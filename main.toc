@@ -1,0 +1,91 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {section}{Lời cam đoan}{i}{section*.1}%
+\contentsline {section}{Lời cảm ơn}{ii}{section*.2}%
+\contentsline {section}{Tóm tắt}{iii}{section*.3}%
+\contentsline {section}{Mục lục}{iv}{section*.4}%
+\contentsline {section}{Danh mục hình ảnh}{vii}{section*.5}%
+\contentsline {section}{Danh mục bảng biểu}{viii}{section*.6}%
+\contentsline {section}{Danh mục từ viết tắt}{ix}{section*.7}%
+\contentsline {section}{\numberline {1}Giới thiệu}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Tính cấp thiết của đề tài}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Mục tiêu và phạm vi đề tài}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}Mục tiêu tổng quát}{1}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}Mục tiêu cụ thể}{2}{subsubsection.1.2.2}%
+\contentsline {subsubsection}{\numberline {1.2.3}Phạm vi đề tài}{2}{subsubsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.3}Đối tượng nghiên cứu}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Phương pháp nghiên cứu}{3}{subsection.1.4}%
+\contentsline {subsubsection}{\numberline {1.4.1}Phương pháp nghiên cứu lý thuyết}{3}{subsubsection.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.4.2}Phương pháp nghiên cứu thực nghiệm}{3}{subsubsection.1.4.2}%
+\contentsline {subsection}{\numberline {1.5}Các công trình nghiên cứu liên quan}{3}{subsection.1.5}%
+\contentsline {section}{\numberline {2}Cơ sở lý thuyết}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Nền tảng Intel OpenBot}{5}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Giới thiệu Intel OpenBot}{5}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Kiến trúc hệ thống OpenBot}{5}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Giao tiếp giữa Smartphone và Robot}{6}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Tổng quan về Mạng Nơ-ron Nhân tạo (Neural Network)}{7}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Khái niệm và nguồn gốc sinh học}{7}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Cấu trúc neuron nhân tạo}{7}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Lan truyền ngược (Backpropagation)}{9}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Vai trò trong Thị giác Máy tính}{13}{subsubsection.2.2.4}%
+\contentsline {subsection}{\numberline {2.3}Mạng Perceptron Đa tầng (MLP)}{16}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Định nghĩa MLP}{16}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Cấu trúc nhiều lớp}{16}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Ưu điểm, hạn chế của MLP và giới hạn trong xử lý ảnh}{16}{subsubsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.4}Mạng Nơ-ron Tích chập (CNN)}{18}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Động cơ ra đời của CNN}{18}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Các thành phần chính của CNN}{20}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Ưu điểm của CNN trong xử lý ảnh và video}{21}{subsubsection.2.4.3}%
+\contentsline {subsubsection}{\numberline {2.4.4}Các kiến trúc CNN tiêu biểu}{21}{subsubsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.5}Giới thiệu YOLO (You Only Look Once)}{23}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Bài toán Object Detection}{23}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Lịch sử phát triển Object Detection}{23}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3}Khái niệm Bounding Box}{24}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}Intersection over Union (IoU)}{26}{subsubsection.2.5.4}%
+\contentsline {subsubsection}{\numberline {2.5.5}Các khái niệm True Positive, False Positive, False Negative}{26}{subsubsection.2.5.5}%
+\contentsline {subsubsection}{\numberline {2.5.6}Đánh giá hiệu suất: Mean Average Precision (mAP)}{27}{subsubsection.2.5.6}%
+\contentsline {subsubsection}{\numberline {2.5.7}Ý tưởng YOLO: Phát hiện trong một lần suy luận}{28}{subsubsection.2.5.7}%
+\contentsline {subsubsection}{\numberline {2.5.8}So sánh YOLO với phương pháp truyền thống}{29}{subsubsection.2.5.8}%
+\contentsline {subsection}{\numberline {2.6}Lý do lựa chọn YOLOv11 cho bài toán Fall Detection}{30}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Giới thiệu YOLOv11}{30}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Các phiên bản mô hình YOLOv11}{31}{subsubsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.7}Theo dõi và Nhận diện Người (Person Tracking)}{31}{subsection.2.7}%
+\contentsline {subsubsection}{\numberline {2.7.1}Giới thiệu Person Tracking}{31}{subsubsection.2.7.1}%
+\contentsline {subsubsection}{\numberline {2.7.2}Tracking-by-Detection Paradigm}{32}{subsubsection.2.7.2}%
+\contentsline {subsection}{\numberline {2.8}Giới thiệu Dataset Fall Detection – CauCaFall}{33}{subsection.2.8}%
+\contentsline {subsubsection}{\numberline {2.8.1}Mục tiêu và đặc điểm của dataset CauCaFall}{33}{subsubsection.2.8.1}%
+\contentsline {subsubsection}{\numberline {2.8.2}Dữ liệu video trong nhà}{33}{subsubsection.2.8.2}%
+\contentsline {subsubsection}{\numberline {2.8.3}Annotation ban đầu}{34}{subsubsection.2.8.3}%
+\contentsline {subsubsection}{\numberline {2.8.4}Ưu điểm và hạn chế của dataset CauCaFall}{34}{subsubsection.2.8.4}%
+\contentsline {subsubsection}{\numberline {2.8.5}Nghiên cứu liên quan: Dataset DiverseFALL10500}{35}{subsubsection.2.8.5}%
+\contentsline {subsection}{\numberline {2.9}Hệ thống AI Agent và Mô hình Ngôn ngữ Lớn (LLM)}{36}{subsection.2.9}%
+\contentsline {subsubsection}{\numberline {2.9.1}Khái niệm AI Agent}{36}{subsubsection.2.9.1}%
+\contentsline {subsubsection}{\numberline {2.9.2}Mô hình Ngôn ngữ Lớn (Large Language Models)}{36}{subsubsection.2.9.2}%
+\contentsline {subsubsection}{\numberline {2.9.3}Retrieval-Augmented Generation (RAG)}{44}{subsubsection.2.9.3}%
+\contentsline {subsection}{\numberline {2.10}Hệ thống Nhận dạng Giọng nói và Xử lý Ngôn ngữ Tự nhiên}{45}{subsection.2.10}%
+\contentsline {subsubsection}{\numberline {2.10.1}Một số giải pháp Nhận dạng Giọng nói:}{45}{subsubsection.2.10.1}%
+\contentsline {subsubsection}{\numberline {2.10.2}So sánh các phương pháp Xử lý Ngôn ngữ Tự nhiên (NLP)}{45}{subsubsection.2.10.2}%
+\contentsline {subsubsection}{\numberline {2.10.3}Phương thức triển khai: Cloud Computing và Edge Computing}{46}{subsubsection.2.10.3}%
+\contentsline {subsection}{\numberline {2.11}Kết luận chương}{46}{subsection.2.11}%
+\contentsline {section}{\numberline {3}Phân tích và thiết kế hệ thống}{48}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Đề xuất thiết kế hệ thống}{48}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Đề xuất giải pháp cho chức năng phát hiện té ngã}{51}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Lựa chọn YOLOv11 cho chức năng phát hiện té ngã}{51}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Lựa chọn YOLOv11n cho Robot}{52}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Đề xuất giải pháp cho chức năng theo dõi(tracking)}{53}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Các thuật toán Tracking phổ biến}{53}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Chi tiết thuật toán ByteTrack}{54}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}Person Re-identification (ReID)}{56}{subsubsection.3.3.3}%
+\contentsline {subsection}{\numberline {3.4}Đề xuất giải pháp cho chức năng xử lý ngôn ngữ, giao tiếp}{57}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Đề xuất các giao thức giao tiếp sử dụng}{57}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Giao thức MQTT (Message Queuing Telemetry Transport)}{57}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Giao thức WebRTC (Real-Time Communication)}{58}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.5.3}Giao thức HTTP/HTTPS}{58}{subsubsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {3.5.4}Giao tiếp nội bộ (Serial/Bluetooth)}{58}{subsubsection.3.5.4}%
+\contentsline {subsubsection}{\numberline {3.5.5}Kết nối Internet (TCP/IP)}{59}{subsubsection.3.5.5}%
+\contentsline {subsection}{\numberline {3.6}Vấn đề liên quan mất đồng bộ giữa tín hiệu điều khiển Robot và Video call}{59}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Hiện thực hệ thống}{63}{section.4}%
+\contentsline {section}{\numberline {5}Kết quả và thảo luận}{64}{section.5}%
+\contentsline {section}{\numberline {6}Kết luận}{65}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Nhận xét}{65}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Hướng phát triển}{65}{subsection.6.2}%
+\contentsline {section}{Tài liệu tham khảo}{66}{section*.37}%

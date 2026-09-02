@@ -1,0 +1,17 @@
+\babel@toc {vietnamese}{}\relax 
+\contentsline {figure}{\numberline {2.1}{\ignorespaces So sánh giữa neuron sinh học (trái) và neuron nhân tạo (phải). Các thành phần tương ứng: dendrite $\leftrightarrow $ input, synapse $\leftrightarrow $ weight, soma $\leftrightarrow $ summation, axon $\leftrightarrow $ activation function và output.}}{8}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Computational Graph minh họa quá trình Forward Pass (mũi tên xanh) và Backward Pass (mũi tên đỏ) với các gradient được tính ngược từ Loss về các tham số.}}{10}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Bề mặt hàm mất mát $J(\theta _0, \theta _1)$ và quỹ đạo của Gradient Descent (đường đen) tìm điểm cực tiểu.}}{12}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Bốn bài toán chính trong Thị giác Máy tính: Phân loại ảnh, Phát hiện đối tượng, Phân vùng ngữ nghĩa, và Nhận dạng hành động.}}{13}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Kiến trúc mạng Perceptron Đa tầng (MLP) với lớp đầu vào, hai lớp ẩn và lớp đầu ra. Mỗi neuron trong một lớp kết nối đầy đủ với tất cả neuron của lớp liền kề.}}{17}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Minh họa phép tích chập (Convolution) và Max Pooling trong CNN: bộ lọc 3×3 trượt qua ảnh đầu vào tạo ra feature map, sau đó Max Pooling 2×2 giảm kích thước không gian.}}{20}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces AlexNet}}{22}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces VGG}}{22}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Ví dụ minh họa Bounding Box trong Object Detection.}}{25}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Minh họa chia lưới $7 \times 7$ trong YOLO: mỗi ô chịu trách nhiệm phát hiện đối tượng có tâm nằm trong ô đó.}}{29}{figure.caption.20}%
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Flowchart pipeline Tracking-by-Detection: Detection $\rightarrow $ Feature Extraction $\rightarrow $ Association $\rightarrow $ State Update, lặp lại cho mỗi frame.}}{32}{figure.caption.22}%
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Minh họa không gian vector embedding và độ tương đồng cosine giữa các từ}}{37}{figure.caption.24}%
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Kiến trúc Transformer với các khối Encoder và Decoder}}{38}{figure.caption.25}%
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{39}{figure.caption.26}%
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Ví dụ Chain-of-Thought: thay vì trả lời trực tiếp, mô hình giải thích từng bước suy luận để đi đến kết quả cuối cùng.}}{44}{figure.caption.30}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Thiết kế hệ thống đề xuất}}{50}{figure.caption.33}%

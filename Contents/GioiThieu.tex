@@ -1,0 +1,101 @@
+\section{Giới thiệu}
+
+\subsection{Tính cấp thiết của đề tài}
+
+Trong bối cảnh xã hội hiện đại, vấn đề già hóa dân số đang trở thành một thách thức lớn đối với nhiều quốc gia trên thế giới, trong đó có Việt Nam. Theo báo cáo của Tổng cục Thống kê, Việt Nam đã chính thức bước vào giai đoạn già hóa dân số từ năm 2011, với tỷ lệ người từ 60 tuổi trở lên ngày càng tăng nhanh. Dự báo đến năm 2050, tỷ lệ người cao tuổi sẽ chiếm khoảng 25\% dân số cả nước. Sự gia tăng này đặt ra nhiều vấn đề về chăm sóc sức khỏe, an sinh xã hội và đặc biệt là nhu cầu hỗ trợ người cao tuổi trong sinh hoạt hàng ngày.
+
+Người cao tuổi thường phải đối mặt với nhiều thách thức trong cuộc sống như: suy giảm trí nhớ dẫn đến quên uống thuốc đúng giờ, khả năng vận động hạn chế làm tăng nguy cơ té ngã, cảm giác cô đơn khi sống một mình hoặc con cháu bận rộn công việc. Theo thống kê của Tổ chức Y tế Thế giới (WHO), té ngã là nguyên nhân gây tử vong đứng thứ hai ở người cao tuổi, với khoảng 37.3 triệu ca té ngã nghiêm trọng mỗi năm trên toàn cầu. Bên cạnh đó, việc không tuân thủ lịch uống thuốc có thể dẫn đến các biến chứng nghiêm trọng về sức khỏe.
+
+Trong khi đó, sự phát triển mạnh mẽ của công nghệ trí tuệ nhân tạo (AI), Internet vạn vật (IoT), và thị giác máy tính đã mở ra nhiều cơ hội ứng dụng trong lĩnh vực chăm sóc sức khỏe. Các hệ thống robot thông minh với khả năng giao tiếp bằng giọng nói, nhận dạng hình ảnh, và kết nối với các thiết bị IoT có thể đóng vai trò như một trợ lý ảo, hỗ trợ người cao tuổi trong các hoạt động thường ngày một cách hiệu quả và an toàn.
+
+Từ những thực tế trên, đề tài \textbf{"Nghiên cứu và phát triển robot trợ lý ảo ứng dụng trí tuệ nhân tạo hỗ trợ chăm sóc và giám sát người cao tuổi tại nhà"} được thực hiện nhằm xây dựng một hệ thống robot thông minh, tích hợp các công nghệ AI tiên tiến để hỗ trợ toàn diện cho người cao tuổi, góp phần nâng cao chất lượng cuộc sống và giảm bớt gánh nặng cho người thân cũng như hệ thống y tế.
+
+\subsection{Mục tiêu và phạm vi đề tài}
+
+\subsubsection{Mục tiêu tổng quát}
+Xây dựng một hệ thống robot trợ lý ảo có khả năng giao tiếp bằng giọng nói dựa trên công nghệ trí tuệ nhân tạo (AI), hỗ trợ nhắc nhở uống thuốc, giám sát hành vi, cảnh báo té ngã và hỗ trợ các hoạt động thường ngày, nhằm nâng cao chất lượng cuộc sống cho người cao tuổi tại nhà.
+
+\subsubsection{Mục tiêu cụ thể}
+\begin{itemize}
+    \item Tìm hiểu nền tảng Intel OpenBot cùng hệ thống giao tiếp giữa điện thoại thông minh và phần cứng robot.
+    \item Phát triển hệ thống nhận dạng giọng nói tích hợp với khả năng hiểu ngôn ngữ tự nhiên (NLU - Natural Language Understanding) để diễn giải các lệnh từ người dùng.
+    \item Triển khai hệ thống trí tuệ nhân tạo cho giao tiếp thông minh và hệ thống kết nối vạn vật (IoT) cho xử lý, điều khiển, tích hợp.
+    \item Nghiên cứu và ứng dụng thị giác máy tính (Computer Vision) và trí tuệ nhân tạo cho hệ thống giám sát, theo dõi, phân tích và xử lý.
+    \item Đánh giá về khả năng và tốc độ xử lý của các thuật toán trí tuệ nhân tạo và hệ thống xử lý, kết nối.
+\end{itemize}
+
+\subsubsection{Phạm vi đề tài}
+\begin{itemize}
+    \item \textbf{Phạm vi không gian:} Hệ thống được thiết kế và triển khai trong môi trường nhà ở, tập trung vào các khu vực sinh hoạt chính của người cao tuổi.
+    \item \textbf{Phạm vi đối tượng:} Người cao tuổi (từ 60 tuổi trở lên) có sức khỏe yếu cần được giám sát, đặc biệt là những người sống một mình hoặc có người thân bận rộn.
+    \item \textbf{Phạm vi chức năng:} Tập trung vào các chức năng cốt lõi bao gồm: giao tiếp bằng giọng nói, nhắc nhở uống thuốc, phát hiện và cảnh báo té ngã, giám sát hoạt động.
+\end{itemize}
+
+\subsection{Đối tượng nghiên cứu}
+
+\begin{itemize}
+    \item \textbf{Nền tảng Intel OpenBot:} Tìm hiểu kiến trúc phần cứng và phần mềm của nền tảng robot mã nguồn mở Intel OpenBot, cơ chế giao tiếp giữa điện thoại thông minh và phần cứng robot.
+    \item \textbf{Công nghệ nhận dạng và xử lý giọng nói:} Các kỹ thuật Speech-to-Text (STT), Text-to-Speech (TTS), và xử lý ngôn ngữ tự nhiên (NLP).
+    \item \textbf{Mô hình ngôn ngữ lớn (LLM):} Nghiên cứu và tích hợp các mô hình ngôn ngữ lớn để tạo khả năng giao tiếp thông minh, hiểu ngữ cảnh và đưa ra phản hồi phù hợp.
+    \item \textbf{Thị giác máy tính:} Các thuật toán phát hiện đối tượng (Object Detection), theo dõi người (Person Tracking), và nhận dạng hành động (Action Recognition) để phát hiện té ngã.
+    \item \textbf{Internet vạn vật (IoT):} Các giao thức và nền tảng IoT để kết nối, điều khiển Robot, nhận và gửi dữ liệu từ xa thông qua ứng dụng di động.
+\end{itemize}
+
+\subsection{Phương pháp nghiên cứu}
+
+\subsubsection{Phương pháp nghiên cứu lý thuyết}
+\begin{itemize}
+    \item Thu thập, tổng hợp và phân tích các tài liệu, công trình nghiên cứu liên quan đến robot hỗ trợ người cao tuổi, công nghệ AI, thị giác máy tính và IoT.
+    \item Nghiên cứu các mô hình học sâu (Deep Learning) tiên tiến trong lĩnh vực xử lý ngôn ngữ tự nhiên và thị giác máy tính.
+    \item Tìm hiểu các tiêu chuẩn và yêu cầu về an toàn, bảo mật trong các hệ thống chăm sóc sức khỏe.
+\end{itemize}
+
+\subsubsection{Phương pháp nghiên cứu thực nghiệm}
+\begin{itemize}
+    \item Có thể tiến hành mô phỏng, hiện thực hệ thống từ đó thu thập thông tin để đánh giá, so sánh để đi đến lựa chọn phương án hiện thực triểm khai hệ thống.
+    \item Kiểm thử và đánh giá hiệu năng hệ thống trong môi trường thực tế.
+\end{itemize}
+
+% \subsection{Cấu trúc báo cáo}
+
+% Báo cáo đồ án được tổ chức thành các phần chính như sau:
+
+% \begin{itemize}
+%     \item \textbf{Phần 1 - Giới thiệu:} Trình bày bối cảnh, đặt vấn đề, mục tiêu, phạm vi và phương pháp nghiên cứu của đề tài.
+    
+%     \item \textbf{Phần 2 - Cơ sở lý thuyết:} Trình bày các kiến thức nền tảng về trí tuệ nhân tạo, mạng nơ-ron, học sâu, thị giác máy tính, xử lý ngôn ngữ tự nhiên, và các công nghệ liên quan.
+    
+%     \item \textbf{Phần 3 - Yêu cầu hệ thống:} Phân tích và đặc tả các yêu cầu chức năng và phi chức năng của hệ thống robot trợ lý ảo.
+    
+%     \item \textbf{Phần 4 - Đặc tả chi tiết các Use Case:} Mô tả chi tiết các trường hợp sử dụng của hệ thống.
+    
+%     \item \textbf{Phần 5 - Phân tích và thiết kế hệ thống:} Trình bày kiến trúc tổng thể, thiết kế chi tiết các module và giao diện của hệ thống.
+    
+%     \item \textbf{Phần 6 - Tổng kết:} Đánh giá kết quả đạt được, những hạn chế và hướng phát triển trong tương lai.
+% \end{itemize}
+
+\subsection{Các công trình nghiên cứu liên quan}
+
+Trong những năm gần đây, đã có nhiều công trình nghiên cứu và sản phẩm thương mại hướng đến việc hỗ trợ người cao tuổi sử dụng công nghệ robot và AI:
+
+\begin{itemize}
+    \item \textbf{Robot Pepper (SoftBank Robotics):} 
+Pepper là robot hình người được phát triển bởi SoftBank Robotics, có khả năng nhận dạng cảm xúc thông qua giọng nói và biểu cảm khuôn mặt, đồng thời hỗ trợ giao tiếp tự nhiên với con người. Robot này đã và đang được triển khai trong lĩnh vực chăm sóc người cao tuổi tại Nhật Bản nhằm hỗ trợ tương tác xã hội và cải thiện chất lượng cuộc sống.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Images/pepper-robot.png}
+    \label{fig:pepper_robot}
+\end{figure}
+\newpage
+    \item \textbf{Robot ElliQ:} Một robot bàn nhỏ gọn được thiết kế đặc biệt cho người cao tuổi giúp họ chống lại cảm giác cô đơn và cô lập. Nó có khả năng nhắc nhở uống thuốc, gợi ý hoạt động và kết nối với người thân.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\textwidth]{Images/robot elliQ.png}
+\end{figure}
+    
+    \item \textbf{Các nghiên cứu về Fall Detection:} Nhiều công trình sử dụng mạng nơ-ron tích chập (CNN), đặc biệt là các mô hình YOLO, để phát hiện té ngã thời gian thực với độ chính xác cao.
+    
+\end{itemize}
+
+Tuy nhiên, các giải pháp hiện có thường có chi phí cao, khó tiếp cận với đại đa số người dùng Việt Nam, hoặc chưa được tối ưu hóa cho ngữ cảnh và ngôn ngữ tiếng Việt. Đề tài này hướng đến việc xây dựng một giải pháp toàn diện, tích hợp nhiều công nghệ AI tiên tiến, với chi phí hợp lý và khả năng tùy biến cao, phù hợp với nhu cầu thực tế của người cao tuổi Việt Nam.
