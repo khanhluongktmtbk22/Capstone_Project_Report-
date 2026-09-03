@@ -1,101 +1,163 @@
 \section{Giới thiệu}
 
-\subsection{Tính cấp thiết của đề tài}
+\subsection{Bối cảnh và tính cấp thiết của đề tài}
 
-Trong bối cảnh xã hội hiện đại, vấn đề già hóa dân số đang trở thành một thách thức lớn đối với nhiều quốc gia trên thế giới, trong đó có Việt Nam. Theo báo cáo của Tổng cục Thống kê, Việt Nam đã chính thức bước vào giai đoạn già hóa dân số từ năm 2011, với tỷ lệ người từ 60 tuổi trở lên ngày càng tăng nhanh. Dự báo đến năm 2050, tỷ lệ người cao tuổi sẽ chiếm khoảng 25\% dân số cả nước. Sự gia tăng này đặt ra nhiều vấn đề về chăm sóc sức khỏe, an sinh xã hội và đặc biệt là nhu cầu hỗ trợ người cao tuổi trong sinh hoạt hàng ngày.
+Già hóa dân số đã trở thành bài toán hiện hữu đối với hệ thống y tế, an sinh xã hội và từng gia đình. Tổ chức Y tế Thế giới (WHO) dự báo số người từ 60 tuổi trở lên trên toàn cầu tăng từ khoảng 1 tỷ người năm 2020 lên 1,4 tỷ người vào năm 2030 và 2,1 tỷ người vào năm 2050; khoảng hai phần ba số người cao tuổi sẽ sống tại các quốc gia thu nhập thấp và trung bình \reportcite{ref:who_ageing}. Quá trình chuyển đổi này diễn ra nhanh hơn trước, trong khi nguồn nhân lực chăm sóc dài hạn, cơ sở hạ tầng và khả năng chi trả không tăng với cùng tốc độ.
 
-Người cao tuổi thường phải đối mặt với nhiều thách thức trong cuộc sống như: suy giảm trí nhớ dẫn đến quên uống thuốc đúng giờ, khả năng vận động hạn chế làm tăng nguy cơ té ngã, cảm giác cô đơn khi sống một mình hoặc con cháu bận rộn công việc. Theo thống kê của Tổ chức Y tế Thế giới (WHO), té ngã là nguyên nhân gây tử vong đứng thứ hai ở người cao tuổi, với khoảng 37.3 triệu ca té ngã nghiêm trọng mỗi năm trên toàn cầu. Bên cạnh đó, việc không tuân thủ lịch uống thuốc có thể dẫn đến các biến chứng nghiêm trọng về sức khỏe.
+Tại Việt Nam, áp lực còn rõ rệt hơn vì thời gian chuyển từ cơ cấu dân số ``già hóa'' sang ``dân số già'' tương đối ngắn. Dự báo dựa trên Tổng điều tra dân số và nhà ở năm 2019 cho thấy Việt Nam có thể trở thành quốc gia có dân số già vào khoảng năm 2036, khi nhóm từ 65 tuổi trở lên đạt xấp xỉ 14\% dân số; đến năm 2069, người cao tuổi có thể chiếm 27,1\% dân số \reportcite{ref:gso_unfpa_ageing}. Nghiên cứu về kinh tế chăm sóc người cao tuổi tại Việt Nam còn dự báo số người cần hỗ trợ thực hiện các hoạt động sống hằng ngày tăng từ khoảng 4,7 triệu năm 2025 lên 6,5 triệu năm 2035 \reportcite{ref:unfpa_care_economy}. Mô hình chỉ dựa vào chăm sóc trực tiếp bởi thành viên gia đình vì vậy sẽ ngày càng khó duy trì, đặc biệt tại đô thị khi người thân thường làm việc xa nhà.
 
-Trong khi đó, sự phát triển mạnh mẽ của công nghệ trí tuệ nhân tạo (AI), Internet vạn vật (IoT), và thị giác máy tính đã mở ra nhiều cơ hội ứng dụng trong lĩnh vực chăm sóc sức khỏe. Các hệ thống robot thông minh với khả năng giao tiếp bằng giọng nói, nhận dạng hình ảnh, và kết nối với các thiết bị IoT có thể đóng vai trò như một trợ lý ảo, hỗ trợ người cao tuổi trong các hoạt động thường ngày một cách hiệu quả và an toàn.
+Té ngã là một rủi ro tiêu biểu cần được phát hiện sớm. WHO định nghĩa té ngã là sự kiện khiến một người ngoài ý muốn nằm lại trên mặt đất, sàn hoặc một mức thấp hơn. Mỗi năm thế giới ghi nhận khoảng 684.000 ca tử vong do té ngã và 37,3 triệu trường hợp đủ nghiêm trọng để cần chăm sóc y tế; nhóm trên 60 tuổi chịu số ca tử vong cao nhất \reportcite{ref:who_falls}. Trong nhà, sự cố có thể xảy ra tại thời điểm không có người chăm sóc. Khoảng thời gian từ khi xảy ra sự cố đến khi người thân biết và can thiệp vì vậy có ý nghĩa trực tiếp đối với mức độ hậu quả.
 
-Từ những thực tế trên, đề tài \textbf{"Nghiên cứu và phát triển robot trợ lý ảo ứng dụng trí tuệ nhân tạo hỗ trợ chăm sóc và giám sát người cao tuổi tại nhà"} được thực hiện nhằm xây dựng một hệ thống robot thông minh, tích hợp các công nghệ AI tiên tiến để hỗ trợ toàn diện cho người cao tuổi, góp phần nâng cao chất lượng cuộc sống và giảm bớt gánh nặng cho người thân cũng như hệ thống y tế.
+Bên cạnh rủi ro té ngã, người cao tuổi thường phải quản lý nhiều thuốc và lịch sinh hoạt. Tổng quan hệ thống về tuân thủ thuốc ở người cao tuổi chỉ ra rằng bệnh đồng mắc, đa thuốc, suy giảm chức năng và độ phức tạp của phác đồ là những yếu tố làm tăng khả năng không tuân thủ \reportcite{ref:med_adherence}. Cô đơn và cô lập xã hội cũng là các yếu tố nguy cơ quan trọng đối với sức khỏe tinh thần ở tuổi già \reportcite{ref:who_mental_health}. Do đó, một giải pháp hỗ trợ tại nhà không nên chỉ là camera giám sát thụ động; hệ thống cần kết hợp nhắc việc, tương tác tự nhiên, liên lạc trực tiếp và cơ chế cảnh báo có thể kiểm chứng.
 
-\subsection{Mục tiêu và phạm vi đề tài}
+Sự phổ biến của điện thoại thông minh tạo điều kiện xây dựng robot chi phí thấp. Điện thoại cung cấp camera, microphone, loa, kết nối mạng và năng lực tính toán đủ cho nhiều tác vụ thị giác máy tính. Công trình OpenBot chứng minh một điện thoại Android có thể đóng vai trò bộ não và hệ cảm biến cho thân xe robot giá thấp, đồng thời hỗ trợ các tác vụ như bám theo người và điều hướng \reportcite{ref:openbot}. Cách tiếp cận này phù hợp với bối cảnh của đề tài: tái sử dụng phần cứng phổ biến, đưa suy luận AI đến gần nguồn dữ liệu và chỉ dùng vi điều khiển cho vòng điều khiển động cơ.
+
+Từ các nhu cầu trên, đề tài \textbf{``Nghiên cứu và phát triển robot trợ lý ảo ứng dụng trí tuệ nhân tạo hỗ trợ chăm sóc và giám sát người cao tuổi tại nhà''} xây dựng một nguyên mẫu tích hợp thay vì các chức năng rời rạc. Hệ thống gồm ứng dụng RobotApp trên thiết bị Android gắn với robot, ứng dụng CaregiverApp cho người chăm sóc, firmware ESP32 điều khiển hai động cơ BLDC và chuỗi mô hình AI được chuyển đổi để suy luận trên thiết bị. Giá trị cốt lõi nằm ở việc kết nối chu trình \textit{nhận biết -- đánh giá -- tương tác xác nhận -- thông báo -- liên lạc -- can thiệp từ xa} trong cùng một kiến trúc.
+
+\subsection{Phát biểu bài toán}
+
+Bài toán đặt ra là thiết kế một robot di động trong nhà có thể hỗ trợ người cao tuổi mà vẫn cho phép người chăm sóc theo dõi và can thiệp từ xa. Hệ thống phải giải quyết đồng thời bốn nhóm vấn đề:
+
+\begin{enumerate}
+    \item \textbf{Nhận biết an toàn:} khai thác camera để phát hiện và theo dõi đúng người mục tiêu, nhận biết chuỗi tư thế nghi té ngã trong điều kiện ảnh thay đổi và hạn chế cảnh báo giả từ hành vi nằm/ngồi bình thường.
+    \item \textbf{Tương tác và chăm sóc:} hỗ trợ hội thoại giọng nói tiếng Việt, phát lời nhắc theo lịch và hỏi xác nhận khi phát hiện sự cố.
+    \item \textbf{Liên lạc và điều khiển:} thiết lập cuộc gọi âm thanh/hình ảnh thời gian thực; truyền lệnh joystick từ CaregiverApp qua hạ tầng đám mây tới RobotApp rồi qua BLE tới ESP32.
+    \item \textbf{An toàn hệ thống:} loại bỏ lệnh cũ hoặc không hợp lệ, dừng robot khi mất kết nối, tránh tranh chấp nguồn điều khiển và bảo vệ dữ liệu người dùng.
+\end{enumerate}
+
+Các yêu cầu trên có quan hệ chặt chẽ. Chẳng hạn, camera vừa phục vụ cuộc gọi WebRTC vừa cung cấp ảnh cho AI; nếu hai thành phần đồng thời mở camera sẽ gây xung đột tài nguyên. Tương tự, joystick từ xa và chế độ tự bám đều có thể phát sinh lệnh chuyển động; nếu không xác định quyền sở hữu, robot có thể nhận hai chỉ thị trái ngược. Vì vậy, đề tài được tiếp cận như một bài toán đồng thiết kế phần mềm di động, AI biên, giao tiếp thời gian thực và điều khiển nhúng.
+
+\subsection{Câu hỏi nghiên cứu}
+
+\begin{itemize}
+    \item Có thể tổ chức kiến trúc nào để một thiết bị Android đồng thời đảm nhiệm camera, suy luận AI, hội thoại, liên lạc và cầu nối điều khiển phần thân robot?
+    \item Làm thế nào duy trì danh tính người cần theo dõi khi vùng bao thay đổi mạnh, bị che khuất ngắn hạn hoặc xuất hiện thêm người trong khung hình?
+    \item Làm thế nào kết hợp thông tin tư thế theo thời gian với luật hậu kiểm để giảm cảnh báo giả và vẫn giữ nguyên tắc an toàn khi người dùng không phản hồi?
+    \item Hợp đồng dữ liệu nào bảo đảm lệnh điều khiển từ xa có thể được phát hiện là mới, hợp lệ và được dừng tự động khi đường truyền gián đoạn?
+    \item Những giới hạn nào cần được công bố để phân biệt một hệ thống hỗ trợ nghiên cứu với thiết bị y tế hoặc sản phẩm thương mại hoàn chỉnh?
+\end{itemize}
+
+\subsection{Mục tiêu đề tài}
 
 \subsubsection{Mục tiêu tổng quát}
-Xây dựng một hệ thống robot trợ lý ảo có khả năng giao tiếp bằng giọng nói dựa trên công nghệ trí tuệ nhân tạo (AI), hỗ trợ nhắc nhở uống thuốc, giám sát hành vi, cảnh báo té ngã và hỗ trợ các hoạt động thường ngày, nhằm nâng cao chất lượng cuộc sống cho người cao tuổi tại nhà.
+
+Nghiên cứu, thiết kế và hiện thực nguyên mẫu robot trợ lý ảo có khả năng tương tác bằng giọng nói, nhắc lịch, theo dõi người, phát hiện tình huống nghi té ngã, gọi video và cho phép người chăm sóc điều khiển từ xa; trong đó điện thoại thông minh là nền tảng tính toán chính và ESP32 đảm nhiệm điều khiển hai động cơ.
 
 \subsubsection{Mục tiêu cụ thể}
-\begin{itemize}
-    \item Tìm hiểu nền tảng Intel OpenBot cùng hệ thống giao tiếp giữa điện thoại thông minh và phần cứng robot.
-    \item Phát triển hệ thống nhận dạng giọng nói tích hợp với khả năng hiểu ngôn ngữ tự nhiên (NLU - Natural Language Understanding) để diễn giải các lệnh từ người dùng.
-    \item Triển khai hệ thống trí tuệ nhân tạo cho giao tiếp thông minh và hệ thống kết nối vạn vật (IoT) cho xử lý, điều khiển, tích hợp.
-    \item Nghiên cứu và ứng dụng thị giác máy tính (Computer Vision) và trí tuệ nhân tạo cho hệ thống giám sát, theo dõi, phân tích và xử lý.
-    \item Đánh giá về khả năng và tốc độ xử lý của các thuật toán trí tuệ nhân tạo và hệ thống xử lý, kết nối.
-\end{itemize}
-
-\subsubsection{Phạm vi đề tài}
-\begin{itemize}
-    \item \textbf{Phạm vi không gian:} Hệ thống được thiết kế và triển khai trong môi trường nhà ở, tập trung vào các khu vực sinh hoạt chính của người cao tuổi.
-    \item \textbf{Phạm vi đối tượng:} Người cao tuổi (từ 60 tuổi trở lên) có sức khỏe yếu cần được giám sát, đặc biệt là những người sống một mình hoặc có người thân bận rộn.
-    \item \textbf{Phạm vi chức năng:} Tập trung vào các chức năng cốt lõi bao gồm: giao tiếp bằng giọng nói, nhắc nhở uống thuốc, phát hiện và cảnh báo té ngã, giám sát hoạt động.
-\end{itemize}
-
-\subsection{Đối tượng nghiên cứu}
 
 \begin{itemize}
-    \item \textbf{Nền tảng Intel OpenBot:} Tìm hiểu kiến trúc phần cứng và phần mềm của nền tảng robot mã nguồn mở Intel OpenBot, cơ chế giao tiếp giữa điện thoại thông minh và phần cứng robot.
-    \item \textbf{Công nghệ nhận dạng và xử lý giọng nói:} Các kỹ thuật Speech-to-Text (STT), Text-to-Speech (TTS), và xử lý ngôn ngữ tự nhiên (NLP).
-    \item \textbf{Mô hình ngôn ngữ lớn (LLM):} Nghiên cứu và tích hợp các mô hình ngôn ngữ lớn để tạo khả năng giao tiếp thông minh, hiểu ngữ cảnh và đưa ra phản hồi phù hợp.
-    \item \textbf{Thị giác máy tính:} Các thuật toán phát hiện đối tượng (Object Detection), theo dõi người (Person Tracking), và nhận dạng hành động (Action Recognition) để phát hiện té ngã.
-    \item \textbf{Internet vạn vật (IoT):} Các giao thức và nền tảng IoT để kết nối, điều khiển Robot, nhận và gửi dữ liệu từ xa thông qua ứng dụng di động.
+    \item Xây dựng RobotApp bằng Android/Kotlin để quản lý camera, suy luận mô hình TFLite, hội thoại, nhắc lịch, WebRTC và kết nối BLE.
+    \item Xây dựng CaregiverApp để quản lý hồ sơ, lịch nhắc, trạng thái theo dõi, cảnh báo, lịch sử, cuộc gọi và joystick điều khiển robot.
+    \item Xây dựng firmware ESP32 dùng BLE GATT, SimpleFOC và phản hồi encoder AS5600 để điều khiển vận tốc hai động cơ BLDC.
+    \item Xây dựng chuỗi xử lý thị giác gồm mô hình pose, giải mã/NMS, SORT, Kalman, Hungarian, Re-ID, khóa người mục tiêu ID0 và LSTM phát hiện té ngã.
+    \item Chuyển đổi mô hình từ định dạng huấn luyện sang ONNX/TensorFlow Lite, tạo biến thể đầu vào 320$\times$320 và FP16/GPU để triển khai trên Android.
+    \item Thiết kế cơ chế xác nhận sự cố bằng giọng nói, ghi nhận cảnh báo và tự khởi tạo cuộc gọi khi phản hồi cho thấy nguy hiểm hoặc không có phản hồi.
+    \item Xác định các yêu cầu an toàn, bảo mật, khả năng bảo trì và giới hạn của nguyên mẫu thông qua kiểm tra mã nguồn và kiểm thử có thể tái lập.
 \end{itemize}
+
+\subsection{Đối tượng và phạm vi nghiên cứu}
+
+\subsubsection{Đối tượng nghiên cứu}
+
+Đối tượng kỹ thuật gồm nền tảng robot dựa trên smartphone; hai ứng dụng Android; thị giác máy tính và học sâu trên thiết bị; theo dõi đa đối tượng; xử lý chuỗi tư thế; nhận dạng và tổng hợp tiếng nói; mô hình ngôn ngữ lớn; Firebase Realtime Database; WebRTC; BLE GATT; điều khiển vận tốc BLDC bằng SimpleFOC; và quy trình chuyển đổi mô hình sang TFLite.
+
+Đối tượng sử dụng gồm người cao tuổi sinh hoạt tại nhà và người thân/người chăm sóc từ xa. Trong nguyên mẫu, hệ thống giả định một cặp người dùng--robot chính; một số nút dữ liệu thời gian thực vẫn ở phạm vi toàn cục và chưa hỗ trợ cách ly nhiều gia đình/robot.
+
+\subsubsection{Phạm vi chức năng}
+
+\begin{itemize}
+    \item Theo dõi một người mục tiêu, tự bám theo ở mức điều khiển chuyển động cơ bản và phát hiện tình huống nghi té ngã từ camera RGB.
+    \item Hội thoại bằng giọng nói thông qua SpeechRecognizer, Groq API và Android TextToSpeech; không huấn luyện một LLM riêng.
+    \item Tạo và thực hiện lịch nhắc; ghi nhật ký phản hồi; hiển thị lịch sử cảnh báo và cuộc gọi.
+    \item Gọi video hai chiều bằng WebRTC, sử dụng Firebase RTDB làm kênh trao đổi offer, answer, ICE candidate và trạng thái; không xây dựng signaling server riêng.
+    \item Điều khiển robot qua chuỗi CaregiverApp--Firebase--RobotApp--BLE--ESP32; CaregiverApp không kết nối trực tiếp tới ESP32.
+\end{itemize}
+
+\subsubsection{Giới hạn nghiên cứu}
+
+Nguyên mẫu không được định vị là thiết bị chẩn đoán hay thiết bị y tế. Dữ liệu té ngã chủ yếu là tình huống dựng lại; khả năng tổng quát với người cao tuổi thật, ánh sáng yếu, vật cản, camera rung và nhiều người cần nghiên cứu thực địa có phê duyệt đạo đức. Hệ thống phụ thuộc Internet cho Firebase, Groq và thiết lập cuộc gọi; khi mất Internet, vòng điều khiển cục bộ BLE có thể dừng an toàn nhưng các chức năng từ xa không hoạt động. Việc đánh giá lâm sàng, chứng nhận an toàn điện/cơ khí, khả năng chống nước, độ bền dài hạn và tuân thủ quy định thiết bị y tế nằm ngoài phạm vi đồ án.
 
 \subsection{Phương pháp nghiên cứu}
 
-\subsubsection{Phương pháp nghiên cứu lý thuyết}
+\subsubsection{Khảo cứu và phân tích tài liệu}
+
+Nhóm tổng hợp nguồn từ tổ chức quốc tế, tiêu chuẩn kỹ thuật, bài báo bình duyệt và tài liệu chính thức. Các nhóm tài liệu bao gồm già hóa và té ngã, robot hỗ trợ, phát hiện đối tượng/tư thế, theo dõi, LSTM, giao tiếp thời gian thực, cơ sở dữ liệu thời gian thực, BLE và điều khiển FOC. Kết quả khảo cứu được dùng để xác lập yêu cầu và lựa chọn kiến trúc, không dùng thay thế đánh giá trên nguyên mẫu.
+
+\subsubsection{Phân tích yêu cầu và đồng thiết kế hệ thống}
+
+Từ kịch bản chăm sóc tại nhà, nhóm xác định tác nhân, use case, yêu cầu chức năng/phi chức năng và tình huống lỗi. Thiết kế được chia theo ranh giới triển khai: CaregiverApp, dịch vụ Internet, RobotApp và firmware. Các hợp đồng giao tiếp được mô tả bằng cấu trúc dữ liệu, đơn vị, miền giá trị, timestamp, timeout và hành vi khi lỗi.
+
+\subsubsection{Phát triển lặp và kiểm chứng theo mã nguồn}
+
+Các chức năng được phát triển theo lát cắt dọc: từ giao diện người chăm sóc, bản ghi RTDB, xử lý tại RobotApp đến payload BLE và chuyển động động cơ. Đối với AI, quy trình đi từ mô hình huấn luyện, xuất ONNX/TFLite, kiểm tra tensor, tích hợp Android, theo dõi mục tiêu, xử lý chuỗi và hậu kiểm. Mã nguồn đang triển khai được xem là nguồn sự thật khi có khác biệt với tài liệu cũ.
+
+\subsubsection{Kiểm thử và đánh giá}
+
+Đánh giá gồm bốn mức: kiểm tra tĩnh hợp đồng và cấu hình; unit test cho ánh xạ lệnh và luật hậu kiểm; build ứng dụng; thử nghiệm tích hợp trên thiết bị với camera, Firebase, WebRTC, BLE và robot. Chỉ số gồm khả năng build, tỷ lệ test đạt, thời gian phản hồi từng chặng, số khung hình xử lý mỗi giây, precision/recall/F1 của cảnh báo té ngã, độ ổn định ID và tỷ lệ dừng an toàn. Khi chưa có log đo đáng tin cậy, báo cáo ghi rõ trạng thái ``chưa đo'' thay vì suy diễn số liệu.
+
+\subsection{Các công trình và giải pháp liên quan}
+
+\subsubsection{Robot xã hội và robot hỗ trợ người cao tuổi}
+
+Các nghiên cứu robot chăm sóc thường phân thành robot đồng hành, robot hiện diện từ xa, robot hỗ trợ thao tác, robot phục hồi chức năng, robot giám sát và robot nhắc việc. Một tổng quan hệ thống về công nghệ robot cho người trên 65 tuổi ghi nhận các mục đích như hỗ trợ cảm xúc, rèn luyện nhận thức, giao tiếp, theo dõi sức khỏe và phát hiện/ngăn ngừa té ngã \reportcite{ref:robotics_over65}. Tuy nhiên, mức bằng chứng khác nhau đáng kể theo thiết kế nghiên cứu và loại robot.
+
+PARO là ví dụ nổi bật của robot đồng hành trị liệu. Tổng quan các thử nghiệm ngẫu nhiên cho thấy tín hiệu tích cực về chất lượng sống và trạng thái tâm--sinh lý, nhưng cũng nhấn mạnh chất lượng bằng chứng thấp đến trung bình và cần thận trọng khi khái quát \reportcite{ref:paro_review}. Tổng quan phạm vi về PARO còn chỉ ra rào cản chi phí, khối lượng công việc, kiểm soát nhiễm khuẩn, kỳ thị và đạo đức \reportcite{ref:paro_barriers}. Robot vì vậy không tự động thay thế người chăm sóc; giá trị thực tế phụ thuộc thiết kế lấy người dùng làm trung tâm và quy trình vận hành.
+
+Pepper đại diện cho robot hình người có khả năng tương tác xã hội, trong khi ElliQ đại diện cho thiết bị đồng hành đặt bàn. Các nền tảng thương mại cho thấy tiềm năng của hội thoại, nhắc việc và kết nối xã hội nhưng thường có chi phí, khả năng tùy biến và mức độ sẵn có theo vùng khác nhau. Đề tài không cố tái tạo hình thái robot hình người; thay vào đó sử dụng thân robot hai bánh và smartphone để ưu tiên chi phí, khả năng phát triển và tính mô-đun.
+
+\subsubsection{Robot dựa trên smartphone}
+
+OpenBot chuyển phần cảm biến, tính toán và giao tiếp sang điện thoại Android, còn thân robot đảm nhiệm chấp hành. Công trình gốc báo cáo thân xe chi phí thấp và chứng minh các tác vụ robot học được trên phần cứng phổ thông \reportcite{ref:openbot}. Đề tài kế thừa tư tưởng này nhưng mở rộng theo hướng chăm sóc: tách hai ứng dụng theo vai trò, bổ sung lịch nhắc, cảnh báo té ngã, hội thoại, WebRTC và điều khiển từ xa. Phần thân cũng khác cấu hình OpenBot tham chiếu vì dùng ESP32, hai BLDC, AS5600 và SimpleFOC.
+
+\subsubsection{Phát hiện té ngã dựa trên thị giác}
+
+Các hệ thống phát hiện té ngã có thể dùng thiết bị đeo, cảm biến môi trường, radar/depth camera hoặc camera RGB. Camera RGB không yêu cầu người dùng nhớ đeo thiết bị nhưng gây quan ngại riêng tư và dễ bị ảnh hưởng bởi che khuất, ánh sáng, góc nhìn. Tổng quan về phát hiện té ngã bằng học sâu cho thấy các hướng phổ biến gồm phân loại ảnh/đoạn video, phát hiện người ngã và mô hình dựa trên pose; thách thức chung là dữ liệu dựng lại, khác biệt miền và đánh đổi giữa độ chính xác với thời gian thực \reportcite{ref:fall_review}.
+
+CAUCAFall cung cấp video trong môi trường ít kiểm soát, có nhãn fall/no-fall và mô tả khoảng cách, góc rơi, độ chiếu sáng; dữ liệu phù hợp cho cả detector và phương pháp dựa trên bản đồ xương \reportcite{ref:caucafall}. DiverseFALL10500 bổ sung khoảng 10.500 ảnh có chú thích với đa dạng môi trường, ánh sáng, trang phục và độ tuổi \reportcite{ref:falldetection}. So với detector chỉ phân lớp một khung hình, đề tài sử dụng pose theo thời gian, theo dõi một người mục tiêu và hậu kiểm sự cố để giảm nhầm lẫn giữa nằm chủ động, ngồi thấp, che khuất và té ngã.
+
+\subsubsection{Khoảng trống nghiên cứu và định vị của đề tài}
+
+Các công trình liên quan thường tối ưu một lớp riêng lẻ: tương tác xã hội, phát hiện té ngã, hiện diện từ xa hoặc thân robot giá thấp. Khoảng trống mà đồ án hướng tới là tích hợp toàn chuỗi trên nền tảng Android phổ biến, có hai vai trò sử dụng rõ ràng và có đường điều khiển tới phần cứng thật. Bảng \ref{tab:related_comparison} tóm tắt định vị này.
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh định tính với các hướng giải pháp liên quan}
+\label{tab:related_comparison}
+\small
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|X|X|}
+\hline
+\textbf{Hướng} & \textbf{Điểm mạnh} & \textbf{Giới hạn điển hình} & \textbf{Liên hệ với đề tài} \\
+\hline
+Robot xã hội PARO/Pepper & Tương tác, hỗ trợ cảm xúc, hoạt động có hướng dẫn & Chi phí, bằng chứng dài hạn còn hạn chế; không tập trung điều khiển di động từ xa & Kế thừa nhu cầu tương tác nhưng dùng smartphone và thân xe đơn giản \\
+\hline
+Thiết bị đồng hành ElliQ & Nhắc việc, trò chuyện, kết nối người thân & Nền tảng đóng, phụ thuộc dịch vụ, không phải robot giám sát di động tổng quát & Tương đồng ở nhắc việc/hội thoại; đề tài bổ sung camera, robot và AI biên \\
+\hline
+OpenBot & Chi phí thấp, tận dụng smartphone, hỗ trợ robot học & Kiến trúc tham chiếu không chuyên cho chăm sóc người cao tuổi & Là nền tảng tư tưởng cho phân chia smartphone--thân robot \\
+\hline
+Detector té ngã YOLO & Suy luận nhanh, định vị trực tiếp người/tư thế & Dễ nhầm hành vi tĩnh; phụ thuộc dữ liệu và góc nhìn & Được đặt trong pipeline pose--tracking--LSTM--hậu kiểm \\
+\hline
+Hệ thống thiết bị đeo & Đo gia tốc trực tiếp, riêng tư hơn camera trong một số bối cảnh & Người dùng phải nhớ đeo/sạc; có thể bỏ quên & Đề tài chọn camera RGB, đồng thời công bố giới hạn riêng tư \\
+\hline
+Nguyên mẫu đề tài & Tích hợp theo dõi, cảnh báo, nhắc lịch, hội thoại, video call và điều khiển & Chưa phải thiết bị y tế; cần đánh giá thực địa và hoàn thiện bảo mật đa người dùng & Đóng góp tích hợp và hợp đồng an toàn xuyên suốt \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Đóng góp của đề tài}
+
 \begin{itemize}
-    \item Thu thập, tổng hợp và phân tích các tài liệu, công trình nghiên cứu liên quan đến robot hỗ trợ người cao tuổi, công nghệ AI, thị giác máy tính và IoT.
-    \item Nghiên cứu các mô hình học sâu (Deep Learning) tiên tiến trong lĩnh vực xử lý ngôn ngữ tự nhiên và thị giác máy tính.
-    \item Tìm hiểu các tiêu chuẩn và yêu cầu về an toàn, bảo mật trong các hệ thống chăm sóc sức khỏe.
+    \item Kiến trúc nguyên mẫu gồm hai ứng dụng Android, Firebase, WebRTC, dịch vụ LLM, BLE và firmware điều khiển động cơ.
+    \item Pipeline AI biên kết hợp pose, SORT/Kalman/Hungarian, Re-ID, người mục tiêu ID0, LSTM 15 khung hình với 69 đặc trưng và bộ hậu kiểm theo bằng chứng.
+    \item Cơ chế chuyển quyền camera: CameraX sở hữu camera khi hoạt động bình thường; trong cuộc gọi, WebRTC sở hữu camera và chia sẻ khung hình cục bộ cho pipeline AI.
+    \item Chuỗi an toàn chuyển động gồm giới hạn miền lệnh, timestamp chống lệnh cũ, watchdog ở Android và watchdog 800 ms trong firmware.
+    \item Quy trình phản ứng sự cố: dừng robot, tạo đúng một cảnh báo, hỏi xác nhận bằng giọng nói, phân loại phản hồi và gọi người chăm sóc theo nguyên tắc mặc định an toàn.
+    \item Tài liệu hóa các điểm còn hạn chế: node RTDB toàn cục, phụ thuộc dịch vụ đám mây, quản lý khóa API, phân tách nhiều robot và nhu cầu kiểm thử thực địa.
 \end{itemize}
 
-\subsubsection{Phương pháp nghiên cứu thực nghiệm}
-\begin{itemize}
-    \item Có thể tiến hành mô phỏng, hiện thực hệ thống từ đó thu thập thông tin để đánh giá, so sánh để đi đến lựa chọn phương án hiện thực triểm khai hệ thống.
-    \item Kiểm thử và đánh giá hiệu năng hệ thống trong môi trường thực tế.
-\end{itemize}
+\subsection{Cấu trúc báo cáo}
 
-% \subsection{Cấu trúc báo cáo}
+Báo cáo gồm sáu chương. Chương 1 trình bày bối cảnh, bài toán, mục tiêu, phạm vi, phương pháp và nghiên cứu liên quan. Chương 2 hệ thống hóa cơ sở lý thuyết về robot smartphone, AI, theo dõi, phát hiện té ngã, LLM, giao tiếp và điều khiển. Chương 3 phân tích yêu cầu và thiết kế kiến trúc, dữ liệu, luồng xử lý và cơ chế an toàn. Chương 4 mô tả hiện thực hai ứng dụng, pipeline AI, chuyển đổi mô hình và firmware. Chương 5 trình bày phương pháp kiểm thử, kết quả, thảo luận giới hạn và mối đe dọa tới tính hợp lệ. Chương 6 tổng kết đóng góp và đề xuất hướng phát triển. Phụ lục cung cấp đặc tả use case, hợp đồng dữ liệu, quy trình build và danh mục kiểm thử.
 
-% Báo cáo đồ án được tổ chức thành các phần chính như sau:
+\subsection{Kết luận chương}
 
-% \begin{itemize}
-%     \item \textbf{Phần 1 - Giới thiệu:} Trình bày bối cảnh, đặt vấn đề, mục tiêu, phạm vi và phương pháp nghiên cứu của đề tài.
-    
-%     \item \textbf{Phần 2 - Cơ sở lý thuyết:} Trình bày các kiến thức nền tảng về trí tuệ nhân tạo, mạng nơ-ron, học sâu, thị giác máy tính, xử lý ngôn ngữ tự nhiên, và các công nghệ liên quan.
-    
-%     \item \textbf{Phần 3 - Yêu cầu hệ thống:} Phân tích và đặc tả các yêu cầu chức năng và phi chức năng của hệ thống robot trợ lý ảo.
-    
-%     \item \textbf{Phần 4 - Đặc tả chi tiết các Use Case:} Mô tả chi tiết các trường hợp sử dụng của hệ thống.
-    
-%     \item \textbf{Phần 5 - Phân tích và thiết kế hệ thống:} Trình bày kiến trúc tổng thể, thiết kế chi tiết các module và giao diện của hệ thống.
-    
-%     \item \textbf{Phần 6 - Tổng kết:} Đánh giá kết quả đạt được, những hạn chế và hướng phát triển trong tương lai.
-% \end{itemize}
-
-\subsection{Các công trình nghiên cứu liên quan}
-
-Trong những năm gần đây, đã có nhiều công trình nghiên cứu và sản phẩm thương mại hướng đến việc hỗ trợ người cao tuổi sử dụng công nghệ robot và AI:
-
-\begin{itemize}
-    \item \textbf{Robot Pepper (SoftBank Robotics):} 
-Pepper là robot hình người được phát triển bởi SoftBank Robotics, có khả năng nhận dạng cảm xúc thông qua giọng nói và biểu cảm khuôn mặt, đồng thời hỗ trợ giao tiếp tự nhiên với con người. Robot này đã và đang được triển khai trong lĩnh vực chăm sóc người cao tuổi tại Nhật Bản nhằm hỗ trợ tương tác xã hội và cải thiện chất lượng cuộc sống.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.3\textwidth]{Images/pepper-robot.png}
-    \label{fig:pepper_robot}
-\end{figure}
-\newpage
-    \item \textbf{Robot ElliQ:} Một robot bàn nhỏ gọn được thiết kế đặc biệt cho người cao tuổi giúp họ chống lại cảm giác cô đơn và cô lập. Nó có khả năng nhắc nhở uống thuốc, gợi ý hoạt động và kết nối với người thân.
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.5\textwidth]{Images/robot elliQ.png}
-\end{figure}
-    
-    \item \textbf{Các nghiên cứu về Fall Detection:} Nhiều công trình sử dụng mạng nơ-ron tích chập (CNN), đặc biệt là các mô hình YOLO, để phát hiện té ngã thời gian thực với độ chính xác cao.
-    
-\end{itemize}
-
-Tuy nhiên, các giải pháp hiện có thường có chi phí cao, khó tiếp cận với đại đa số người dùng Việt Nam, hoặc chưa được tối ưu hóa cho ngữ cảnh và ngôn ngữ tiếng Việt. Đề tài này hướng đến việc xây dựng một giải pháp toàn diện, tích hợp nhiều công nghệ AI tiên tiến, với chi phí hợp lý và khả năng tùy biến cao, phù hợp với nhu cầu thực tế của người cao tuổi Việt Nam.
+Chương này đã xác lập tính cấp thiết từ xu hướng già hóa, rủi ro té ngã, nhu cầu nhắc việc và liên lạc tại nhà; đồng thời định vị nguyên mẫu trong bối cảnh robot hỗ trợ và phát hiện té ngã hiện có. Bài toán của đề tài không chỉ là huấn luyện một mô hình AI mà là bảo đảm nhiều thành phần hoạt động như một hệ thống có hành vi dự đoán được. Các kiến thức nền cho những quyết định đó được trình bày ở chương tiếp theo.

@@ -1,0 +1,334 @@
+\section{Kết quả và thảo luận}
+
+\subsection{Mục tiêu đánh giá}
+
+Đánh giá nguyên mẫu nhằm trả lời bốn câu hỏi: các khối có được hiện thực đúng kiến trúc hay không; hợp đồng liên ứng dụng có nhất quán hay không; các cơ chế an toàn có điểm kiểm chứng hay không; và bằng chứng hiện có cho phép kết luận tới mức nào. Do hệ thống gồm AI, cloud, mobile và phần cứng, một con số accuracy đơn lẻ không đại diện cho toàn hệ thống.
+
+Chương này phân biệt ba loại bằng chứng. \textit{Bằng chứng tĩnh} được rút từ mã nguồn, cấu hình và artifact. \textit{Bằng chứng tự động} đến từ unit test/build có thể chạy lặp. \textit{Bằng chứng tích hợp} đến từ thử nghiệm hai điện thoại, Internet, BLE và robot thật. Chỉ các kết quả có artifact hoặc được nhóm dự án xác nhận mới được ghi ``đạt''; hạng mục thiếu log định lượng được ghi rõ để tránh tạo số liệu.
+
+\subsection{Cấu hình và tiêu chí đánh giá}
+
+\begin{table}[htbp]
+\centering
+\caption{Cấu hình phần mềm được đánh giá}
+\label{tab:evaluation_config}
+\small
+\begin{tabularx}{\textwidth}{|p{4.2cm}|X|}
+\hline
+\textbf{Hạng mục} & \textbf{Cấu hình} \\
+\hline
+RobotApp & Android/Kotlin; minSdk 23; target/compile SDK 36; CameraX; TFLite; OpenCV; Firebase; WebRTC; BLE \\
+\hline
+CaregiverApp & Android/Kotlin; minSdk 23; target/compile SDK 36; Firebase; WebRTC \\
+\hline
+AI trên Android & Pose input 320$\times$320; LSTM input $15\times69$; CPU/GPU TFLite artifacts \\
+\hline
+Firmware & ESP32; NimBLE; SimpleFOC; hai AS5600; hai BLDC; velocity limit 40 rad/s \\
+\hline
+Cloud & Firebase Authentication/RTDB; Groq HTTPS; STUN/TURN cho WebRTC \\
+\hline
+Giao thức điều khiển & RTDB $x,y,ts$; BLE \texttt{L<float>R<float>\textbackslash n} \\
+\hline
+\end{tabularx}
+\end{table}
+
+Các chỉ số AI thích hợp gồm precision, recall, F1 và confusion matrix ở cấp sự cố. Với $TP$ là phát hiện đúng sự cố, $FP$ là cảnh báo giả, $FN$ là bỏ sót:
+
+\begin{align}
+Precision &= \frac{TP}{TP+FP},\\
+Recall &= \frac{TP}{TP+FN},\\
+F_1 &= 2\frac{Precision\cdot Recall}{Precision+Recall}.
+\end{align}
+
+Đơn vị đánh giá phải là một sự kiện té ngã, không phải từng frame; nhiều frame cảnh báo liên tiếp của cùng sự cố chỉ tính một sự kiện. Với tracking, chỉ số cần theo dõi là số lần ID0 đổi sai, tỷ lệ phục hồi đúng và thời gian mất mục tiêu. Với điều khiển, chỉ số là độ trễ end-to-end, tần số lệnh, tỷ lệ lệnh bị loại và thời gian dừng sau mất kênh. Với WebRTC, chỉ số gồm thời gian thiết lập, tỷ lệ cuộc gọi thành công, RTT, jitter và packet loss từ \texttt{getStats}.
+
+\subsection{Kết quả hiện thực và artifact}
+
+\subsubsection{Mức độ hoàn thành thành phần}
+
+\begin{longtable}{|p{4.0cm}|p{2.3cm}|p{6.7cm}|}
+\caption{Kết quả hiện thực theo thành phần}\label{tab:implementation_results}\\
+\hline
+\textbf{Thành phần} & \textbf{Trạng thái} & \textbf{Bằng chứng} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Thành phần} & \textbf{Trạng thái} & \textbf{Bằng chứng} \\
+\hline
+RobotApp Android & Đã hiện thực & 24 tệp Kotlin lõi; manifest; resource; model trong assets; APK debug \\
+\hline
+CaregiverApp Android & Đã hiện thực & 24 tệp Kotlin; giao diện quản lý, diary, lịch, call; APK debug \\
+\hline
+Pose trên thiết bị & Đã tích hợp & Hai model TFLite CPU/GPU và pipeline decode/NMS \\
+\hline
+Tracking và Re-ID & Đã tích hợp & SORT, Kalman, Hungarian, HSV histogram, ID0 \\
+\hline
+LSTM và hậu kiểm & Đã tích hợp & Model TFLite, queue 15$\times$69, state machine, verification engine \\
+\hline
+Hội thoại giọng nói & Đã tích hợp RobotApp & SpeechRecognizer, Groq streaming/classify, Android TTS \\
+\hline
+Lịch nhắc và nhật ký & Đã tích hợp & Schedules, reminder\_logs, adapters và service \\
+\hline
+WebRTC & Đã tích hợp & Caller/callee, SDP/ICE RTDB, incoming foreground service \\
+\hline
+Điều khiển robot & Đã tích hợp & Joystick, RTDB, RobotControlManager, BLE GATT \\
+\hline
+Firmware BLDC & Đã hiện thực & Sketch ESP32, NimBLE, SimpleFOC, dual I2C, watchdog \\
+\hline
+Backend riêng/MQTT & Không thuộc hiện thực & Hệ thống dùng Firebase RTDB; không có broker/server signaling riêng \\
+\hline
+Chatbot CaregiverApp & Placeholder & Logic hội thoại thật chỉ nằm ở RobotApp \\
+\hline
+\end{longtable}
+
+\subsubsection{Kết quả đóng gói Android}
+
+Nhóm dự án xác nhận cả hai ứng dụng build thành công. Trong cây build có APK debug RobotApp khoảng 504,24 MiB và CaregiverApp khoảng 51,03 MiB. Chênh lệch chủ yếu do RobotApp đóng gói nhiều runtime native và thư viện AI (TFLite, GPU/Select TF Ops, OpenCV, WebRTC) cùng model; CaregiverApp không chứa model pose/LSTM và stack AI.
+
+Kích thước 504 MiB là chấp nhận được cho prototype debug nhưng không phù hợp phát hành. Bản release cần bật shrinking, loại ABI không dùng, kiểm tra trùng native library, cân nhắc Play App Bundle/split APK và bỏ dependency AI dư. Model thực chỉ chiếm khoảng vài chục MB; phần lớn dung lượng tăng đến từ runtime/native binaries và ký hiệu debug.
+
+\begin{table}[htbp]
+\centering
+\caption{Artifact đóng gói hiện có}
+\label{tab:apk_results}
+\begin{tabular}{|l|r|l|}
+\hline
+\textbf{Artifact} & \textbf{Kích thước} & \textbf{Ý nghĩa} \\
+\hline
+RobotApp debug APK & 504,24 MiB & Bản debug tích hợp AI/WebRTC/BLE \\
+\hline
+CaregiverApp debug APK & 51,03 MiB & Bản debug quản lý/WebRTC \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Kết quả artifact mô hình}
+
+Chuỗi chuyển đổi đã tạo đủ artifact H5, PT, ONNX, SavedModel và TFLite. LSTM giảm từ khoảng 193,8 KB xuống 63,9 KB. Biến thể pose FP16 khoảng 6,28 MB, gần một nửa biến thể float32 tương ứng; biến thể app CPU/GPU lần lượt khoảng 12,03/11,84 MB. Đây là kết quả về kích thước tệp, không tự động chứng minh tốc độ hoặc độ chính xác.
+
+\begin{table}[htbp]
+\centering
+\caption{Đánh giá định tính các biến thể mô hình}
+\label{tab:model_variant_discussion}
+\small
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{3.3cm}|X|}
+\hline
+\textbf{Biến thể} & \textbf{Lợi ích kỳ vọng} & \textbf{Điều phải đo} \\
+\hline
+Float32 CPU & Tương thích rộng, dễ debug & Latency, nhiệt, FPS, bộ nhớ \\
+\hline
+Graph GPU & Tăng throughput nếu delegate hỗ trợ toàn graph & Tỷ lệ op chạy GPU, overhead copy, fallback \\
+\hline
+FP16 & Giảm dung lượng/băng thông bộ nhớ & Sai số keypoint, mAP/PCK, latency thật \\
+\hline
+NMS ngoài graph & Tăng tính tương thích delegate & Độ đúng decode/NMS Kotlin so với nguồn \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Kiểm thử tự động ở mức logic}
+
+\subsubsection{Ánh xạ điều khiển}
+
+\texttt{RobotControlManagerTest} định nghĩa bốn test bảo vệ hiệu chỉnh dấu. Sai sót dấu là rủi ro cao vì tên ``trái/phải/tiến/lùi'' đi qua ba hệ tọa độ: màn hình, camera và chiều lắp motor. Các assertion dùng sai số $0,001$.
+
+\begin{table}[htbp]
+\centering
+\caption{Bộ unit test ánh xạ điều khiển}
+\label{tab:control_unit_tests}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Ca kiểm thử} & \textbf{Input $(x,y)$} & \textbf{Kỳ vọng $(L,R)$} \\
+\hline
+forward calibrated & $(-1,0)$ & $(-20,20)$ \\
+\hline
+backward calibrated & $(1,0)$ & $(20,-20)$ \\
+\hline
+positive steering & $(0,1)$ & $(3,3)$ \\
+\hline
+negative steering & $(0,-1)$ & $(-3,-3)$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Bốn test này kiểm tra điểm chuẩn, nhưng chưa bao phủ clipping, NaN/infinity, vùng đi thẳng, deadzone, timestamp và format Locale.US. Các ca đó được đề xuất bổ sung trước khi release.
+
+\subsubsection{Hậu kiểm té ngã}
+
+\texttt{FallVerificationEngineTest} định nghĩa bốn nhánh quan trọng. Engine trước hết được ``arm'' bằng năm frame đứng và một raw fall, sau đó đánh giá tình huống.
+
+\begin{table}[htbp]
+\centering
+\caption{Bộ unit test hậu kiểm té ngã}
+\label{tab:fall_unit_tests}
+\small
+\begin{tabularx}{\textwidth}{|p{4.2cm}|X|p{3.0cm}|}
+\hline
+\textbf{Ca} & \textbf{Kích thích} & \textbf{Kỳ vọng} \\
+\hline
+clipped bbox after fall & Thân thấp, bbox không nằm trọn ảnh & Hỏi ngay \\
+\hline
+stable upper body top 30\% & Ba frame thân trên ở vùng an toàn & Từ chối sự cố \\
+\hline
+lower occluded horizontal & Thân thấp, 7 keypoint, aspect 1,6 trong ba frame & Hỏi xác nhận \\
+\hline
+lost target after fall & Mất mục tiêu ba frame & Hỏi xác nhận \\
+\hline
+\end{tabularx}
+\end{table}
+
+Các test xác nhận khả năng tách engine khỏi Android UI. Coverage còn thiếu: khóa một sự cố, phục hồi 10 frame, baseline EMA, ngưỡng biên, reset, safe/danger resolution và chuỗi nhiễu xen kẽ.
+
+\subsection{Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}
+
+\subsubsection{Nhất quán Firebase}
+
+Đối chiếu hai ứng dụng cho thấy các path quan trọng trùng nhau: \path|robot_control|, \path|robot_follow_enabled|, \path|ai_fall_detection_enabled|, \path|webrtc_signal|, \path|fall_alerts|, \path|call_history|, \texttt{Users}, \texttt{Schedules} và \path|reminder_logs|. Offer/answer dùng cùng trường \texttt{sdp,type}. ICE dùng \path|candidate,sdpMid,sdpMLineIndex|; hai nhánh candidate được tách theo vai trò.
+
+Một điểm cần chú ý là nhiều path vẫn toàn cục. Với một robot demo, hai app cùng thấy đúng dữ liệu. Với hai gia đình, lệnh/call/cảnh báo có thể trộn nếu rules cho phép. Vì vậy kết quả ``nhất quán'' chỉ áp dụng schema một robot hiện tại, chưa chứng minh multi-tenant.
+
+\subsubsection{Nhất quán BLE}
+
+Tên thiết bị, service UUID và characteristic UUID trong RobotControlManager trùng firmware. Android format L trước R, hai số có dấu chấm và newline; firmware trim rồi tách tại L/R. Android giới hạn $[-20,20]$, hẹp hơn firmware $[-40,40]$, tạo lớp an toàn bổ sung. Characteristic đều dùng write without response.
+
+\subsubsection{Chuỗi timeout}
+
+Ba timeout có thứ tự hợp lý: firmware 800 ms, Android resend/watchdog 1.200 ms và độ mới RTDB 2.000 ms. Firmware dừng sớm nhất khi không có gói BLE; Android dừng nếu nguồn RTDB ngừng; timestamp chặn lệnh cache khi reconnect. Tần suất joystick khoảng 20 Hz tương ứng chu kỳ 50 ms, nhỏ hơn nhiều so với 800 ms, do đó có biên cho jitter bình thường.
+
+\subsubsection{Quyền sở hữu tài nguyên}
+
+Mã nguồn chỉ định tracking fragment là owner của RobotControlManager. Luồng cuộc gọi chia sẻ local WebRTC frame về AI và unbind CameraX. Đây là kết quả kiến trúc quan trọng vì xung đột camera/GATT thường không xuất hiện trong unit test. Kiểm thử vòng đời trên thiết bị vẫn cần bao phủ gọi đến khi app nền, từ chối, mất mạng, xoay màn hình và kết thúc bất thường.
+
+\subsection{Kịch bản kiểm thử chức năng đầu cuối}
+
+\begin{longtable}{|p{1.4cm}|p{4.0cm}|p{4.4cm}|p{3.5cm}|}
+\caption{Danh mục kiểm thử đầu cuối}\label{tab:e2e_tests}\\
+\hline
+\textbf{Mã} & \textbf{Kịch bản} & \textbf{Thao tác/kích thích} & \textbf{Kết quả mong đợi} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Mã} & \textbf{Kịch bản} & \textbf{Thao tác/kích thích} & \textbf{Kết quả mong đợi} \\
+\hline
+\endhead
+E01 & Đăng nhập dùng chung & Đăng nhập cùng tài khoản hai app & Cùng UID/hồ sơ, không lộ user khác \\
+\hline
+E02 & Tạo lịch nhắc & Tạo lịch từ caregiver, chờ thời điểm & Robot phát TTS, log xuất hiện \\
+\hline
+E03 & Hội thoại bình thường & Nói câu tiếng Việt khi robot lắng nghe & STT--LLM--TTS hoàn thành \\
+\hline
+E04 & Bật auto-follow & Chỉ một người đứng trước robot & ID0 ổn định, robot bám trong giới hạn \\
+\hline
+E05 & Người thứ hai đi qua & Người nhiễu cắt ngang mục tiêu & ID0 không đổi sai \\
+\hline
+E06 & Mất mục tiêu ngắn & ID0 ra khỏi ảnh rồi trở lại & Khôi phục trong điều kiện cho phép \\
+\hline
+E07 & Nằm chủ động & Người từ từ nằm nhưng còn rõ/an toàn & Không cảnh báo sai hoặc xác nhận an toàn \\
+\hline
+E08 & Té ngã dựng lại & Thực hiện với đệm và người giám sát & Robot dừng, hỏi, tạo một alert \\
+\hline
+E09 & Phản hồi an toàn & Trả lời ``tôi ổn'' rõ ràng & Cập nhật safe, không gọi khẩn cấp \\
+\hline
+E10 & Không phản hồi & Im lặng quá cửa sổ nghe & Cập nhật danger/no-response, gọi caregiver \\
+\hline
+E11 & Video call & Gọi giữa hai mạng khác nhau & Offer/answer/ICE, audio/video kết nối \\
+\hline
+E12 & AI trong cuộc gọi & Bật tracking khi call & Một camera, frame chia sẻ, không crash \\
+\hline
+E13 & Joystick & Kéo bốn hướng rồi thả & Đúng dấu; thả gửi STOP \\
+\hline
+E14 & Mất Internet & Ngắt mạng khi joystick đang kéo & Không nhận lệnh mới; watchdog dừng \\
+\hline
+E15 & Mất BLE & Tắt Bluetooth/ngắt nguồn tablet & Callback/watchdog firmware dừng \\
+\hline
+E16 & Lệnh cũ & Ghi timestamp cũ hơn 2 s & RobotApp bỏ lệnh và dừng \\
+\hline
+E17 & Input lỗi & NaN/vượt miền/thiếu timestamp & Không chuyển động \\
+\hline
+E18 & Cuộc gọi khẩn nền & Caregiver app ở nền, robot gọi fall & Notification/full-screen nêu đúng lý do \\
+\hline
+\end{longtable}
+
+Bảng là bộ kiểm thử hồi quy đề xuất. Các kịch bản phần cứng phải bắt đầu với bánh xe nhấc khỏi mặt đất, tốc độ thấp, vùng trống và nút ngắt nguồn sẵn sàng. Không cho người cao tuổi thật thực hiện té ngã; chỉ dùng diễn viên khỏe mạnh, đệm bảo vệ và giám sát.
+
+\subsection{Thiết kế phép đo hiệu năng}
+
+\subsubsection{Độ trễ pipeline AI}
+
+Mỗi frame cần gắn timestamp $t_0$ khi nhận, $t_1$ sau preprocess, $t_2$ sau interpreter, $t_3$ sau decode/NMS, $t_4$ sau tracking/LSTM và $t_5$ khi UI/lệnh được cập nhật. Báo cáo median, P90, P95 thay vì chỉ trung bình. FPS hiệu dụng phải tính frame thật được xử lý; drop-frame count phản ánh quá tải.
+
+\begin{equation}
+T_{AI}= (t_1-t_0)+(t_2-t_1)+(t_3-t_2)+(t_4-t_3).
+\end{equation}
+
+Nhiệt và pin ảnh hưởng mạnh sau vài phút. Do đó benchmark cần warm-up 30--60 s, chạy ít nhất 10 phút cho mỗi CPU/GPU/FP16, ghi model thiết bị, Android version, delegate, thread count và độ phân giải camera.
+
+\subsubsection{Độ trễ điều khiển}
+
+Caregiver gắn sequence number và $t_c$ vào lệnh; RobotApp log $t_r$ khi listener nhận và $t_b$ khi ghi BLE; ESP32 log micros/millis khi callback nhận. Nếu đồng hồ thiết bị chưa đồng bộ, đo từng chặng hoặc quay video tốc độ cao; không trừ trực tiếp timestamp khác clock. Độ trễ cần báo cáo cùng packet loss và khoảng cách BLE.
+
+\subsubsection{WebRTC}
+
+Thu thập \texttt{RTCStatsReport} định kỳ: candidate pair, currentRoundTripTime, packetsLost, jitter, framesEncoded/Decoded, framesDropped và availableOutgoingBitrate. Thử cùng Wi-Fi, Wi-Fi--4G và hai mạng NAT khó; ghi rõ có dùng TURN. Thời gian setup tính từ \texttt{calling} đến \texttt{connected}.
+
+\subsubsection{Độ chính xác té ngã}
+
+Tập kiểm thử phải độc lập theo chủ thể/video, bao gồm đi, ngồi, nằm, cúi nhặt đồ, khuất người, ra khỏi ảnh, té nhiều hướng và nhiều điều kiện sáng. So sánh ít nhất ba cấu hình: pose/luật một frame; pose+LSTM; pose+LSTM+hậu kiểm. Ablation này đo được đóng góp của mỗi tầng thay vì chỉ nêu pipeline cuối.
+
+\subsection{Thảo luận kết quả}
+
+\subsubsection{Điểm mạnh}
+
+Kết quả nổi bật nhất là mức tích hợp xuyên suốt. Lệnh caregiver không dừng ở giao diện mà đi đến hai setpoint motor. Cảnh báo AI không dừng ở nhãn mà nối với hỏi xác nhận, bản ghi và cuộc gọi. Camera được dùng chung đúng vòng đời. Các chi tiết timestamp, watchdog, khóa sự cố và ID0 cho thấy thiết kế đã xử lý nhiều lỗi đặc thù hệ thống thời gian thực.
+
+Việc chạy pose và LSTM tại RobotApp giảm nhu cầu gửi video liên tục lên cloud. Hệ thống vẫn dùng Internet cho điều phối/hội thoại/call, nhưng quyết định thị giác cơ bản ở gần nguồn. Tách CaregiverApp khỏi BLE cũng giảm phụ thuộc khoảng cách vật lý và giữ hiệu chỉnh motor ở một nơi.
+
+\subsubsection{Hạn chế}
+
+Thứ nhất, chưa có bảng metric huấn luyện/validation và benchmark thiết bị được lưu cùng artifact; vì vậy không thể đưa ra mAP, PCK, precision/recall, FPS hay latency đáng tin cậy. Thứ hai, dữ liệu té ngã dựng lại khác người cao tuổi thật; domain shift có thể lớn. Thứ ba, camera RGB gây vấn đề riêng tư và có điểm mù. Thứ tư, Groq/Firebase/TURN là phụ thuộc ngoài; mất Internet làm suy giảm chức năng. Thứ năm, node toàn cục và auth/rules cần hoàn thiện cho multi-tenant. Thứ sáu, APK RobotApp debug còn quá lớn.
+
+Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Logic người có bbox lớn nhất chỉ là heuristic ban đầu. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm dùng ngưỡng thủ công, cần calibration theo góc camera/nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
+
+\subsubsection{Mối đe dọa tới tính hợp lệ}
+
+\textit{Nội tại:} kết quả có thể phụ thuộc actor, trình tự kịch bản, vị trí camera và việc điều chỉnh ngưỡng trên cùng dữ liệu. \textit{Ngoại tại:} một hoặc vài nhà/thiết bị không đại diện mọi căn hộ, mạng và người cao tuổi. \textit{Đo lường:} accuracy theo frame có thể thổi phồng hiệu năng; clock khác nhau gây sai độ trễ. \textit{Kết luận:} số mẫu nhỏ làm confidence interval rộng. Giảm rủi ro bằng protocol cố định, split theo chủ thể, log tự động, blind annotation và công bố cả trường hợp thất bại.
+
+\subsection{Mức đáp ứng mục tiêu}
+
+\begin{table}[htbp]
+\centering
+\caption{Đối chiếu mục tiêu và kết quả}
+\label{tab:objective_results}
+\small
+\begin{tabularx}{\textwidth}{|p{4.0cm}|p{2.4cm}|X|}
+\hline
+\textbf{Mục tiêu} & \textbf{Mức đạt} & \textbf{Nhận xét} \\
+\hline
+Hai ứng dụng theo vai trò & Đạt nguyên mẫu & Có APK và module chức năng chính \\
+\hline
+Firmware thân robot & Đạt nguyên mẫu & BLE, dual BLDC, encoder, FOC, watchdog \\
+\hline
+Theo dõi người và auto-follow & Đạt hiện thực & Có ID0, SORT/Re-ID và cầu nối motor; cần metric dài hạn \\
+\hline
+Phát hiện/xác nhận té ngã & Đạt hiện thực & Pose+LSTM+hậu kiểm+voice+alert; chưa có metric test độc lập \\
+\hline
+Hội thoại và nhắc lịch & Đạt nguyên mẫu & STT--Groq--TTS và Schedules/logs \\
+\hline
+Video call/điều khiển xa & Đạt nguyên mẫu & WebRTC signaling RTDB và joystick \\
+\hline
+Đánh giá định lượng toàn diện & Chưa hoàn tất & Cần log dataset, benchmark thiết bị và thử nghiệm nhiều bối cảnh \\
+\hline
+Sẵn sàng sản phẩm/y tế & Ngoài phạm vi & Cần security, safety, UX, pháp lý và thử nghiệm thực địa \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Khuyến nghị trước nghiệm thu và trình diễn}
+
+Trước buổi trình diễn, nên đóng băng commit của bốn khối, lưu checksum model, build release/debug từ môi trường ghi phiên bản và chạy danh mục E01--E18. Mỗi thất bại cần lưu thời gian, thiết bị, logcat/serial và video. Chuẩn bị chế độ demo offline tối thiểu cho AI/BLE, kiểm tra credential TURN/Groq/Firebase, sạc đầy thiết bị và thử nút dừng vật lý.
+
+Các bảng kết quả định lượng nên được điền từ log thật theo mẫu ở Phụ lục. Việc để trống có chú thích tốt hơn một con số không truy nguồn. Nếu thời gian hạn chế, ưu tiên đo recall/false alarm theo sự cố, latency P95 AI, thời gian dừng khi mất lệnh, tỷ lệ cuộc gọi thành công và số lần ID switch.
+
+\subsection{Kết luận chương}
+
+Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có tập trung vào dấu điều khiển và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.

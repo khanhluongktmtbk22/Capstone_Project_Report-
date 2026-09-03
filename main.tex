@@ -28,7 +28,7 @@
 \usepackage{indentfirst}
 \setlength{\parindent}{1.25cm}
 \setlength{\parskip}{3pt}
-\setlength{\emergencystretch}{2em}
+\setlength{\emergencystretch}{4em}
 
 % ==================== TOÁN HỌC VÀ MÔI TRƯỜNG ====================
 \usepackage{amsmath,amssymb,amsthm,amscd}
@@ -209,6 +209,9 @@
   pdftitle={Đồ án tốt nghiệp Kỹ thuật Máy tính}
 }
 
+% Trích dẫn đánh số dùng chung với danh mục tài liệu tham khảo thủ công.
+\newcommand{\reportcite}[1]{\hyperref[#1]{[\ref*{#1}]}}
+
 \begin{document}
 
 % ==================== TRANG BÌA ====================
@@ -323,13 +326,13 @@
 \clearpage
 \input{Contents/CoSoLyThuyet}
 \clearpage
-\input{Contents/Giaiphapdexuat}
+\input{Contents/PhanTichThietKeHeThong}
 \clearpage
-\input{Contents/HienThuc}
+\input{Contents/HienThucHeThong}
 \clearpage
-\input{Contents/KiemThuHeThong}
+\input{Contents/KetQuaVaThaoLuan}
 \clearpage
-\input{Contents/TongKet}
+\input{Contents/KetLuan}
 
 % ==================== PHẦN CUỐI BÁO CÁO ====================
 \clearpage

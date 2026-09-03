@@ -8,7 +8,7 @@ Phần này trình bày nền tảng lý thuyết cần thiết cho hệ thống
 
 \subsubsection{Giới thiệu Intel OpenBot}
 
-Intel OpenBot là một nền tảng robot mã nguồn mở được Intel phát triển nhằm mục đích nghiên cứu và giáo dục trong lĩnh vực robotics và trí tuệ nhân tạo. Điểm đặc biệt của OpenBot là sử dụng điện thoại thông minh (smartphone) làm ``bộ não'' chính của robot, tận dụng sức mạnh tính toán, camera, và các cảm biến có sẵn trên điện thoại.
+Intel OpenBot là một nền tảng robot mã nguồn mở được phát triển cho nghiên cứu và giáo dục trong lĩnh vực robotics và trí tuệ nhân tạo. Điểm đặc biệt của OpenBot là sử dụng điện thoại thông minh (smartphone) làm ``bộ não'' chính của robot, tận dụng sức mạnh tính toán, camera và các cảm biến có sẵn trên điện thoại \reportcite{ref:openbot}.
 
 
 Các đặc điểm nổi bật của Intel OpenBot:
@@ -654,7 +654,7 @@ ResNet cho phép huấn luyện mạng với hàng trăm thậm chí hàng nghì
 
 \subsubsection{Bài toán Object Detection}
 
-Object Detection (Phát hiện đối tượng) là một trong những bài toán cơ bản và quan trọng nhất trong thị giác máy tính [13]. Khác với Image Classification chỉ xác định loại đối tượng chính trong ảnh, Object Detection yêu cầu đồng thời:
+Object Detection (Phát hiện đối tượng) là một trong những bài toán cơ bản và quan trọng nhất trong thị giác máy tính \reportcite{ref:odsurvey}. Khác với Image Classification chỉ xác định loại đối tượng chính trong ảnh, Object Detection yêu cầu đồng thời:
 
 \begin{itemize}
     \item \textbf{Định vị (Localization)}: Xác định vị trí của đối tượng trong ảnh thông qua bounding box (hộp giới hạn)
@@ -665,7 +665,7 @@ Trong bài toán phát hiện ngã, Object Detection đóng vai trò then chốt
 
 \subsubsection{Lịch sử phát triển Object Detection}
 
-Theo survey ``Object Detection in 20 Years'' của Zou et al. [13], lĩnh vực Object Detection đã trải qua sự phát triển đáng kể trong hơn hai thập kỷ:
+Theo khảo sát ``Object Detection in 20 Years'' của Zou và cộng sự \reportcite{ref:odsurvey}, lĩnh vực Object Detection đã trải qua sự phát triển đáng kể trong hơn hai thập kỷ:
 
 \textbf{a) Giai đoạn truyền thống (1990s-2012)}
 
@@ -689,7 +689,7 @@ Theo survey ``Object Detection in 20 Years'' của Zou et al. [13], lĩnh vực 
 
 \textbf{c) Xu hướng hiện tại}
 
-Theo [13], các xu hướng chính trong Object Detection bao gồm:
+Theo \reportcite{ref:odsurvey}, các xu hướng chính trong Object Detection bao gồm:
 \begin{itemize}
     \item Anchor-free detectors (loại bỏ anchor boxes)
     \item Transformer-based detectors (DETR, Swin Transformer)
@@ -830,9 +830,9 @@ với $N$ là số class trong dataset.
 
 \subsubsection{Ý tưởng YOLO: Phát hiện trong một lần suy luận}
 
-YOLO (You Only Look Once) được Joseph Redmon, Santosh Divvala, Ross Girshick và Ali Farhadi đề xuất năm 2016 trong bài báo ``You Only Look Once: Unified, Real-Time Object Detection'' [1]. Đây là bước đột phá mang đến cách tiếp cận hoàn toàn mới cho Object Detection.
+YOLO (You Only Look Once) được Joseph Redmon, Santosh Divvala, Ross Girshick và Ali Farhadi đề xuất năm 2016 trong bài báo ``You Only Look Once: Unified, Real-Time Object Detection'' \reportcite{ref:yolo}. Đây là bước đột phá mang đến cách tiếp cận hợp nhất cho Object Detection.
 
-\textbf{Ý tưởng cách mạng của YOLO} (theo [1]):
+\textbf{Ý tưởng cốt lõi của YOLO} (theo \reportcite{ref:yolo}):
 
 ``We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are.''
 
@@ -904,14 +904,14 @@ YOLOv5 & 100+ & 68.9 & Có \\
 \end{itemize}
 
 %=========================================
-\subsection{Lý do lựa chọn YOLOv11 cho bài toán Fall Detection}
+\subsection{Khảo sát YOLOv11 cho bài toán Fall Detection}
 %=========================================
 
 \subsubsection{Giới thiệu YOLOv11}
 
-YOLOv11 là phiên bản mới nhất trong họ YOLO, được phân tích chi tiết trong nghiên cứu ``YOLOv11: An Overview of the Key Architectural Enhancements'' của Rahima Khanam và Muhammad Hussain [11]. Phiên bản này được phát triển bởi Ultralytics (2024), kế thừa và cải tiến từ YOLOv5 và YOLOv8.
+Tại giai đoạn khảo sát, YOLOv11 là một ứng viên trong họ YOLO và được phân tích trong nghiên cứu ``YOLOv11: An Overview of the Key Architectural Enhancements'' của Rahima Khanam và Muhammad Hussain \reportcite{ref:yolov11}. Phiên bản được công bố trong hệ sinh thái Ultralytics năm 2024, kế thừa hướng phát triển của các phiên bản trước. Artifact triển khai cuối của đồ án được ghi theo đúng tên tệp trong Chương 4, không đồng nhất tên khảo sát với tên model đã đóng gói.
 
-Theo [11], các cải tiến kiến trúc chính của YOLOv11 bao gồm:
+Theo \reportcite{ref:yolov11}, các cải tiến kiến trúc chính của YOLOv11 bao gồm:
 
 \begin{itemize}
     \item \textbf{C3k2 Block (Cross Stage Partial with kernel size 2)}: Module convolution mới thay thế C3 trong YOLOv8, sử dụng kernel size nhỏ hơn để tăng tốc độ inference trong khi vẫn giữ hiệu suất feature extraction.
@@ -929,10 +929,11 @@ YOLOv11 hỗ trợ đa nhiệm vụ trong cùng một framework: Object Detectio
 
 \subsubsection{Các phiên bản mô hình YOLOv11}
 
-Theo [11], YOLOv11 cung cấp nhiều kích thước mô hình phù hợp với các nhu cầu khác nhau:
+Theo \reportcite{ref:yolov11}, YOLOv11 cung cấp nhiều kích thước mô hình phù hợp với các nhu cầu khác nhau:
 
 \begin{center}
-\begin{tabular}{|l|c|c|c|c|}
+\small
+\begin{tabularx}{\textwidth}{|l|c|c|c|X|}
 \hline
 \textbf{Model} & \textbf{Params (M)} & \textbf{mAP@50-95} & \textbf{Latency (ms)} & \textbf{Ứng dụng} \\
 \hline
@@ -942,7 +943,7 @@ YOLOv11m & 20.1 & 51.5 & 4.70 & Desktop GPU \\
 YOLOv11l & 25.3 & 53.4 & 6.16 & High accuracy \\
 YOLOv11x & 56.9 & 54.7 & 11.31 & Maximum accuracy \\
 \hline
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \textit{Nguồn: Ultralytics YOLO11 Documentation, 2024}
@@ -991,7 +992,7 @@ Phương pháp Tracking-by-Detection là hướng tiếp cận phổ biến nh�
 
 \subsubsection{Mục tiêu và đặc điểm của dataset CauCaFall}
 
-CauCaFall là bộ dữ liệu chuyên biệt cho bài toán phát hiện ngã, được xây dựng với mục tiêu cung cấp nguồn dữ liệu chất lượng cao cho nghiên cứu và phát triển các hệ thống giám sát an toàn trong môi trường sinh hoạt.
+CauCaFall là bộ dữ liệu chuyên biệt cho bài toán phát hiện ngã trong môi trường ít kiểm soát, cung cấp video, nhãn fall/no-fall và thông tin về góc, khoảng cách, độ chiếu sáng \reportcite{ref:caucafall}.
 
 Đặc điểm nổi bật của dataset CauCaFall:
 
@@ -1049,7 +1050,7 @@ Annotation được thực hiện ở mức bounding box cho từng frame, xác 
 
 \subsubsection{Nghiên cứu liên quan: Dataset DiverseFALL10500}
 
-Nghiên cứu của Habib Khan và cộng sự (2024) ``Visionary vigilance: Optimized YOLOV8 for fallen person detection with large-scale benchmark dataset'' [12] đã đề xuất một dataset quy mô lớn cho bài toán Fall Detection:
+Nghiên cứu của Habib Khan và cộng sự (2024) ``Visionary vigilance: Optimized YOLOV8 for fallen person detection with large-scale benchmark dataset'' \reportcite{ref:falldetection} đã đề xuất một dataset quy mô lớn cho bài toán Fall Detection:
 
 \textbf{DiverseFALL10500 Dataset:}
 \begin{itemize}
@@ -1058,10 +1059,10 @@ Nghiên cứu của Habib Khan và cộng sự (2024) ``Visionary vigilance: Opt
     \item \textbf{Điều kiện ánh sáng}: Nhiều mức độ chiếu sáng khác nhau (illumination variations)
     \item \textbf{Đa dạng đối tượng}: Samples từ nhiều độ tuổi khác nhau
     \item \textbf{Góc quay đa dạng}
-    \item \textbf{Mã nguồn mở}: Available tại \url{https://github.com/habib1402/Fall-Detection-DiverseFall10500}
+    \item \textbf{Mã nguồn mở}: công bố tại \href{https://github.com/habib1402/Fall-Detection-DiverseFall10500}{kho mã DiverseFALL10500}
 \end{itemize}
 
-Theo [12], các dataset Fall Detection hiện có thường gặp hạn chế về:
+Theo \reportcite{ref:falldetection}, các dataset Fall Detection hiện có thường gặp hạn chế về:
 \begin{itemize}
     \item Thiếu đa dạng trong samples (môi trường đồng nhất)
     \item Hạn chế về biểu hiện thị giác của các nhóm tuổi khác nhau
@@ -1351,7 +1352,7 @@ Chain-of-Thought là kỹ thuật quan trọng giúp LLM giải quyết các bà
 \newpage
 \subsubsection{Retrieval-Augmented Generation (RAG)}
 
-RAG là kỹ thuật kết hợp LLM với hệ thống truy xuất thông tin, giúp mô hình trả lời dựa trên kiến thức cụ thể mà không cần fine-tune:
+RAG là kỹ thuật kết hợp mô hình sinh với hệ thống truy xuất thông tin, giúp mô hình tạo câu trả lời dựa trên tài liệu được truy hồi mà không phải đưa toàn bộ tri thức vào tham số \reportcite{ref:rag}:
 
 \begin{enumerate}
     \item \textbf{Indexing}: Chuyển đổi tài liệu thành vector embeddings và lưu vào vector database
@@ -1420,35 +1421,95 @@ Việc lựa chọn phương pháp NLP quyết định khả năng "thông minh"
 
 
 
+\subsection{Mô hình chuỗi LSTM cho nhận dạng hành động}
+
+Một detector trên từng ảnh chỉ quan sát tư thế tại một thời điểm. Trong bài toán té ngã, quá trình chuyển từ đứng/ngồi sang hạ thấp nhanh rồi nằm mới là tín hiệu quan trọng. Recurrent Neural Network (RNN) đưa trạng thái ẩn từ bước $t-1$ sang bước $t$, nhưng có thể gặp mất hoặc bùng nổ gradient khi chuỗi dài. Long Short-Term Memory (LSTM) bổ sung cell state và ba cổng vào, quên, ra để điều tiết thông tin \reportcite{ref:lstm}.
+
+Với input $x_t$, hidden state $h_{t-1}$ và cell state $c_{t-1}$:
+
+\begin{align}
+f_t &= \sigma(W_f[x_t,h_{t-1}]+b_f),\\
+i_t &= \sigma(W_i[x_t,h_{t-1}]+b_i),\\
+\tilde{c}_t &= \tanh(W_c[x_t,h_{t-1}]+b_c),\\
+c_t &= f_t\odot c_{t-1}+i_t\odot\tilde{c}_t,\\
+o_t &= \sigma(W_o[x_t,h_{t-1}]+b_o),\\
+h_t &= o_t\odot\tanh(c_t).
+\end{align}
+
+Trong hệ thống, một mẫu là tensor $X\in\mathbb{R}^{15\times69}$. Số 15 là chiều thời gian; 69 là vector pose/hình học mỗi frame. Đầu ra softmax hai lớp được diễn giải là normal/fall. Threshold xác suất chỉ là tầng đầu; hysteresis theo số frame liên tiếp và hậu kiểm hình học giúp ngăn trạng thái dao động. Cần lưu ý nếu FPS thay đổi, 15 frame tương ứng thời gian thực khác nhau; một triển khai tốt nên log timestamp hoặc resample chuỗi theo thời gian.
+
+\subsection{Tracking-by-detection và duy trì danh tính}
+
+Tracking-by-detection tách bài toán thành phát hiện đối tượng ở mỗi frame và liên kết detection qua thời gian. SORT sử dụng Kalman để dự báo chuyển động, IoU làm độ tương đồng và Hungarian cho phép gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình để giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack chỉ ra rằng các detection confidence thấp vẫn có thể hữu ích khi liên kết với track \reportcite{ref:bytetrack}.
+
+Kalman gồm hai pha. Pha dự báo:
+
+\begin{align}
+\hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
+P_{t|t-1}&=FP_{t-1|t-1}F^T+Q.
+\end{align}
+
+Pha cập nhật với quan sát $z_t$:
+
+\begin{align}
+K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
+\hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
+P_{t|t}&=(I-K_tH)P_{t|t-1}.
+\end{align}
+
+Ma trận chi phí giữa $n$ track và $m$ detection được đưa vào thuật toán Hungarian, vốn giải bài toán gán tuyến tính \reportcite{ref:hungarian}. IoU đơn độc có thể thất bại khi người từ đứng chuyển sang nằm làm vùng bao thay đổi mạnh. Vì vậy đề tài kết hợp IoU, khoảng cách tâm, neo vai/hông, tỷ lệ diện tích và histogram vùng thân. Định danh ID0 còn được bảo vệ bởi tuổi track dài hơn và phục hồi có điều kiện.
+
+\subsection{Suy luận AI trên thiết bị và TensorFlow Lite}
+
+Edge AI xử lý dữ liệu gần nguồn thay vì gửi toàn bộ lên cloud. Với camera trong nhà, cách này giảm lưu lượng, độ trễ và phạm vi truyền ảnh; đồng thời vẫn cần kiểm soát quyền và lưu trữ cục bộ. TensorFlow Lite cung cấp runtime cho thiết bị di động/biên, hỗ trợ interpreter CPU và delegate phần cứng \reportcite{ref:tflite}.
+
+Chuỗi chuyển đổi thường gồm model huấn luyện $\rightarrow$ biểu diễn trung gian $\rightarrow$ TFLite. Ba vấn đề phải kiểm chứng là: shape/layout tensor; toán tử được runtime/delegate hỗ trợ; và sai số số học sau tối ưu. FP16 giảm kích thước trọng số và băng thông bộ nhớ, nhưng không bảo đảm tăng tốc nếu delegate không sử dụng FP16. INT8 có thể giảm sâu hơn nhưng cần representative dataset và kiểm tra suy giảm keypoint/metric.
+
+NMS có thể đặt trong graph hoặc ngoài graph. NMS trong graph giảm code hậu xử lý nhưng dễ tạo toán tử không tương thích delegate. NMS ngoài graph yêu cầu decoder Kotlin chính xác, đổi lại graph gọn và dễ chạy GPU hơn. Vì vậy kết quả chuyển đổi cần so ở cả tensor và detection cuối cùng.
+
+\subsection{Firebase Authentication và Realtime Database}
+
+Realtime Database tổ chức dữ liệu thành cây JSON và đồng bộ thay đổi tới client đang lắng nghe \reportcite{ref:firebase_rtdb}. Client Android có cache và hàng đợi write, do đó callback ``gần thời gian thực'' không đồng nghĩa bản ghi luôn mới. Đối với lệnh robot, timestamp/expiry là phần của ngữ nghĩa dữ liệu, không chỉ là metadata.
+
+Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \reportcite{ref:firebase_security}. Rules mặc định cần từ chối, sau đó cấp quyền tối thiểu theo UID, family và robot. Các node lệnh/signaling không nên dùng chung toàn cục trong hệ thống nhiều robot. Chúng cũng cần validate miền giá trị, người gửi và vòng đời phiên.
+
+Ưu điểm của RTDB là tích hợp Android nhanh, listener đơn giản và phù hợp state/event nhỏ. Hạn chế là schema phi quan hệ, truy vấn có giới hạn và dễ tạo coupling bằng string path. Tách repository/data access, định nghĩa model chung và test rules bằng emulator giúp giảm rủi ro.
+
+\subsection{WebRTC, signaling và ICE}
+
+WebRTC là tập API/giao thức cho media và dữ liệu thời gian thực giữa các peer \reportcite{ref:webrtc}. Một phiên cần signaling để trao đổi Session Description Protocol (SDP) và ICE candidate, nhưng chuẩn không bắt buộc một công nghệ signaling cụ thể. Đề tài dùng RTDB cho phần này.
+
+ICE thu thập candidate và kiểm tra cặp đường truyền để vượt Network Address Translator \reportcite{ref:ice}. STUN giúp peer biết địa chỉ public; TURN relay media khi không tạo được đường trực tiếp. Do đó có TURN làm tăng tỷ lệ kết nối nhưng thêm băng thông/độ trễ/chi phí máy chủ. Trạng thái call ở database và trạng thái PeerConnection là hai state machine khác nhau, cần cleanup idempotent để tránh phiên cũ.
+
+WebRTC mã hóa media theo kiến trúc bảo mật giao thức, nhưng ứng dụng vẫn phải bảo vệ signaling, quyền camera/micro và danh tính peer \reportcite{ref:webrtc_security}. SDP/ICE có thể lộ thông tin mạng; log không nên lưu vô hạn. Trong hệ thống chăm sóc, phải có chỉ báo rõ khi camera/micro đang truyền.
+
+\subsection{Bluetooth Low Energy và GATT}
+
+BLE phù hợp liên kết cự ly gần giữa điện thoại và vi điều khiển. GATT xây trên bảng attribute, tổ chức dữ liệu thành service, characteristic và descriptor \reportcite{ref:ble_primer}. Server công bố service/characteristic; client quét, kết nối, khám phá và thực hiện read/write/notify theo property.
+
+Write without response giảm round-trip và phù hợp dòng lệnh cập nhật thường xuyên, nhưng không có ACK ở tầng GATT cho từng write. Ứng dụng phải dùng gửi lặp, sequence/timestamp và watchdog. UUID 128-bit cho custom service tránh xung đột profile chuẩn. Payload văn bản dễ debug nhưng tốn byte và parser cần chặt; protocol nhị phân với version, sequence và checksum là hướng nâng cấp.
+
+BLE disconnect là trạng thái bình thường có thể xảy ra do khoảng cách, radio hoặc vòng đời Android. Motor vì vậy không được giữ setpoint cuối. Callback disconnect và timeout độc lập ở firmware là yêu cầu an toàn, không nên chỉ dựa vào app.
+
+\subsection{Động cơ BLDC và điều khiển FOC}
+
+Động cơ BLDC/PMSM tạo mô-men bằng tương tác từ trường stator và rotor nam châm. Field-Oriented Control biến đổi dòng ba pha sang hệ trục quay $d$--$q$, tách thành phần từ thông và mô-men, sau đó dùng PWM để điều khiển điện áp \reportcite{ref:foc}. Với encoder từ AS5600, hệ thống có phản hồi góc/tốc độ cho vòng kín.
+
+Vòng điều khiển vận tốc so sánh tốc độ đặt với tốc độ đo. PID có dạng khái quát:
+
+\begin{equation}
+u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
+\end{equation}
+
+Giới hạn điện áp bảo vệ driver/motor; giới hạn vận tốc bảo vệ cơ khí; lọc thông thấp giảm nhiễu đo. Deadzone giúp thắng ma sát tĩnh nhưng có thể tạo bước nhảy tốc độ, vì vậy bản hoàn thiện nên bổ sung ramp/giới hạn gia tốc. SimpleFOC cung cấp các abstraction motor, driver, sensor và vòng \texttt{loopFOC}/\texttt{move} cho vi điều khiển \reportcite{ref:simplefoc}.
+
+\subsection{An toàn và quản trị rủi ro AI}
+
+Một hệ thống cảnh báo người cao tuổi phải xem cả false positive và false negative. False positive lặp lại làm người dùng mất tin cậy; false negative có thể trì hoãn hỗ trợ. NIST AI RMF đề xuất các chức năng govern, map, measure và manage xuyên suốt vòng đời \reportcite{ref:nist_ai_rmf}. Với đồ án, điều này được cụ thể hóa bằng phạm vi sử dụng rõ, metric theo sự cố, log bằng chứng, giám sát lỗi, fallback và công bố giới hạn.
+
+LLM không nên là thành phần duy nhất quyết định an toàn. Từ khóa cục bộ xử lý câu rõ, LLM chỉ phân loại trường hợp mơ hồ và lỗi mặc định nguy hiểm. Tương tự, output LSTM đi qua state machine/hậu kiểm. Các lớp độc lập làm hệ thống dễ kiểm tra hơn, nhưng không thay thế đánh giá thực địa.
+
 \subsection{Kết luận chương}
 %=========================================
 
-Chương này đã trình bày đầy đủ cơ sở lý thuyết và một số phương pháp đề xuất cho bài toán phát hiện ngã sử dụng học sâu:
-
-\textbf{Về cơ sở lý thuyết:}
-\begin{itemize}
-    \item Giới thiệu nền tảng về mạng nơ-ron nhân tạo, từ cấu trúc neuron cơ bản đến các cơ chế lan truyền xuôi và lan truyền ngược
-    \item Phân tích MLP và lý giải tại sao kiến trúc này không phù hợp trực tiếp cho xử lý ảnh/video
-    \item Trình bày chi tiết CNN với các thành phần Convolution, Pooling, Fully Connected và các kiến trúc nổi tiếng như AlexNet, VGG, ResNet
-    \item Giới thiệu YOLO như giải pháp real-time object detection, so sánh với các phương pháp two-stage truyền thống
-\end{itemize}
-
-\textbf{Về lựa chọn mô hình:}
-\begin{itemize}
-    \item Phân tích lý do lựa chọn YOLOv11 dựa trên các tiêu chí: SOTA performance, cải tiến NMS, tốc độ inference, và phù hợp cho video giám sát
-    \item Giải thích việc chọn phiên bản YOLOv11m như điểm cân bằng tối ưu giữa độ chính xác và tốc độ
-\end{itemize}
-
-\textbf{Về xây dựng dataset:}
-\begin{itemize}
-    \item Giới thiệu dataset CauCaFall với ưu và nhược điểm
-    \item Phân tích các khó khăn trong bài toán multi-task learning khi dataset không đồng nhất
-    \item Đề xuất phương pháp xây dựng dataset mới bằng cách:
-    \begin{itemize}
-        \item Bổ sung indoor objects annotation cho CauCaFall sử dụng pretrained YOLO
-        \item Chuyển đổi nhãn person trong COCO thành fall/no\_fall sử dụng fine-tuned model
-        \item Hợp nhất và chuẩn hóa annotation theo format YOLO
-    \end{itemize}
-\end{itemize}
-
-Dataset multi-task được xây dựng với bộ nhãn cuối cùng gồm 8 classes, cho phép huấn luyện một mô hình duy nhất có khả năng phát hiện ngã và nhận diện vật thể trong nhà đồng thời. Điều này tạo nền tảng cho chương thực nghiệm tiếp theo, nơi sẽ trình bày chi tiết quá trình huấn luyện, đánh giá, và các kết quả đạt được của mô hình YOLOv11m trên dataset đề xuất.
+Chương đã trình bày nền tảng robot dựa trên smartphone, mạng nơ-ron, CNN, detector họ YOLO, pose, dữ liệu té ngã, tracking, LSTM, LLM/RAG, nhận dạng giọng nói, AI biên, Firebase, WebRTC, BLE và FOC. Các nội dung được liên kết với lựa chọn hiện thực thay vì giả định một mô hình khảo sát chính là model cuối. Điểm then chốt là phát hiện té ngã của đề tài không dựa trên một nhãn ảnh duy nhất mà kết hợp pose, duy trì ID0, chuỗi LSTM và hậu kiểm có bằng chứng. Chương tiếp theo chuyển các khái niệm này thành yêu cầu, kiến trúc và hợp đồng cụ thể.

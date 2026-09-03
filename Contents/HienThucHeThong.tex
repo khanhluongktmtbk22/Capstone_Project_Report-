@@ -1,0 +1,264 @@
+\section{Hiện thực hệ thống}
+
+\subsection{Môi trường và tổ chức mã nguồn}
+
+Đồ án được hiện thực thành bốn khối mã/tài nguyên độc lập nhưng dùng chung hợp đồng dữ liệu. Hai ứng dụng Android được viết bằng Kotlin, giao diện XML và ViewBinding. RobotApp có package \texttt{com.example.datn\_v1}; CaregiverApp có package \texttt{com.example.datn\_caregiver}. Cả hai đặt \texttt{minSdk=23}, \texttt{targetSdk=36}, Java/Kotlin JVM target 11. Firmware là một sketch Arduino cho ESP32. Khối AI chứa mô hình huấn luyện, mô hình trung gian ONNX, mô hình TFLite và các script chuyển đổi/thử suy luận.
+
+\begin{table}[htbp]
+\centering
+\caption{Các khối mã nguồn của đồ án}
+\label{tab:source_blocks}
+\small
+\begin{tabularx}{\textwidth}{|p{3.1cm}|p{5.1cm}|X|}
+\hline
+\textbf{Khối} & \textbf{Công nghệ chính} & \textbf{Vai trò} \\
+\hline
+RobotApp & Android/Kotlin, CameraX, TFLite, OpenCV, Firebase, WebRTC, BLE, OkHttp & Bộ não trên robot, AI, hội thoại, cuộc gọi và cầu nối phần thân \\
+\hline
+CaregiverApp & Android/Kotlin, Firebase Auth/RTDB, WebRTC & Ứng dụng cho người thân quản lý, giám sát và điều khiển \\
+\hline
+AI model & Python, Keras/TensorFlow, Ultralytics, ONNX, onnx2tf, TFLite & Huấn luyện/chuẩn bị và chuyển đổi mô hình cho Android \\
+\hline
+Firmware & ESP32, NimBLE, SimpleFOC, AS5600, 3PWM & GATT server, parser lệnh và điều khiển hai BLDC \\
+\hline
+\end{tabularx}
+\end{table}
+
+Các thư viện RobotApp gồm CameraX, TensorFlow Lite CPU/GPU/Support/Select TF Ops, OpenCV Android, Firebase Auth/Database, WebRTC native, OkHttp và Kotlin Coroutines. CaregiverApp dùng Firebase Auth/Database, Android Credentials, RecyclerView và WebRTC. Mô hình TFLite được đánh dấu \texttt{noCompress} để Android đóng gói nguyên dạng, thuận lợi cho memory mapping.
+
+\subsection{Hiện thực RobotApp}
+
+\subsubsection{Khởi động, điều hướng và vòng đời dịch vụ}
+
+\texttt{LoginActivity} là launcher của RobotApp. Sau xác thực, \texttt{MainActivity} quản lý các fragment hồ sơ, theo dõi, chatbot và cuộc gọi. Activity cũng lắng nghe \texttt{webrtc\_signal} để chuyển giao diện khi có lời mời gọi. Các foreground service gồm \texttt{ReminderService} và \texttt{TrackingService}. AndroidManifest khai báo camera, microphone, Internet, notification, foreground service và quyền BLE tương thích nhiều phiên bản Android.
+
+Quyền Bluetooth được tách theo nền tảng. Android 11 trở xuống dùng \texttt{BLUETOOTH}, \path|BLUETOOTH_ADMIN| và vị trí để quét. Android 12 trở lên dùng \path|BLUETOOTH_SCAN| và \path|BLUETOOTH_CONNECT|; cách phân chia này phù hợp tài liệu Android về quyền Bluetooth \reportcite{ref:android_permissions}. Camera được khai báo \texttt{required=false} để ứng dụng vẫn có thể cài trên thiết bị không báo camera theo feature flag, nhưng chức năng thị giác tất nhiên cần camera thực tế.
+
+\subsubsection{TrackingFragment và quyền sở hữu camera}
+
+\texttt{tracking\_fragment.kt} là module lớn điều phối CameraX, mô hình pose, tracker, LSTM, hậu kiểm và điều khiển bám. CameraX cung cấp \texttt{Preview} và \texttt{ImageAnalysis}; analyzer chuyển \texttt{ImageProxy} sang bitmap/tensor rồi đóng frame đúng thời điểm. Tài liệu CameraX mô tả use case được bind theo lifecycle, phù hợp cách fragment quản lý camera \reportcite{ref:android_camera}.
+
+Khi không có cuộc gọi, fragment bind CameraX. Khi WebRTC bắt đầu, CameraX được unbind để tránh lỗi ``camera already in use''. \texttt{video\_call\_fragment} lấy camera và đẩy bản sao local VideoFrame về tracking fragment. Frame được chuyển I420 sang RGB, giảm kích thước và đưa vào executor riêng. Nếu lần suy luận trước chưa xong, frame mới bị bỏ thay vì xếp hàng vô hạn. Khi kết thúc gọi, WebRTC capturer được dừng/dispose rồi CameraX bind lại.
+
+Thiết kế chỉ tạo một \texttt{RobotControlManager} trong tracking fragment. Video call không tạo GATT client thứ hai. Điều này loại bỏ tranh chấp kết nối với cùng ESP32 và giữ một điểm duy nhất chịu trách nhiệm dừng.
+
+\subsubsection{Nạp và suy luận mô hình pose}
+
+RobotApp đóng gói hai biến thể pose trong \texttt{assets}: \path|yolo26n-pose_320.tflite| kích thước khoảng 12,03 MB và \path|yolo26n-pose_320_gpu.tflite| khoảng 11,84 MB. Tên tệp ``yolo26n'' là định danh artifact đang triển khai của đồ án. Interpreter ưu tiên cấu hình tương thích thiết bị; biến thể GPU nhằm giảm thời gian suy luận trên phần cứng hỗ trợ, còn CPU là đường dự phòng.
+
+Pipeline tiền xử lý chuẩn hóa ảnh về kích thước 320$\times$320. Đầu ra được giải mã thành detection người, vùng bao, confidence và danh sách keypoint. Detection dưới ngưỡng bị bỏ, sau đó NMS loại vùng bao trùng. TFLite được chọn vì hướng tới triển khai mô hình trên mobile/edge \reportcite{ref:tflite}.
+
+\subsubsection{SORT, Kalman, Hungarian và Re-ID}
+
+Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực tracking-by-detection. Mỗi detection gồm \texttt{bbox}, \texttt{score}, \texttt{classId} và keypoint. Kalman dự báo vùng bao kế tiếp; ma trận chi phí ghép được giải bằng Hungarian. Cách tiếp cận giữ độ phức tạp thấp phù hợp suy luận trên điện thoại, kế thừa tinh thần SORT \reportcite{ref:sort} nhưng bổ sung tín hiệu pose và ngoại hình.
+
+Hàm chi phí sử dụng 30\% sai khác IoU, 32\% khoảng cách tâm, 23\% khoảng cách pose và 15\% thay đổi diện tích. Match thông thường có chi phí tối đa 0,76; track được bảo vệ cho phép đến 0,88. Ngưỡng IoU cơ sở là 0,15 vì pose/bbox có thể rung mạnh. Track mới cần hai hit để xuất hiện. Track ID0 được giữ tối đa 45 frame, track nhiễu 10 frame.
+
+Re-ID trích histogram HSV vùng thân, nơi ít bị thay đổi hơn nền và mặt khi người quay. Histogram không được cập nhật liên tục khi thiếu keypoint vì một vùng crop sai có thể làm ``học nhầm'' người khác. Khi detection mới phù hợp với hồ sơ track cũ, \texttt{restoreWithId} khôi phục định danh. Đây là Re-ID nhẹ, không tương đương embedding sâu của Deep SORT \reportcite{ref:deepsort}; ưu điểm là chi phí tính toán thấp, hạn chế là nhạy với quần áo giống nhau và ánh sáng.
+
+\subsubsection{Khóa mục tiêu ID0 và sinh lệnh auto-follow}
+
+Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ở lần chọn đầu, người có vùng bao lớn thường được xem là gần robot nhất. Sau đó ID0 được truyền qua pipeline LSTM và điều khiển. Khi mất mục tiêu, logic phục hồi yêu cầu một người duy nhất, ở gần vị trí cũ, thuộc vùng trung tâm và ổn định; trong cảnh nhiều người, robot chờ thay vì tự đổi chủ thể.
+
+Auto-follow so sánh tâm vùng bao với vùng mục tiêu. Nếu lệch ngang, hệ thống phát lệnh quay; nếu kích thước người cho thấy khoảng cách xa, phát lệnh tiến. Các mức quay hiện dùng kênh $y=\pm0,50$ theo hệ tọa độ camera. Cách đặt dấu khác trực giác joystick nhưng đã được tách rõ theo từng hệ tọa độ. Lệnh cuối vẫn đi qua \texttt{RobotControlManager}, nhờ đó cùng được kiểm tra và format.
+
+\subsubsection{LSTM phát hiện té ngã}
+
+\texttt{LstmFallDetector} nạp \texttt{best\_model\_lstm\_v2.tflite} khoảng 63,9 KB, dùng hai luồng CPU. Mỗi track có \texttt{FallDetectionQueue}; queue đủ 15 frame mới tạo tensor $1\times15\times69$ kiểu float. Output $1\times2$ được diễn giải là xác suất normal/fall. Model gốc Keras khoảng 193,8 KB, cho thấy TFLite giảm đáng kể kích thước đóng gói.
+
+Máy trạng thái dùng threshold 0,5 và nhiều bộ đếm: 10 frame fall liên tiếp để vào Falling; 15 frame phù hợp để xác nhận trạng thái nằm; 20 frame đứng để phục hồi; track mất quá 60 frame thì dọn state. Khi tracker đổi ID hợp lệ, \texttt{transferStateTo} chuyển queue và trạng thái để chuỗi thời gian không bị mất. LSTM được dùng vì khả năng mô hình hóa phụ thuộc theo thời gian \reportcite{ref:lstm}, nhưng đầu ra không được dùng đơn độc để phát cảnh báo.
+
+\subsubsection{Hậu kiểm té ngã}
+
+\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence}: mục tiêu có thấy hay không, tỷ lệ $y$ của thân trên, số keypoint, vùng bao có nằm trọn ảnh và aspect ratio. Baseline thân trên được cập nhật bằng trung bình trượt mũ với $\alpha=0,08$ trong trạng thái bình thường. Khi có sự kiện, engine chấm bằng chứng qua các ngưỡng đã mô tả ở Chương 3.
+
+Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reason)} hoặc \texttt{AskForConfirmation(reason, score, evidence)}. Tách quyết định khỏi UI giúp unit test từng nhánh mà không cần camera. \texttt{isIncidentActive} và \texttt{canAcquireNewTarget} ngăn một sự cố tạo nhiều yêu cầu đồng thời. \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} làm rõ vòng đời sự cố.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{1.jpeg}
+    \caption{Ví dụ khung hình té ngã trong dữ liệu tham khảo}
+    \label{fig:fall_sample}
+\end{figure}
+
+\subsubsection{Luồng xác nhận và cảnh báo}
+
+TrackingService truyền \texttt{FallEvent} đến chatbot. Chatbot là owner duy nhất tạo \texttt{fall\_alerts}, bảo đảm một record cho một sự cố. Robot trước hết dừng, phát câu hỏi TTS và mở cửa sổ nghe tối đa 10 s. Các cụm từ an toàn/nguy hiểm rõ được đối chiếu cục bộ để giảm độ trễ và tránh phụ thuộc LLM. Phản hồi mơ hồ gọi model phân loại không streaming và yêu cầu kết quả cấu trúc. Nếu phân loại lỗi hoặc người dùng im lặng, trạng thái được cập nhật nguy hiểm và gọi caregiver sau khi TTS hoàn tất.
+
+Bản ghi cảnh báo chứa timestamp, trạng thái, phản hồi và bằng chứng như \path|verificationReason|, \path|visibleKeypoints|, \path|bboxFullyInside|, \path|upperBodyYRatio|. Thông tin này giúp truy vết vì sao engine yêu cầu xác nhận, nhưng không phải là giải thích đầy đủ của mô hình LSTM.
+
+\subsubsection{Chatbot giọng nói}
+
+\path|chatbot_fragment| phối hợp ba lớp quản lý. \path|SpeechRecognizerManager| nhận dạng tiếng nói; \path|GroqChatService| xử lý hội thoại; còn \path|AndroidTtsService| tổng hợp tiếng nói. Giao diện chính tối giản thành trạng thái, icon lớn, tên robot và câu đang nghe/nói. Hồ sơ người dùng được đọc từ \texttt{Users/\{uid\}} để xây prompt về cách xưng hô, tên caregiver, tình trạng và sở thích.
+
+\texttt{GroqChatService} gọi endpoint \texttt{/openai/v1/chat/completions} qua OkHttp. Hội thoại streaming dùng model cấu hình \texttt{qwen/qwen3.6-27b}; các tác vụ phân loại ngắn dùng \texttt{openai/gpt-oss-20b}. Lịch sử được giới hạn 20 message để kiểm soát context. Dòng SSE có tiền tố \texttt{data:}; service đọc \texttt{choices[0].delta.content}, phát từng phần qua Kotlin Flow và lưu câu hoàn chỉnh khi stream kết thúc.
+
+Tác vụ an toàn không dựa hoàn toàn vào sinh văn bản tự do. Hàm phân loại phản hồi té ngã quét từ khóa nguy hiểm/an toàn trước; chỉ trường hợp mơ hồ mới gọi API và parse JSON. \texttt{detectCallIntent} cũng có từ khóa, kiểm tra tên/quan hệ caregiver và model phân loại dự phòng. Khóa API được truyền vào service; bản phát hành phải lấy từ cấu hình không commit hoặc một proxy backend, không hard-code.
+
+\subsubsection{Lịch nhắc}
+
+\texttt{ReminderService} lắng nghe \texttt{Schedules/\{uid\}} và hồ sơ \texttt{Users/\{uid\}}. Khi tới thời điểm, service tạo log dưới \texttt{reminder\_logs/\{uid\}}, truyền sự kiện đến chatbot và phát lời nhắc. Người cao tuổi có thể xác nhận, từ chối hoặc không phản hồi; log cập nhật status, câu trả lời, retry count và confirmed time. Cấu trúc này tách định nghĩa lịch khỏi lần thực hiện, cho phép caregiver xem lịch sử mà không làm thay đổi lịch gốc.
+
+\subsubsection{WebRTC trong RobotApp}
+
+\texttt{video\_call\_fragment} khởi tạo PeerConnectionFactory, nguồn audio/video, renderer và Firebase reference \texttt{webrtc\_signal}. Khi RobotApp gọi, nó ghi offer và đẩy ICE vào \texttt{robotCandidates}; khi nhận gọi, nó đọc offer, tạo answer và nghe \texttt{caregiverCandidates}. Listener chỉ được dùng cho đúng pha và được gỡ trong cleanup.
+
+WebRTC cung cấp mã hóa và truyền media; Firebase chỉ trao đổi SDP, ICE và trạng thái \reportcite{ref:webrtc}. Trường \texttt{emergencyReason=fall} phân biệt cuộc gọi khẩn cấp với cuộc gọi thường. Khi kết thúc, status được đặt \texttt{ended}, track/capturer/renderer/PeerConnection được giải phóng và quyền camera trả lại tracking.
+
+\subsubsection{RobotControlManager và BLE}
+
+\texttt{RobotControlManager} lắng nghe \texttt{robot\_control}. Hàm ánh xạ được tách để kiểm thử bốn điểm chuẩn. Mọi input được kiểm tra hữu hạn, giới hạn, tuổi và skew tương lai. Payload được format với \texttt{Locale.US} để dấu thập phân luôn là dấu chấm:
+
+\begin{lstlisting}[caption={Định dạng lệnh BLE ở mức logic}]
+left  = clamp((steering * 0.15 + translation) * 20, -20, 20)
+right = clamp((steering * 0.15 - translation) * 20, -20, 20)
+payload = "L%.2fR%.2f\n".format(Locale.US, left, right)
+\end{lstlisting}
+
+Manager quét theo tên \texttt{OhmniRobot} và custom UUID, timeout quét 10 s, reconnect sau 3 s. Sau discovery, characteristic được cấu hình \texttt{WRITE\_TYPE\_NO\_RESPONSE}. API ghi khác nhau theo phiên bản Android được xử lý tương thích. Watchdog 1.200 ms gọi STOP nếu luồng RTDB không cập nhật. \texttt{stop()} gỡ listener, callback, scan và GATT để tránh leak.
+
+\subsection{Hiện thực CaregiverApp}
+
+\subsubsection{Khởi động, xác thực và hồ sơ}
+
+CaregiverApp có \texttt{LoginActivity}, \texttt{SignUpActivity}, \texttt{MainActivity} và \texttt{ProfileFragment}. Firebase Authentication cấp UID; profile được lưu dưới \texttt{Users/\{uid\}} dùng chung với RobotApp. MainActivity là launcher trong manifest hiện tại và khởi động \texttt{IncomingCallService}. Khi đóng gói sản phẩm, cần bảo đảm auth gate tại MainActivity để người chưa có phiên hợp lệ không đi thẳng vào màn hình chính.
+
+\subsubsection{Bật/tắt chức năng theo dõi}
+
+\path|tracking_fragment| ghi hai cờ \path|robot_follow_enabled| và \path|ai_fall_detection_enabled|. Fragment đồng thời theo dõi \texttt{.info/connected} để phản ánh kết nối RTDB. Khi tắt auto-follow, CaregiverApp ghi $x=0,y=0,ts=now$; đây là hành vi quan trọng vì chỉ đổi cờ có thể để lại lệnh chuyển động trước đó.
+
+\subsubsection{Lịch và nhật ký}
+
+\texttt{ScheduleFragment} đọc danh sách \texttt{Schedules/uid}; \texttt{AddScheduleFragment} tạo/cập nhật lịch; \texttt{ScheduleAdapter} xử lý RecyclerView và công tắc \texttt{active}. Tên trường được giữ đúng là \texttt{active}, tránh sai lệch với \texttt{isActive}. Ba nhánh nhật ký có fragment/adaptor riêng: reminder, fall alert và call history. Danh sách cảnh báo/cuộc gọi được truy vấn theo timestamp trong bảy ngày gần nhất.
+
+\subsubsection{Cuộc gọi đến nền}
+
+\texttt{IncomingCallService} là foreground service lắng nghe \texttt{webrtc\_signal}. Khi status là calling và callerRole là robot, service tạo notification và có thể mở \texttt{IncomingCallActivity} toàn màn hình. Nếu \texttt{emergencyReason=fall}, tiêu đề/nội dung thông báo nêu đây là cuộc gọi do chưa xác nhận an toàn. Manifest khai báo notification, foreground service và full-screen intent; hành vi thực tế còn phụ thuộc chính sách hệ điều hành và quyền người dùng.
+
+\subsubsection{Video call và joystick}
+
+\texttt{video\_call\_fragment} hiện thực cả hai vai trò caller/callee, renderer cục bộ/từ xa và signaling tương ứng. Trong màn hình gọi, joystick tính $x=\Delta y/r$, $y=-\Delta x/r$, chặn $[-1,1]$ và throttle khoảng 20 Hz. Khi người dùng bắt đầu lái, app tắt auto-follow để hai nguồn không tranh chấp. \texttt{ACTION\_UP}/\texttt{ACTION\_CANCEL}, kết thúc gọi và rời fragment đều gửi STOP.
+
+CaregiverApp không có BLE và không biết dấu vật lý của motor. Ranh giới này giúp điện thoại caregiver hoạt động ở bất kỳ khoảng cách Internet nào; RobotApp gần phần thân chịu trách nhiệm kiểm tra lệnh và hiệu chỉnh motor.
+
+\subsection{Hiện thực dữ liệu dùng chung}
+
+Firebase listener cung cấp cập nhật gần thời gian thực, còn write được phản ánh cục bộ trước khi đồng bộ máy chủ \reportcite{ref:firebase_rtdb}. Vì vậy timestamp trong lệnh là bắt buộc: tính ``realtime'' của callback không đồng nghĩa dữ liệu luôn mới. Các class model như \texttt{UserProfile}, \texttt{ScheduleItem}, \texttt{FallAlertEntry}, \texttt{ReminderLogEntry} và \texttt{CallHistoryEntry} phản ánh dữ liệu JSON.
+
+Snapshot hiện dùng kết hợp node theo UID và node toàn cục. Điều này giảm độ phức tạp demo một robot nhưng chưa đủ cách ly nhiều gia đình. Trong triển khai thực, rules phải từ chối mặc định, cho phép theo UID/family/robot và validate từng trường \reportcite{ref:firebase_security}. Chuyển schema cần cập nhật đồng thời hai app; nếu chỉ sửa một phía sẽ tạo lỗi im lặng do listener đọc sai path.
+
+\subsection{Huấn luyện và chuyển đổi mô hình AI}
+
+\subsubsection{Dữ liệu và bài toán}
+
+Khối thị giác dùng mô hình pose tổng quát để lấy 17 keypoint người và mô hình LSTM phân loại chuỗi. Dữ liệu té ngã tham khảo CAUCAFall, vốn cung cấp video fall/no-fall trong điều kiện ít kiểm soát \reportcite{ref:caucafall}. Dữ liệu dạng frame cần được tách theo video/chủ thể trước khi train/validation/test; nếu chia ngẫu nhiên từng frame, các frame gần nhau có thể lọt sang tập test và làm chỉ số lạc quan.
+
+Hình \ref{fig:dataset_distribution} cho thấy ví dụ phân bố nhãn của một tập dữ liệu liên quan: các lớp có chênh lệch lớn. Đối với bài toán nhị phân fall/normal, mất cân bằng phải được xử lý bằng lấy mẫu, trọng số lớp và báo cáo precision/recall thay vì chỉ accuracy.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.72\textwidth]{2.jpg}
+    \caption{Ví dụ phân bố số lượng thể hiện sự mất cân bằng lớp trong dữ liệu}
+    \label{fig:dataset_distribution}
+\end{figure}
+
+\subsubsection{Xây dựng vector đặc trưng chuỗi}
+
+Từ pose, tọa độ keypoint được chuẩn hóa theo vùng bao hoặc kích thước ảnh để giảm phụ thuộc khoảng cách camera. Confidence giúp biểu diễn keypoint bị khuất. Các đặc trưng hình học bổ sung tỷ lệ vùng bao và trạng thái thân người. Cửa sổ trượt 15 frame cân bằng giữa đủ thông tin chuyển động và độ trễ. Mỗi cửa sổ có nhãn normal/fall; các chuỗi chuyển tiếp cần được gán nhất quán để tránh model học sai thời điểm.
+
+Quy trình huấn luyện LSTM cần lưu seed, split, scaler/chuẩn hóa, class mapping và phiên bản thư viện. Chỉ artifact \texttt{best\_model\_lstm.h5} và model đã chuyển đổi hiện có trong thư mục bàn giao; vì vậy báo cáo không suy diễn epoch hay metric không còn log. Việc tái lập đầy đủ yêu cầu bổ sung notebook/script huấn luyện và lịch sử loss/metric.
+
+\subsubsection{Chuyển Keras LSTM sang TFLite}
+
+Script \path|convert_to_tflite.py| nạp model H5, đọc \texttt{input\_shape} để xác nhận sequence length và feature count, sau đó dùng \path|TFLiteConverter.from_keras_model|. Supported ops gồm TFLite built-ins và Select TF Ops để bao phủ toán tử LSTM. Model đầu ra được nạp lại bằng Interpreter, allocate tensor và kiểm tra shape. Artifact cuối \texttt{best\_model\_lstm\_v2.tflite} được sao chép vào assets RobotApp.
+
+\subsubsection{Xuất mô hình pose qua ONNX}
+
+Các script dùng Ultralytics nạp \texttt{yolo26n-pose.pt}, xuất ONNX với batch 1 và kích thước ảnh cố định. Biến thể \texttt{convert\_to\_tflite\_320.py} cố định input 320$\times$320 ở bước export; kích thước này được ``bake'' vào graph nên Android phải tiền xử lý đúng. ONNX đóng vai trò biểu diễn trung gian để kiểm tra input/output và chuyển bằng onnx2tf.
+
+Một khó khăn là graph end-to-end chứa NMS có thể tạo toán tử không tương thích GPU delegate. \texttt{convert\_to\_tflite\_gpu.py} đặt \texttt{module.end2end=false} trước export để bỏ NMS head, chuyển NMS sang Kotlin. Điều này làm output thô lớn hơn nhưng graph chỉ còn các toán tử thuận lợi hơn cho delegate. Android chịu trách nhiệm decode, threshold và NMS.
+
+\subsubsection{Chuyển ONNX sang TFLite và FP16}
+
+onnx2tf chuyển graph ONNX tĩnh sang SavedModel/TFLite. Script FP16 dùng \texttt{TFLiteConverter.from\_saved\_model}, bật \texttt{Optimize.DEFAULT} và đặt \texttt{supported\_types=[tf.float16]}. Trọng số FP16 giảm kích thước và băng thông bộ nhớ; input/output có thể vẫn float32 tùy converter/delegate. Sau chuyển đổi, script kiểm tra tensor shape/type, chạy một input thử và kiểm tra output hữu hạn trước khi copy vào assets.
+
+\begin{table}[htbp]
+\centering
+\caption{Các artifact mô hình chính}
+\label{tab:model_artifacts}
+\small
+\begin{tabularx}{\textwidth}{|p{4.3cm}|p{2.5cm}|p{2.2cm}|X|}
+\hline
+\textbf{Artifact} & \textbf{Định dạng} & \textbf{Kích thước gần đúng} & \textbf{Mục đích} \\
+\hline
+best\_model\_lstm.h5 & Keras H5 & 193,8 KB & Model huấn luyện/nguồn chuyển đổi \\
+\hline
+best\_model\_lstm\_v2.tflite & TFLite & 63,9 KB & LSTM triển khai Android \\
+\hline
+yolo26n-pose.pt & PyTorch & 7,88 MB & Trọng số pose nguồn \\
+\hline
+yolo26n-pose\_320.onnx & ONNX & Theo artifact & Graph trung gian input cố định \\
+\hline
+yolo26n-pose\_320.tflite & TFLite & 12,03 MB & Model CPU/fallback trong RobotApp \\
+\hline
+yolo26n-pose\_320\_gpu.tflite & TFLite & 11,84 MB & Graph hướng tới GPU delegate \\
+\hline
+yolo26n-pose\_320\_fp16.tflite & TFLite FP16 & 6,28 MB & Biến thể giảm trọng số/băng thông \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsubsection{Kiểm tra tương đương sau chuyển đổi}
+
+Kiểm tra ``model mở được'' chưa đủ để kết luận tương đương. Cần chạy cùng tập ảnh qua PyTorch, ONNX và TFLite; đưa output về cùng layout; so sai số số học; rồi so detection sau decode/NMS theo confidence, IoU, keypoint và số lượng người. Với LSTM, cần so vector xác suất trên cùng cửa sổ 15$\times$69. Chênh lệch FP16 phải được đánh giá ở metric cuối, không chỉ chênh tensor trung gian.
+
+\subsection{Hiện thực firmware phần thân robot}
+
+\subsubsection{Khởi tạo phần cứng}
+
+Firmware dùng ESP32 với hai AS5600 trên hai bus I2C. Motor trái dùng SDA=19/SCL=18 và motor phải dùng SDA=23/SCL=5. Driver trái dùng IN1=32, IN2=33, IN3=25, EN=22; driver phải dùng IN1=26, IN2=27, IN3=14, EN=12. Hai bus riêng tránh xung đột địa chỉ mặc định giống nhau của AS5600.
+
+Hai \texttt{BLDCMotor} có 7 pole pairs, liên kết encoder và driver 3PWM. Điều chế \texttt{SpaceVectorPWM}, controller \texttt{velocity}, PID và LPF được thiết lập trước \texttt{init}/\texttt{initFOC}. Firmware gọi \texttt{loopFOC} liên tục; không đặt delay trong loop điều khiển.
+
+\subsubsection{BLE GATT server}
+
+NimBLE khởi tạo tên \texttt{OhmniRobot}, công suất phát cao và advertising có service UUID trong scan response. Characteristic chỉ có \texttt{WRITE\_NR}. Callback kết nối bật cờ và tiếp tục advertising; callback ngắt đặt target hai bánh về 0. Callback write lấy \texttt{std::string}, trim và gọi parser.
+
+Parser tìm vị trí L và R, tách hai substring và dùng \texttt{toFloat}. Khi hợp lệ, target và \texttt{lastCmdTime} được cập nhật. Mức Android đã bảo đảm format, nhưng firmware tương lai nên dùng parser xác nhận toàn chuỗi và \texttt{isfinite} để phòng client lỗi/độc hại.
+
+\subsubsection{Deadzone và watchdog}
+
+\texttt{applyDeadzone} đưa $|v|<0,5$ về 0; nâng biên độ khác 0 nhưng dưới 3 lên 3; rồi constrain $[-40,40]$. Watchdog 800 ms kiểm tra khi BLE đang kết nối. Nếu timeout và target khác 0, firmware ghi log và dừng. Vì motor.move được gọi sau bước watchdog, setpoint 0 có hiệu lực ngay vòng hiện tại.
+
+\begin{lstlisting}[caption={Giả mã vòng điều khiển firmware}]
+loopFOC(left); loopFOC(right)
+if connected and now - lastCommand > 800 ms:
+    targetLeft = 0; targetRight = 0
+leftCommand  = applyDeadzone(targetLeft)
+rightCommand = applyDeadzone(targetRight)
+move(leftCommand); move(rightCommand)
+\end{lstlisting}
+
+\subsection{Cấu hình và triển khai}
+
+Hai ứng dụng phải trỏ cùng Firebase project và có tệp cấu hình Android tương ứng. RTDB Rules phải được triển khai trước khi dùng dữ liệu thật. STUN/TURN cần được cấu hình cho cả hai peer; TURN nên dùng credential ngắn hạn. API key Groq không xuất hiện trong Git hoặc báo cáo. Trên thiết bị robot, phải cấp camera, microphone, notification, BLE scan/connect; trên caregiver phải cấp camera, microphone, notification và full-screen intent theo chính sách hệ điều hành.
+
+Quy trình tích hợp khuyến nghị:
+
+\begin{enumerate}
+    \item Nạp firmware, kiểm tra encoder và motor với bánh nhấc khỏi mặt đất.
+    \item Cài RobotApp, kiểm tra quyền và kết nối BLE; gửi STOP trước mọi thử nghiệm.
+    \item Kiểm tra riêng dấu bốn lệnh chuẩn ở tốc độ thấp.
+    \item Cài CaregiverApp, xác nhận cùng tài khoản/project và đồng bộ profile/lịch.
+    \item Kiểm tra cuộc gọi trên cùng mạng, sau đó hai mạng khác nhau/TURN.
+    \item Bật tracking rồi fall detection; thử kịch bản an toàn trước kịch bản té ngã dựng lại.
+    \item Kiểm tra mất Internet, mất BLE, khóa màn hình và vòng đời ứng dụng.
+\end{enumerate}
+
+\subsection{Những điểm hiện thực cần lưu ý}
+
+Mã nguồn phản ánh một nguyên mẫu đang phát triển. Một số node Firebase toàn cục phù hợp demo nhưng chưa phù hợp nhiều robot. CaregiverApp có màn chatbot placeholder trong khi chatbot thật ở RobotApp. Secret cần được externalize. Parser firmware cần được gia cố. Phiên bản model và graph chuyển đổi cần manifest/checksum để tránh nhầm artifact. Các điểm này không phủ nhận chức năng đã hiện thực, nhưng là điều kiện cần giải quyết trước triển khai thực tế.
+
+\subsection{Kết luận chương}
+
+Chương đã mô tả cách kiến trúc được chuyển thành hai ứng dụng Android, chuỗi mô hình AI, cơ chế chuyển đổi và firmware ESP32. Các chi tiết được gắn với class, path dữ liệu, hằng số và artifact cụ thể, qua đó bảo đảm báo cáo có thể đối chiếu mã nguồn. Chương tiếp theo trình bày kế hoạch kiểm thử, kết quả được xác nhận và thảo luận giới hạn của nguyên mẫu.

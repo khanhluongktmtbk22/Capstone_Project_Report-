@@ -1,1 +1,522 @@
-% \section{Phụ lục}
+\frontsection{Phụ lục}
+
+\subsection*{Phụ lục A -- Đặc tả use case}
+\addcontentsline{toc}{subsection}{Phụ lục A -- Đặc tả use case}
+
+\subsubsection*{UC01 -- Đăng ký và đăng nhập}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc/người quản trị thiết bị robot \\
+\hline
+Mục tiêu & Tạo hoặc sử dụng tài khoản Firebase để nhận UID và truy cập dữ liệu chăm sóc tương ứng. \\
+\hline
+Tiền điều kiện & Thiết bị có Internet, ứng dụng trỏ đúng Firebase project. \\
+\hline
+Luồng chính & (1) Nhập email/mật khẩu; (2) ứng dụng gửi Firebase Auth; (3) nhận phiên và UID; (4) tải \texttt{Users/uid}; (5) chuyển màn hình chính. \\
+\hline
+Ngoại lệ & Email sai định dạng, mật khẩu sai, tài khoản chưa xác minh, mất mạng hoặc profile chưa tồn tại. \\
+\hline
+Hậu điều kiện & Phiên hợp lệ được duy trì; listener dữ liệu chỉ dùng UID được xác thực. \\
+\hline
+Yêu cầu liên quan & FR01, FR02, NFR05. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC02 -- Quản lý hồ sơ chăm sóc}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc \\
+\hline
+Mục tiêu & Cập nhật thông tin giúp robot xưng hô và hỗ trợ phù hợp. \\
+\hline
+Tiền điều kiện & Đã đăng nhập và có quyền trên profile. \\
+\hline
+Luồng chính & Mở Profile; sửa họ tên, tên robot, đại từ, người liên hệ, quan hệ, tình trạng, ghi chú, sở thích; xác nhận; ghi \texttt{Users/uid}; RobotApp nhận thay đổi. \\
+\hline
+Ngoại lệ & Trường bắt buộc rỗng, số điện thoại sai, mất mạng, write bị Rules từ chối. \\
+\hline
+Hậu điều kiện & Profile mới được dùng khi tạo prompt/lời nhắc; thay đổi được ghi log nếu triển khai audit. \\
+\hline
+Yêu cầu liên quan & FR02, NFR05, NFR06. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC03 -- Quản lý lịch nhắc}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc \\
+\hline
+Mục tiêu & Tạo, sửa, bật/tắt hoặc xóa lịch thuốc/sinh hoạt. \\
+\hline
+Tiền điều kiện & Đăng nhập; thời gian và ngày lặp hợp lệ. \\
+\hline
+Luồng chính & Chọn thêm lịch; nhập tiêu đề, ghi chú, thời gian, ngày; lưu dưới \texttt{Schedules/uid/id}; danh sách cập nhật; RobotApp nhận lịch active. \\
+\hline
+Ngoại lệ & Lịch trùng, múi giờ thay đổi, thiết bị khởi động lại, mất mạng, thời gian quá khứ. \\
+\hline
+Hậu điều kiện & Lịch định nghĩa được lưu riêng với từng lần thực hiện. \\
+\hline
+Yêu cầu liên quan & FR03, FR04, NFR10. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC04 -- Nhận và xác nhận lời nhắc}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người cao tuổi; RobotApp \\
+\hline
+Mục tiêu & Phát lời nhắc dễ hiểu và lưu phản hồi. \\
+\hline
+Tiền điều kiện & Lịch active tới hạn; RobotApp hoạt động; TTS sẵn sàng. \\
+\hline
+Luồng chính & ReminderService tạo log delivered; phát sự kiện; chatbot phát TTS; nghe phản hồi; cập nhật confirmed/completed và confirmedAt. \\
+\hline
+Ngoại lệ & Người dùng đang gọi, TTS/STT bận, không phản hồi, lịch bị tắt đồng thời, dịch vụ LLM lỗi. \\
+\hline
+Hậu điều kiện & Một log phản ánh kết quả; lịch gốc không bị thay đổi ngoài quy tắc lặp. \\
+\hline
+Yêu cầu liên quan & FR04, FR05, FR19. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC05 -- Hội thoại trợ lý}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người cao tuổi \\
+\hline
+Mục tiêu & Trao đổi bằng giọng nói và có câu trả lời theo hồ sơ. \\
+\hline
+Tiền điều kiện & Micro, STT, Internet, Groq và TTS khả dụng. \\
+\hline
+Luồng chính & Lắng nghe; STT tạo text; thêm history/prompt; gọi stream; ghép theo câu; TTS phát; trở về listening. \\
+\hline
+Ngoại lệ & Không nghe rõ, API timeout/rate limit, nội dung trống, TTS lỗi, người dùng ngắt. \\
+\hline
+Hậu điều kiện & History giữ tối đa số message cấu hình; không lưu secret trong log. \\
+\hline
+Yêu cầu liên quan & FR05, NFR04, NFR06. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC06 -- Theo dõi và tự bám người mục tiêu}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc; RobotApp; ESP32 \\
+\hline
+Mục tiêu & Robot duy trì khoảng cách/hướng tương đối với ID0. \\
+\hline
+Tiền điều kiện & Camera, model, BLE và cờ follow khả dụng; vùng di chuyển an toàn. \\
+\hline
+Luồng chính & Bật follow; pose detection; tracker chọn/duy trì ID0; sinh $x,y,ts$; RobotControlManager ánh xạ; ESP32 điều khiển bánh. \\
+\hline
+Ngoại lệ & Nhiều người, mất ID0, vật cản, thiếu sáng, BLE mất, caregiver giành manual control. \\
+\hline
+Hậu điều kiện & Khi không đủ điều kiện, lệnh dừng; không tự đổi mục tiêu trong cảnh mơ hồ. \\
+\hline
+Yêu cầu liên quan & FR06--FR09, FR17--FR20. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC07 -- Phát hiện và xác nhận té ngã}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & RobotApp; người cao tuổi; người chăm sóc \\
+\hline
+Mục tiêu & Phát hiện sự cố, hỏi xác nhận và chuyển cảnh báo có thể can thiệp. \\
+\hline
+Tiền điều kiện & Fall detection bật; ID0 và model sẵn sàng. \\
+\hline
+Luồng chính & Pose--tracking--LSTM phát raw fall; hậu kiểm; dừng robot; tạo một alert pending; hỏi TTS; phân loại phản hồi; cập nhật safe/danger. \\
+\hline
+Ngoại lệ & Mất bbox, bbox bị cắt, API lỗi, STT lỗi, không phản hồi, call đang tồn tại. \\
+\hline
+Hậu điều kiện & Safe: đóng sự cố; danger/no-response: gọi caregiver với emergencyReason; không phát lặp đến khi phục hồi. \\
+\hline
+Yêu cầu liên quan & FR10--FR14, NFR01, NFR12. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC08 -- Gọi video}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người cao tuổi/RobotApp; người chăm sóc/CaregiverApp \\
+\hline
+Mục tiêu & Thiết lập âm thanh, hình ảnh hai chiều. \\
+\hline
+Tiền điều kiện & Internet, camera/mic, signaling RTDB và STUN/TURN sẵn sàng. \\
+\hline
+Luồng chính & Caller ghi calling/role, offer; callee đọc và ghi answer; hai bên trao đổi ICE; connected; truyền media; ended và cleanup. \\
+\hline
+Ngoại lệ & Từ chối, timeout, mất mạng, permission thiếu, camera bận, TURN lỗi. \\
+\hline
+Hậu điều kiện & Listener, PeerConnection, capturer và renderer được giải phóng; camera trả về tracking; call history được ghi. \\
+\hline
+Yêu cầu liên quan & FR14, FR15, NFR03, NFR06. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC09 -- Điều khiển joystick}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc; CaregiverApp; RobotApp; ESP32 \\
+\hline
+Mục tiêu & Lái robot từ xa trong cuộc gọi. \\
+\hline
+Tiền điều kiện & Call/control screen hoạt động, Firebase và BLE kết nối, khu vực an toàn. \\
+\hline
+Luồng chính & Chạm joystick; tắt auto-follow; chuẩn hóa $x,y$; gửi khoảng 20 Hz với timestamp; RobotApp lọc/ánh xạ; firmware chấp hành; thả để STOP. \\
+\hline
+Ngoại lệ & Mất touch, fragment pause, timestamp cũ, lệnh không hữu hạn, RTDB/BLE mất. \\
+\hline
+Hậu điều kiện & Khi thao tác kết thúc hoặc lỗi, target motor về 0. \\
+\hline
+Yêu cầu liên quan & FR16--FR20, NFR01--NFR03. \\
+\hline
+\end{longtable}
+
+\subsubsection*{UC10 -- Xem nhật ký}
+
+\begin{longtable}{|p{3.3cm}|p{10.1cm}|}
+\hline
+Tác nhân & Người chăm sóc \\
+\hline
+Mục tiêu & Xem các hoạt động nhắc, cảnh báo và cuộc gọi theo thời gian. \\
+\hline
+Tiền điều kiện & Đăng nhập và có quyền đọc dữ liệu. \\
+\hline
+Luồng chính & Chọn loại diary; query log; sắp xếp theo timestamp; hiển thị trạng thái, nội dung, phản hồi và lý do. \\
+\hline
+Ngoại lệ & Không có dữ liệu, schema cũ, offline, quyền bị từ chối. \\
+\hline
+Hậu điều kiện & Không sửa bản ghi khi chỉ xem; query được giới hạn để tránh tải toàn bộ lịch sử. \\
+\hline
+Yêu cầu liên quan & FR19, NFR05, NFR10. \\
+\hline
+\end{longtable}
+
+\subsection*{Phụ lục B -- Hợp đồng dữ liệu và giao thức}
+\addcontentsline{toc}{subsection}{Phụ lục B -- Hợp đồng dữ liệu và giao thức}
+
+\subsubsection*{B.1. Lệnh điều khiển RTDB}
+
+\begin{lstlisting}[caption={Ví dụ lệnh điều khiển hợp lệ}]
+{
+  "robot_control": {
+    "x": -0.65,
+    "y":  0.10,
+    "ts": 1788381000000
+  }
+}
+\end{lstlisting}
+
+Ràng buộc: $x,y$ phải là số hữu hạn trong $[-1,1]$ sau clipping; \texttt{ts} là epoch millisecond; tại RobotApp $now-ts\leq2000$ ms và $ts-now\leq5000$ ms. Lệnh STOP là $x=0,y=0$ với timestamp mới. Không xóa node thay cho STOP vì listener có thể diễn giải trường thiếu theo giá trị mặc định không mong muốn.
+
+\subsubsection*{B.2. Signaling WebRTC}
+
+\begin{lstlisting}[caption={Cấu trúc signaling khái quát}]
+webrtc_signal: {
+  status: "calling" | "connected" | "ended",
+  callerRole: "robot" | "caregiver",
+  emergencyReason: "fall" | null,
+  offer:  { type: "offer",  sdp: "..." },
+  answer: { type: "answer", sdp: "..." },
+  robotCandidates: {
+    id: { candidate: "...", sdpMid: "0", sdpMLineIndex: 0 }
+  },
+  caregiverCandidates: {
+    id: { candidate: "...", sdpMid: "0", sdpMLineIndex: 0 }
+  }
+}
+\end{lstlisting}
+
+Mỗi cuộc gọi tương lai nên có \texttt{callId}, \texttt{robotId}, caller UID, callee UID, \texttt{createdAt}, \texttt{expiresAt} và state transition được rules kiểm soát. Candidate/SDP phải được xóa khi kết thúc để tránh client mới đọc dữ liệu cũ.
+
+\subsubsection*{B.3. Bản ghi cảnh báo}
+
+\begin{lstlisting}[caption={Các trường cảnh báo té ngã}]
+fall_alerts/{alertId}: {
+  timestamp: Long,
+  status: "pending" | "safe" | "danger" | "no_response",
+  elderlyResponse: String,
+  verificationReason: String,
+  evidenceScore: Int,
+  visibleKeypoints: Int,
+  bboxFullyInside: Boolean,
+  upperBodyYRatio: Number
+}
+\end{lstlisting}
+
+\subsubsection*{B.4. BLE GATT}
+
+\begin{table}[htbp]
+\centering
+\caption{Thông số BLE triển khai}
+\begin{tabularx}{\textwidth}{|p{4.0cm}|X|}
+\hline
+Device name & \texttt{OhmniRobot} \\
+\hline
+Service UUID & \texttt{4FAFC201-1FB5-459E-8FCC-C5C9C331914B} \\
+\hline
+Characteristic UUID & \texttt{BEB5483E-36E1-4688-B7F5-EA07361B26A8} \\
+\hline
+Property & Write without response \\
+\hline
+Payload & \texttt{L<left>R<right>\textbackslash n}, ASCII/UTF-8, dấu chấm thập phân \\
+\hline
+Android limit & $[-20,20]$ mỗi motor \\
+\hline
+Firmware limit & $[-40,40]$ rad/s; deadzone 0,5/3,0 \\
+\hline
+Watchdog & Android 1.200 ms; firmware 800 ms \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection*{Phụ lục C -- Danh mục module mã nguồn}
+\addcontentsline{toc}{subsection}{Phụ lục C -- Danh mục module mã nguồn}
+
+\begin{longtable}{|p{4.4cm}|p{8.9cm}|}
+\caption{Module chính của RobotApp}\\
+\hline
+\textbf{Tệp/lớp} & \textbf{Trách nhiệm} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Tệp/lớp} & \textbf{Trách nhiệm} \\
+\hline
+\endhead
+MainActivity & Điều hướng, vòng đời fragment/call và listener lời mời \\
+\hline
+tracking\_fragment & CameraX/WebRTC frame, AI, ID0, fall và auto-follow \\
+\hline
+BoundingBoxOverlay & Vẽ vùng bao, keypoint, ID và trạng thái \\
+\hline
+SortTracker & Ghép detection--track, bảo vệ ID0, tích hợp Re-ID \\
+\hline
+KalmanBoxTracker & Dự báo/cập nhật trạng thái vùng bao \\
+\hline
+HungarianAlgorithm & Tối ưu phép gán từ ma trận chi phí \\
+\hline
+ReIdModule & Histogram vùng thân và khôi phục track \\
+\hline
+FallDetectionQueue & Bộ đệm cửa sổ 15 frame, 69 feature \\
+\hline
+LstmFallDetector & Interpreter và máy trạng thái fall/lying/recovery \\
+\hline
+FallVerificationEngine & Hậu kiểm bằng chứng, khóa sự cố \\
+\hline
+TrackingService/\allowbreak ReminderEvent & Chuyển sự kiện giữa tracking/reminder và chatbot \\
+\hline
+chatbot\_fragment & UI giọng nói, xử lý reminder/fall/call intent \\
+\hline
+SpeechRecognizer\allowbreak Manager & Đóng gói Android SpeechRecognizer \\
+\hline
+AndroidTtsService & Đóng gói TextToSpeech và callback \\
+\hline
+GroqChatService & Chat streaming và các tác vụ phân loại \\
+\hline
+ReminderService & Theo dõi lịch và phát sự kiện nhắc \\
+\hline
+video\_call\_fragment & PeerConnection, signaling, media và camera sharing \\
+\hline
+RobotControlManager & RTDB command, validation, motor mapping và BLE \\
+\hline
+\end{longtable}
+
+\begin{longtable}{|p{4.4cm}|p{8.9cm}|}
+\caption{Module chính của CaregiverApp}\\
+\hline
+\textbf{Tệp/lớp} & \textbf{Trách nhiệm} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Tệp/lớp} & \textbf{Trách nhiệm} \\
+\hline
+\endhead
+Login/SignUpActivity & Firebase Authentication và tạo profile \\
+\hline
+MainActivity & Điều hướng chính và khởi động incoming-call service \\
+\hline
+ProfileFragment & Đọc/cập nhật Users/uid \\
+\hline
+tracking\_fragment & Cờ follow/fall và STOP khi tắt \\
+\hline
+Schedule/\allowbreak AddScheduleFragment & CRUD lịch nhắc \\
+\hline
+ScheduleAdapter/\allowbreak ScheduleItem & Danh sách và trạng thái active \\
+\hline
+Diary*Fragment/\allowbreak Adapter & Reminder log, fall alert và call history \\
+\hline
+IncomingCallService & Listener nền và notification cuộc gọi \\
+\hline
+IncomingCallActivity & UI nhận/từ chối call toàn màn hình \\
+\hline
+video\_call\_fragment & WebRTC caller/callee, joystick và call log \\
+\hline
+chatbot\_fragment & Placeholder trong snapshot hiện tại \\
+\hline
+\end{longtable}
+
+\subsection*{Phụ lục D -- Manifest artifact AI}
+\addcontentsline{toc}{subsection}{Phụ lục D -- Manifest artifact AI}
+
+Mỗi model phát hành nên đi kèm manifest theo mẫu:
+
+\begin{lstlisting}[caption={Mẫu manifest model có thể tái lập}]
+model_id: pose-320-fp16-v1
+source_weight: yolo26n-pose.pt
+source_sha256: <hash>
+converter:
+  ultralytics: <version>
+  onnx: <version>
+  onnx2tf: <version>
+  tensorflow: <version>
+input:
+  shape: [1, 320, 320, 3]
+  dtype: float32
+  color: RGB
+  normalization: /255
+output:
+  shape: <recorded shape>
+  decoding: android-decoder-v1
+quantization: fp16-weights
+validation:
+  dataset_split_sha256: <hash>
+  max_abs_tensor_error: <value>
+  final_metric_delta: <value>
+\end{lstlisting}
+
+Đối với LSTM, manifest phải ghi thứ tự 69 feature, cách normalize keypoint, class order của output, sequence length, stride, threshold và hysteresis. Nếu thiếu một trong các thông tin này, model có thể nạp thành công nhưng cho kết quả sai ngữ nghĩa.
+
+\subsection*{Phụ lục E -- Quy trình build và triển khai}
+\addcontentsline{toc}{subsection}{Phụ lục E -- Quy trình build và triển khai}
+
+\subsubsection*{E.1. Hai ứng dụng Android}
+
+Yêu cầu JDK 11 trở lên, Android SDK phù hợp compile SDK 36 và tệp cấu hình Firebase của từng applicationId. Các lệnh chuẩn:
+
+\begin{lstlisting}[caption={Build và unit test Android trên Windows}]
+cd DATN_RobotApp_Smartphone_v2
+gradlew.bat testDebugUnitTest
+gradlew.bat assembleDebug
+
+cd DATN_CaregiverApp_Smartphone_v2
+gradlew.bat testDebugUnitTest
+gradlew.bat assembleDebug
+\end{lstlisting}
+
+Không đưa \texttt{local.properties}, API key hoặc credential TURN vào Git. Build release cần signing key bảo mật, minify/resource shrinking và kiểm thử lại reflection/native library.
+
+\subsubsection*{E.2. Firmware}
+
+Trong Arduino IDE, chọn ESP32 Dev Module; cài SimpleFOC phiên bản tương thích và NimBLE-Arduino; mở \texttt{robot\_ble\_control.ino}; kiểm tra pin; compile/upload; mở Serial 115200. Lần đầu initFOC phải nâng bánh khỏi sàn. Kiểm tra encoder quay đúng chiều và chỉ thử setpoint nhỏ trước.
+
+\subsubsection*{E.3. Dịch vụ}
+
+Thiết lập Firebase Auth email/password, RTDB và Rules. Cấu hình STUN/TURN trên cả hai ứng dụng. Cấp Groq key qua cơ chế bí mật. Tạo một tài khoản thử, profile, lịch và cặp thiết bị; xóa SDP/ICE cũ trước test. Đảm bảo notification/full-screen intent được cấp trên caregiver.
+
+\subsection*{Phụ lục F -- Phiếu ghi kết quả kiểm thử}
+\addcontentsline{toc}{subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}
+
+\begin{longtable}{|p{3.2cm}|p{10.2cm}|}
+\hline
+Test ID & \\
+\hline
+Commit/model hash & \\
+\hline
+Ngày, người thực hiện & \\
+\hline
+Thiết bị/Android & \\
+\hline
+Mạng/BLE/\allowbreak khoảng cách & \\
+\hline
+Tiền điều kiện & \\
+\hline
+Các bước & \\
+\hline
+Kết quả mong đợi & \\
+\hline
+Kết quả quan sát & \\
+\hline
+Metric/log/video & \\
+\hline
+Pass/Fail/Blocked & \\
+\hline
+Mã lỗi và ghi chú & \\
+\hline
+\end{longtable}
+
+\begin{table}[htbp]
+\centering
+\caption{Mẫu tổng hợp benchmark AI}
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|X|X|X|}
+\hline
+Cấu hình & Median (ms) & P95 (ms) & FPS hiệu dụng & Drop frame (\%) \\
+\hline
+CPU float32 & & & & \\
+\hline
+GPU graph & & & & \\
+\hline
+FP16 & & & & \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Mẫu tổng hợp phát hiện té ngã theo sự cố}
+\begin{tabularx}{\textwidth}{|p{3.4cm}|X|X|X|X|}
+\hline
+Cấu hình & Precision & Recall & F1 & Cảnh báo giả/giờ \\
+\hline
+Pose/luật & & & & \\
+\hline
+Pose + LSTM & & & & \\
+\hline
+Pose + LSTM + hậu kiểm & & & & \\
+\hline
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Mẫu tổng hợp độ trễ và an toàn điều khiển}
+\begin{tabularx}{\textwidth}{|p{4.0cm}|X|X|X|}
+\hline
+Kịch bản & Median & P95 & Max/ghi chú \\
+\hline
+Caregiver tới RobotApp & & & \\
+\hline
+RobotApp tới BLE callback & & & \\
+\hline
+Thời gian dừng khi mất RTDB & & & \\
+\hline
+Thời gian dừng khi mất BLE & & & \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection*{Phụ lục G -- Checklist an toàn trình diễn}
+\addcontentsline{toc}{subsection}{Phụ lục G -- Checklist an toàn trình diễn}
+
+\begin{itemize}
+    \item Bánh xe được nâng khỏi sàn khi kiểm tra dấu/FOC lần đầu.
+    \item Khu vực chạy phẳng, không có bậc thang, trẻ nhỏ, vật nuôi hoặc vật cản dễ vỡ.
+    \item Pin, dây, driver và động cơ không quá nhiệt; có cầu chì/bảo vệ phù hợp.
+    \item Có người giữ công tắc ngắt nguồn; STOP đã được thử trước auto-follow.
+    \item Không dùng người cao tuổi thật để dựng lại té ngã; có đệm và giám sát.
+    \item Không trình chiếu API key, token, email/số điện thoại thật hoặc dữ liệu sức khỏe.
+    \item Kiểm tra RTDB Rules và dùng tài khoản/dữ liệu demo.
+    \item Kiểm tra Internet, TURN, notification và quyền camera/micro/BLE.
+    \item Lưu commit/model checksum và phương án khôi phục bản APK/firmware ổn định.
+    \item Ghi log, nhưng tắt/xóa log nhạy cảm sau trình diễn.
+\end{itemize}

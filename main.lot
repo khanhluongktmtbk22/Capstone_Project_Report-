@@ -1,8 +1,32 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {table}{\numberline {2.1}{\ignorespaces Ưu điểm và hạn chế của mạng MLP}}{17}{table.caption.15}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces So sánh YOLO với các phương pháp Object Detection khác}}{30}{table.caption.21}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces So sánh Transformer và CNN}}{40}{table.caption.27}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces So sánh các công nghệ Speech-to-Text.}}{45}{table.caption.31}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces So sánh các phương pháp NLP.}}{45}{table.caption.32}%
-\contentsline {table}{\numberline {3.1}{\ignorespaces So sánh các thuật toán Multi-Object Tracking}}{53}{table.caption.35}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces So sánh các mô hình Person Re-identification}}{56}{table.caption.36}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces So sánh định tính với các hướng giải pháp liên quan}}{8}{table.caption.9}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Ưu điểm và hạn chế của mạng MLP}}{22}{table.caption.15}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces So sánh YOLO với các phương pháp Object Detection khác}}{35}{table.caption.21}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces So sánh Transformer và CNN}}{45}{table.caption.27}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces So sánh các công nghệ Speech-to-Text.}}{50}{table.caption.31}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces So sánh các phương pháp NLP.}}{50}{table.caption.32}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Tác nhân và trách nhiệm}}{58}{table.caption.34}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Danh sách yêu cầu chức năng}}{59}{table.3.2}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Yêu cầu phi chức năng}}{60}{table.3.3}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Tóm tắt use case chính}}{62}{table.caption.35}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Phân rã thành phần và trách nhiệm}}{63}{table.caption.37}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Cây dữ liệu Realtime Database}}{63}{table.3.6}%
+\contentsline {table}{\numberline {3.7}{\ignorespaces Các điểm chuẩn ánh xạ lệnh}}{66}{table.caption.38}%
+\contentsline {table}{\numberline {3.8}{\ignorespaces Phân tích mối đe dọa và biện pháp}}{69}{table.3.8}%
+\contentsline {table}{\numberline {3.9}{\ignorespaces Truy vết từ yêu cầu đến module và kiểm thử}}{70}{table.3.9}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Các khối mã nguồn của đồ án}}{72}{table.caption.39}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Các artifact mô hình chính}}{82}{table.caption.42}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{85}{table.caption.43}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{86}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{87}{table.caption.44}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{88}{table.caption.45}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Bộ unit test ánh xạ điều khiển}}{88}{table.caption.46}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Bộ unit test hậu kiểm té ngã}}{89}{table.caption.47}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{90}{table.5.7}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{94}{table.caption.48}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{111}{table.caption.52}%
+\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{111}{table.6.12}%
+\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{112}{table.6.13}%
+\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{115}{table.caption.53}%
+\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{115}{table.caption.54}%
+\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{115}{table.caption.55}%
