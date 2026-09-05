@@ -6,11 +6,11 @@
 
 RobotApp tận dụng smartphone/tablet như bộ não robot theo định hướng OpenBot: camera, microphone, loa, mạng và năng lực suy luận được dùng chung cho nhiều nhiệm vụ. Ứng dụng tích hợp CameraX, TFLite, OpenCV, Firebase, WebRTC, BLE, nhận dạng giọng nói, TTS và Groq. CaregiverApp cung cấp hồ sơ, lịch nhắc, cờ theo dõi/té ngã, nhật ký, cuộc gọi và joystick. Firmware ESP32 dùng NimBLE và SimpleFOC để điều khiển kín hai BLDC theo phản hồi AS5600.
 
-Pipeline thị giác kết hợp mô hình pose với tracking-by-detection, Kalman, Hungarian và Re-ID nhẹ. Người cần chăm sóc được bảo vệ dưới ID0; chỉ ID0 đi vào LSTM. Model LSTM xử lý cửa sổ 15 khung hình với 69 đặc trưng, sau đó máy trạng thái và bộ hậu kiểm dùng các bằng chứng vùng bao, keypoint, tư thế, vị trí thân trên và mất dấu. Khi cần xác nhận, robot dừng, hỏi bằng giọng nói và mặc định theo nhánh nguy hiểm nếu người dùng không phản hồi hoặc dịch vụ phân loại lỗi.
+Pipeline thị giác kết hợp mô hình pose với tracking-by-detection, Kalman, Hungarian và Re-ID nhẹ. Người cần chăm sóc được bảo vệ dưới ID0; chỉ ID0 đi vào LSTM. Model xử lý cửa sổ 15 khung hình với 69 đặc trưng và trả nhãn nhị phân. Bộ xác minh yêu cầu năm nhãn FALL liên tiếp, sau đó kiểm tra vị trí mũi/vai trong ba khung hình khi chuỗi kết thúc hoặc chờ tối đa 12 khung hình nếu mất quan sát. Trong sự cố, robot dừng ngay rồi chỉ được lùi/quay để lấy trọn khung người nằm, không tiến gần. Khi cần xác nhận, chatbot hỏi bằng giọng nói và mặc định theo nhánh nguy hiểm nếu người dùng không phản hồi hoặc dịch vụ phân loại lỗi.
 
 Hệ thống giải quyết hai xung đột kỹ thuật đáng chú ý. Thứ nhất, CameraX sở hữu camera khi bình thường, WebRTC sở hữu camera trong cuộc gọi và chia sẻ local frame cho AI. Thứ hai, tracking fragment là chủ sở hữu duy nhất của RobotControlManager/BLE; mọi nguồn joystick và auto-follow hội tụ tại cùng lớp kiểm tra. Các quyết định này tăng tính ổn định hơn so với việc mở camera hoặc GATT client riêng cho từng fragment.
 
-Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, bộ lọc lệnh cũ/không hữu hạn tại RobotApp, watchdog 1,2 s ở Android, giới hạn tốc độ, callback ngắt BLE và watchdog 800 ms ở firmware. Đây là đóng góp thiết kế có thể kiểm tra độc lập với độ chính xác AI. Hai ứng dụng đã được nhóm dự án build thành công và có APK debug; các artifact model H5/PT/ONNX/TFLite cùng script chuyển đổi cho thấy luồng triển khai AI trên Android đã được thực hiện.
+Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, bộ lọc lệnh cũ/không hữu hạn tại RobotApp, watchdog 500 ms ở Android, giới hạn tốc độ, callback ngắt BLE và watchdog 800 ms ở firmware. Các kênh lệnh, cờ AI, signaling và lịch sử đã được đưa dưới \path|pair_sessions/{uid}| với rules từ chối mặc định và kiểm tra UID. Đây là các đóng góp thiết kế có thể kiểm tra độc lập với độ chính xác AI. Hai ứng dụng đã được nhóm dự án build thành công và có APK debug; các artifact model H5/PT/ONNX/TFLite cùng script chuyển đổi cho thấy luồng triển khai AI trên Android đã được thực hiện.
 
 \subsection{Kết quả đạt được}
 
@@ -20,7 +20,8 @@ Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, 
     \item Xây dựng CaregiverApp có quản lý tài khoản/hồ sơ/lịch, bật tắt AI, xem lịch sử, nhận cuộc gọi và điều khiển joystick.
     \item Xây dựng firmware ESP32 điều khiển hai động cơ BLDC bằng SimpleFOC, giao tiếp BLE GATT và dừng an toàn.
     \item Tạo pipeline chuyển đổi LSTM Keras và pose PyTorch qua ONNX/SavedModel sang TFLite, gồm biến thể 320$\times$320, GPU và FP16.
-    \item Thiết kế khóa mục tiêu ID0, khôi phục có điều kiện và bộ hậu kiểm sự cố có lý do/bằng chứng.
+    \item Thiết kế khóa mục tiêu ID0, khôi phục theo chi phí trong cửa sổ 2 s, chính sách tốc độ tracking và chế độ tạo khung an toàn khi người nằm.
+    \item Cách ly các kênh thời gian thực theo \path|pair_sessions/{uid}| và triển khai RTDB Rules kiểm tra người dùng đã xác thực.
     \item Đặc tả đầy đủ path dữ liệu, trạng thái WebRTC, format BLE, mapping motor và timeout.
     \item Xây dựng khung kiểm thử truy vết từ yêu cầu tới module, unit test và kịch bản đầu cuối.
 \end{itemize}
@@ -29,9 +30,9 @@ Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, 
 
 Nguyên mẫu chưa phải sản phẩm y tế và chưa trải qua đánh giá lâm sàng. Báo cáo chưa có log huấn luyện/validation đầy đủ để công bố metric AI độc lập, cũng chưa có benchmark chuẩn hóa trên nhiều thiết bị Android và nhiều môi trường nhà. Dữ liệu té ngã dựng lại có thể khác đáng kể với sự cố thật của người cao tuổi. Camera RGB có điểm mù, nhạy ánh sáng/che khuất và tạo rủi ro riêng tư.
 
-Kiến trúc hiện phụ thuộc Firebase, Groq và STUN/TURN. Khi mất Internet, AI/BLE cục bộ có thể tiếp tục hoặc dừng an toàn, nhưng hội thoại cloud, đồng bộ caregiver và cuộc gọi suy giảm. Một số node RTDB như lệnh, signaling, cảnh báo và call history còn ở phạm vi toàn cục. Cấu trúc này phù hợp demo một robot nhưng phải thay đổi trước khi hỗ trợ nhiều gia đình. Firebase Rules, quản lý secret, TURN credential và auth gate cần được harden.
+Kiến trúc hiện phụ thuộc Firebase, Groq và STUN/TURN. Khi mất Internet, AI/BLE cục bộ có thể tiếp tục hoặc dừng an toàn, nhưng hội thoại cloud, đồng bộ caregiver và cuộc gọi suy giảm. RTDB đã cách ly dữ liệu giữa các UID, song RobotApp và CaregiverApp trong một cặp phải đăng nhập cùng tài khoản; chưa có mô hình thành viên, vai trò hoặc nhiều robot trên một gia đình. Rules cũng mới kiểm soát quyền theo nhánh, chưa validate kiểu/miền từng trường lệnh. Quản lý secret, TURN credential và auth gate vẫn cần được harden.
 
-Re-ID histogram chỉ là đặc trưng ngoại hình nhẹ. Khi nhiều người mặc giống nhau, ID0 có thể mất hoặc ghép sai. Các ngưỡng hậu kiểm được thiết lập theo kinh nghiệm và cần calibration theo vị trí camera. Firmware parser còn dựa vào \texttt{String.toFloat}; cơ cấu robot cần nút dừng vật lý, bảo vệ dòng/điện áp và kiểm thử cơ khí. APK RobotApp debug lớn và cần tối ưu đóng gói.
+Re-ID histogram chỉ là đặc trưng ngoại hình nhẹ. Khi nhiều người mặc giống nhau, ID0 có thể mất hoặc ghép sai. Điểm chọn ban đầu, chi phí phục hồi và các ngưỡng hậu kiểm 5/3/12 khung hình được thiết lập theo kinh nghiệm, cần calibration theo FPS và vị trí camera. Firmware parser còn dựa vào \texttt{String.toFloat}; cơ cấu robot cần nút dừng vật lý, bảo vệ dòng/điện áp và kiểm thử cơ khí. APK RobotApp debug lớn và cần tối ưu đóng gói.
 
 \subsection{Hướng phát triển}
 

@@ -3,78 +3,200 @@
 Phần này trình bày nền tảng lý thuyết cần thiết cho hệ thống robot thông minh tích hợp trí tuệ nhân tạo phục vụ giám sát và phát hiện té ngã. Nội dung được tổ chức theo thứ tự: tìm hiểu nền tảng Intel OpenBot; hệ thống nhận dạng giọng nói và xử lý ngôn ngữ tự nhiên; công nghệ Internet vạn vật (IoT) cho kết nối và điều khiển; các kiến trúc mạng nơ-ron nhân tạo (MLP, CNN); mô hình YOLO và lý do lựa chọn YOLOv11; cùng phương pháp xây dựng tập dữ liệu đa nhiệm phục vụ huấn luyện mô hình phát hiện ngã.
 
 %=========================================
-\subsection{Nền tảng Intel OpenBot}
+\subsection{Nền tảng Intel OpenBot (OpenBot)}
+\iffalse
 %=========================================
 
-\subsubsection{Giới thiệu Intel OpenBot}
+\subsubsection{Nguồn gốc và động cơ hình thành}
 
-Intel OpenBot là một nền tảng robot mã nguồn mở được phát triển cho nghiên cứu và giáo dục trong lĩnh vực robotics và trí tuệ nhân tạo. Điểm đặc biệt của OpenBot là sử dụng điện thoại thông minh (smartphone) làm ``bộ não'' chính của robot, tận dụng sức mạnh tính toán, camera và các cảm biến có sẵn trên điện thoại \reportcite{ref:openbot}.
+OpenBot là nền tảng robot mã nguồn mở khởi nguồn từ công trình của Matthias Müller và Vladlen Koltun, được công bố tại Hội nghị Quốc tế về Robot và Tự động hóa IEEE ICRA 2021. Ý tưởng trung tâm của công trình là chuyển phần cảm nhận, tính toán bậc cao và giao tiếp sang điện thoại thông minh, trong khi một thân xe điện chi phí thấp đảm nhiệm chuyển động. Nhóm tác giả lập luận rằng robot truyền thống thường phải đánh đổi giữa chi phí với độ phong phú cảm biến, năng lực tính toán và khả năng kết nối; smartphone đã tích hợp sẵn camera, IMU, bộ xử lý, pin, màn hình, kết nối không dây và hệ sinh thái phần mềm nên có thể giải quyết phần lớn sự đánh đổi này \reportcite{ref:openbot}.
 
+Nguyên mẫu trong công trình gốc sử dụng một thân xe khoảng 50 USD cho điện thoại Android phổ thông. Kết quả nghiên cứu cho thấy kiến trúc này đủ khả năng thực hiện bám theo người và điều hướng tự động thời gian thực trong môi trường không có cấu trúc, đồng thời có thể hoạt động với nhiều điện thoại và thân robot khác nhau \reportcite{ref:openbot}. Website của OpenBot hiện mô tả sứ mệnh rộng hơn là phổ cập giáo dục robot và AI bằng cách biến smartphone thành ``bộ não'' của robot giá thấp \reportcite{ref:openbot_web}. Vì vậy, tên ``Intel OpenBot'' thường được dùng để chỉ nguồn gốc nghiên cứu, còn dự án mã nguồn mở hiện được duy trì dưới tổ chức OpenBot Foundation.
 
-Các đặc điểm nổi bật của Intel OpenBot:
+OpenBot đáng chú ý không chỉ vì một mẫu xe cụ thể mà vì cung cấp một \textit{software--hardware stack} tương đối đầy đủ. Kho mã gồm thiết kế thân xe, firmware, Robot App, Controller App, bộ điều khiển từ trình duyệt/Python, công cụ thu thập dữ liệu, pipeline huấn luyện chính sách lái và môi trường lập trình kéo--thả \reportcite{ref:openbot_repo}. Điều này biến OpenBot thành một nền tảng tham khảo phù hợp cho đồ án: có thể kế thừa nguyên lý phân tầng và tận dụng smartphone nhưng vẫn thay thế từng thành phần theo bài toán chăm sóc người cao tuổi.
 
-\begin{itemize}
-    \item \textbf{Chi phí thấp}: Phần cứng cơ bản chỉ khoảng 50-100 USD, bao gồm khung xe, động cơ, và mạch điều khiển đơn giản
-    \item \textbf{Mã nguồn mở}: Toàn bộ thiết kế phần cứng (3D printable) và phần mềm (Android app, firmware) đều công khai
-    \item \textbf{Tận dụng smartphone}: Sử dụng camera và khả năng kết nối của điện thoại để chạy các mô hình AI
-    \item \textbf{Hỗ trợ Machine Learning}: Tích hợp TensorFlow Lite cho việc triển khai mô hình học sâu trực tiếp trên thiết bị
-\end{itemize}
+\subsubsection{Triết lý thiết kế smartphone-as-a-robot-brain}
 
-\subsubsection{Kiến trúc hệ thống OpenBot}
-
-Hệ thống OpenBot bao gồm ba thành phần chính:
-
-\textbf{a) Phần cứng Robot (Hardware)}
+Trong OpenBot, smartphone không đơn thuần là bộ điều khiển từ xa. Điện thoại được đặt trực tiếp trên thân xe và nằm trong vòng xử lý của robot. Camera cung cấp dòng ảnh; CPU/GPU/NPU thực thi mô hình; các cảm biến quán tính bổ sung trạng thái chuyển động; giao diện cảm ứng hỗ trợ cấu hình; Wi-Fi/Bluetooth/USB tạo kênh giao tiếp; loa và màn hình cung cấp phản hồi cho người dùng. Cách tổ chức này tạo ra bốn lợi ích chính:
 
 \begin{itemize}
-    \item \textbf{Khung xe}: Có thể in 3D hoặc sử dụng các kit robot có sẵn
-    \item \textbf{Động cơ DC}: Thường sử dụng động cơ DC với encoder để điều khiển chính xác
-    \item \textbf{Board điều khiển}: Arduino Nano hoặc ESP32 làm vi điều khiển
-    \item \textbf{Cảm biến phụ trợ}: Có thể tích hợp thêm cảm biến siêu âm, IR, hoặc IMU
-    \item \textbf{Pin}: Pin lithium để cấp nguồn cho robot và sạc điện thoại
+    \item \textbf{Tận dụng phần cứng phổ biến}: không cần lắp riêng camera, máy tính nhúng mạnh, màn hình và mô-đun mạng cho mỗi robot.
+    \item \textbf{Nâng cấp theo smartphone}: có thể thay điện thoại để tăng năng lực tính toán hoặc chất lượng cảm biến mà không thiết kế lại toàn bộ thân xe.
+    \item \textbf{Xử lý tại biên}: ảnh có thể được suy luận ngay trên thiết bị, giảm nhu cầu truyền video liên tục lên máy chủ và giảm độ trễ điều khiển.
+    \item \textbf{Tận dụng hệ sinh thái di động}: ứng dụng Android, TensorFlow Lite, camera API, BLE, USB, WebRTC/RTSP và các dịch vụ mạng có thể được ghép thành một hệ robot hoàn chỉnh.
 \end{itemize}
 
-\textbf{b) Ứng dụng Android (Mobile App)}
+Điểm cốt lõi là phân chia theo yêu cầu thời gian. Nhận thức môi trường, suy luận AI và logic nhiệm vụ được đặt trên smartphone vì cần tài nguyên tính toán lớn và thường xuyên thay đổi. Ngược lại, vi điều khiển xử lý PWM, đọc cảm biến gắn trên xe và phản ứng an toàn mức thấp vì cần vòng lặp đơn giản, xác định và gần cơ cấu chấp hành. Đây cũng là nguyên tắc được đồ án sử dụng khi đặt AI và điều phối chức năng trong RobotApp, còn ESP32 đảm nhiệm BLE và điều khiển động cơ.
 
-Ứng dụng Android là ``bộ não'' của robot, chịu trách nhiệm:
-\begin{itemize}
-    \item Thu thập dữ liệu từ camera và các cảm biến của điện thoại
-    \item Chạy các mô hình AI (object detection, navigation, policy learning)
-    \item Gửi lệnh điều khiển đến phần cứng robot qua USB hoặc Bluetooth
-    \item Giao diện người dùng cho việc điều khiển và giám sát
-\end{itemize}
+\subsubsection{Kiến trúc tổng thể của OpenBot}
 
-\textbf{c) Firmware vi điều khiển}
+Có thể mô hình hóa luồng xử lý OpenBot thành năm tầng:
 
-Firmware trên Arduino/ESP32 thực hiện các tác vụ cấp thấp:
-\begin{itemize}
-    \item Nhận lệnh từ điện thoại (tốc độ, hướng đi)
-    \item Điều khiển PWM cho động cơ
-    \item Đọc encoder và cảm biến
-    \item Gửi phản hồi trạng thái về điện thoại
-\end{itemize}
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{2.5cm}|p{3.8cm}|X|}
+\hline
+\textbf{Tầng} & \textbf{Thành phần tiêu biểu} & \textbf{Vai trò} \\
+\hline
+Cảm nhận & Camera/IMU smartphone; sonar, bumper, encoder, đo pin trên thân xe & Thu ảnh, chuyển động của điện thoại và trạng thái vật lý của xe. \\
+\hline
+Nhận thức và AI & Android, mô hình TensorFlow Lite, CPU/GPU/NNAPI & Phát hiện đối tượng, bám mục tiêu, suy luận chính sách lái và điều hướng. \\
+\hline
+Điều phối & Robot App & Quản lý chế độ hoạt động, ánh xạ đầu ra AI hoặc tay điều khiển thành lệnh xe. \\
+\hline
+Truyền thông & USB serial, BLE, Wi-Fi, WebRTC hoặc RTSP & Trao đổi lệnh/telemetry với vi điều khiển và truyền điều khiển/media đến thiết bị ngoài. \\
+\hline
+Chấp hành & Arduino Nano/ESP32, driver, động cơ và đèn & Chuyển lệnh logic thành PWM, giám sát cảm biến thấp tầng và phản hồi trạng thái. \\
+\hline
+\end{tabularx}
+\end{center}
 
-\subsubsection{Giao tiếp giữa Smartphone và Robot}
+Một chu kỳ tự động điển hình bắt đầu khi camera điện thoại nhận frame. Robot App tiền xử lý frame và chạy mô hình tại chỗ; kết quả nhận thức được đưa vào bộ điều khiển để sinh lệnh trái/phải; lệnh được truyền tới MCU; firmware chuyển lệnh thành PWM cho driver; dữ liệu pin, tốc độ bánh hoặc khoảng cách được gửi ngược về ứng dụng. Với điều khiển từ xa, nguồn sinh lệnh có thể là gamepad Bluetooth, Controller App, trình duyệt hoặc chương trình Python, nhưng MCU vẫn là điểm cuối chấp hành \reportcite{ref:openbot_controller}.
 
-Giao tiếp giữa điện thoại và phần cứng robot được thực hiện qua hai phương thức chính:
+\subsubsection{Phần cứng thân robot}
 
-\textbf{a) Kết nối USB Serial}
+OpenBot không ràng buộc vào một bộ khung duy nhất. Tài liệu chính thức cung cấp hoặc đề cập các biến thể DIY in 3D, OpenBot Lite cho giáo dục, thân chuyển đổi từ xe RC tỉ lệ 1:16, Multi-Terrain Vehicle và các bộ Ready-to-Run. Một thân robot bánh xe khác cũng có thể dùng với software stack nếu đáp ứng giao tiếp và khả năng điều khiển cần thiết \reportcite{ref:openbot_body}.
 
-\begin{itemize}
-    \item Sử dụng cáp USB OTG kết nối điện thoại với Arduino/ESP32
-    \item Giao thức Serial với baudrate thường là 115200
-    \item Ưu điểm: Độ trễ thấp, ổn định, có thể sạc pin cho điện thoại
-    \item Nhược điểm: Dây cáp hạn chế tính linh hoạt
-\end{itemize}
-
-\textbf{b) Kết nối Bluetooth}
+Cấu hình DIY điển hình gồm khung in 3D, giá giữ smartphone, động cơ DC hộp số, driver công suất, bánh xe, pin và Arduino Nano hoặc ESP32. Các cảm biến/tải phụ có thể được bật tùy cấu hình firmware:
 
 \begin{itemize}
-    \item Sử dụng module Bluetooth (HC-05/HC-06) hoặc Bluetooth tích hợp trên ESP32
-    \item Giao thức Bluetooth Serial Port Profile (SPP)
-    \item Ưu điểm: Không dây, linh hoạt
-    \item Nhược điểm: Độ trễ cao hơn, cần quản lý pin riêng
+    \item cảm biến tốc độ bánh trước hoặc sau để ước lượng số vòng quay;
+    \item cảm biến siêu âm phía trước để đo khoảng trống;
+    \item bumper để nhận biết va chạm;
+    \item cầu phân áp để đo điện áp pin;
+    \item đèn trước, đèn sau, đèn báo hướng và đèn trạng thái;
+    \item màn hình OLED để hiển thị trạng thái tại chỗ.
 \end{itemize}
+
+Thiết kế này thể hiện tính mô-đun: các chức năng không được khai báo sẽ không biên dịch vào firmware, giúp tiết kiệm bộ nhớ và giảm xử lý không cần thiết trên MCU \reportcite{ref:openbot_firmware}. Đồng thời, smartphone mount là một bộ phận quan trọng chứ không chỉ là giá đỡ cơ khí, vì góc camera và độ rung ảnh hưởng trực tiếp đến dữ liệu đầu vào của mô hình.
+
+\subsubsection{Cấu trúc kho mã và công nghệ phần mềm}
+
+Kho mã OpenBot tổ chức các phần theo vòng đời phát triển robot \reportcite{ref:openbot_repo}:
+
+\begin{itemize}
+    \item \path|android|: Robot App và Controller App cho Android;
+    \item \path|body|: bản vẽ, hướng dẫn lắp ráp và các biến thể thân robot;
+    \item \path|firmware|: chương trình cho Arduino Nano và ESP32;
+    \item \path|controller|: gamepad, Node.js, Python, Flutter và điều khiển qua web;
+    \item \path|policy|: thu thập dữ liệu, tiền xử lý, huấn luyện và xuất chính sách lái;
+    \item \path|open-code|: OpenBot Playground lập trình bằng khối kéo--thả;
+    \item \path|python| và \path|ios|: các công cụ hoặc client bổ sung cho hệ sinh thái.
+\end{itemize}
+
+Trên Android, OpenBot sử dụng camera và cảm biến của điện thoại, kết nối USB/BLE, suy luận mô hình trên thiết bị và các kênh stream video. Tài liệu Robot App cho phép chọn CPU, GPU hoặc NNAPI, số luồng CPU và nhiều mô hình đã lượng tử hóa để cân bằng tốc độ với độ chính xác. Các lựa chọn này cho thấy nền tảng không giả định mọi smartphone có cùng năng lực; backend suy luận phải được benchmark trên thiết bị đích \reportcite{ref:openbot_robot_app}.
+
+Ở phía huấn luyện, OpenBot cung cấp môi trường Python/TensorFlow, Jupyter Notebook, dữ liệu thư mục hoặc TFRecord và các script dòng lệnh. Hệ thống có thể huấn luyện các kiến trúc chính sách như \path|cil_mobile|, \path|cil_mobile_fast|, CIL và PilotNet; tham số gồm batch size, learning rate, số epoch và augmentation. Model sau huấn luyện được chuyển về định dạng phù hợp để suy luận trên smartphone \reportcite{ref:openbot_policy}.
+
+\subsubsection{Các chức năng của Robot App}
+
+Robot App là trung tâm điều phối của OpenBot. Các màn hình/chức năng chính trong tài liệu hiện hành gồm \reportcite{ref:openbot_robot_app}:
+
+\begin{enumerate}
+    \item \textbf{Free Roam}: điều khiển robot và hiển thị thời gian thực mức pin, trạng thái tiến/dừng/lùi, tốc độ và khoảng cách sonar.
+    \item \textbf{Data Collection}: ghi ảnh và tín hiệu điều khiển để tạo tập dữ liệu; hỗ trợ nhiều độ phân giải xem trước/mô hình và lưu phiên ghi thành tệp.
+    \item \textbf{Controller Mapping}: kiểm tra ánh xạ nút/joystick của gamepad Bluetooth.
+    \item \textbf{Robot Info}: đọc loại robot và các tính năng firmware, quan sát telemetry, thử lệnh động cơ và đèn.
+    \item \textbf{Autopilot}: chọn chính sách lái đã huấn luyện, thiết bị suy luận CPU/GPU/NNAPI và số luồng.
+    \item \textbf{Object Tracking}: nhận dạng và bám một trong 80 lớp COCO; cho phép chọn model, lớp mục tiêu, confidence và tốc độ động.
+    \item \textbf{Point Goal Navigation}: dùng ARCore và một policy AI để đi tới mục tiêu hai chiều tương đối trong khi tránh vật cản.
+    \item \textbf{Model Management}: quản lý model và so sánh tốc độ trên nhiều smartphone/backend.
+    \item \textbf{Video Streaming}: lựa chọn WebRTC cho controller/Node.js hoặc RTSP cho controller Python.
+\end{enumerate}
+
+Chức năng object tracking minh họa rõ vòng kín nhận thức--điều khiển. Detector tìm vùng bao của đối tượng; tâm vùng bao cung cấp sai lệch ngang để đánh lái; diện tích vùng bao xấp xỉ khoảng cách và có thể dùng giảm tốc khi robot tiến gần mục tiêu. OpenBot cho phép thay detector và ngưỡng confidence, cho thấy chất lượng điều khiển phụ thuộc đồng thời vào model, tốc độ suy luận và luật biến đổi detection thành lệnh.
+
+\subsubsection{Các phương thức điều khiển và truyền hình ảnh}
+
+OpenBot hỗ trợ nhiều nguồn điều khiển nhằm phục vụ cả vận hành và phát triển \reportcite{ref:openbot_controller}:
+
+\begin{itemize}
+    \item gamepad Bluetooth như PS4/Xbox cho điều khiển trực tiếp và dừng khẩn;
+    \item Controller App trên điện thoại thứ hai, có điều khiển trên màn hình hoặc nghiêng thiết bị;
+    \item Node.js controller trong cùng mạng Wi-Fi, cung cấp video độ trễ thấp và bàn phím điều khiển từ trình duyệt;
+    \item Python controller sử dụng dòng RTSP và bàn phím, đồng thời là mẫu để phát triển thuật toán riêng;
+    \item Flutter controller cho Android/iOS với điều khiển và truyền audio/video;
+    \item web server controller để teleoperation qua Internet.
+\end{itemize}
+
+Sự tách biệt Robot App--Controller App là một tham khảo trực tiếp cho kiến trúc hai ứng dụng của đồ án. Điện thoại trên robot giữ quyền truy cập camera, mô hình và thân xe; thiết bị của người vận hành phát ý định điều khiển và nhận thông tin. Tuy nhiên, đồ án không sao chép cơ chế controller của OpenBot mà dùng Firebase RTDB cho lệnh/trạng thái và WebRTC cho cuộc gọi, phù hợp kịch bản caregiver ở khác mạng và cần dữ liệu chăm sóc lâu dài.
+
+\subsubsection{Firmware và giao thức giữa smartphone với MCU}
+
+Firmware OpenBot hỗ trợ Arduino Nano ATmega328P và ESP32. MCU đóng vai trò cầu nối giữa smartphone với cơ cấu vật lý: nhận lệnh điều khiển/đèn qua kết nối serial, chuyển giá trị điều khiển thành PWM, đếm xung tốc độ bánh, lọc điện áp pin, đo sonar và gửi telemetry ngược về Android \reportcite{ref:openbot_firmware}.
+
+OpenBot định nghĩa giao thức văn bản ngắn gọn. Ví dụ, lệnh \texttt{c<left>,<right>} điều khiển hai phía trong miền $[-255,255]$; \texttt{i} điều khiển đèn báo hướng; \texttt{l} đặt độ sáng đèn; \texttt{s}, \texttt{w}, \texttt{v} cấu hình chu kỳ gửi sonar, tốc độ bánh và điện áp; \texttt{h<time\_ms>} cấu hình heartbeat để dừng khi mất lệnh; và \texttt{f} yêu cầu firmware trả về loại xe cùng danh sách tính năng. Telemetry dùng tiền tố tương ứng như \texttt{v}, \texttt{w}, \texttt{s} và \texttt{b} \reportcite{ref:openbot_firmware}.
+
+Hai kênh chính giữa smartphone và MCU là:
+
+\begin{itemize}
+    \item \textbf{USB serial}: ứng dụng mặc định làm việc ở baud rate 115200; ưu điểm là ổn định, độ trễ thấp và có thể kết hợp cấp nguồn, nhưng có dây và phụ thuộc USB OTG.
+    \item \textbf{BLE}: được hỗ trợ trên các biến thể ESP32; ưu điểm là không dây và dễ bố trí điện thoại, nhưng cần discovery, quản lý kết nối, quyền Android và cơ chế tự dừng khi mất liên lạc.
+\end{itemize}
+
+Heartbeat là bài học thiết kế quan trọng. Điều khiển chuyển động không nên giả định kết nối luôn tồn tại; nếu không nhận gói mới trong thời gian giới hạn, lớp gần động cơ phải đặt lệnh về 0. Đồ án áp dụng cùng nguyên tắc fail-safe bằng watchdog 500 ms tại RobotApp và 800 ms tại firmware, cùng kiểm tra tuổi lệnh Firebase tối đa 2 s.
+
+\subsubsection{Thu thập dữ liệu, huấn luyện và triển khai mô hình}
+
+OpenBot cung cấp một chu trình machine learning tương đối hoàn chỉnh. Người phát triển lái robot bằng gamepad trong khi Robot App ghi ảnh và điều khiển. Mỗi phiên được lưu riêng; dữ liệu được chia train/test theo phiên để đánh giá trên các quan sát chưa dùng huấn luyện. Tài liệu nhấn mạnh policy sẽ bắt chước hành vi người lái, do đó dữ liệu lái nhất quán ảnh hưởng trực tiếp đến kết quả \reportcite{ref:openbot_policy}.
+
+Dữ liệu có thể đọc trực tiếp hoặc chuyển sang TFRecord. Huấn luyện được thực hiện bằng TensorFlow qua Jupyter Notebook hoặc command line, có hỗ trợ augmentation và nhiều kiến trúc. Sau khi huấn luyện, model được triển khai lại trên điện thoại. Chu trình này thể hiện nguyên tắc \textit{collect--train--convert--deploy--evaluate}; đây cũng là cấu trúc tham khảo cho phần AI của đồ án, dù bài toán được thay từ chính sách lái sang pose estimation và phân loại chuỗi té ngã.
+
+Bên cạnh policy lái, Robot App tích hợp nhiều detector TensorFlow Lite như MobileNet SSD, YOLO và EfficientDet ở các độ phân giải khác nhau. Tài liệu công bố benchmark riêng cho CPU, GPU và NNAPI trên nhiều điện thoại, qua đó cho thấy không có backend luôn nhanh nhất trên mọi SoC \reportcite{ref:openbot_robot_app}. Vì vậy, việc cung cấp model nhỏ, model dự phòng CPU và khả năng chọn delegate là thiết kế cần thiết đối với robot dùng smartphone.
+
+\subsubsection{OpenBot Playground và khả năng giáo dục}
+
+OpenBot Playground là môi trường kéo--thả để xây dựng chuỗi chỉ dẫn mà không cần viết mã. Chương trình có thể lưu ở local storage hoặc Google Drive, sau đó tạo đầu ra/QR để Robot App tải và thực thi. Công cụ hướng tới người học, thiết bị di động và máy tính bảng \reportcite{ref:openbot_playground}. Thành phần này không được đồ án sử dụng trực tiếp nhưng cho thấy một nền tảng robot tốt cần lớp trừu tượng trên phần cứng, giúp người dùng mô tả hành vi mà không phải thao tác với PWM hay giao thức serial.
+
+\subsubsection{Ưu điểm và giới hạn của OpenBot}
+
+Ưu điểm lớn nhất của OpenBot là giảm ngưỡng tiếp cận robot AI. Nền tảng có thiết kế cơ khí mở, firmware đa cấu hình, ứng dụng Android, nhiều controller và pipeline học máy. Việc xử lý trên smartphone làm giảm chi phí máy tính nhúng riêng, đồng thời cho phép dùng camera và bộ tăng tốc sẵn có. Kiến trúc mô-đun cũng thuận lợi cho nghiên cứu vì có thể thay thân xe, điện thoại, model hoặc nguồn điều khiển độc lập.
+
+Tuy nhiên, cách tiếp cận này có các giới hạn cần nhận thức:
+
+\begin{itemize}
+    \item hiệu năng và khả năng tương thích phụ thuộc lớn vào mẫu điện thoại, Android, camera và delegate;
+    \item smartphone không phải bộ điều khiển thời gian thực cứng, nên vòng an toàn cuối phải đặt tại MCU;
+    \item nhiệt độ, pin và giới hạn tài nguyên có thể làm giảm FPS khi chạy AI lâu;
+    \item độ rung, góc gắn và rolling shutter ảnh hưởng dữ liệu thị giác;
+    \item policy hoặc detector không bảo đảm tránh va chạm trong mọi tình huống; tài liệu OpenBot yêu cầu thử nghiệm trong môi trường an toàn và có phương tiện dừng thủ công \reportcite{ref:openbot_robot_app};
+    \item nền tảng gốc tập trung robot nghiên cứu/giáo dục, chưa cung cấp đầy đủ luồng nghiệp vụ chăm sóc, phân quyền caregiver hay quản lý sự cố sức khỏe.
+\end{itemize}
+
+\subsubsection{Mức độ kế thừa OpenBot trong đồ án}
+
+Đồ án kế thừa OpenBot ở cấp \textbf{tư tưởng kiến trúc}, không phải là bản sao nguyên trạng. Bảng \ref{tab:openbot_inheritance} chỉ rõ phần tham khảo và phần phát triển riêng.
+
+\begin{table}[htbp]
+\centering
+\caption{Đối chiếu OpenBot với hướng hiện thực của đồ án}
+\label{tab:openbot_inheritance}
+\small
+\begin{tabularx}{\textwidth}{|p{3.0cm}|X|X|}
+\hline
+\textbf{Khía cạnh} & \textbf{OpenBot tham khảo} & \textbf{Đồ án hiện thực/điều chỉnh} \\
+\hline
+Vai trò smartphone & Camera, cảm biến, AI và logic điều phối trên điện thoại gắn robot & RobotApp chạy pose, tracking, LSTM, hội thoại, cuộc gọi và điều phối chuyển động. \\
+\hline
+Phân tầng điều khiển & Android xử lý bậc cao; MCU nhận lệnh và điều khiển PWM & Android xử lý lệnh/AI; ESP32 điều khiển hai BLDC bằng SimpleFOC và encoder AS5600. \\
+\hline
+Ứng dụng thứ hai & Controller App/gamepad phục vụ teleoperation & CaregiverApp quản lý hồ sơ, lịch nhắc, nhật ký, cảnh báo, gọi và joystick từ xa. \\
+\hline
+Thị giác & Object detection, object tracking, point-goal navigation và driving policy & Pose estimation, SORT/Re-ID, theo dõi người ưu tiên và phát hiện/xác nhận té ngã. \\
+\hline
+Liên kết smartphone--MCU & USB serial hoặc BLE; giao thức lệnh OpenBot & BLE GATT riêng; payload hai setpoint dạng \texttt{L...R...}; watchdog hai tầng. \\
+\hline
+Kết nối từ xa & Controller cục bộ hoặc qua web; WebRTC/RTSP tùy client & Firebase RTDB cho signaling/lệnh/trạng thái và WebRTC cho audio/video caregiver--robot. \\
+\hline
+Machine learning & Thu dữ liệu lái, huấn luyện policy TensorFlow, triển khai mobile & Chuẩn bị pose model, huấn luyện LSTM theo chuỗi, chuyển ONNX/TFLite/FP16 và đóng gói Android. \\
+\hline
+Mục tiêu & Nền tảng robot AI chi phí thấp cho nghiên cứu và giáo dục & Nguyên mẫu robot hỗ trợ giám sát, tương tác và chăm sóc người cao tuổi. \\
+\hline
+\end{tabularx}
+\end{table}
+
+Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nút edge thông minh và tách nó khỏi lớp chấp hành. Các phần mang tính đóng góp riêng của đồ án gồm kiến trúc RobotApp--CaregiverApp, Firebase theo nghiệp vụ chăm sóc, pipeline pose--tracking--LSTM--hậu kiểm, xác nhận bằng giọng nói trước khi báo động, lịch nhắc, nhật ký và thân robot BLDC/FOC. Cách trình bày này giúp xác định đúng vai trò của OpenBot: nền tảng tham khảo rất quan trọng về ý tưởng và công nghệ, nhưng không đồng nhất với toàn bộ hệ thống được xây dựng trong đồ án.
+\fi
+\input{Contents/OpenBotTomLuoc}
 
 %=========================================
 
@@ -1471,7 +1593,7 @@ NMS có thể đặt trong graph hoặc ngoài graph. NMS trong graph giảm cod
 
 Realtime Database tổ chức dữ liệu thành cây JSON và đồng bộ thay đổi tới client đang lắng nghe \reportcite{ref:firebase_rtdb}. Client Android có cache và hàng đợi write, do đó callback ``gần thời gian thực'' không đồng nghĩa bản ghi luôn mới. Đối với lệnh robot, timestamp/expiry là phần của ngữ nghĩa dữ liệu, không chỉ là metadata.
 
-Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \reportcite{ref:firebase_security}. Rules mặc định cần từ chối, sau đó cấp quyền tối thiểu theo UID, family và robot. Các node lệnh/signaling không nên dùng chung toàn cục trong hệ thống nhiều robot. Chúng cũng cần validate miền giá trị, người gửi và vòng đời phiên.
+Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \reportcite{ref:firebase_security}. Trong đồ án, rules từ chối mặc định rồi cấp quyền cho đúng UID; các node lệnh/signaling được đặt dưới \path|pair_sessions/{uid}| thay vì dùng chung ở gốc. Khi mở rộng nhiều người chăm sóc hoặc nhiều robot, cần bổ sung quan hệ family--member--robot, vai trò và kiểm tra chi tiết miền giá trị, người gửi cùng vòng đời phiên.
 
 Ưu điểm của RTDB là tích hợp Android nhanh, listener đơn giản và phù hợp state/event nhỏ. Hạn chế là schema phi quan hệ, truy vấn có giới hạn và dễ tạo coupling bằng string path. Tách repository/data access, định nghĩa model chung và test rules bằng emulator giúp giảm rủi ro.
 

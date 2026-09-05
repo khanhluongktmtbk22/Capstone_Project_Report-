@@ -58,21 +58,23 @@ Re-ID trích histogram HSV vùng thân, nơi ít bị thay đổi hơn nền và
 
 \subsubsection{Khóa mục tiêu ID0 và sinh lệnh auto-follow}
 
-Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ở lần chọn đầu, người có vùng bao lớn thường được xem là gần robot nhất. Sau đó ID0 được truyền qua pipeline LSTM và điều khiển. Khi mất mục tiêu, logic phục hồi yêu cầu một người duy nhất, ở gần vị trí cũ, thuộc vùng trung tâm và ổn định; trong cảnh nhiều người, robot chờ thay vì tự đổi chủ thể.
+Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ở lần chọn đầu, ứng dụng xếp hạng ứng viên bằng diện tích vùng bao, confidence, tỷ lệ keypoint nhìn thấy, độ gần tâm và mức chạm biên thay vì chỉ lấy vùng bao lớn nhất. Khi mất ID0, trong cửa sổ 2 s ứng dụng lọc ứng viên cách vị trí cuối không quá 35\% đường chéo ảnh, rồi chọn chi phí nhỏ nhất theo khoảng cách, thay đổi tỷ lệ và độ đầy đủ pose. Cùng ứng viên phải ổn định ba khung hình mới được nâng lại thành ID0; state nhị phân của LSTM được chuyển theo ID mới.
 
-Auto-follow so sánh tâm vùng bao với vùng mục tiêu. Nếu lệch ngang, hệ thống phát lệnh quay; nếu kích thước người cho thấy khoảng cách xa, phát lệnh tiến. Các mức quay hiện dùng kênh $y=\pm0,50$ theo hệ tọa độ camera. Cách đặt dấu khác trực giác joystick nhưng đã được tách rõ theo từng hệ tọa độ. Lệnh cuối vẫn đi qua \texttt{RobotControlManager}, nhờ đó cùng được kiểm tra và format.
+Auto-follow ước lượng khoảng cách bảo thủ từ các neo vai--hông--gối--mắt cá và kích thước vùng bao, làm mượt bằng EMA $\alpha=0,45$, sau đó dùng hysteresis bốn ngưỡng 0,56/0,64/0,72/0,80 để tránh đổi liên tục giữa tiến--dừng--lùi. Tốc độ tiến biến thiên từ 0,60 đến 0,90 và giảm còn 85\% khi quay hoặc 70\% khi mắt cá chưa tin cậy; tốc độ lùi biến thiên từ 0,45 đến 0,60. Sai lệch tâm ngoài deadzone 0,07 được nhân hệ số 2,2 và chặn ở $\pm0,50$. Translation và steering được làm mượt riêng rồi gửi tối đa mỗi 120 ms; khi translation mạnh, steering nhỏ được nâng tới ngưỡng hiệu lực 0,30 để không bị deadzone của \texttt{RobotControlManager} loại bỏ.
+
+Ngoài nhãn LSTM, hình học tư thế được dùng riêng cho an toàn điều khiển. \texttt{PostureGeometry} nhận biết cả trường hợp người nằm dọc theo trục nhìn khiến hộp người vẫn có vẻ cao: cần thấy phần thân dưới, aspect ratio vùng bao ít nhất 0,68, chiều cao pose không quá 0,55 khung và chênh cao vai--hông không quá 0,20. Tín hiệu này chỉ chuyển auto-follow sang chế độ tạo khung người nằm, không sửa nhãn nhị phân của model.
 
 \subsubsection{LSTM phát hiện té ngã}
 
 \texttt{LstmFallDetector} nạp \texttt{best\_model\_lstm\_v2.tflite} khoảng 63,9 KB, dùng hai luồng CPU. Mỗi track có \texttt{FallDetectionQueue}; queue đủ 15 frame mới tạo tensor $1\times15\times69$ kiểu float. Output $1\times2$ được diễn giải là xác suất normal/fall. Model gốc Keras khoảng 193,8 KB, cho thấy TFLite giảm đáng kể kích thước đóng gói.
 
-Máy trạng thái dùng threshold 0,5 và nhiều bộ đếm: 10 frame fall liên tiếp để vào Falling; 15 frame phù hợp để xác nhận trạng thái nằm; 20 frame đứng để phục hồi; track mất quá 60 frame thì dọn state. Khi tracker đổi ID hợp lệ, \texttt{transferStateTo} chuyển queue và trạng thái để chuỗi thời gian không bị mất. LSTM được dùng vì khả năng mô hình hóa phụ thuộc theo thời gian \reportcite{ref:lstm}, nhưng đầu ra không được dùng đơn độc để phát cảnh báo.
+\texttt{LstmFallDetector} trả đúng lớp argmax của model: FALL khi \path|probFall > probNormal|, ngược lại là NO FALL; lớp này không suy diễn thêm trạng thái Falling/Lying. Queue và kết quả gần nhất được quản lý theo ID, track vắng quá 60 khung hình sẽ bị dọn. Khi tracker thay ID hợp lệ, \texttt{transferStateTo} bảo toàn kết quả nhị phân gần nhất; ổn định sự kiện được xử lý độc lập ở \texttt{FallVerificationEngine}. LSTM được dùng vì khả năng mô hình hóa phụ thuộc theo thời gian \reportcite{ref:lstm}, nhưng một dự đoán đơn lẻ không trực tiếp phát cảnh báo.
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence}: mục tiêu có thấy hay không, tỷ lệ $y$ của thân trên, số keypoint, vùng bao có nằm trọn ảnh và aspect ratio. Baseline thân trên được cập nhật bằng trung bình trượt mũ với $\alpha=0,08$ trong trạng thái bình thường. Khi có sự kiện, engine chấm bằng chứng qua các ngưỡng đã mô tả ở Chương 3.
+\texttt{FallVerificationEngine} chỉ mở chuỗi sự cố sau năm nhãn FALL liên tiếp. Khi model lần đầu trở về NO FALL, engine lấy tọa độ $y$ nhỏ nhất của các điểm mũi/vai nhìn thấy: ba khung hình liên tiếp có $y\leq0,70$ làm từ chối ứng viên, còn ba khung hình có $y>0,70$ dẫn tới hỏi xác nhận. Nếu mục tiêu hoặc các điểm thân trên bị mất, engine chờ 12 khung hình rồi yêu cầu xác nhận theo hướng bảo thủ. \texttt{FrameEvidence} còn mang số keypoint, trạng thái vùng bao và aspect ratio để ghi log; ba trường này không được cộng điểm hay dùng làm điều kiện quyết định trong phiên bản hiện tại.
 
-Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reason)} hoặc \texttt{AskForConfirmation(reason, score, evidence)}. Tách quyết định khỏi UI giúp unit test từng nhánh mà không cần camera. \texttt{isIncidentActive} và \texttt{canAcquireNewTarget} ngăn một sự cố tạo nhiều yêu cầu đồng thời. \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} làm rõ vòng đời sự cố.
+Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reason)} hoặc \texttt{AskForConfirmation(reason, score, evidence)}. Tách quyết định khỏi UI giúp unit test từng nhánh mà không cần camera. \texttt{isIncidentActive} kích hoạt chế độ tạo khung an toàn; \texttt{canAcquireNewTarget} ngăn đổi người trong sự cố. Sau \texttt{resolveAsSafe} hoặc \texttt{resolveAsDanger}, mười khung hình NO FALL liên tiếp mới reset engine về pha theo dõi.
 
 \begin{figure}[htbp]
     \centering
@@ -83,7 +85,7 @@ Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reas
 
 \subsubsection{Luồng xác nhận và cảnh báo}
 
-TrackingService truyền \texttt{FallEvent} đến chatbot. Chatbot là owner duy nhất tạo \texttt{fall\_alerts}, bảo đảm một record cho một sự cố. Robot trước hết dừng, phát câu hỏi TTS và mở cửa sổ nghe tối đa 10 s. Các cụm từ an toàn/nguy hiểm rõ được đối chiếu cục bộ để giảm độ trễ và tránh phụ thuộc LLM. Phản hồi mơ hồ gọi model phân loại không streaming và yêu cầu kết quả cấu trúc. Nếu phân loại lỗi hoặc người dùng im lặng, trạng thái được cập nhật nguy hiểm và gọi caregiver sau khi TTS hoàn tất.
+Trong thời gian sự cố, robot gửi STOP ngay khi vào chế độ tạo khung; sau đó chỉ cho phép lùi chậm $(x=0,22)$ hoặc quay tại chỗ $(y=\pm0,42)$ để đưa vùng bao vào trọn ảnh, không có nhánh tiến. Lệnh lùi cần ổn định hai khung hình, lệnh quay ba khung hình; mất mục tiêu gây STOP ngay. Khi đủ điều kiện hỏi, TrackingService truyền đúng một \texttt{FallEvent} đến chatbot. Chatbot giữ khóa bản ghi \texttt{fall\_alerts}, phát câu hỏi TTS và mở cửa sổ nghe tối đa 10 s. Các cụm từ an toàn/nguy hiểm rõ được đối chiếu cục bộ; phản hồi mơ hồ mới gọi model phân loại. Nếu phân loại lỗi hoặc người dùng im lặng, trạng thái được ghi là nguy hiểm và ứng dụng gọi caregiver sau khi TTS hoàn tất.
 
 Bản ghi cảnh báo chứa timestamp, trạng thái, phản hồi và bằng chứng như \path|verificationReason|, \path|visibleKeypoints|, \path|bboxFullyInside|, \path|upperBodyYRatio|. Thông tin này giúp truy vết vì sao engine yêu cầu xác nhận, nhưng không phải là giải thích đầy đủ của mô hình LSTM.
 
@@ -101,13 +103,13 @@ Tác vụ an toàn không dựa hoàn toàn vào sinh văn bản tự do. Hàm p
 
 \subsubsection{WebRTC trong RobotApp}
 
-\texttt{video\_call\_fragment} khởi tạo PeerConnectionFactory, nguồn audio/video, renderer và Firebase reference \texttt{webrtc\_signal}. Khi RobotApp gọi, nó ghi offer và đẩy ICE vào \texttt{robotCandidates}; khi nhận gọi, nó đọc offer, tạo answer và nghe \texttt{caregiverCandidates}. Listener chỉ được dùng cho đúng pha và được gỡ trong cleanup.
+\texttt{video\_call\_fragment} khởi tạo PeerConnectionFactory, nguồn audio/video, renderer và Firebase reference \path|pair_sessions/{uid}/webrtc_signal|. Khi RobotApp gọi, nó ghi offer và đẩy ICE vào \texttt{robotCandidates}; khi nhận gọi, nó đọc offer, tạo answer và nghe \texttt{caregiverCandidates}. Listener chỉ được dùng cho đúng pha và được gỡ trong cleanup.
 
 WebRTC cung cấp mã hóa và truyền media; Firebase chỉ trao đổi SDP, ICE và trạng thái \reportcite{ref:webrtc}. Trường \texttt{emergencyReason=fall} phân biệt cuộc gọi khẩn cấp với cuộc gọi thường. Khi kết thúc, status được đặt \texttt{ended}, track/capturer/renderer/PeerConnection được giải phóng và quyền camera trả lại tracking.
 
 \subsubsection{RobotControlManager và BLE}
 
-\texttt{RobotControlManager} lắng nghe \texttt{robot\_control}. Hàm ánh xạ được tách để kiểm thử bốn điểm chuẩn. Mọi input được kiểm tra hữu hạn, giới hạn, tuổi và skew tương lai. Payload được format với \texttt{Locale.US} để dấu thập phân luôn là dấu chấm:
+\texttt{RobotControlManager} chỉ khởi động khi có người dùng đã xác thực và lắng nghe \path|pair_sessions/{uid}/robot_control|. Hàm ánh xạ được tách để kiểm thử bốn điểm chuẩn. Mọi input được kiểm tra hữu hạn, giới hạn, tuổi và skew tương lai. Payload được format với \texttt{Locale.US} để dấu thập phân luôn là dấu chấm:
 
 \begin{lstlisting}[caption={Định dạng lệnh BLE ở mức logic}]
 left  = clamp((steering * 0.15 + translation) * 20, -20, 20)
@@ -115,7 +117,7 @@ right = clamp((steering * 0.15 - translation) * 20, -20, 20)
 payload = "L%.2fR%.2f\n".format(Locale.US, left, right)
 \end{lstlisting}
 
-Manager quét theo tên \texttt{OhmniRobot} và custom UUID, timeout quét 10 s, reconnect sau 3 s. Sau discovery, characteristic được cấu hình \texttt{WRITE\_TYPE\_NO\_RESPONSE}. API ghi khác nhau theo phiên bản Android được xử lý tương thích. Watchdog 1.200 ms gọi STOP nếu luồng RTDB không cập nhật. \texttt{stop()} gỡ listener, callback, scan và GATT để tránh leak.
+Manager quét theo tên \texttt{OhmniRobot} và custom UUID, timeout quét 10 s, reconnect sau 3 s. Sau discovery, characteristic được cấu hình \texttt{WRITE\_TYPE\_NO\_RESPONSE}. API ghi khác nhau theo phiên bản Android được xử lý tương thích. Watchdog 500 ms gọi STOP nếu luồng RTDB không cập nhật; timestamp quá 2.000 ms hoặc vượt tương lai quá 5.000 ms và số không hữu hạn cũng bị từ chối kèm STOP. \texttt{stop()} gỡ listener, callback, scan và GATT để tránh leak.
 
 \subsection{Hiện thực CaregiverApp}
 
@@ -125,7 +127,7 @@ CaregiverApp có \texttt{LoginActivity}, \texttt{SignUpActivity}, \texttt{MainAc
 
 \subsubsection{Bật/tắt chức năng theo dõi}
 
-\path|tracking_fragment| ghi hai cờ \path|robot_follow_enabled| và \path|ai_fall_detection_enabled|. Fragment đồng thời theo dõi \texttt{.info/connected} để phản ánh kết nối RTDB. Khi tắt auto-follow, CaregiverApp ghi $x=0,y=0,ts=now$; đây là hành vi quan trọng vì chỉ đổi cờ có thể để lại lệnh chuyển động trước đó.
+\path|tracking_fragment| ghi hai cờ \path|pair_sessions/{uid}/robot_follow_enabled| và \path|pair_sessions/{uid}/ai_fall_detection_enabled|. Fragment đồng thời theo dõi \texttt{.info/connected} để phản ánh kết nối RTDB. Khi tắt auto-follow, CaregiverApp ghi $x=0,y=0,ts=now$ vào kênh điều khiển cùng cặp; đây là hành vi quan trọng vì chỉ đổi cờ có thể để lại lệnh chuyển động trước đó.
 
 \subsubsection{Lịch và nhật ký}
 
@@ -133,7 +135,7 @@ CaregiverApp có \texttt{LoginActivity}, \texttt{SignUpActivity}, \texttt{MainAc
 
 \subsubsection{Cuộc gọi đến nền}
 
-\texttt{IncomingCallService} là foreground service lắng nghe \texttt{webrtc\_signal}. Khi status là calling và callerRole là robot, service tạo notification và có thể mở \texttt{IncomingCallActivity} toàn màn hình. Nếu \texttt{emergencyReason=fall}, tiêu đề/nội dung thông báo nêu đây là cuộc gọi do chưa xác nhận an toàn. Manifest khai báo notification, foreground service và full-screen intent; hành vi thực tế còn phụ thuộc chính sách hệ điều hành và quyền người dùng.
+\texttt{IncomingCallService} là foreground service lắng nghe \path|pair_sessions/{uid}/webrtc_signal|. Khi status là calling và callerRole là robot, service tạo notification và có thể mở \texttt{IncomingCallActivity} toàn màn hình. Nếu \texttt{emergencyReason=fall}, tiêu đề/nội dung thông báo nêu đây là cuộc gọi do chưa xác nhận an toàn. Manifest khai báo notification, foreground service và full-screen intent; hành vi thực tế còn phụ thuộc chính sách hệ điều hành và quyền người dùng.
 
 \subsubsection{Video call và joystick}
 
@@ -145,7 +147,7 @@ CaregiverApp không có BLE và không biết dấu vật lý của motor. Ranh 
 
 Firebase listener cung cấp cập nhật gần thời gian thực, còn write được phản ánh cục bộ trước khi đồng bộ máy chủ \reportcite{ref:firebase_rtdb}. Vì vậy timestamp trong lệnh là bắt buộc: tính ``realtime'' của callback không đồng nghĩa dữ liệu luôn mới. Các class model như \texttt{UserProfile}, \texttt{ScheduleItem}, \texttt{FallAlertEntry}, \texttt{ReminderLogEntry} và \texttt{CallHistoryEntry} phản ánh dữ liệu JSON.
 
-Snapshot hiện dùng kết hợp node theo UID và node toàn cục. Điều này giảm độ phức tạp demo một robot nhưng chưa đủ cách ly nhiều gia đình. Trong triển khai thực, rules phải từ chối mặc định, cho phép theo UID/family/robot và validate từng trường \reportcite{ref:firebase_security}. Chuyển schema cần cập nhật đồng thời hai app; nếu chỉ sửa một phía sẽ tạo lỗi im lặng do listener đọc sai path.
+Hai ứng dụng dùng cùng lớp quy ước \texttt{FirebasePairPaths}. Hồ sơ, lịch và nhật ký nhắc nằm dưới các nhánh UID tương ứng; lệnh, cờ AI, signaling, cảnh báo và lịch sử gọi nằm dưới \path|pair_sessions/{uid}|. Tệp \path|database.rules.json| từ chối đọc/ghi ở gốc và chỉ cho phép khi \path|auth.uid| trùng UID của nhánh; hai danh sách lịch sử được lập chỉ mục timestamp \reportcite{ref:firebase_security}. Cách ghép cặp hiện yêu cầu RobotApp và CaregiverApp đăng nhập cùng tài khoản. Đây là cách ly tài khoản đã hiện thực, nhưng chưa phải mô hình phân quyền nhiều thành viên hoặc nhiều robot.
 
 \subsection{Huấn luyện và chuyển đổi mô hình AI}
 
@@ -257,7 +259,7 @@ Quy trình tích hợp khuyến nghị:
 
 \subsection{Những điểm hiện thực cần lưu ý}
 
-Mã nguồn phản ánh một nguyên mẫu đang phát triển. Một số node Firebase toàn cục phù hợp demo nhưng chưa phù hợp nhiều robot. CaregiverApp có màn chatbot placeholder trong khi chatbot thật ở RobotApp. Secret cần được externalize. Parser firmware cần được gia cố. Phiên bản model và graph chuyển đổi cần manifest/checksum để tránh nhầm artifact. Các điểm này không phủ nhận chức năng đã hiện thực, nhưng là điều kiện cần giải quyết trước triển khai thực tế.
+Mã nguồn phản ánh một nguyên mẫu đang phát triển. Firebase đã cách ly theo UID, nhưng cách ghép cặp bằng tài khoản dùng chung chưa phù hợp hệ thống có nhiều caregiver/robot và chưa validate chi tiết từng trường lệnh ở rules. CaregiverApp có màn chatbot placeholder trong khi chatbot thật ở RobotApp. Secret cần được externalize. Parser firmware cần được gia cố. Phiên bản model và graph chuyển đổi cần manifest/checksum để tránh nhầm artifact. Các điểm này không phủ nhận chức năng đã hiện thực, nhưng là điều kiện cần giải quyết trước triển khai thực tế.
 
 \subsection{Kết luận chương}
 

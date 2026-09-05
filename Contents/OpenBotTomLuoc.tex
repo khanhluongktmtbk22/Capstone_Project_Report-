@@ -1,0 +1,84 @@
+\subsubsection{Giới thiệu và ý tưởng cốt lõi}
+
+OpenBot là nền tảng robot mã nguồn mở khởi nguồn từ công trình của Matthias Müller và Vladlen Koltun, được công bố tại IEEE ICRA 2021. Ý tưởng chính của OpenBot là sử dụng điện thoại thông minh làm ``bộ não'' cho một thân xe robot chi phí thấp. Thay vì trang bị riêng camera, máy tính nhúng mạnh, màn hình và mô-đun mạng, nền tảng tận dụng camera, cảm biến, CPU/GPU, pin và khả năng kết nối đã có trên smartphone \reportcite{ref:openbot}.
+
+Trong kiến trúc này, điện thoại được gắn trực tiếp lên robot và tham gia vào vòng xử lý: thu hình ảnh, chạy mô hình AI, quyết định hướng di chuyển và gửi lệnh xuống vi điều khiển. Thân xe đảm nhiệm cấp nguồn, điều khiển động cơ và đọc các cảm biến thấp tầng. Công trình gốc chứng minh cách tiếp cận này có thể thực hiện các tác vụ như bám theo người và điều hướng tự động thời gian thực trên điện thoại Android phổ thông \reportcite{ref:openbot}. Website và kho mã chính thức tiếp tục phát triển OpenBot theo hướng một nền tảng mở phục vụ nghiên cứu, giáo dục robot và AI \reportcite{ref:openbot_web}\reportcite{ref:openbot_repo}.
+
+Ý tưởng này có liên hệ trực tiếp với đồ án. RobotApp cũng sử dụng smartphone để thu hình ảnh, chạy mô hình AI, giao tiếp mạng và điều phối hoạt động; ESP32 tập trung vào giao tiếp BLE và điều khiển động cơ. Nhờ đó, các thuật toán thị giác có thể thay đổi mà không phải thiết kế lại toàn bộ phần thân robot.
+
+\subsubsection{Kiến trúc và các thành phần liên quan}
+
+OpenBot có thể được khái quát thành ba lớp chính:
+
+\begin{itemize}
+    \item \textbf{Lớp smartphone}: Robot App truy cập camera và cảm biến, chạy mô hình TensorFlow Lite, quản lý chế độ điều khiển và truyền lệnh cho thân xe.
+    \item \textbf{Lớp vi điều khiển và thân robot}: Arduino Nano hoặc ESP32 nhận lệnh, tạo PWM cho driver động cơ, đọc encoder, sonar, bumper và điện áp pin rồi gửi trạng thái trở lại ứng dụng \reportcite{ref:openbot_firmware}.
+    \item \textbf{Lớp điều khiển bên ngoài}: gamepad, điện thoại thứ hai, trình duyệt hoặc chương trình Python có thể gửi lệnh và nhận hình ảnh từ robot \reportcite{ref:openbot_controller}.
+\end{itemize}
+
+Kho mã OpenBot cũng phản ánh cách phân chia trên: thư mục \path|android| chứa Robot App và Controller App; \path|firmware| chứa chương trình cho MCU; \path|body| chứa thiết kế thân xe; \path|controller| chứa các phương thức điều khiển; còn \path|policy| hỗ trợ thu thập dữ liệu và huấn luyện chính sách lái \reportcite{ref:openbot_repo}. Cấu trúc mô-đun này là một tham khảo hữu ích cho việc tách RobotApp, CaregiverApp, firmware và phần AI trong đồ án.
+
+Điểm quan trọng của kiến trúc OpenBot là phân công theo năng lực của thiết bị. Smartphone phù hợp với camera, AI, giao diện và kết nối Internet; MCU phù hợp với vòng điều khiển động cơ có chu kỳ ngắn. Việc không đặt toàn bộ xử lý trên MCU giúp triển khai được các mô hình thị giác phức tạp, trong khi vẫn giữ lớp chấp hành độc lập và có khả năng dừng khi mất lệnh.
+
+\subsubsection{Giải pháp kết nối và điều khiển}
+
+OpenBot hỗ trợ USB serial và BLE giữa smartphone với vi điều khiển. Với USB, Robot App thường sử dụng baud rate 115200 để gửi lệnh và nhận telemetry. Với các cấu hình ESP32, BLE cho phép bố trí điện thoại không dây và thuận tiện hơn, nhưng ứng dụng phải xử lý quét thiết bị, kết nối lại và mất liên lạc \reportcite{ref:openbot_robot_app}\reportcite{ref:openbot_firmware}.
+
+Firmware OpenBot sử dụng giao thức văn bản ngắn gọn. Lệnh điều khiển chứa giá trị cho phía trái và phải; các lệnh khác cấu hình đèn, chu kỳ đo sonar, tốc độ bánh hoặc điện áp. Firmware còn hỗ trợ heartbeat: nếu không nhận được gói mới trong thời gian quy định, robot phải dừng. Đây là giải pháp quan trọng vì smartphone và kết nối không dây không bảo đảm hoạt động liên tục \reportcite{ref:openbot_firmware}.
+
+Ở mức điều khiển từ xa, OpenBot cung cấp nhiều lựa chọn: gamepad Bluetooth, Controller App trên điện thoại thứ hai, Node.js controller qua Wi-Fi, Python controller với RTSP và web controller qua Internet. Robot App có thể truyền hình ảnh bằng WebRTC hoặc RTSP tùy client \reportcite{ref:openbot_controller}.
+
+Trong đồ án, ý tưởng kết nối được điều chỉnh theo mục tiêu chăm sóc người cao tuổi:
+
+\begin{itemize}
+    \item RobotApp kết nối ESP32 bằng BLE GATT thay cho giao thức serial nguyên bản của OpenBot;
+    \item CaregiverApp gửi lệnh từ xa qua Firebase RTDB, do người chăm sóc có thể không ở cùng mạng với robot;
+    \item WebRTC được dùng cho cuộc gọi audio/video giữa caregiver và robot;
+    \item lệnh có timestamp, RobotApp có watchdog 500 ms và firmware có watchdog 800 ms để robot dừng khi mất luồng điều khiển.
+\end{itemize}
+
+Như vậy, đồ án kế thừa nguyên tắc phân tầng và dừng an toàn của OpenBot, nhưng xây dựng lại kênh truyền để phù hợp mô hình điều khiển từ xa qua Internet.
+
+\subsubsection{AI và cơ chế theo dõi đối tượng}
+
+Robot App của OpenBot hỗ trợ suy luận TensorFlow Lite trực tiếp trên điện thoại. Người dùng có thể lựa chọn model, ngưỡng confidence, số luồng và backend CPU, GPU hoặc NNAPI. Tài liệu OpenBot cung cấp các detector như MobileNet SSD, YOLO và EfficientDet, đồng thời benchmark chúng trên nhiều mẫu smartphone. Cách thiết kế này cho thấy model triển khai trên robot phải cân bằng độ chính xác, tốc độ, nhiệt độ và khả năng tương thích của thiết bị \reportcite{ref:openbot_robot_app}.
+
+Trong chức năng Object Tracking, detector nhận dạng các đối tượng thuộc tập lớp COCO và trả về vùng bao. Sai lệch giữa tâm vùng bao với tâm ảnh có thể dùng để điều chỉnh hướng quay; kích thước vùng bao được dùng như một dấu hiệu gần đúng về khoảng cách để giảm tốc khi robot tiến gần mục tiêu. Luồng xử lý cơ bản gồm:
+
+\begin{center}
+Camera $\rightarrow$ phát hiện đối tượng $\rightarrow$ chọn mục tiêu $\rightarrow$ tính sai lệch vị trí $\rightarrow$ lệnh bánh xe.
+\end{center}
+
+Đối với bám theo người, OpenBot cung cấp ý tưởng nền tảng là đặt nhận thức và điều khiển trong cùng một vòng kín trên smartphone. Tuy nhiên, chỉ chọn detection có nhãn ``person'' ở từng frame có thể làm đổi mục tiêu khi nhiều người xuất hiện hoặc khi người đang bám bị che khuất. Vì vậy, đồ án phát triển thêm cơ chế tracking theo thời gian.
+
+Pipeline của đồ án sử dụng mô hình pose để phát hiện người và keypoint, SORT/Kalman/Hungarian để liên kết detection giữa các frame, cùng Re-ID nhẹ để hỗ trợ duy trì người mục tiêu. Người được chọn được bảo vệ bằng ID0; vị trí và kích thước vùng bao được chuyển thành lệnh bám. Chuỗi pose cũng được đưa vào LSTM và bộ hậu kiểm để phát hiện té ngã. Đây là phần mở rộng từ ý tưởng object/person tracking của OpenBot sang yêu cầu nhận diện đúng người và giám sát an toàn.
+
+\subsubsection{Khả năng áp dụng cho đồ án}
+
+Bảng \ref{tab:openbot_inheritance} tổng hợp những nội dung OpenBot có liên quan trực tiếp đến hệ thống hiện tại.
+
+\begin{table}[htbp]
+\centering
+\caption{Các ý tưởng OpenBot được tham khảo trong đồ án}
+\label{tab:openbot_inheritance}
+\small
+\begin{tabularx}{\textwidth}{|p{3.2cm}|X|X|}
+\hline
+\textbf{Nội dung} & \textbf{OpenBot} & \textbf{Áp dụng trong đồ án} \\
+\hline
+Smartphone làm bộ não & Camera, AI, giao diện và logic điều phối đặt trên điện thoại & RobotApp chạy pose, tracking, LSTM, hội thoại và cuộc gọi. \\
+\hline
+Tách xử lý và chấp hành & Smartphone xử lý bậc cao; MCU điều khiển PWM & RobotApp sinh lệnh; ESP32 điều khiển hai BLDC bằng SimpleFOC. \\
+\hline
+Kết nối thân robot & USB serial hoặc BLE & BLE GATT với giao thức hai setpoint và watchdog. \\
+\hline
+Điều khiển từ thiết bị khác & Gamepad, Controller App, web/Python controller & CaregiverApp gửi lệnh qua Firebase RTDB và nhận trạng thái từ xa. \\
+\hline
+AI tracking & Detector TFLite, vùng bao và luật bám mục tiêu & Pose, SORT, Kalman, Hungarian, Re-ID và bảo vệ ID0. \\
+\hline
+Truyền hình ảnh & WebRTC hoặc RTSP tùy bộ điều khiển & WebRTC cho cuộc gọi audio/video caregiver--robot. \\
+\hline
+\end{tabularx}
+\end{table}
+
+OpenBot vì vậy là nền tảng tham khảo quan trọng về ý tưởng và các giải pháp kỹ thuật nền, đặc biệt là smartphone-as-a-robot-brain, xử lý AI tại biên, kết nối smartphone--MCU và vòng kín theo dõi mục tiêu. Đồ án kế thừa các nguyên tắc này nhưng bổ sung kiến trúc hai ứng dụng, nghiệp vụ chăm sóc, phát hiện té ngã, tương tác giọng nói, Firebase và phần thân BLDC/FOC riêng.

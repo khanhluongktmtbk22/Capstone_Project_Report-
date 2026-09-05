@@ -155,7 +155,7 @@ Bốn test này kiểm tra điểm chuẩn, nhưng chưa bao phủ clipping, NaN
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngineTest} định nghĩa bốn nhánh quan trọng. Engine trước hết được ``arm'' bằng năm frame đứng và một raw fall, sau đó đánh giá tình huống.
+\texttt{FallVerificationEngineTest} định nghĩa sáu ca phản ánh trực tiếp máy trạng thái hiện tại. Một ứng viên chỉ được mở sau năm nhãn FALL liên tiếp; việc hậu kiểm bắt đầu ở các khung hình NO FALL kế tiếp.
 
 \begin{table}[htbp]
 \centering
@@ -166,26 +166,34 @@ Bốn test này kiểm tra điểm chuẩn, nhưng chưa bao phủ clipping, NaN
 \hline
 \textbf{Ca} & \textbf{Kích thích} & \textbf{Kỳ vọng} \\
 \hline
-clipped bbox after fall & Thân thấp, bbox không nằm trọn ảnh & Hỏi ngay \\
+single fall output & Chỉ một nhãn FALL & Không mở sự cố \\
 \hline
-stable upper body top 30\% & Ba frame thân trên ở vùng an toàn & Từ chối sự cố \\
+five consecutive fall outputs & Năm nhãn FALL, sau đó ba khung thân trên cao & Mở hậu kiểm và từ chối \\
 \hline
-lower occluded horizontal & Thân thấp, 7 keypoint, aspect 1,6 trong ba frame & Hỏi xác nhận \\
+NO FALL resets candidate & Bốn FALL, một NO FALL, rồi bốn FALL & Không mở sự cố \\
 \hline
-lost target after fall & Mất mục tiêu ba frame & Hỏi xác nhận \\
+upper body in upper 70\% & Sau chuỗi FALL, $y=0,55$ trong ba khung & Từ chối sự cố \\
+\hline
+upper body below 70\% & Sau chuỗi FALL, $y=0,78$ trong ba khung & Hỏi xác nhận \\
+\hline
+missing endpoint evidence & Sau chuỗi FALL, mất mục tiêu 12 khung & Hỏi xác nhận \\
 \hline
 \end{tabularx}
 \end{table}
 
-Các test xác nhận khả năng tách engine khỏi Android UI. Coverage còn thiếu: khóa một sự cố, phục hồi 10 frame, baseline EMA, ngưỡng biên, reset, safe/danger resolution và chuỗi nhiễu xen kẽ.
+Các test xác nhận khả năng tách engine khỏi Android UI và bao phủ điều kiện mở chuỗi, reset ứng viên cùng ba nhánh kết thúc chính. Coverage còn thiếu: pha khóa sau khi đã hỏi, phục hồi 10 khung hình, đúng tại biên $y=0,70$, chuyển đổi safe/danger và chuỗi nhiễu dài xen kẽ.
+
+\subsubsection{Chính sách tracking và hình học tư thế}
+
+\texttt{TrackingMotionPolicyTest} có bốn ca kiểm tra tốc độ tiến tăng theo khoảng cách và được chặn ở 0,90; tốc độ giảm khi quay hoặc thiếu mắt cá; tốc độ lùi tăng khi người đến gần; và hiệu chỉnh steering nhỏ lên $\pm0,30$ khi translation mạnh. \texttt{PostureGeometryTest} có bốn ca đối chiếu tư thế đứng, nằm dọc theo trục camera, đang đứng dậy và thiếu phần thân dưới. Các test này kiểm tra các hàm thuần vừa được tách khỏi fragment, nhưng chưa thay thế thử nghiệm chuyển động trên robot thật.
 
 \subsection{Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}
 
 \subsubsection{Nhất quán Firebase}
 
-Đối chiếu hai ứng dụng cho thấy các path quan trọng trùng nhau: \path|robot_control|, \path|robot_follow_enabled|, \path|ai_fall_detection_enabled|, \path|webrtc_signal|, \path|fall_alerts|, \path|call_history|, \texttt{Users}, \texttt{Schedules} và \path|reminder_logs|. Offer/answer dùng cùng trường \texttt{sdp,type}. ICE dùng \path|candidate,sdpMid,sdpMLineIndex|; hai nhánh candidate được tách theo vai trò.
+Đối chiếu hai ứng dụng cho thấy lớp \texttt{FirebasePairPaths} tạo cùng các kênh dưới \path|pair_sessions/{uid}|: \path|robot_control|, \path|robot_follow_enabled|, \path|ai_fall_detection_enabled|, \path|webrtc_signal|, \path|fall_alerts| và \path|call_history|. Các dữ liệu \texttt{Users}, \texttt{Schedules} và \path|reminder_logs| vẫn được phân nhánh trực tiếp theo UID. Offer/answer dùng cùng trường \texttt{sdp,type}; ICE dùng \path|candidate,sdpMid,sdpMLineIndex| và tách hai nhánh candidate theo vai trò.
 
-Một điểm cần chú ý là nhiều path vẫn toàn cục. Với một robot demo, hai app cùng thấy đúng dữ liệu. Với hai gia đình, lệnh/call/cảnh báo có thể trộn nếu rules cho phép. Vì vậy kết quả ``nhất quán'' chỉ áp dụng schema một robot hiện tại, chưa chứng minh multi-tenant.
+\texttt{FirebasePairPathsTest} xác nhận hai UID khác nhau không tạo cùng đường dẫn điều khiển, cuộc gọi hay cảnh báo, đồng thời tất cả sáu kênh đều là con của đúng \path|pair_sessions/{uid}|. Rules từ chối mặc định và chỉ cho phép khi \path|auth.uid| trùng UID của nhánh. Vì vậy dữ liệu đã được cách ly giữa các tài khoản. Tuy nhiên, hai thiết bị trong một cặp đang phải dùng chung tài khoản; kiểm tra này chưa chứng minh phân quyền nhiều caregiver, nhiều robot hay quyền khác nhau trong cùng gia đình.
 
 \subsubsection{Nhất quán BLE}
 
@@ -193,7 +201,7 @@ Tên thiết bị, service UUID và characteristic UUID trong RobotControlManage
 
 \subsubsection{Chuỗi timeout}
 
-Ba timeout có thứ tự hợp lý: firmware 800 ms, Android resend/watchdog 1.200 ms và độ mới RTDB 2.000 ms. Firmware dừng sớm nhất khi không có gói BLE; Android dừng nếu nguồn RTDB ngừng; timestamp chặn lệnh cache khi reconnect. Tần suất joystick khoảng 20 Hz tương ứng chu kỳ 50 ms, nhỏ hơn nhiều so với 800 ms, do đó có biên cho jitter bình thường.
+Ba mốc bảo vệ hiện là watchdog Android 500 ms, watchdog firmware 800 ms và độ mới tối đa của lệnh RTDB 2.000 ms. Android dừng sớm khi nguồn lệnh/camera bị gián đoạn; firmware dừng độc lập nếu ứng dụng hoặc BLE không còn cập nhật; timestamp chặn snapshot cũ khi reconnect. Auto-follow gửi tối đa mỗi 120 ms (xấp xỉ 8,3 Hz), còn joystick khoảng 20 Hz; cả hai đều có biên cho jitter bình thường so với watchdog 500 ms.
 
 \subsubsection{Quyền sở hữu tài nguyên}
 
@@ -285,9 +293,9 @@ Việc chạy pose và LSTM tại RobotApp giảm nhu cầu gửi video liên t�
 
 \subsubsection{Hạn chế}
 
-Thứ nhất, chưa có bảng metric huấn luyện/validation và benchmark thiết bị được lưu cùng artifact; vì vậy không thể đưa ra mAP, PCK, precision/recall, FPS hay latency đáng tin cậy. Thứ hai, dữ liệu té ngã dựng lại khác người cao tuổi thật; domain shift có thể lớn. Thứ ba, camera RGB gây vấn đề riêng tư và có điểm mù. Thứ tư, Groq/Firebase/TURN là phụ thuộc ngoài; mất Internet làm suy giảm chức năng. Thứ năm, node toàn cục và auth/rules cần hoàn thiện cho multi-tenant. Thứ sáu, APK RobotApp debug còn quá lớn.
+Thứ nhất, chưa có bảng metric huấn luyện/validation và benchmark thiết bị được lưu cùng artifact; vì vậy không thể đưa ra mAP, PCK, precision/recall, FPS hay latency đáng tin cậy. Thứ hai, dữ liệu té ngã dựng lại khác người cao tuổi thật; domain shift có thể lớn. Thứ ba, camera RGB gây vấn đề riêng tư và có điểm mù. Thứ tư, Groq/Firebase/TURN là phụ thuộc ngoài; mất Internet làm suy giảm chức năng. Thứ năm, RTDB đã cách ly theo UID nhưng cơ chế ghép cặp bằng tài khoản dùng chung chưa hỗ trợ nhiều vai trò/robot và rules chưa validate chi tiết payload lệnh. Thứ sáu, APK RobotApp debug còn quá lớn.
 
-Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Logic người có bbox lớn nhất chỉ là heuristic ban đầu. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm dùng ngưỡng thủ công, cần calibration theo góc camera/nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
+Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Điểm chất lượng khóa mục tiêu ban đầu vẫn là heuristic thủ công. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm chỉ dùng vị trí đầu/vai tại điểm kết thúc với các ngưỡng 5/3/12 khung hình, nên cần calibration theo FPS, góc camera và bố trí nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
 
 \subsubsection{Mối đe dọa tới tính hợp lệ}
 
@@ -331,4 +339,4 @@ Các bảng kết quả định lượng nên được điền từ log thật t
 
 \subsection{Kết luận chương}
 
-Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có tập trung vào dấu điều khiển và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.
+Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có bao phủ ánh xạ motor, đường dẫn Firebase theo cặp, chính sách tốc độ tracking, hình học tư thế và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.

@@ -88,9 +88,9 @@ FR08 & Duy trì người mục tiêu & Hệ thống gán người cần theo dõ
 \hline
 FR09 & Tự bám theo & Từ vị trí ID0, RobotApp sinh lệnh tiến/quay phù hợp vùng chết và giới hạn tốc độ. \\
 \hline
-FR10 & Phát hiện nghi té ngã & LSTM xử lý cửa sổ 15 khung hình $\times$ 69 đặc trưng và sinh trạng thái theo dõi. \\
+FR10 & Phát hiện nghi té ngã & LSTM xử lý cửa sổ 15 khung hình $\times$ 69 đặc trưng và sinh nhãn nhị phân FALL/NO FALL. \\
 \hline
-FR11 & Hậu kiểm sự cố & Bộ luật dùng vị trí thân trên, keypoint, vùng bao, tỷ lệ và mất dấu để chấp nhận/từ chối. \\
+FR11 & Hậu kiểm sự cố & Bộ luật xác nhận chuỗi FALL liên tiếp, kiểm tra vị trí đầu/vai khi chuỗi kết thúc và xử lý bảo thủ khi mất quan sát. \\
 \hline
 FR12 & Xác nhận bằng giọng nói & Robot dừng, hỏi người cao tuổi và chỉ tạo một phiên xác nhận cho mỗi sự cố. \\
 \hline
@@ -231,7 +231,7 @@ ESP32 firmware & NimBLE, SimpleFOC, I2C, PWM & Parser lệnh, deadzone, watchdog
 
 \subsection{Thiết kế dữ liệu Firebase}
 
-Firebase RTDB lưu cây JSON và đồng bộ thay đổi tới listener của client \reportcite{ref:firebase_rtdb}. Bảng \ref{tab:rtdb_schema} tổng hợp schema được suy ra từ hai ứng dụng. Các node UID-scoped phù hợp nhiều tài khoản hơn, trong khi node toàn cục hiện chỉ an toàn cho kịch bản demo một robot.
+Firebase RTDB lưu cây JSON và đồng bộ thay đổi tới listener của client \reportcite{ref:firebase_rtdb}. Bảng \ref{tab:rtdb_schema} tổng hợp schema hiện được dùng thống nhất trong hai ứng dụng. RobotApp và CaregiverApp của cùng một cặp phải đăng nhập chung tài khoản Firebase; lớp \texttt{FirebasePairPaths} ánh xạ các kênh thời gian thực vào \path|pair_sessions/{uid}|, nhờ đó hai UID khác nhau không dùng chung lệnh, cuộc gọi hoặc cảnh báo.
 
 \begin{longtable}{|p{4.0cm}|p{4.0cm}|p{5.4cm}|}
 \caption{Cây dữ liệu Realtime Database}\label{tab:rtdb_schema}\\
@@ -249,21 +249,21 @@ Firebase RTDB lưu cây JSON và đồng bộ thay đổi tới listener của c
 \hline
 \shortstack[l]{\texttt{reminder\_logs/}\\\texttt{\{uid\}/\{id\}}} & scheduleId, triggeredAt, status, elderlyResponse, retryCount & Nhật ký lời nhắc; theo UID \\
 \hline
-\path|robot_follow_enabled| & Boolean & Cờ auto-follow; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{robot\_follow\_enabled}} & Boolean & Cờ auto-follow của cặp thiết bị \\
 \hline
-\path|ai_fall_detection_enabled| & Boolean & Cờ phát hiện té ngã; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{ai\_fall\_detection\_enabled}} & Boolean & Cờ phát hiện té ngã của cặp thiết bị \\
 \hline
-\path|robot_control| & x, y, ts & Lệnh joystick/tự bám; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{robot\_control}} & x, y, ts & Lệnh joystick/tự bám của cặp thiết bị \\
 \hline
-\path|webrtc_signal| & status, callerRole, emergencyReason, offer, answer, robotCandidates, caregiverCandidates & Signaling cuộc gọi; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{webrtc\_signal}} & status, callerRole, emergencyReason, offer, answer, robotCandidates, caregiverCandidates & Signaling cuộc gọi của cặp thiết bị \\
 \hline
-\path|fall_alerts/{pushId}| & timestamp, status, response, verificationReason, evidence & Cảnh báo té ngã; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{fall\_alerts/\{pushId\}}} & timestamp, status, response, verificationReason, evidence & Cảnh báo té ngã; lập chỉ mục theo timestamp \\
 \hline
-\path|call_history/{id}| & timestamp, direction, status, duration/reason & Nhật ký cuộc gọi; hiện toàn cục \\
+\shortstack[l]{\texttt{pair\_sessions/\{uid\}/}\\\texttt{call\_history/\{id\}}} & timestamp, direction, status, duration/reason & Nhật ký cuộc gọi; lập chỉ mục theo timestamp \\
 \hline
 \end{longtable}
 
-Schema mục tiêu nên đưa các node toàn cục vào \path|families/{familyId}/robots/{robotId}|. Quy tắc bảo mật phải kiểm tra thành viên gia đình, quyền caregiver và quyền của thiết bị robot. Firebase Security Rules có thể kiểm soát read/write và validate cấu trúc tại máy chủ \reportcite{ref:firebase_security}; vì vậy miền $[-1,1]$, kiểu Number và giới hạn timestamp nên được kiểm tra cả ở rules lẫn RobotApp.
+Tệp \path|database.rules.json| áp dụng nguyên tắc từ chối mặc định. Các nhánh \texttt{Users}, \texttt{Schedules}, \path|reminder_logs| và \path|pair_sessions| chỉ cho phép đọc/ghi khi \path|auth.uid| trùng khóa \texttt{uid}; \path|call_history| và \path|fall_alerts| có chỉ mục timestamp. Rules hiện bảo đảm cách ly theo tài khoản \reportcite{ref:firebase_security}, còn RobotApp tiếp tục kiểm tra miền số và độ mới của lệnh. Giới hạn còn lại là một UID đang đại diện cho cả cặp thiết bị; khi mở rộng nhiều caregiver hoặc nhiều robot, schema cần bổ sung \texttt{familyId}, \texttt{robotId}, thành viên và vai trò thay vì chia sẻ thông tin đăng nhập.
 
 \subsection{Thiết kế kênh điều khiển chuyển động}
 
@@ -330,7 +330,7 @@ RobotApp là GATT client và ESP32 là GATT server. Hai định danh của kết
 \end{itemize}
 Payload ASCII có dạng \texttt{L<float>R<float>\textbackslash n} và được ghi bằng \path|WRITE_NO_RESPONSE|. GATT tổ chức dữ liệu thành service, characteristic và descriptor \reportcite{ref:ble_primer}.
 
-Ba tầng thời gian bảo vệ chuyển động: tuổi lệnh RTDB 2 s chống lệnh lưu cũ; watchdog RobotApp 1,2 s chủ động gửi STOP khi không nhận lệnh mới; watchdog firmware 800 ms đặt hai setpoint bằng 0 nếu BLE không cập nhật. Khi ngắt kết nối, callback firmware cũng dừng ngay. Việc đặt watchdog ngắn nhất ở tầng chấp hành bảo đảm lỗi ở Android hoặc mạng không làm động cơ giữ lệnh vô thời hạn.
+Ba tầng thời gian bảo vệ chuyển động gồm: watchdog RobotApp 500 ms chủ động gửi STOP khi luồng RTDB không cập nhật; watchdog firmware 800 ms đặt hai setpoint bằng 0 nếu BLE không nhận lệnh; và giới hạn tuổi lệnh RTDB 2 s để loại snapshot cũ sau reconnect. Khi BLE ngắt, callback firmware cũng dừng ngay. Watchdog Android ngắn nhất nhằm phản ứng sớm với gián đoạn camera/Firebase; firmware là lớp dự phòng độc lập nếu ứng dụng không còn gửi được lệnh.
 
 \subsection{Thiết kế pipeline thị giác và té ngã}
 
@@ -340,7 +340,7 @@ Khung hình từ CameraX hoặc bản sao VideoFrame cục bộ của WebRTC đ�
 
 \subsubsection{Khóa người mục tiêu ID0}
 
-Khi chưa có mục tiêu, người có vùng bao lớn nhất được ưu tiên và chuyển thành ID0. Track ID0 có tuổi tối đa 45 khung hình, trong khi track nhiễu chỉ giữ 10 khung hình. Chi phí ghép kết hợp IoU, khoảng cách tâm chuẩn hóa, khoảng cách neo pose, biến thiên diện tích và tương quan histogram. Trọng số hình học trong mã là:
+Khi chưa có mục tiêu, hệ thống tính điểm chất lượng từ diện tích vùng bao (60\%), độ tin cậy detection (15\%), tỷ lệ keypoint nhìn thấy (15\%), độ gần tâm ảnh (10\%) và phạt 10\% nếu vùng bao chạm biên; ứng viên tốt nhất được chuyển thành ID0. Track ID0 có tuổi tối đa 45 khung hình, trong khi track nhiễu chỉ giữ 10 khung hình. Chi phí ghép kết hợp IoU, khoảng cách tâm chuẩn hóa, khoảng cách neo pose, biến thiên diện tích và tương quan histogram. Trọng số hình học trong mã là:
 
 \begin{equation}
 C=0,30(1-\operatorname{IoU})+0,32d_c+0,23d_p+0,15p_a,
@@ -348,19 +348,19 @@ C=0,30(1-\operatorname{IoU})+0,32d_c+0,23d_p+0,15p_a,
 
 trong đó $d_c$ là khoảng cách tâm chuẩn hóa, $d_p$ là khoảng cách neo thân và $p_a$ là phạt thay đổi diện tích. Track được bảo vệ có ngưỡng ghép rộng hơn nhưng detection cạnh tranh bị phạt để tránh chiếm ID0.
 
-Khi ID0 mất tạm thời, hệ thống chỉ khôi phục nếu đúng một người xuất hiện, gần vị trí cuối trong phạm vi 28\% đường chéo khung hình, nằm trong vùng trung tâm và ổn định ba khung hình. Cửa sổ phục hồi là 8 s. Nếu có nhiều người, hệ thống không tự gán lại để tránh theo nhầm người khác.
+Khi ID0 mất tạm thời, hệ thống tìm ứng viên trong tối đa 2 s, giới hạn tâm cách vị trí cuối không quá 35\% đường chéo ảnh và nằm trong vùng quan sát rộng. Nếu có nhiều ứng viên, hệ thống chọn chi phí nhỏ nhất theo khoảng cách tâm (60\%), thay đổi tỷ lệ diện tích (25\%) và tỷ lệ pose bị thiếu (15\%). Chỉ sau khi cùng ứng viên ổn định ba khung hình, track đó mới được nâng thành ID0; trong lúc một sự cố té ngã chưa kết thúc, hệ thống không khóa sang một người mới.
 
-\subsubsection{Đặc trưng LSTM và máy trạng thái}
+\subsubsection{Đặc trưng LSTM và tín hiệu nhị phân}
 
-LSTM xử lý 15 khung hình, mỗi khung có 69 đặc trưng. Vector gồm tọa độ/độ tin cậy keypoint và đặc trưng hình học như tỷ lệ vùng bao. LSTM được thiết kế để giữ quan hệ dài/ngắn hạn và giảm mất gradient so với RNN cơ bản \reportcite{ref:lstm}. Đầu ra hai lớp là xác suất normal và fall; ngưỡng fall là 0,5.
+LSTM xử lý 15 khung hình, mỗi khung có 69 đặc trưng. Vector gồm tọa độ/độ tin cậy keypoint và đặc trưng hình học như tỷ lệ vùng bao. LSTM được thiết kế để giữ quan hệ dài/ngắn hạn và giảm mất gradient so với RNN cơ bản \reportcite{ref:lstm}. Đầu ra hai lớp lần lượt là xác suất NO FALL và FALL; nhãn thô được chọn bằng argmax, tương đương FALL khi xác suất FALL lớn hơn xác suất NO FALL.
 
-Để tránh dao động theo từng frame, hệ thống dùng hysteresis: cần 10 frame fall liên tiếp để vào Falling; một frame normal reset bộ đếm vào fall; trạng thái Lying dùng cửa sổ xác nhận dài hơn; cần 20 frame biểu hiện đứng để xác nhận phục hồi. Chỉ ID0 được đưa vào LSTM, tránh sự kiện của người đi ngang kích hoạt cảnh báo dành cho chủ thể cần chăm sóc.
+\texttt{LstmFallDetector} không tự suy diễn trạng thái Falling/Lying và không làm mượt nhãn model. Nó duy trì queue theo track, dọn queue khi track vắng quá 60 khung hình và chỉ chuyển kết quả nhị phân gần nhất khi ID thay thế được nâng thành ID0. Chỉ ID0 được đưa vào LSTM, tránh sự kiện của người đi ngang kích hoạt cảnh báo dành cho chủ thể cần chăm sóc; ổn định theo thời gian được giao cho tầng xác minh sự cố kế tiếp.
 
 \subsubsection{Hậu kiểm và quản lý một sự cố}
 
-Khi tín hiệu fall thô kết thúc, \texttt{FallVerificationEngine} đánh giá bằng chứng thay vì chờ toàn bộ cửa sổ chuyển sang Lying. Các tín hiệu gồm: thân trên nằm thấp trong ảnh; không quá 8 keypoint nhìn thấy; tỷ lệ vùng bao theo chiều ngang từ 1,05; độ tụt thân trên ít nhất 0,12 so với baseline; vùng bao bị cắt; hoặc mất mục tiêu ba frame. Cần điểm nghi ngờ tối thiểu 3 trong trường hợp vùng bao còn đầy đủ. Nếu đầu/vai ổn định trong 30\% phía trên khung hình, sự kiện có thể bị loại là nhiễu.
+\texttt{FallVerificationEngine} tách việc xác minh khỏi nhãn model. Ở pha theo dõi, phải có ít nhất năm đầu ra FALL liên tiếp mới hình thành một chuỗi sự cố; một NO FALL xuất hiện sớm sẽ đưa bộ đếm về 0. Trong chuỗi FALL, engine chưa hỏi người dùng. Khi xuất hiện NO FALL đầu tiên, engine kiểm tra điểm nhìn thấy cao nhất trong ba điểm mũi, vai trái và vai phải. Nếu tỷ lệ $y\leq0,70$ ổn định ba khung hình, đầu hoặc vai vẫn thuộc 70\% phía trên ảnh và ứng viên bị loại. Nếu $y>0,70$ ổn định ba khung hình, đầu và vai đều nằm ở vùng thấp, engine yêu cầu xác nhận. Nếu mất mục tiêu hoặc không thấy đủ các điểm thân trên, engine chờ tối đa 12 khung hình rồi cũng yêu cầu xác nhận theo hướng bảo thủ. Số keypoint, trạng thái vùng bao và aspect ratio vẫn được lưu cùng sự kiện để truy vết, nhưng không tham gia phép quyết định hiện tại.
 
-Khi quyết định hỏi xác nhận, khóa sự cố được bật. Robot dừng và chỉ phát một \texttt{FallEvent}. Chatbot tạo một record \texttt{fall\_alerts}, hỏi bằng TTS rồi nghe tối đa 10 s. Câu trả lời rõ được phân loại bằng từ khóa cục bộ; câu mơ hồ mới dùng LLM. Lỗi API, nội dung không chắc chắn hoặc không phản hồi đều đi theo nhánh nguy hiểm. Khóa chỉ được giải phóng sau khi xử lý và phục hồi ổn định, tránh bão cảnh báo.
+Ngay khi chuỗi sự cố hoạt động, auto-follow dừng lệnh đang chạy và chuyển sang chế độ tạo khung dành cho người nằm. Chế độ này không có lệnh tiến: robot chỉ lùi chậm khi vùng bao bị cắt/quá lớn, quay tại chỗ khi người lệch tâm và dừng khi vùng bao đã nằm trọn trong ảnh. Sau năm khung hình đạt yêu cầu, trạng thái khung hình được khóa; mất mục tiêu trong pha này cũng gây STOP tức thời. Khi engine quyết định hỏi, hệ thống chỉ phát một \texttt{FallEvent}; chatbot hỏi bằng TTS rồi nghe tối đa 10 s. Câu trả lời rõ được phân loại bằng từ khóa cục bộ, câu mơ hồ mới dùng LLM; lỗi API, nội dung không chắc chắn hoặc không phản hồi đều đi theo nhánh nguy hiểm. Sau khi đánh dấu an toàn hoặc nguy hiểm, mười khung hình NO FALL liên tiếp đưa engine về theo dõi để tránh lặp cảnh báo.
 
 \subsection{Thiết kế cuộc gọi WebRTC và quyền sở hữu camera}
 
@@ -446,7 +446,7 @@ FR20 & Android và firmware watchdog & timestamp, timeout & TC-SAFETY \\
 
 \subsection{Đánh đổi và quyết định kiến trúc}
 
-Firebase RTDB giúp giảm khối lượng backend và phù hợp đồng bộ sự kiện, nhưng schema không quan hệ và node toàn cục là rủi ro mở rộng. WebRTC giảm tải truyền media qua backend nhưng cần signaling và TURN trong mạng khó. AI biên giảm độ trễ và riêng tư, đổi lại bị giới hạn CPU/GPU, pin và nhiệt. BLE có độ trễ thấp ở cự ly gần nhưng kết nối có thể gián đoạn, vì vậy cần watchdog. LLM cloud giúp hội thoại linh hoạt nhưng phụ thuộc mạng và có rủi ro nội dung; các quyết định an toàn quan trọng không được giao hoàn toàn cho LLM.
+Firebase RTDB giúp giảm khối lượng backend và phù hợp đồng bộ sự kiện. Việc đặt kênh dưới \path|pair_sessions/{uid}| giải quyết cách ly giữa tài khoản, nhưng schema không quan hệ và mô hình dùng chung một UID vẫn là giới hạn khi mở rộng nhiều vai trò/robot. WebRTC giảm tải truyền media qua backend nhưng cần signaling và TURN trong mạng khó. AI biên giảm độ trễ và riêng tư, đổi lại bị giới hạn CPU/GPU, pin và nhiệt. BLE có độ trễ thấp ở cự ly gần nhưng kết nối có thể gián đoạn, vì vậy cần watchdog. LLM cloud giúp hội thoại linh hoạt nhưng phụ thuộc mạng và có rủi ro nội dung; các quyết định an toàn quan trọng không được giao hoàn toàn cho LLM.
 
 Việc kết hợp LSTM và hậu kiểm luật cũng là một đánh đổi. Mô hình học quan hệ thời gian tốt hơn luật một frame; luật lại cho phép giải thích bằng chứng và chặn một số tình huống hiển nhiên. Hai tầng tạo độ trễ xác nhận nhất định nhưng phù hợp hơn với nguyên tắc giảm cảnh báo giả có kiểm soát. Độ phù hợp cuối cùng phải được lượng hóa bằng thử nghiệm trên dữ liệu và thiết bị mục tiêu.
 
