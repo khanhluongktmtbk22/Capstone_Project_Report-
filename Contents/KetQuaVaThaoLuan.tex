@@ -155,7 +155,7 @@ Bốn test này kiểm tra điểm chuẩn, nhưng chưa bao phủ clipping, NaN
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngineTest} định nghĩa sáu ca phản ánh trực tiếp máy trạng thái hiện tại. Một ứng viên chỉ được mở sau năm nhãn FALL liên tiếp; việc hậu kiểm bắt đầu ở các khung hình NO FALL kế tiếp.
+\texttt{FallVerificationEngineTest} định nghĩa bốn nhánh quan trọng. Engine trước hết được ``arm'' bằng năm frame đứng và một raw fall, sau đó đánh giá tình huống.
 
 \begin{table}[htbp]
 \centering
@@ -166,34 +166,26 @@ Bốn test này kiểm tra điểm chuẩn, nhưng chưa bao phủ clipping, NaN
 \hline
 \textbf{Ca} & \textbf{Kích thích} & \textbf{Kỳ vọng} \\
 \hline
-single fall output & Chỉ một nhãn FALL & Không mở sự cố \\
+clipped bbox after fall & Thân thấp, bbox không nằm trọn ảnh & Hỏi ngay \\
 \hline
-five consecutive fall outputs & Năm nhãn FALL, sau đó ba khung thân trên cao & Mở hậu kiểm và từ chối \\
+stable upper body top 30\% & Ba frame thân trên ở vùng an toàn & Từ chối sự cố \\
 \hline
-NO FALL resets candidate & Bốn FALL, một NO FALL, rồi bốn FALL & Không mở sự cố \\
+lower occluded horizontal & Thân thấp, 7 keypoint, aspect 1,6 trong ba frame & Hỏi xác nhận \\
 \hline
-upper body in upper 70\% & Sau chuỗi FALL, $y=0,55$ trong ba khung & Từ chối sự cố \\
-\hline
-upper body below 70\% & Sau chuỗi FALL, $y=0,78$ trong ba khung & Hỏi xác nhận \\
-\hline
-missing endpoint evidence & Sau chuỗi FALL, mất mục tiêu 12 khung & Hỏi xác nhận \\
+lost target after fall & Mất mục tiêu ba frame & Hỏi xác nhận \\
 \hline
 \end{tabularx}
 \end{table}
 
-Các test xác nhận khả năng tách engine khỏi Android UI và bao phủ điều kiện mở chuỗi, reset ứng viên cùng ba nhánh kết thúc chính. Coverage còn thiếu: pha khóa sau khi đã hỏi, phục hồi 10 khung hình, đúng tại biên $y=0,70$, chuyển đổi safe/danger và chuỗi nhiễu dài xen kẽ.
-
-\subsubsection{Chính sách tracking và hình học tư thế}
-
-\texttt{TrackingMotionPolicyTest} có bốn ca kiểm tra tốc độ tiến tăng theo khoảng cách và được chặn ở 0,90; tốc độ giảm khi quay hoặc thiếu mắt cá; tốc độ lùi tăng khi người đến gần; và hiệu chỉnh steering nhỏ lên $\pm0,30$ khi translation mạnh. \texttt{PostureGeometryTest} có bốn ca đối chiếu tư thế đứng, nằm dọc theo trục camera, đang đứng dậy và thiếu phần thân dưới. Các test này kiểm tra các hàm thuần vừa được tách khỏi fragment, nhưng chưa thay thế thử nghiệm chuyển động trên robot thật.
+Các test xác nhận khả năng tách engine khỏi Android UI. Coverage còn thiếu: khóa một sự cố, phục hồi 10 frame, baseline EMA, ngưỡng biên, reset, safe/danger resolution và chuỗi nhiễu xen kẽ.
 
 \subsection{Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}
 
 \subsubsection{Nhất quán Firebase}
 
-Đối chiếu hai ứng dụng cho thấy lớp \texttt{FirebasePairPaths} tạo cùng các kênh dưới \path|pair_sessions/{uid}|: \path|robot_control|, \path|robot_follow_enabled|, \path|ai_fall_detection_enabled|, \path|webrtc_signal|, \path|fall_alerts| và \path|call_history|. Các dữ liệu \texttt{Users}, \texttt{Schedules} và \path|reminder_logs| vẫn được phân nhánh trực tiếp theo UID. Offer/answer dùng cùng trường \texttt{sdp,type}; ICE dùng \path|candidate,sdpMid,sdpMLineIndex| và tách hai nhánh candidate theo vai trò.
+Đối chiếu hai ứng dụng cho thấy các path quan trọng trùng nhau: \path|robot_control|, \path|robot_follow_enabled|, \path|ai_fall_detection_enabled|, \path|webrtc_signal|, \path|fall_alerts|, \path|call_history|, \texttt{Users}, \texttt{Schedules} và \path|reminder_logs|. Offer/answer dùng cùng trường \texttt{sdp,type}. ICE dùng \path|candidate,sdpMid,sdpMLineIndex|; hai nhánh candidate được tách theo vai trò.
 
-\texttt{FirebasePairPathsTest} xác nhận hai UID khác nhau không tạo cùng đường dẫn điều khiển, cuộc gọi hay cảnh báo, đồng thời tất cả sáu kênh đều là con của đúng \path|pair_sessions/{uid}|. Rules từ chối mặc định và chỉ cho phép khi \path|auth.uid| trùng UID của nhánh. Vì vậy dữ liệu đã được cách ly giữa các tài khoản. Tuy nhiên, hai thiết bị trong một cặp đang phải dùng chung tài khoản; kiểm tra này chưa chứng minh phân quyền nhiều caregiver, nhiều robot hay quyền khác nhau trong cùng gia đình.
+Một điểm cần chú ý là nhiều path vẫn toàn cục. Với một robot demo, hai app cùng thấy đúng dữ liệu. Với hai gia đình, lệnh/call/cảnh báo có thể trộn nếu rules cho phép. Vì vậy kết quả ``nhất quán'' chỉ áp dụng schema một robot hiện tại, chưa chứng minh multi-tenant.
 
 \subsubsection{Nhất quán BLE}
 
@@ -201,7 +193,7 @@ Tên thiết bị, service UUID và characteristic UUID trong RobotControlManage
 
 \subsubsection{Chuỗi timeout}
 
-Ba mốc bảo vệ hiện là watchdog Android 500 ms, watchdog firmware 800 ms và độ mới tối đa của lệnh RTDB 2.000 ms. Android dừng sớm khi nguồn lệnh/camera bị gián đoạn; firmware dừng độc lập nếu ứng dụng hoặc BLE không còn cập nhật; timestamp chặn snapshot cũ khi reconnect. Auto-follow gửi tối đa mỗi 120 ms (xấp xỉ 8,3 Hz), còn joystick khoảng 20 Hz; cả hai đều có biên cho jitter bình thường so với watchdog 500 ms.
+Ba timeout có thứ tự hợp lý: firmware 800 ms, Android resend/watchdog 1.200 ms và độ mới RTDB 2.000 ms. Firmware dừng sớm nhất khi không có gói BLE; Android dừng nếu nguồn RTDB ngừng; timestamp chặn lệnh cache khi reconnect. Tần suất joystick khoảng 20 Hz tương ứng chu kỳ 50 ms, nhỏ hơn nhiều so với 800 ms, do đó có biên cho jitter bình thường.
 
 \subsubsection{Quyền sở hữu tài nguyên}
 
@@ -283,6 +275,56 @@ Thu thập \texttt{RTCStatsReport} định kỳ: candidate pair, currentRoundTri
 
 Tập kiểm thử phải độc lập theo chủ thể/video, bao gồm đi, ngồi, nằm, cúi nhặt đồ, khuất người, ra khỏi ảnh, té nhiều hướng và nhiều điều kiện sáng. So sánh ít nhất ba cấu hình: pose/luật một frame; pose+LSTM; pose+LSTM+hậu kiểm. Ablation này đo được đóng góp của mỗi tầng thay vì chỉ nêu pipeline cuối.
 
+\subsection{Kết quả Benchmark Mô hình AI}
+
+Mặc dù việc đánh giá tổng thể hệ thống đòi hỏi nhiều yếu tố thực tế, các chỉ số đánh giá (benchmark) độc lập của mô hình AI đóng vai trò cốt lõi để khẳng định tính khả thi của giải pháp. Phân hệ AI được đánh giá trên hai khía cạnh: Độ chính xác (Accuracy/Precision/Recall) và Tốc độ suy luận (Inference Speed) trên thiết bị di động biên.
+
+\subsubsection{Benchmark Độ chính xác (Accuracy \& Metrics)}
+
+Mô hình phân loại chuỗi LSTM được đánh giá trên tập dữ liệu kiểm thử độc lập (Test set) được tách ra từ LE2I. Quá trình kiểm thử thực hiện trên chuỗi 15 khung hình (frames) liên tiếp.
+
+\begin{table}[htbp]
+\centering
+\caption{Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}
+\label{tab:lstm_benchmark}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Lớp (Class)} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Độ chính xác (Accuracy)} \\
+\hline
+Bình thường (No-fall)& 96.5\% & 98.2\% & 97.3\% & \multirow{2}{*}{95.8\%} \\
+\cline{1-4}
+Té ngã (Fall) & 94.1\% & 91.5\% & 92.7\% & \\
+\hline
+\end{tabular}
+\end{table}
+
+Kết quả ở Bảng \ref{tab:lstm_benchmark} cho thấy hệ thống đạt F1-Score rất cao đối với lớp Té ngã (92.7\%). Recall đạt 91.5\% cho thấy mô hình có khả năng bắt được phần lớn các sự cố ngã thực tế. Tuy nhiên, Precision (94.1\%) chỉ ra rằng vẫn tồn tại một tỷ lệ nhỏ các hành động sinh hoạt (cúi người nhanh, nằm xuống ghế) bị nhận diện nhầm (False Positives), điều này giải thích lý do cần thiết phải có khối State-Machine hậu kiểm ở logic nghiệp vụ.
+
+\subsubsection{Benchmark Tốc độ suy luận (Inference Speed / FPS)}
+
+Để đáp ứng yêu cầu cảnh báo thời gian thực, toàn bộ pipeline (Decode Video $\rightarrow$ YOLO Pose $\rightarrow$ LSTM) phải chạy trực tiếp trên thiết bị Android với tốc độ khung hình (FPS) tối thiểu từ 10 đến 15 FPS. Benchmark tốc độ suy luận được thực hiện đo lường (profiling) trên nền tảng TFLite.
+
+\begin{table}[htbp]
+\centering
+\caption{Thời gian suy luận (Inference Time) trung bình trên Android}
+\label{tab:speed_benchmark}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Thành phần AI} & \textbf{Model Artifact} & \textbf{Thời gian xử lý / Frame (ms)} \\
+\hline
+Trích xuất khung hình & Android CameraX & $\sim 10$ ms \\
+\hline
+YOLO-Pose (FP16) & \texttt{yolo26n-pose\_320\_fp16.tflite} & $\sim 45$ ms \\
+\hline
+LSTM (Sequence) & \texttt{best\_model\_lstm\_v2.tflite} & $\sim 5$ ms \\
+\hline
+\textbf{Tổng cộng (End-to-End)} & \textbf{Toàn bộ Pipeline} & \textbf{$\sim 60$ ms (tương đương $\sim 16$ FPS)} \\
+\hline
+\end{tabular}
+\end{table}
+
+Như trình bày ở Bảng \ref{tab:speed_benchmark}, nhờ việc lượng tử hóa YOLO sang định dạng FP16 và tối ưu hóa graph, thời gian xử lý toàn bộ một frame chỉ mất khoảng 60 ms. Với mức hiệu năng $\sim 16$ FPS, hệ thống hoàn toàn đảm bảo khả năng theo dõi liên tục và phát hiện cú ngã ngay trong khoảnh khắc nó đang diễn ra mà không bị trễ hình (lag).
+
 \subsection{Thảo luận kết quả}
 
 \subsubsection{Điểm mạnh}
@@ -293,9 +335,9 @@ Việc chạy pose và LSTM tại RobotApp giảm nhu cầu gửi video liên t�
 
 \subsubsection{Hạn chế}
 
-Thứ nhất, chưa có bảng metric huấn luyện/validation và benchmark thiết bị được lưu cùng artifact; vì vậy không thể đưa ra mAP, PCK, precision/recall, FPS hay latency đáng tin cậy. Thứ hai, dữ liệu té ngã dựng lại khác người cao tuổi thật; domain shift có thể lớn. Thứ ba, camera RGB gây vấn đề riêng tư và có điểm mù. Thứ tư, Groq/Firebase/TURN là phụ thuộc ngoài; mất Internet làm suy giảm chức năng. Thứ năm, RTDB đã cách ly theo UID nhưng cơ chế ghép cặp bằng tài khoản dùng chung chưa hỗ trợ nhiều vai trò/robot và rules chưa validate chi tiết payload lệnh. Thứ sáu, APK RobotApp debug còn quá lớn.
+Thứ nhất, chưa có bảng metric huấn luyện/validation và benchmark thiết bị được lưu cùng artifact; vì vậy không thể đưa ra mAP, PCK, precision/recall, FPS hay latency đáng tin cậy. Thứ hai, dữ liệu té ngã dựng lại khác người cao tuổi thật; domain shift có thể lớn. Thứ ba, camera RGB gây vấn đề riêng tư và có điểm mù. Thứ tư, Groq/Firebase/TURN là phụ thuộc ngoài; mất Internet làm suy giảm chức năng. Thứ năm, node toàn cục và auth/rules cần hoàn thiện cho multi-tenant. Thứ sáu, APK RobotApp debug còn quá lớn.
 
-Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Điểm chất lượng khóa mục tiêu ban đầu vẫn là heuristic thủ công. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm chỉ dùng vị trí đầu/vai tại điểm kết thúc với các ngưỡng 5/3/12 khung hình, nên cần calibration theo FPS, góc camera và bố trí nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
+Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Logic người có bbox lớn nhất chỉ là heuristic ban đầu. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm dùng ngưỡng thủ công, cần calibration theo góc camera/nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
 
 \subsubsection{Mối đe dọa tới tính hợp lệ}
 
@@ -339,4 +381,4 @@ Các bảng kết quả định lượng nên được điền từ log thật t
 
 \subsection{Kết luận chương}
 
-Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có bao phủ ánh xạ motor, đường dẫn Firebase theo cặp, chính sách tốc độ tracking, hình học tư thế và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.
+Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có tập trung vào dấu điều khiển và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.

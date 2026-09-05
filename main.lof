@@ -9,6 +9,6 @@
 \contentsline {figure}{\numberline {2.8}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{39}{figure.caption.37}%
 \contentsline {figure}{\numberline {2.9}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{46}{figure.caption.42}%
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc mức cao của hệ thống robot chăm sóc người cao tuổi}}{52}{figure.caption.43}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{56}{figure.caption.46}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{71}{figure.caption.50}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ phân bố số lượng thể hiện sự mất cân bằng lớp trong dữ liệu}}{76}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{59}{figure.caption.46}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{73}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{77}{figure.caption.51}%
