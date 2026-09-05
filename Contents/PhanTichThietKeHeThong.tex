@@ -152,9 +152,18 @@ NFR12 & Minh bạch AI & Lưu lý do hậu kiểm và đặc trưng bằng chứ
 \hline
 \end{longtable}
 
-\subsection{Mô hình use case}
+\subsection{Biểu đồ ca sử dụng (Use Case Diagram)}
 
 Các use case được nhóm theo bốn miền. Nhóm quản lý gồm đăng nhập, hồ sơ, lịch và nhật ký. Nhóm tương tác gồm hội thoại và lời nhắc. Nhóm an toàn gồm theo dõi, phát hiện té ngã, hỏi xác nhận và cảnh báo. Nhóm điều khiển/liên lạc gồm gọi video, joystick, auto-follow và dừng khẩn cấp.
+
+Hình \ref{fig:use_case_overall} mô tả quan hệ giữa hai tác nhân chính và các dịch vụ của hệ thống. Người chăm sóc thao tác chủ yếu qua CaregiverApp để cấu hình hồ sơ, lịch nhắc, bật các chức năng AI, xem nhật ký, gọi video và điều khiển robot. Người cao tuổi tương tác với RobotApp thông qua hội thoại, lời nhắc, xác nhận tình trạng và cuộc gọi. Firebase, WebRTC, Groq cùng thân robot ESP32 được biểu diễn như các tác nhân hỗ trợ vì chúng cung cấp hạ tầng hoặc thực thi hành động vật lý nhưng không tự khởi tạo mục tiêu nghiệp vụ.
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.92\textheight]{Images/Use_Case_Diagram.pdf}
+    \caption{Biểu đồ ca sử dụng tổng thể của hệ thống robot hỗ trợ chăm sóc người cao tuổi}
+    \label{fig:use_case_overall}
+\end{sidewaysfigure}
 
 \begin{table}[htbp]
 \centering
@@ -189,6 +198,32 @@ UC10 & Xem nhật ký & Người chăm sóc & Danh sách sự kiện theo thời
 \end{table}
 
 Đặc tả đầy đủ tiền điều kiện, luồng chính, ngoại lệ và hậu điều kiện được trình bày ở Phụ lục. Việc tách đặc tả giúp chương thiết kế tập trung vào quan hệ giữa use case và kiến trúc.
+
+\subsection{Biểu đồ hoạt động (Activity Diagram)}
+
+Biểu đồ hoạt động tại Hình \ref{fig:activity_fall_detection} cụ thể hóa luồng UC07 từ lúc chức năng phát hiện té ngã được bật đến khi sự cố được kết thúc hoặc chuyển thành cuộc gọi khẩn cấp. Luồng được thiết kế theo vòng lặp giám sát: mỗi khung hình lần lượt đi qua mô hình pose, bộ theo dõi ID0 và LSTM. Một dự đoán đơn lẻ không phát cảnh báo; hệ thống chỉ chuyển sang hậu kiểm sau khi thỏa điều kiện ổn định theo thời gian. Nếu bằng chứng hình học không đủ, sự kiện bị loại và vòng lặp tiếp tục.
+
+Khi bằng chứng đủ mạnh, RobotApp khóa sự cố để chống phát lặp, gửi lệnh dừng xuống thân robot, tạo bản ghi cảnh báo rồi hỏi người cao tuổi bằng TTS. Nhánh an toàn cập nhật kết quả và chỉ mở khóa sau khi tư thế phục hồi ổn định. Nhánh nguy hiểm, không phản hồi hoặc không chắc chắn được xử lý theo nguyên tắc an toàn: cập nhật trạng thái sự cố và khởi tạo cuộc gọi WebRTC tới người chăm sóc.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth,height=0.78\textheight,keepaspectratio]{Images/Activity_Fall_Detection.pdf}
+    \caption{Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}
+    \label{fig:activity_fall_detection}
+\end{figure}
+
+\subsection{Biểu đồ tuần tự (Sequence Diagram)}
+
+Hình \ref{fig:sequence_emergency_response} trình bày thứ tự trao đổi giữa người cao tuổi, RobotApp, pipeline AI, ESP32, Firebase và CaregiverApp trong một sự cố té ngã. Pipeline AI chỉ trả kết quả nhận thức cho RobotApp; lớp ứng dụng mới chịu trách nhiệm dừng robot, ghi trạng thái và điều phối hội thoại. Cách phân vai này giữ quyết định nghiệp vụ bên ngoài mô hình học máy và cho phép kiểm thử riêng từng thành phần.
+
+Trong nhánh khẩn cấp, Firebase RTDB truyền trạng thái cuộc gọi, SDP và ICE candidate tới CaregiverApp. Dữ liệu âm thanh và hình ảnh không đi qua Firebase mà được truyền trên kết nối WebRTC giữa hai peer. Khi người chăm sóc điều khiển robot trong cuộc gọi, lệnh đi theo chuỗi CaregiverApp--RTDB--RobotApp--BLE--ESP32; watchdog ở RobotApp và firmware vẫn có hiệu lực độc lập.
+
+\begin{sidewaysfigure}
+    \centering
+    \includegraphics[width=0.92\textheight]{Images/Sequence_Emergency_Response.pdf}
+    \caption{Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}
+    \label{fig:sequence_emergency_response}
+\end{sidewaysfigure}
 
 \subsection{Giải pháp AI cho chức năng phát hiện té ngã (Fall Detection)}
 

@@ -11,6 +11,9 @@
 \contentsline {figure}{\numberline {2.10}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{46}{figure.caption.40}%
 \contentsline {figure}{\numberline {2.11}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{53}{figure.caption.45}%
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc mức cao của hệ thống robot chăm sóc người cao tuổi}}{59}{figure.caption.46}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{66}{figure.caption.49}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{80}{figure.caption.53}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{84}{figure.caption.54}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ ca sử dụng tổng thể của hệ thống robot hỗ trợ chăm sóc người cao tuổi}}{64}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}}{65}{figure.caption.50}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{67}{figure.caption.51}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{70}{figure.caption.52}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{84}{figure.caption.56}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{88}{figure.caption.57}%
