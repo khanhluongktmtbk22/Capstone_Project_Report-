@@ -8,7 +8,7 @@ Phần này trình bày nền tảng lý thuyết cần thiết cho hệ thống
 
 \subsubsection{Giới thiệu Intel OpenBot}
 
-Intel OpenBot là một nền tảng robot mã nguồn mở được phát triển cho nghiên cứu và giáo dục trong lĩnh vực robotics và trí tuệ nhân tạo. Điểm đặc biệt của OpenBot là sử dụng điện thoại thông minh (smartphone) làm ``bộ não'' chính của robot, tận dụng sức mạnh tính toán, camera và các cảm biến có sẵn trên điện thoại \reportcite{ref:openbot}.
+Intel OpenBot là một nền tảng robot mã nguồn mở được phát triển cho nghiên cứu và giáo dục trong lĩnh vực robotics và trí tuệ nhân tạo. Điểm đặc biệt của OpenBot là sử dụng điện thoại thông minh (smartphone) làm ``bộ não'' chính của robot, tận dụng sức mạnh tính toán, camera và các cảm biến có sẵn trên điện thoại \r\r\reportcite{ref:openbot}.
 
 
 Các đặc điểm nổi bật của Intel OpenBot:
@@ -208,887 +208,174 @@ Giao tiếp giữa điện thoại và phần cứng robot được thực hiệ
 
 
 
-\subsection{Tổng quan về Mạng Nơ-ron Nhân tạo (Neural Network)}
-%=========================================
+\subsection{Nền tảng Thị giác máy tính (Computer Vision)}
 
-\subsubsection{Khái niệm và nguồn gốc sinh học}
+Thị giác máy tính (Computer Vision) đóng vai trò cốt lõi trong hệ thống giám sát và nhận diện té ngã. Bằng cách phân tích luồng video từ camera, hệ thống có khả năng nhận biết, định vị và theo dõi con người trong không gian. Phần này trình bày các nền tảng kỹ thuật được sử dụng bao gồm Mạng nơ-ron tích chập (CNN), kiến trúc YOLO cho bài toán phát hiện đối tượng và thuật toán ByteTrack cho bài toán theo dõi.
 
-Mạng nơ-ron nhân tạo (Artificial Neural Network - ANN) là một mô hình tính toán lấy cảm hứng từ cấu trúc và cách thức hoạt động của hệ thần kinh sinh học. Trong não bộ con người, hàng tỷ tế bào thần kinh (neuron) liên kết với nhau thông qua các khớp thần kinh (synapse) để xử lý và truyền tải thông tin. Mỗi neuron sinh học nhận tín hiệu đầu vào từ các neuron khác thông qua các sợi nhánh (dendrite), xử lý tín hiệu tại thân tế bào (soma), và truyền tín hiệu đầu ra qua sợi trục (axon) đến các neuron tiếp theo.
+\subsubsection{Mạng nơ-ron tích chập (CNN) và Kiến trúc YOLO26}
 
-Dựa trên nguyên lý này, các nhà khoa học đã phát triển neuron nhân tạo như một đơn vị tính toán cơ bản. Ý tưởng đầu tiên về neuron nhân tạo được Warren McCulloch và Walter Pitts đề xuất vào năm 1943, mở đường cho sự phát triển của lĩnh vực học máy và trí tuệ nhân tạo hiện đại.
+\textbf{Mạng nơ-ron tích chập (CNN)}
 
-\subsubsection{Cấu trúc neuron nhân tạo}
+Mạng nơ-ron tích chập (Convolutional Neural Network - CNN) là một lớp mạng học sâu (Deep Learning) chuyên biệt, được thiết kế để xử lý dữ liệu có dạng lưới tĩnh như hình ảnh 2D 
+\r\r\reportcite{ref:cnn}. Khác với mạng đa tầng (MLP) truyền thống yêu cầu làm phẳng (flatten) hình ảnh gây mất thông tin không gian, CNN bảo toàn cấu trúc không gian của pixel bằng cách sử dụng các bộ lọc (filters/kernels) trượt qua toàn bộ bức ảnh.
 
-\textbf{Nguồn gốc sinh học và cảm hứng từ não bộ}
+Kiến trúc cốt lõi của một mạng CNN tiêu chuẩn bao gồm 3 loại lớp chính:
+\begin{itemize}
+    \item \textbf{Lớp tích chập (Convolutional Layer)}: Đóng vai trò là bộ trích xuất đặc trưng (feature extractor). Nó áp dụng các phép tính tích chập giữa một bộ lọc ma trận (kernel) và vùng ảnh đầu vào để tạo ra các bản đồ đặc trưng (feature maps). Ở các lớp đầu, CNN học cách nhận diện các đặc trưng cấp thấp như cạnh, góc; ở các lớp sâu hơn, nó nhận diện các đặc trưng phức tạp như hình khối, khuôn mặt.
+    \item \textbf{Lớp gộp (Pooling Layer)}: Thường theo ngay sau lớp tích chập (như Max Pooling hoặc Average Pooling), có nhiệm vụ giảm độ phân giải không gian của bản đồ đặc trưng. Quá trình này không chỉ giúp giảm đáng kể khối lượng tính toán, tránh hiện tượng quá khớp (overfitting) mà còn mang lại tính bất biến cục bộ (translation invariance) -- giúp mô hình vẫn nhận diện được đối tượng dù chúng bị dịch chuyển nhẹ trong khung hình.
+    \item \textbf{Lớp kết nối đầy đủ (Fully Connected Layer)}: Nằm ở phần cuối mạng, làm nhiệm vụ tổng hợp các đặc trưng cao cấp đã được trích xuất để thực hiện dự đoán cuối cùng (phân loại hoặc hồi quy tọa độ).
+\end{itemize}
 
-Neuron nhân tạo được thiết kế dựa trên việc mô phỏng cấu trúc và chức năng của neuron sinh học trong hệ thần kinh con người. Một neuron sinh học hoạt động theo cơ chế:
+Bên cạnh đó, sau mỗi lớp tích chập, một hàm kích hoạt phi tuyến (như ReLU, SiLU) được áp dụng để đưa tính phi tuyến vào mô hình, cho phép CNN học được các mối quan hệ phức tạp. Sự kết hợp luân phiên giữa Convolution và Pooling giúp CNN tự động học cách phân tích hình ảnh mà không cần đến các chuyên gia thiết kế đặc trưng thủ công (manual feature engineering) như các phương pháp thị giác máy tính cổ điển.
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{Images/cnn_arch.png}
+    \caption{Minh họa cấu trúc tiêu biểu của mạng nơ-ron tích chập (CNN) gồm các lớp Convolution, Pooling và Fully Connected.}
+    \label{fig:typical_cnn}
+\end{figure}
+
+\textbf{Kiến trúc YOLO26 (Kế thừa từ YOLOv8/YOLOv11)}
+YOLO (You Only Look Once) là một trong những họ mô hình Object Detection tốc độ cao phổ biến nhất. Khác với các phương pháp dựa trên region-proposal (như Faster R-CNN) yêu cầu chạy mô hình nhiều lần trên một ảnh, YOLO định hình bài toán detection như một bài toán hồi quy đơn lẻ (single regression problem) dự đoán trực tiếp tọa độ Bounding Box và xác suất nhãn lớp từ các pixel hình ảnh trong một lần quét duy nhất 
+\r\r\reportcite{ref:yolo}.
+
+Trong hệ thống, mô hình YOLO26 (phiên bản nano tối ưu từ YOLO-Pose) được sử dụng nhằm mục đích trích xuất khung xương (pose landmarks) thay vì chỉ lấy bounding box thông thường.
+Mô hình này nổi bật với các cải tiến kiến trúc như:
+\begin{itemize}
+    \item \textbf{Backbone hiệu năng cao}: Sử dụng các khối C3k2 (Cross Stage Partial) giúp giảm tham số nhưng vẫn duy trì độ chính xác cao.
+    \item \textbf{Đầu ra đa nhiệm (Multi-task Head)}: Hỗ trợ dự đoán đồng thời vị trí Bounding Box và 17 điểm khớp xương (keypoints) của con người.
+    \item \textbf{Tối ưu hóa cho thiết bị biên (Edge Devices)}: Phiên bản nano (yolo26n-pose) có dung lượng cực nhẹ, phù hợp để chuyển đổi sang định dạng TFLite hoặc ONNX, giúp hệ thống đạt tốc độ Real-time trên các phần cứng hạn chế như Raspberry Pi hay điện thoại di động.
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{yolo_arch.jpg}
+    \caption{Minh họa một kiến trúc mạng YOLO tiêu biểu với Backbone, Neck và Head.}
+    \label{fig:yolo_architecture}
+\end{figure}
+
+\subsubsection{Thuật toán theo dõi đa đối tượng ByteTrack}
+
+Trong bài toán nhận diện té ngã, không chỉ cần phát hiện người ở từng khung hình (frame) riêng lẻ, mà còn phải liên kết các phát hiện đó xuyên suốt thời gian để tạo thành một chuỗi hành động (tracklet). Đây là vai trò của bài toán Theo dõi đa đối tượng (Multi-Object Tracking - MOT).
+
+Hệ thống ứng dụng thuật toán \textbf{ByteTrack}, một trong những thuật toán tracking State-of-the-Art hiện nay với phương pháp tiếp cận độc đáo về ghép nối dữ liệu (data association) 
+\r\r\reportcite{ref:bytetrack}.
+
+\textbf{Cơ chế hoạt động của ByteTrack:}
+Các thuật toán tracking truyền thống thường loại bỏ hoàn toàn các detection có độ tin cậy thấp (low-confidence) nhằm giảm thiểu nhiễu. Tuy nhiên, điều này dẫn đến việc mất dấu đối tượng khi họ bị che khuất một phần (occlusion) hoặc hình ảnh bị mờ do chuyển động nhanh (thường gặp khi nạn nhân đang ngã).
+
+ByteTrack giải quyết vấn đề này bằng kỹ thuật \textbf{Dual-threshold Association} (Liên kết hai ngưỡng):
 \begin{enumerate}
-    \item \textbf{Tiếp nhận tín hiệu}: Các sợi nhánh (dendrite) tiếp nhận tín hiệu điện-hóa học từ hàng nghìn neuron khác thông qua các khớp thần kinh (synapse).
-    
-    \item \textbf{Tích hợp thông tin}: Thân tế bào (soma) tổng hợp tất cả tín hiệu đầu vào. Mỗi synapse có ``sức mạnh'' khác nhau - một số kết nối có ảnh hưởng mạnh hơn (tương tự như trọng số trong mạng nhân tạo).
-    
-    \item \textbf{Quyết định kích hoạt}: Nếu tổng tín hiệu vượt quá ngưỡng kích hoạt (threshold), neuron sẽ ``bắn'' (fire) một xung điện.
-    
-    \item \textbf{Truyền tín hiệu}: Xung điện truyền dọc theo sợi trục (axon) đến các neuron tiếp theo.
+    \item \textbf{Ghép nối lần 1 (High-score association)}: Thuật toán sử dụng bộ lọc Kalman (Kalman Filter) để dự đoán vị trí của đối tượng ở frame tiếp theo. Sau đó, nó tính toán khoảng cách IoU (Intersection over Union) giữa vị trí dự đoán và các bounding box có độ tin cậy \textit{cao} do YOLO trả về. Các cặp phù hợp sẽ được liên kết với nhau.
+    \item \textbf{Ghép nối lần 2 (Low-score association)}: Đối với các đối tượng chưa tìm được ghép nối (unmatched tracks) ở lần 1, ByteTrack không xóa chúng đi mà tiếp tục tìm kiếm trong nhóm các bounding box có độ tin cậy \textit{thấp}. Nếu nạn nhân đang ngã bị mờ, YOLO có thể trả về box với độ tin cậy thấp. Nhờ bước thứ hai này, ByteTrack có thể "cứu" lại tracklet của nạn nhân, giúp chuỗi hành động không bị ngắt quãng.
 \end{enumerate}
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{Images/biological_neuron.png}
-    \caption{So sánh giữa neuron sinh học (trái) và neuron nhân tạo (phải). Các thành phần tương ứng: dendrite $\leftrightarrow$ input, synapse $\leftrightarrow$ weight, soma $\leftrightarrow$ summation, axon $\leftrightarrow$ activation function và output.}
-    \label{fig:biological_neuron}
+    \includegraphics[width=0.9\textwidth]{bytetrack_arch.jpg}
+    \caption{Thuật toán ByteTrack với cơ chế Dual-threshold Association giúp duy trì Track ID ổn định.}
+    \label{fig:bytetrack}
 \end{figure}
 
-Năm 1943, Warren McCulloch (nhà thần kinh học) và Walter Pitts (nhà logic học) đã công bố bài báo ``A Logical Calculus of Ideas Immanent in Nervous Activity'', đề xuất mô hình toán học đầu tiên của neuron - đặt nền móng cho lĩnh vực mạng nơ-ron nhân tạo. Họ chứng minh rằng một mạng các neuron đơn giản có thể thực hiện bất kỳ phép tính logic nào.
+Sự kết hợp giữa YOLO26 (nhận diện chính xác, nhanh) và ByteTrack (liên kết mạnh mẽ, chống đứt gãy) tạo nên một nền tảng vững chắc để trích xuất dữ liệu chuỗi thời gian chất lượng cao, trước khi đưa vào mạng LSTM phân tích hành vi ngã.
 
-\textbf{Các thành phần của neuron nhân tạo}
 
-Ánh xạ từ neuron sinh học sang nhân tạo, một neuron nhân tạo bao gồm các thành phần chính:
 
+
+% --- Tích hợp từ phần cũ ---
+
+Tracking-by-detection tách bài toán thành phát hiện đối tượng ở mỗi frame và liên kết detection qua thời gian. SORT sử dụng Kalman để dự báo chuyển động, IoU làm độ tương đồng và Hungarian cho phép gán tối ưu \r\r\reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình để giảm đổi ID khi che khuất \r\r\reportcite{ref:deepsort}; ByteTrack chỉ ra rằng các detection confidence thấp vẫn có thể hữu ích khi liên kết với track \r\r\reportcite{ref:bytetrack}.
+
+Kalman gồm hai pha. Pha dự báo:
+
+\begin{align}
+\hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
+P_{t|t-1}&=FP_{t-1|t-1}F^T+Q.
+\end{align}
+
+Pha cập nhật với quan sát $z_t$:
+
+\begin{align}
+K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
+\hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
+P_{t|t}&=(I-K_tH)P_{t|t-1}.
+\end{align}
+
+Ma trận chi phí giữa $n$ track và $m$ detection được đưa vào thuật toán Hungarian, vốn giải bài toán gán tuyến tính \r\r\reportcite{ref:hungarian}. IoU đơn độc có thể thất bại khi người từ đứng chuyển sang nằm làm vùng bao thay đổi mạnh. Vì vậy đề tài kết hợp IoU, khoảng cách tâm, neo vai/hông, tỷ lệ diện tích và histogram vùng thân. Định danh ID0 còn được bảo vệ bởi tuổi track dài hơn và phục hồi có điều kiện.
+
+
+\subsection{Mô hình chuỗi thời gian (Sequence Modeling)}
+%=========================================
+
+\subsubsection{Mạng nơ-ron hồi quy (RNN)}
+
+Mạng nơ-ron hồi quy (Recurrent Neural Network - RNN) là một lớp mạng nơ-ron nhân tạo chuyên biệt để xử lý dữ liệu dạng chuỗi (sequence data) như văn bản, âm thanh, hoặc chuỗi thời gian (time-series). Trong ngữ cảnh phát hiện té ngã, luồng video chứa các khung hình liên tiếp tạo thành một chuỗi dữ liệu thời gian ghi nhận chuyển động của con người 
+\r\r\reportcite{ref:rnn}.
+
+Khác với mạng truyền thẳng (Feedforward Neural Network) nơi dữ liệu chỉ đi một chiều từ đầu vào đến đầu ra, RNN sở hữu các "vòng lặp" (loops) cho phép thông tin có thể lưu lại và truyền qua các bước thời gian. 
+Nhờ cơ chế trạng thái ẩn (hidden state), mạng RNN có thể nhớ được thông tin từ quá khứ để ảnh hưởng đến quyết định ở hiện tại. Tuy nhiên, RNN truyền thống gặp phải vấn đề \textbf{triệt tiêu đạo hàm (vanishing gradient)} và \textbf{bùng nổ đạo hàm (exploding gradient)} khi phải học các phụ thuộc xa (long-term dependencies) trong những chuỗi dữ liệu dài.
+
+\subsubsection{Mạng Bộ nhớ Ngắn-Dài hạn (LSTM)}
+
+Để khắc phục nhược điểm của RNN, mạng \textbf{Long Short-Term Memory (LSTM)} được đề xuất bởi Hochreiter và Schmidhuber (1997) 
+\r\r\reportcite{ref:lstm}. LSTM có khả năng học các phụ thuộc dài hạn cực kỳ xuất sắc nhờ cấu trúc "Cell State" (trạng thái tế bào) hoạt động như một băng chuyền thông tin xuyên suốt các bước thời gian, giúp đạo hàm không bị suy giảm quá nhanh.
+
+Cốt lõi của kiến trúc LSTM nằm ở ba cổng (gates) đóng vai trò kiểm soát luồng thông tin:
 \begin{itemize}
-    \item \textbf{Đầu vào (Input)}: Tập hợp các giá trị $x_1, x_2, ..., x_n$ đại diện cho dữ liệu hoặc tín hiệu từ các neuron trước đó. \textit{(Tương ứng với dendrite trong sinh học)}
-    
-    \item \textbf{Trọng số (Weight)}: Mỗi đầu vào $x_i$ được gắn với một trọng số $w_i$ thể hiện mức độ quan trọng của đầu vào đó. Trọng số là tham số có thể học được trong quá trình huấn luyện. \textit{(Tương ứng với sức mạnh synapse - sức mạnh kết nối giữa các neuron)}
-    
-    \item \textbf{Độ lệch (Bias)}: Giá trị $b$ được cộng thêm vào tổng có trọng số, cho phép neuron điều chỉnh ngưỡng kích hoạt một cách linh hoạt. \textit{(Tương ứng với ngưỡng kích hoạt trong neuron sinh học)}
-    
-    \item \textbf{Hàm kích hoạt (Activation Function)}: Hàm phi tuyến $\sigma$ áp dụng lên tổng có trọng số để tạo ra đầu ra của neuron. \textit{(Mô phỏng cơ chế ``bắn'' hay không ``bắn'' của neuron sinh học)}
+    \item \textbf{Cổng quên (Forget Gate)}: Quyết định lượng thông tin từ quá khứ (trạng thái tế bào trước đó) cần bị loại bỏ hoặc lãng quên.
+    \item \textbf{Cổng đầu vào (Input Gate)}: Quyết định lượng thông tin mới (từ dữ liệu hiện tại và trạng thái ẩn trước đó) nào sẽ được cập nhật vào trạng thái tế bào.
+    \item \textbf{Cổng đầu ra (Output Gate)}: Quyết định thông tin nào từ trạng thái tế bào sẽ được xuất ra dưới dạng trạng thái ẩn mới cho bước thời gian tiếp theo.
 \end{itemize}
 
-Đầu ra của một neuron được tính theo công thức:
-
-\begin{equation}
-y = \sigma\left(\sum_{i=1}^{n} w_i x_i + b\right) = \sigma(W^T X + b)
-\end{equation}
-
-Trong đó $W = [w_1, w_2, ..., w_n]^T$ là vector trọng số, $X = [x_1, x_2, ..., x_n]^T$ là vector đầu vào, và $\sigma$ là hàm kích hoạt.
-
-Các hàm kích hoạt phổ biến bao gồm:
-
-\begin{itemize}
-    \item \textbf{Hàm Sigmoid}: $\sigma(z) = \frac{1}{1 + e^{-z}}$, cho đầu ra trong khoảng $(0, 1)$
-    \item \textbf{Hàm Tanh}: $\sigma(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$, cho đầu ra trong khoảng $(-1, 1)$
-    \item \textbf{Hàm ReLU}: $\sigma(z) = \max(0, z)$, được sử dụng rộng rãi trong học sâu nhờ tính đơn giản và hiệu quả
-\end{itemize}
-
-\subsubsection{Lan truyền ngược (Backpropagation)}
-
-Lan truyền ngược là thuật toán cốt lõi để huấn luyện mạng nơ-ron, cho phép tính gradient của hàm mất mát theo từng tham số trong mạng. Thuật toán dựa trên quy tắc chuỗi (chain rule) trong giải tích.
-
-\textbf{Đồ thị Tính toán (Computational Graph)}
-
-Computational Graph là cách biểu diễn các phép tính toán học dưới dạng đồ thị có hướng, trong đó:
-\begin{itemize}
-    \item \textbf{Các nút (nodes)}: Đại diện cho các biến (inputs, outputs, intermediate values) hoặc các phép toán (cộng, nhân, activation function)
-    \item \textbf{Các cạnh (edges)}: Thể hiện sự phụ thuộc dữ liệu giữa các nút
-\end{itemize}
-
-\begin{figure}[h!]
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.7\textwidth]{Images/computational_graph.jpg}
-    \vspace{6pt}
-    \caption{Computational Graph minh họa quá trình Forward Pass (mũi tên xanh) và Backward Pass (mũi tên đỏ) với các gradient được tính ngược từ Loss về các tham số.}
-    \label{fig:computational_graph}
+    \includegraphics[width=0.9\textwidth]{Images/lstm_arch.jpg}
+    \caption{Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}
+    \label{fig:lstm_architecture}
 \end{figure}
 
-Computational Graph là nền tảng cho cơ chế \textbf{Automatic Differentiation} (vi phân tự động) trong các framework deep learning hiện đại như PyTorch, TensorFlow:
-
-\begin{enumerate}
-    \item \textbf{Forward Pass}: Tính toán giá trị đầu ra theo chiều xuôi từ input đến loss
-    \begin{itemize}
-        \item Mỗi node lưu lại giá trị tính được (activation cache)
-        \item Đồng thời xây dựng đồ thị các phép tính đã thực hiện
-    \end{itemize}
-    
-    \item \textbf{Backward Pass}: Tính gradient theo chiều ngược từ loss về các tham số
-    \begin{itemize}
-        \item Bắt đầu từ $\frac{\partial \mathcal{L}}{\partial \mathcal{L}} = 1$
-        \item Áp dụng chain rule tại mỗi node để lan truyền gradient ngược
-        \item Mỗi node nhận gradient từ phía sau và tính gradient cho các input của nó
-    \end{itemize}
-\end{enumerate}
-
-\textbf{Ví dụ minh họa Chain Rule trên Computational Graph}
-
-Xét phép tính đơn giản: $\mathcal{L} = (w \cdot x + b)^2$ với $w=2, x=3, b=1$
-
-\begin{verbatim}
-Forward Pass:
-    z1 = w * x = 2 * 3 = 6
-    z2 = z1 + b = 6 + 1 = 7
-    L = z2^2 = 49
-
-Backward Pass:
-    dL/dL = 1
-    dL/dz2 = 2*z2 = 14
-    dL/dz1 = dL/dz2 * dz2/dz1 = 14 * 1 = 14
-    dL/db = dL/dz2 * dz2/db = 14 * 1 = 14
-    dL/dw = dL/dz1 * dz1/dw = 14 * x = 14 * 3 = 42
-    dL/dx = dL/dz1 * dz1/dx = 14 * w = 14 * 2 = 28
-\end{verbatim}
-
-\textbf{Ưu điểm của Computational Graph:}
-\begin{itemize}
-    \item \textbf{Tự động hóa}: Không cần đạo hàm thủ công, framework tự động tính gradient
-    \item \textbf{Hiệu quả}: Gradient được tính một lần backward pass, không cần tính lại nhiều lần
-    \item \textbf{Linh hoạt}: Hỗ trợ dynamic computational graph (PyTorch) cho kiến trúc thay đổi
-    \item \textbf{Tối ưu bộ nhớ}: Các framework áp dụng gradient checkpointing để tiết kiệm memory
-\end{itemize}
-
-\textbf{Công thức Backpropagation}
-
-Cho hàm mất mát $\mathcal{L}$, gradient theo trọng số của lớp $l$ được tính:
-
-\begin{equation}
-\frac{\partial \mathcal{L}}{\partial W^{(l)}} = \frac{\partial \mathcal{L}}{\partial a^{(l)}} \cdot \frac{\partial a^{(l)}}{\partial z^{(l)}} \cdot \frac{\partial z^{(l)}}{\partial W^{(l)}}
-\end{equation}
-
-Đặt $\delta^{(l)} = \frac{\partial \mathcal{L}}{\partial z^{(l)}}$ là ``error signal'' của lớp $l$:
-
-\begin{equation}
-\delta^{(l)} = (W^{(l+1)})^T \delta^{(l+1)} \odot \sigma'^{(l)}(z^{(l)})
-\end{equation}
-
-Trong đó $\odot$ là phép nhân element-wise và $\sigma'$ là đạo hàm của hàm kích hoạt. Sau khi tính được gradient, các tham số được cập nhật theo thuật toán tối ưu như Stochastic Gradient Descent (SGD):
-
-\begin{equation}
-W^{(l)} \leftarrow W^{(l)} - \eta \frac{\partial \mathcal{L}}{\partial W^{(l)}}
-\end{equation}
-
-với $\eta$ là tốc độ học (learning rate).
+Trong kiến trúc của hệ thống nhận diện té ngã, LSTM đóng vai trò cực kỳ quan trọng ở khâu cuối cùng. Sau khi mạng YOLO và thuật toán ByteTrack trích xuất ra một chuỗi các tọa độ điểm neo (keypoints) xuyên suốt các khung hình, dữ liệu này mang tính chất chuỗi thời gian. Mạng LSTM sẽ tiếp nhận chuỗi tọa độ này, phân tích sự thay đổi vị trí không gian của cơ thể con người theo thời gian, từ đó nhận diện được hành động ngã một cách chính xác so với các hành động bình thường như ngồi, cúi người hay nằm.
 
 
-\textbf{Ý nghĩa trực quan của Gradient Descent}
 
-\begin{figure}[h!]
+% --- Tích hợp từ phần cũ ---
+
+Một detector trên từng ảnh chỉ quan sát tư thế tại một thời điểm. Trong bài toán té ngã, quá trình chuyển từ đứng/ngồi sang hạ thấp nhanh rồi nằm mới là tín hiệu quan trọng. Recurrent Neural Network (RNN) đưa trạng thái ẩn từ bước $t-1$ sang bước $t$, nhưng có thể gặp mất hoặc bùng nổ gradient khi chuỗi dài. Long Short-Term Memory (LSTM) bổ sung cell state và ba cổng vào, quên, ra để điều tiết thông tin \r\r\reportcite{ref:lstm}.
+
+Với input $x_t$, hidden state $h_{t-1}$ và cell state $c_{t-1}$:
+
+\begin{align}
+f_t &= \sigma(W_f[x_t,h_{t-1}]+b_f),\\
+i_t &= \sigma(W_i[x_t,h_{t-1}]+b_i),\\
+\tilde{c}_t &= \tanh(W_c[x_t,h_{t-1}]+b_c),\\
+c_t &= f_t\odot c_{t-1}+i_t\odot\tilde{c}_t,\\
+o_t &= \sigma(W_o[x_t,h_{t-1}]+b_o),\\
+h_t &= o_t\odot\tanh(c_t).
+\end{align}
+
+Trong hệ thống, một mẫu là tensor $X\in\mathbb{R}^{15\times69}$. Số 15 là chiều thời gian; 69 là vector pose/hình học mỗi frame. Đầu ra softmax hai lớp được diễn giải là normal/fall. Threshold xác suất chỉ là tầng đầu; hysteresis theo số frame liên tiếp và hậu kiểm hình học giúp ngăn trạng thái dao động. Cần lưu ý nếu FPS thay đổi, 15 frame tương ứng thời gian thực khác nhau; một triển khai tốt nên log timestamp hoặc resample chuỗi theo thời gian.
+
+
+\subsection{Xử lý Ngôn ngữ Tự nhiên (NLP) và Hệ thống Giọng nói}
+%=========================================
+
+\subsubsection{Mô hình ngôn ngữ lớn (LLM) và Kiến trúc Transformer}
+
+Mô hình ngôn ngữ lớn (Large Language Model - LLM) là một bước đột phá trong lĩnh vực Trí tuệ Nhân tạo, được huấn luyện trên lượng dữ liệu văn bản khổng lồ để có khả năng hiểu, suy luận và tạo ra ngôn ngữ tự nhiên giống con người. Trái tim của các mô hình LLM hiện đại chính là kiến trúc \textbf{Transformer} \r\r\reportcite{ref:transformer}.
+
+Kiến trúc Transformer loại bỏ hoàn toàn cơ chế xử lý tuần tự của RNN/LSTM, thay vào đó sử dụng cơ chế \textbf{Tự chú ý (Self-Attention)}. Cơ chế này cho phép mô hình đánh giá mức độ liên quan (trọng số) của từng từ trong câu với tất cả các từ khác cùng một lúc, bất kể khoảng cách giữa chúng. Nhờ đó, Transformer không chỉ giải quyết triệt để vấn đề quên thông tin tầm xa mà còn hỗ trợ tính toán song song, giúp tăng tốc độ huấn luyện lên nhiều lần.
+
+\begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.75\textwidth]{Images/loss_surface.png}
-    \caption{Bề mặt hàm mất mát $J(\theta_0, \theta_1)$ và quỹ đạo của Gradient Descent (đường đen) tìm điểm cực tiểu.}
-    \label{fig:loss_surface}
+    \includegraphics[width=0.6\textwidth]{Images/transformer_arch.png}
+    \caption{Sơ đồ kiến trúc của mô hình Transformer với cơ chế Multi-Head Attention.}
+    \label{fig:transformer}
 \end{figure}
 
-Công thức cập nhật trọng số có ý nghĩa hình học trực quan:
+Trong phạm vi hệ thống robot hỗ trợ người cao tuổi, việc triển khai một mô hình LLM với hàng tỷ tham số trực tiếp trên phần cứng cục bộ (edge devices) là không khả thi do giới hạn về bộ nhớ và năng lượng. Do đó, hệ thống sử dụng \textbf{Groq API} để gọi các mô hình LLM mã nguồn mở (như LLaMA 3 hoặc Mixtral) thông qua điện toán đám mây \r\r\reportcite{ref:groq}. Điểm khác biệt của Groq là việc sử dụng chip LPU (Language Processing Unit) chuyên biệt cho inference, mang lại tốc độ phản hồi cực kỳ nhanh (có thể lên tới hàng trăm token/giây). Điều này rất quan trọng để đảm bảo robot có thể giao tiếp, nhắc nhở hoặc trò chuyện với người cao tuổi theo thời gian thực mà không có độ trễ gây khó chịu.
 
-\begin{itemize}
-    \item \textbf{Bề mặt Loss}: Hàm mất mát $\mathcal{L}$ tạo thành một ``bề mặt'' trong không gian nhiều chiều, với mỗi điểm tương ứng với một tập giá trị trọng số $W$. Mục tiêu huấn luyện là tìm điểm thấp nhất trên bề mặt này (điểm cực tiểu).
-    
-    \item \textbf{Gradient}: Vector gradient $\nabla_W \mathcal{L} = \frac{\partial \mathcal{L}}{\partial W}$ chỉ hướng tăng nhanh nhất của hàm mất mát. Do đó, hướng ngược lại ($-\nabla_W \mathcal{L}$) chính là hướng giảm nhanh nhất.
-    
-    \item \textbf{Bước cập nhật}: Mỗi lần cập nhật, ta ``đi'' một bước theo hướng giảm nhanh nhất với độ lớn được kiểm soát bởi learning rate $\eta$:
-    \begin{itemize}
-        \item $\eta$ quá lớn: Bước đi quá dài, có thể ``nhảy'' qua điểm cực tiểu hoặc dao động không hội tụ
-        \item $\eta$ quá nhỏ: Hội tụ rất chậm, tốn nhiều thời gian huấn luyện
-        \item $\eta$ phù hợp: Hội tụ ổn định và nhanh đến điểm cực tiểu
-    \end{itemize}
-    
-    \item \textbf{Quỹ đạo tối ưu}: Qua nhiều iterations, các tham số được điều chỉnh dần để ``lăn'' xuống đáy của bề mặt loss, như hình minh họa với đường đen trên Hình \ref{fig:loss_surface}.
-\end{itemize}
-\subsubsection{Vai trò trong Thị giác Máy tính}
 
-Mạng nơ-ron đóng vai trò then chốt trong lĩnh vực thị giác máy tính (Computer Vision), cho phép máy tính ``nhìn'' và hiểu nội dung hình ảnh. Các ứng dụng tiêu biểu được minh họa trong Hình \ref{fig:cv_tasks}.
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Images/cv_tasks_overview.png}
-    \caption{Bốn bài toán chính trong Thị giác Máy tính: Phân loại ảnh, Phát hiện đối tượng, Phân vùng ngữ nghĩa, và Nhận dạng hành động.}
-    \label{fig:cv_tasks}
-\end{figure}
-\newpage
-
-\textbf{a) Phân loại ảnh (Image Classification)}
-
-Phân loại ảnh là bài toán cơ bản nhất trong thị giác máy tính, với mục tiêu gán một nhãn duy nhất cho toàn bộ ảnh đầu vào.
-
-\begin{itemize}
-    \item \textbf{Đầu vào}: Một ảnh đơn lẻ (RGB hoặc grayscale)
-    \item \textbf{Đầu ra}: Một nhãn lớp (class label) từ tập hợp các lớp định trước
-    \item \textbf{Ví dụ}: Phân loại ảnh chứa chó, mèo, xe cộ; nhận diện chữ số viết tay (MNIST)
-    \item \textbf{Ứng dụng}: Chẩn đoán y tế từ ảnh X-quang, nhận diện thực vật, kiểm tra chất lượng sản phẩm
-\end{itemize}
-
-\textbf{b) Phát hiện đối tượng (Object Detection)}
-
-Phát hiện đối tượng mở rộng từ phân loại ảnh bằng cách không chỉ nhận diện loại đối tượng mà còn xác định vị trí của chúng trong ảnh.
-
-\begin{itemize}
-    \item \textbf{Đầu vào}: Một ảnh có thể chứa nhiều đối tượng
-    \item \textbf{Đầu ra}: Danh sách các bounding box (khung giới hạn) kèm nhãn lớp và điểm tin cậy (confidence score)
-    \item \textbf{Các mô hình tiêu biểu}: YOLO (You Only Look Once), Faster R-CNN, SSD, RetinaNet
-    \item \textbf{Ứng dụng}: Xe tự hành (phát hiện người đi bộ, biển báo), giám sát an ninh, đếm đối tượng
-\end{itemize}
-
-\textbf{c) Phân vùng ngữ nghĩa (Semantic Segmentation)}
-
-Phân vùng ngữ nghĩa đưa việc hiểu ảnh lên mức pixel, gán nhãn lớp cho từng pixel trong ảnh.
-
-\begin{itemize}
-    \item \textbf{Đầu vào}: Một ảnh có kích thước $H \times W$
-    \item \textbf{Đầu ra}: Ma trận nhãn $H \times W$, mỗi pixel được gán một lớp
-    \item \textbf{Các mô hình tiêu biểu}: U-Net, FCN (Fully Convolutional Networks), DeepLab, SegFormer
-    \item \textbf{Ứng dụng}: Phân tích ảnh y tế (phân vùng khối u), xe tự hành (phân biệt đường, vỉa hè, xe cộ), chỉnh sửa ảnh
-\end{itemize}
-
-\textbf{d) Nhận dạng hành động (Action Recognition)}
-
-Nhận dạng hành động mở rộng thị giác máy tính sang miền thời gian, phân tích chuỗi các frame video để xác định hành vi của con người hoặc đối tượng.
-
-\begin{itemize}
-    \item \textbf{Đầu vào}: Video hoặc chuỗi các frame liên tiếp
-    \item \textbf{Đầu ra}: Nhãn hành động (ví dụ: đi bộ, chạy, ngã, vẫy tay)
-    \item \textbf{Các phương pháp}: 
-    \begin{itemize}
-        \item 3D CNN: Mở rộng CNN sang chiều thời gian (ví dụ: I3D, C3D)
-        \item Two-stream networks: Kết hợp RGB và optical flow
-        \item Transformer-based: Video Transformer, TimeSformer
-    \end{itemize}
-    \item \textbf{Ứng dụng}: Phát hiện hành vi bất thường, nhận dạng cử chỉ, phân tích thể thao
-\end{itemize}
-
-\textbf{e) Phát hiện té ngã (Fall Detection)}
-
-Đặc biệt quan trọng trong đề tài này, phát hiện té ngã là bài toán kết hợp nhiều kỹ thuật:
-
-\begin{itemize}
-    \item \textbf{Object Detection}: Phát hiện và định vị người trong khung hình
-    \item \textbf{Pose Estimation}: Ước lượng tư thế cơ thể (skeleton detection)
-    \item \textbf{Action Recognition}: Phân tích chuỗi tư thế theo thời gian
-    \item \textbf{Đặc trưng phân biệt}: 
-    \begin{itemize}
-        \item Góc nghiêng của cơ thể so với mặt đất
-        \item Tốc độ thay đổi vị trí (velocity)
-        \item Tỷ lệ chiều cao/chiều rộng của bounding box
-        \item Vị trí tương đối của các khớp (joints)
-    \end{itemize}
-\end{itemize}
-
-Mạng nơ-ron học được các đặc trưng phức tạp từ tư thế cơ thể, chuyển động, và ngữ cảnh không gian để phân biệt giữa các hành vi bình thường (ngồi xuống, cúi người) và trạng thái ngã thực sự.
-
-%=========================================
-\subsection{Mạng Perceptron Đa tầng (MLP)}
-%=========================================
-
-\subsubsection{Định nghĩa MLP}
-
-Multilayer Perceptron (MLP) là một trong những kiến trúc mạng nơ-ron cơ bản nhất, thuộc lớp mạng truyền thẳng (feedforward neural network). MLP được cấu thành từ nhiều lớp neuron xếp chồng, trong đó tín hiệu chỉ truyền theo một chiều từ đầu vào đến đầu ra mà không có vòng lặp phản hồi.
-
-MLP khác biệt với Perceptron đơn lớp ở chỗ có thêm một hoặc nhiều lớp ẩn (hidden layers) giữa lớp đầu vào và lớp đầu ra. Sự hiện diện của các lớp ẩn kết hợp với hàm kích hoạt phi tuyến cho phép MLP học được các hàm ánh xạ phức tạp, vượt qua giới hạn của các mô hình tuyến tính.
-
-\subsubsection{Cấu trúc nhiều lớp}
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.85\textwidth]{Images/mlp_architecture.png}
-    \caption{Kiến trúc mạng Perceptron Đa tầng (MLP) với lớp đầu vào, hai lớp ẩn và lớp đầu ra. Mỗi neuron trong một lớp kết nối đầy đủ với tất cả neuron của lớp liền kề.}
-    \label{fig:mlp_architecture}
-\end{figure}
-
-Kiến trúc MLP tiêu biểu bao gồm ba loại lớp:
-
-\begin{itemize}
-    \item \textbf{Lớp đầu vào (Input Layer)}: Nhận dữ liệu thô và truyền đến các lớp tiếp theo. Số neuron bằng số chiều của vector đặc trưng đầu vào. Lớp này không thực hiện bất kỳ phép tính nào.
-    
-    \item \textbf{Lớp ẩn (Hidden Layers)}: Một hoặc nhiều lớp thực hiện các phép biến đổi phi tuyến trên dữ liệu. Mỗi neuron trong lớp ẩn kết nối đầy đủ (fully connected) với tất cả neuron của lớp trước đó. Số lượng lớp ẩn và số neuron mỗi lớp là siêu tham số (hyperparameter) cần được lựa chọn phù hợp với bài toán.
-    
-    \item \textbf{Lớp đầu ra (Output Layer)}: Tạo ra dự đoán cuối cùng của mô hình. Số neuron phụ thuộc vào bài toán: một neuron cho hồi quy, $C$ neuron cho phân loại $C$ lớp kết hợp với hàm Softmax.
-\end{itemize}
-
-Ví dụ, một MLP với cấu trúc [784, 256, 128, 10] có 784 neuron đầu vào (phù hợp với ảnh MNIST 28×28 pixel), hai lớp ẩn với 256 và 128 neuron, và 10 neuron đầu ra cho 10 lớp chữ số.
-
-\subsubsection{Ưu điểm, hạn chế của MLP và giới hạn trong xử lý ảnh}
-
-\textbf{So sánh ưu điểm và hạn chế của MLP}
-
-\begin{table}[h!]
-\centering
-\caption{Ưu điểm và hạn chế của mạng MLP}
-\begin{tabular}{|p{7cm}|p{7cm}|}
-\hline
-\textbf{Ưu điểm} & \textbf{Hạn chế} \\
-\hline
-Có khả năng xấp xỉ mọi hàm liên tục (Universal Approximation Theorem) & Số lượng tham số tăng nhanh theo kích thước đầu vào do kết nối đầy đủ \\
-\hline
-Cài đặt đơn giản, dễ hiểu và triển khai & Không khai thác được cấu trúc không gian của dữ liệu ảnh \\
-\hline
-Phù hợp với dữ liệu dạng bảng (tabular data) và các bài toán với đặc trưng được thiết kế sẵn & Nhạy cảm với nhiễu và biến đổi (dịch chuyển, xoay, co giãn) trong ảnh \\
-\hline
-Huấn luyện ổn định với các phương pháp tối ưu chuẩn & Dễ bị overfitting khi dữ liệu huấn luyện hạn chế \\
-\hline
-\end{tabular}
-\label{tab:mlp_pros_cons}
-\end{table}
-
-\textbf{Hạn chế của MLP trong xử lý ảnh và video}
-
-Mặc dù MLP có thể được áp dụng cho dữ liệu ảnh bằng cách ``làm phẳng'' (flatten) ma trận pixel thành vector một chiều, cách tiếp cận này có nhiều nhược điểm nghiêm trọng:
-
-\begin{enumerate}
-    \item \textbf{Mất thông tin không gian}: Khi chuyển đổi ảnh 2D thành vector 1D, quan hệ không gian giữa các pixel lân cận bị phá vỡ. Ví dụ, với ảnh 224×224×3, MLP xem 150,528 giá trị pixel như các đặc trưng độc lập, mất đi khái niệm về ``vùng'', ``biên'', hay ``hình dạng''.
-    
-    \item \textbf{Số tham số khổng lồ}: Với ảnh 224×224×3 và lớp ẩn đầu tiên có 1000 neuron, riêng lớp này đã cần $224 \times 224 \times 3 \times 1000 \approx 150$ triệu tham số, gây khó khăn cho việc huấn luyện và dễ dẫn đến overfitting.
-    
-    \item \textbf{Không bất biến với phép biến đổi}: MLP không có tính bất biến tịnh tiến (translation invariance). Cùng một đối tượng xuất hiện ở vị trí khác trong ảnh sẽ tạo ra vector đầu vào hoàn toàn khác, khiến mô hình khó tổng quát hóa.
-    
-    \item \textbf{Không thể xử lý video hiệu quả}: Video là chuỗi các khung hình, đòi hỏi xử lý thông tin thời gian. MLP không có cơ chế tự nhiên để mô hình hóa sự phụ thuộc theo thời gian.
-\end{enumerate}
-
-Những hạn chế này thúc đẩy sự phát triển của mạng nơ-ron tích chập (CNN) - kiến trúc được thiết kế đặc biệt cho dữ liệu có cấu trúc không gian như ảnh và video.
-
-%=========================================
-\subsection{Mạng Nơ-ron Tích chập (CNN)}
-%=========================================
-
-\subsubsection{Động cơ ra đời của CNN}
-
-Như đã phân tích, MLP không phù hợp cho xử lý ảnh do không khai thác được cấu trúc không gian cục bộ. Trong khi đó, thị giác sinh học cho thấy não bộ xử lý thông tin thị giác theo cách phân cấp: các vùng thị giác sơ cấp phát hiện các đặc trưng đơn giản như cạnh và góc, sau đó các vùng cao hơn tổng hợp thành các khái niệm phức tạp hơn.
-
-Năm 1998, Yann LeCun và cộng sự đề xuất kiến trúc LeNet-5 cho bài toán nhận dạng chữ số viết tay, đánh dấu sự ra đời của CNN hiện đại. CNN được thiết kế với ba ý tưởng cốt lõi:
-
-\begin{itemize}
-    \item \textbf{Kết nối cục bộ (Local Connectivity)}: Mỗi neuron chỉ kết nối với một vùng nhỏ của đầu vào thay vì toàn bộ, phù hợp với tính cục bộ của đặc trưng ảnh.
-    \item \textbf{Chia sẻ tham số (Weight Sharing)}: Cùng một bộ lọc được áp dụng trên toàn bộ ảnh, giảm đáng kể số tham số và tạo tính bất biến tịnh tiến.
-    \item \textbf{Pooling}: Giảm kích thước không gian, tăng tính bất biến với biến đổi nhỏ và mở rộng trường nhìn (receptive field).
-\end{itemize}
-\newpage
-\subsubsection{Các thành phần chính của CNN}
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Images/cnn_convolution.png}
-    \caption{Minh họa phép tích chập (Convolution) và Max Pooling trong CNN: bộ lọc 3×3 trượt qua ảnh đầu vào tạo ra feature map, sau đó Max Pooling 2×2 giảm kích thước không gian.}
-    \label{fig:cnn_convolution}
-\end{figure} 
-
-\textbf{a) Lớp Tích chập (Convolution Layer)}
-
-Lớp tích chập là thành phần cốt lõi của CNN, thực hiện phép tích chập giữa đầu vào và các bộ lọc (filter/kernel) có thể học được. Mỗi bộ lọc trượt qua toàn bộ ảnh đầu vào, tính tích vô hướng tại mỗi vị trí để tạo ra bản đồ đặc trưng (feature map).
-
-Với ảnh đầu vào $I$ có kích thước $H \times W \times C$ và bộ lọc $K$ có kích thước $k \times k \times C$, phép tích chập được định nghĩa:
-
-\begin{equation}
-(I * K)[i,j] = \sum_{m=0}^{k-1} \sum_{n=0}^{k-1} \sum_{c=0}^{C-1} I[i+m, j+n, c] \cdot K[m, n, c] + b
-\end{equation}
-
-Các siêu tham số quan trọng của lớp tích chập:
-\begin{itemize}
-    \item \textbf{Kích thước bộ lọc}: Thường là $3 \times 3$ hoặc $5 \times 5$
-    \item \textbf{Bước nhảy (Stride)}: Khoảng cách di chuyển của bộ lọc, stride lớn hơn làm giảm kích thước đầu ra
-    \item \textbf{Padding}: Thêm viền 0 xung quanh ảnh để kiểm soát kích thước đầu ra
-    \item \textbf{Số bộ lọc}: Quyết định số kênh của feature map đầu ra
-\end{itemize}
-
-\textbf{b) Lớp Pooling}
-
-Lớp pooling thực hiện phép lấy mẫu xuống (downsampling) để giảm kích thước không gian của feature map, từ đó giảm số tham số và chi phí tính toán, đồng thời tăng tính bất biến với các biến đổi nhỏ.
-
-Hai loại pooling phổ biến:
-\begin{itemize}
-    \item \textbf{Max Pooling}: Lấy giá trị lớn nhất trong mỗi vùng, giữ lại đặc trưng nổi bật nhất
-    \item \textbf{Average Pooling}: Lấy giá trị trung bình, cho kết quả mượt mà hơn
-\end{itemize}
-
-Ví dụ, Max Pooling với cửa sổ $2 \times 2$ và stride 2 sẽ giảm kích thước feature map đi một nửa theo mỗi chiều.
-
-\textbf{c) Lớp Kết nối Đầy đủ (Fully Connected Layer)}
-
-Sau các lớp tích chập và pooling, feature map được ``làm phẳng'' thành vector và đưa qua các lớp fully connected để thực hiện phân loại hoặc hồi quy. Các lớp này hoạt động như MLP, tổng hợp các đặc trưng đã trích xuất để đưa ra dự đoán cuối cùng.
-
-\subsubsection{Ưu điểm của CNN trong xử lý ảnh và video}
-
-\begin{itemize}
-    \item \textbf{Học đặc trưng tự động}: CNN tự động trích xuất các đặc trưng phân cấp từ thấp đến cao (cạnh → texture → bộ phận → đối tượng) mà không cần thiết kế thủ công.
-    \item \textbf{Hiệu quả tham số}: Nhờ chia sẻ trọng số, CNN có ít tham số hơn nhiều so với MLP tương đương.
-    \item \textbf{Bất biến tịnh tiến}: Cùng một bộ lọc áp dụng trên toàn ảnh giúp phát hiện đặc trưng bất kể vị trí.
-    \item \textbf{Xử lý video tự nhiên}: CNN có thể mở rộng sang 3D-CNN để xử lý cả chiều thời gian trong video.
-\end{itemize}
-
-\subsubsection{Các kiến trúc CNN tiêu biểu}
-
-\textbf{a) AlexNet (2012)}
-
-AlexNet được Alex Krizhevsky và cộng sự phát triển, giành chiến thắng tại cuộc thi ImageNet 2012 với cách biệt lớn, đánh dấu sự bùng nổ của học sâu trong thị giác máy tính.
-
-Đặc điểm chính của AlexNet:
-\begin{itemize}
-    \item 5 lớp tích chập và 3 lớp fully connected, tổng cộng khoảng 60 triệu tham số
-    \item Sử dụng hàm kích hoạt ReLU thay cho Sigmoid/Tanh, giúp huấn luyện nhanh hơn
-    \item Áp dụng Dropout để giảm overfitting
-    \item Huấn luyện trên 2 GPU song song lần đầu tiên
-\end{itemize}
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Images/AlexCNN.png}
-    \vspace{8pt}
-    \caption{AlexNet}
-\end{figure}
-\textbf{b) VGGNet (2014)}
-
-VGGNet do nhóm Visual Geometry Group tại Oxford phát triển, nổi bật với triết lý thiết kế đơn giản và đồng nhất: sử dụng các bộ lọc $3 \times 3$ xuyên suốt.
-
-Kiến trúc VGG-16 bao gồm 13 lớp tích chập và 3 lớp fully connected. Ý tưởng chính là thay vì dùng bộ lọc lớn $7 \times 7$, có thể xếp chồng nhiều bộ lọc $3 \times 3$ để đạt cùng receptive field nhưng với ít tham số hơn và thêm các lớp phi tuyến.
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=0.5\linewidth]{Images/VGG2014.png}
-    \vspace{8pt}
-    \caption{VGG}
-    \label{fig:placeholder}
-\end{figure}
-
-\textbf{c) ResNet (2015)}
-
-ResNet (Residual Network) do nhóm Microsoft Research phát triển, giải quyết vấn đề nghiêm trọng của các mạng rất sâu: hiện tượng suy giảm gradient (vanishing gradient) và sự suy giảm độ chính xác.
-
-\textbf{Vấn đề:} Khi mạng sâu hơn, lý thuyết cho rằng độ chính xác phải tốt lên hoặc ít nhất không kém đi (vì mạng sâu có thể ``học'' thành mạng nông). Tuy nhiên thực tế, mạng quá sâu có độ chính xác giảm cả trên tập huấn luyện lẫn kiểm tra.
-
-\textbf{Giải pháp - Residual Connection:} Thay vì học ánh xạ $H(x)$ trực tiếp, ResNet học ``phần dư'' $F(x) = H(x) - x$ và đầu ra là:
-
-\begin{equation}
-y = F(x, \{W_i\}) + x
-\end{equation}
-
-Kết nối tắt (skip connection) $+x$ cho phép gradient lan truyền trực tiếp qua các lớp, giải quyết vanishing gradient. Nếu $F(x)$ không cần thiết, mạng có thể dễ dàng học $F(x) \approx 0$ để trở thành hàm đồng nhất.
-
-ResNet cho phép huấn luyện mạng với hàng trăm thậm chí hàng nghìn lớp (ResNet-152, ResNet-1001), đạt kết quả vượt trội trên nhiều benchmark và trở thành nền tảng cho nhiều kiến trúc hiện đại.
-
-%=========================================
-\subsection{Giới thiệu YOLO (You Only Look Once)}
-%=========================================
-
-\subsubsection{Bài toán Object Detection}
-
-Object Detection (Phát hiện đối tượng) là một trong những bài toán cơ bản và quan trọng nhất trong thị giác máy tính \reportcite{ref:odsurvey}. Khác với Image Classification chỉ xác định loại đối tượng chính trong ảnh, Object Detection yêu cầu đồng thời:
-
-\begin{itemize}
-    \item \textbf{Định vị (Localization)}: Xác định vị trí của đối tượng trong ảnh thông qua bounding box (hộp giới hạn)
-    \item \textbf{Phân loại (Classification)}: Xác định loại của mỗi đối tượng được phát hiện
-\end{itemize}
-
-Trong bài toán phát hiện ngã, Object Detection đóng vai trò then chốt: mô hình cần xác định vị trí con người trong khung hình và phân loại trạng thái của họ (đang đứng, đi lại, hay đã ngã).
-
-\subsubsection{Lịch sử phát triển Object Detection}
-
-Theo khảo sát ``Object Detection in 20 Years'' của Zou và cộng sự \reportcite{ref:odsurvey}, lĩnh vực Object Detection đã trải qua sự phát triển đáng kể trong hơn hai thập kỷ:
-
-\textbf{a) Giai đoạn truyền thống (1990s-2012)}
-
-\begin{itemize}
-    \item \textbf{Viola-Jones Detector (2001)}: Detector đầu tiên đạt tốc độ real-time cho face detection, sử dụng Haar-like features và AdaBoost
-    \item \textbf{HOG Detector (2005)}: Histogram of Oriented Gradients cho pedestrian detection
-    \item \textbf{DPM - Deformable Parts Model (2010)}: Mô hình biến dạng các phần, đạt SOTA trên PASCAL VOC nhiều năm
-\end{itemize}
-
-\textbf{b) Giai đoạn Deep Learning (2012-nay)}
-
-\begin{itemize}
-    \item \textbf{AlexNet (2012)}: Bước ngoặt của deep learning trong computer vision
-    \item \textbf{R-CNN (2014)}: Kết hợp region proposals với CNN features
-    \item \textbf{Fast R-CNN, Faster R-CNN (2015)}: Cải tiến tốc độ với RoI pooling và Region Proposal Network
-    \item \textbf{YOLO v1 (2016)}: Đột phá với one-stage detection, real-time
-    \item \textbf{SSD (2016)}: Single Shot MultiBox Detector với multi-scale features
-    \item \textbf{RetinaNet (2017)}: Giới thiệu Focal Loss để giải quyết class imbalance
-    \item \textbf{YOLO v3-v11 (2018-2024)}: Liên tục cải tiến về accuracy và speed
-\end{itemize}
-
-\textbf{c) Xu hướng hiện tại}
-
-Theo \reportcite{ref:odsurvey}, các xu hướng chính trong Object Detection bao gồm:
-\begin{itemize}
-    \item Anchor-free detectors (loại bỏ anchor boxes)
-    \item Transformer-based detectors (DETR, Swin Transformer)
-    \item NAS-based architecture search (tự động tìm kiếm kiến trúc)
-    \item Real-time detection trên edge devices
-\end{itemize}
-
-\subsubsection{Khái niệm Bounding Box}
-
-Bounding Box (hộp giới hạn) là hình chữ nhật bao quanh đối tượng trong ảnh, được sử dụng để xác định vị trí và kích thước của đối tượng.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.6\textwidth]{Images/bounding_box_example.png}
-    \vspace{8pt}
-    \caption{Ví dụ minh họa Bounding Box trong Object Detection.}
-    \label{fig:bounding_box}
-\end{figure}
-
-Có hai cách biểu diễn bounding box phổ biến:
-
-\textbf{a) Format $(x_{min}, y_{min}, x_{max}, y_{max})$ - PASCAL VOC format}
-
-\begin{itemize}
-    \item $(x_{min}, y_{min})$: Tọa độ góc trên bên trái của box
-    \item $(x_{max}, y_{max})$: Tọa độ góc dưới bên phải của box
-    \item Đơn vị: pixel tuyệt đối
-\end{itemize}
-
-\textbf{b) Format $(x_{center}, y_{center}, w, h)$ - YOLO format}
-
-\begin{itemize}
-    \item $(x_{center}, y_{center})$: Tọa độ tâm của box
-    \item $w$: Chiều rộng của box
-    \item $h$: Chiều cao của box
-    \item Đơn vị: normalized (chia cho kích thước ảnh, giá trị từ 0 đến 1)
-\end{itemize}
-
-\textbf{c) Công thức chuyển đổi}
-
-Từ PASCAL VOC sang YOLO (với ảnh kích thước $W \times H$):
-\begin{equation}
-x_{center} = \frac{x_{min} + x_{max}}{2W}, \quad y_{center} = \frac{y_{min} + y_{max}}{2H}
-\end{equation}
-\begin{equation}
-w = \frac{x_{max} - x_{min}}{W}, \quad h = \frac{y_{max} - y_{min}}{H}
-\end{equation}
-
-\subsubsection{Intersection over Union (IoU)}
-
-IoU là metric đo độ chồng lấp giữa hai bounding box, được sử dụng rộng rãi trong đánh giá object detection:
-
-\begin{equation}
-IoU = \frac{\text{Area of Intersection}}{\text{Area of Union}} = \frac{|A \cap B|}{|A \cup B|}
-\end{equation}
-
-Trong đó:
-\begin{itemize}
-    \item $A$: Bounding box dự đoán (predicted)
-    \item $B$: Bounding box ground truth (thực tế)
-    \item IoU = 1: Hai box trùng khớp hoàn toàn
-    \item IoU = 0: Hai box không có phần giao nhau
-\end{itemize}
-
-Ngưỡng IoU thường được sử dụng để xác định dự đoán đúng:
-\begin{itemize}
-    \item IoU $\geq 0.5$: Ngưỡng phổ biến (PASCAL VOC, COCO mAP@0.5)
-    \item IoU $\geq 0.75$: Ngưỡng nghiêm ngặt (COCO mAP@0.75)
-    \item IoU từ 0.5 đến 0.95: Đánh giá đa ngưỡng (COCO mAP@[.5:.95])
-\end{itemize}
-
-\subsubsection{Các khái niệm True Positive, False Positive, False Negative}
-
-Để đánh giá kết quả detection, cần phân loại các dự đoán:
-
-\begin{itemize}
-    \item \textbf{True Positive (TP)}: Dự đoán đúng - có bounding box dự đoán khớp với ground truth (IoU $\geq$ threshold) và đúng class
-    \item \textbf{False Positive (FP)}: Dự đoán sai - bounding box dự đoán không khớp với bất kỳ ground truth nào, hoặc sai class
-    \item \textbf{False Negative (FN)}: Bỏ sót - ground truth không được detect bởi bất kỳ dự đoán nào
-\end{itemize}
-
-Từ đó tính được:
-\begin{equation}
-\text{Precision} = \frac{TP}{TP + FP} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số dự đoán}}
-\end{equation}
-\begin{equation}
-\text{Recall} = \frac{TP}{TP + FN} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số ground truth}}
-\end{equation}
-
-\subsubsection{Đánh giá hiệu suất: Mean Average Precision (mAP)}
-
-Mean Average Precision (mAP) là metric chuẩn để đánh giá hiệu suất của mô hình object detection, tổng hợp cả precision và recall.
-
-\textbf{a) Precision-Recall Curve}
-
-Với mỗi class, sắp xếp các dự đoán theo confidence score giảm dần. Tại mỗi điểm, tính precision và recall tích lũy, từ đó vẽ được đường cong Precision-Recall.
-
-\textbf{b) Average Precision (AP)}
-
-AP là diện tích dưới đường cong Precision-Recall:
-\begin{equation}
-AP = \int_0^1 p(r) \, dr
-\end{equation}
-
-Trong thực tế, sử dụng phép nội suy (interpolation):
-\begin{equation}
-AP = \sum_{i=1}^{n} (r_i - r_{i-1}) \cdot p_{interp}(r_i)
-\end{equation}
-
-với $p_{interp}(r) = \max_{r' \geq r} p(r')$ là precision nội suy tại recall $r$.
-
-\textbf{c) Mean Average Precision (mAP)}
-
-mAP là trung bình của AP trên tất cả các class:
-\begin{equation}
-mAP = \frac{1}{N} \sum_{i=1}^{N} AP_i
-\end{equation}
-
-với $N$ là số class trong dataset.
-
-\textbf{d) Các biến thể mAP}
-
-\begin{itemize}
-    \item \textbf{mAP@0.5 (mAP50)}: AP tính với ngưỡng IoU = 0.5, được sử dụng trong PASCAL VOC
-    \item \textbf{mAP@0.75 (mAP75)}: AP với ngưỡng IoU = 0.75, nghiêm ngặt hơn
-    \item \textbf{mAP@[.5:.95]}: Trung bình AP với IoU từ 0.5 đến 0.95 (bước 0.05), metric chính của COCO
-    \item \textbf{mAP Small/Medium/Large}: mAP theo kích thước đối tượng
-\end{itemize}
-
-\textbf{e) Ý nghĩa của mAP}
-
-\begin{itemize}
-    \item mAP cao $\rightarrow$ Mô hình phát hiện đúng nhiều đối tượng và định vị chính xác
-    \item mAP50 cao nhưng mAP75 thấp $\rightarrow$ Phát hiện được nhưng định vị chưa chính xác
-    \item Precision cao, Recall thấp $\rightarrow$ Mô hình thận trọng, ít false positive nhưng bỏ sót nhiều
-    \item Precision thấp, Recall cao $\rightarrow$ Mô hình phát hiện nhiều nhưng có nhiều false positive
-\end{itemize}
-
-\subsubsection{Ý tưởng YOLO: Phát hiện trong một lần suy luận}
-
-YOLO (You Only Look Once) được Joseph Redmon, Santosh Divvala, Ross Girshick và Ali Farhadi đề xuất năm 2016 trong bài báo ``You Only Look Once: Unified, Real-Time Object Detection'' \reportcite{ref:yolo}. Đây là bước đột phá mang đến cách tiếp cận hợp nhất cho Object Detection.
-
-\textbf{Ý tưởng cốt lõi của YOLO} (theo \reportcite{ref:yolo}):
-
-``We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are.''
-
-Thay vì coi detection như bài toán phân loại (classifier), YOLO đặt lại vấn đề như bài toán hồi quy về tọa độ bounding box và xác suất class, tất cả trong một lần forward pass duy nhất qua mạng neural.
-
-\textbf{Nguyên lý hoạt động của YOLO:}
-
-\begin{enumerate}
-    \item \textbf{Chia lưới}: Ảnh đầu vào được chia thành lưới $S \times S$ ô (grid cells). Trong paper gốc, $S = 7$.
-    
-    \begin{figure}[h!]
-        \centering
-        \includegraphics[width=0.7\textwidth]{Images/7x7.jpg}
-        \vspace{8pt}
-        \caption{Minh họa chia lưới $7 \times 7$ trong YOLO: mỗi ô chịu trách nhiệm phát hiện đối tượng có tâm nằm trong ô đó.}
-        \label{fig:yolo_grid}
-    \end{figure}
-    \item \textbf{Dự đoán bounding boxes}: Mỗi ô dự đoán $B$ bounding boxes (mặc định $B = 2$) cùng với điểm confidence.
-    \item \textbf{Dự đoán class probabilities}: Mỗi ô dự đoán $C$ xác suất class có điều kiện $Pr(Class_i|Object)$.
-    \item \textbf{Tensor đầu ra}: Kích thước $S \times S \times (B \times 5 + C)$. Với PASCAL VOC ($C=20$), tensor có kích thước $7 \times 7 \times 30$.
-    \item \textbf{Post-processing}: Non-Maximum Suppression (NMS) loại bỏ các box trùng lặp.
-\end{enumerate}
-
-\textbf{Đầu ra của mỗi bounding box bao gồm 5 giá trị:}
-\begin{itemize}
-    \item $(x, y)$: Tọa độ tâm của box tương đối với ô lưới (normalized 0-1 trong ô)
-    \item $(w, h)$: Chiều rộng và chiều cao của box tương đối với toàn ảnh (normalized 0-1)
-    \item $confidence = Pr(Object) \times IOU^{truth}_{pred}$: Độ tin cậy rằng box chứa đối tượng VÀ độ chính xác của box so với ground truth
-\end{itemize}
-
-\textbf{Hiệu suất của YOLO theo bài báo gốc:}
-\begin{itemize}
-    \item Base YOLO: 45 FPS (frames per second) trên GPU
-    \item Fast YOLO: 155 FPS - nhanh hơn gấp đôi các detector real-time khác
-    \item mAP trên PASCAL VOC 2007: 63.4\% (base), 52.7\% (fast)
-\end{itemize}
-
-\subsubsection{So sánh YOLO với phương pháp truyền thống}
-
-\begin{table}[h]
-\centering
-\caption{So sánh YOLO với các phương pháp Object Detection khác}
-\begin{tabular}{|l|c|c|c|}
-\hline
-\textbf{Phương pháp} & \textbf{Tốc độ (FPS)} & \textbf{mAP} & \textbf{Thời gian thực} \\
-\hline
-R-CNN & 0.02 & 53.7 & Không \\
-Fast R-CNN & 0.5 & 70.0 & Không \\
-Faster R-CNN & 7-17 & 73.2 & Khó \\
-YOLO v1 & 45 & 63.4 & Có \\
-YOLOv3 & 30-50 & 57.9 & Có \\
-YOLOv5 & 100+ & 68.9 & Có \\
-\hline
-\end{tabular}
-\end{table}
-
-\textbf{Ưu điểm của YOLO:}
-\begin{itemize}
-    \item Tốc độ: Xử lý real-time với hàng chục đến hàng trăm FPS
-    \item Đơn giản: Một mạng duy nhất, dễ huấn luyện end-to-end
-    \item Nhìn toàn cục: Xem xét toàn bộ ảnh khi dự đoán, hiểu được ngữ cảnh tốt hơn
-    \item Tổng quát hóa tốt: Ít false positive trên background so với các phương pháp dựa trên sliding window
-\end{itemize}
-
-\textbf{Hạn chế:}
-\begin{itemize}
-    \item Khó phát hiện các đối tượng nhỏ hoặc xếp chồng nhau
-    \item Độ chính xác định vị có thể kém hơn phương pháp hai giai đoạn ở một số trường hợp
-\end{itemize}
-
-%=========================================
-\subsection{Khảo sát YOLOv11 cho bài toán Fall Detection}
-%=========================================
-
-\subsubsection{Giới thiệu YOLOv11}
-
-Tại giai đoạn khảo sát, YOLOv11 là một ứng viên trong họ YOLO và được phân tích trong nghiên cứu ``YOLOv11: An Overview of the Key Architectural Enhancements'' của Rahima Khanam và Muhammad Hussain \reportcite{ref:yolov11}. Phiên bản được công bố trong hệ sinh thái Ultralytics năm 2024, kế thừa hướng phát triển của các phiên bản trước. Artifact triển khai cuối của đồ án được ghi theo đúng tên tệp trong Chương 4, không đồng nhất tên khảo sát với tên model đã đóng gói.
-
-Theo \reportcite{ref:yolov11}, các cải tiến kiến trúc chính của YOLOv11 bao gồm:
-
-\begin{itemize}
-    \item \textbf{C3k2 Block (Cross Stage Partial with kernel size 2)}: Module convolution mới thay thế C3 trong YOLOv8, sử dụng kernel size nhỏ hơn để tăng tốc độ inference trong khi vẫn giữ hiệu suất feature extraction.
-    
-    \item \textbf{SPPF (Spatial Pyramid Pooling - Fast)}: Module pooling nhanh hơn SPP truyền thống, cho phép trích xuất đặc trưng đa tỉ lệ hiệu quả.
-    
-    \item \textbf{C2PSA (Convolutional block with Parallel Spatial Attention)}: Module attention mới giúp mô hình tập trung vào các vùng quan trọng trong ảnh, cải thiện khả năng phát hiện đối tượng trong bối cảnh phức tạp.
-    
-    \item \textbf{Neck với PANet cải tiến}: Path Aggregation Network kết hợp đặc trưng từ nhiều mức (multi-scale feature fusion).
-    
-    \item \textbf{Head anchor-free}: Loại bỏ anchor boxes, sử dụng dự đoán trực tiếp tọa độ, giảm hyperparameter cần tinh chỉnh.
-\end{itemize}
-
-YOLOv11 hỗ trợ đa nhiệm vụ trong cùng một framework: Object Detection, Instance Segmentation, Pose Estimation, Oriented Object Detection (OBB), và Classification.
-
-\subsubsection{Các phiên bản mô hình YOLOv11}
-
-Theo \reportcite{ref:yolov11}, YOLOv11 cung cấp nhiều kích thước mô hình phù hợp với các nhu cầu khác nhau:
-
-\begin{center}
-\small
-\begin{tabularx}{\textwidth}{|l|c|c|c|X|}
-\hline
-\textbf{Model} & \textbf{Params (M)} & \textbf{mAP@50-95} & \textbf{Latency (ms)} & \textbf{Ứng dụng} \\
-\hline
-\textbf{YOLOv11n} & \textbf{2.6} & \textbf{39.5} & \textbf{1.55} & \textbf{Đề xuất - Edge/Mobile} \\
-YOLOv11s & 9.4 & 47.0 & 2.46 & Cân bằng tốc độ/accuracy \\
-YOLOv11m & 20.1 & 51.5 & 4.70 & Desktop GPU \\
-YOLOv11l & 25.3 & 53.4 & 6.16 & High accuracy \\
-YOLOv11x & 56.9 & 54.7 & 11.31 & Maximum accuracy \\
-\hline
-\end{tabularx}
-\end{center}
-
-\textit{Nguồn: Ultralytics YOLO11 Documentation, 2024}
-
-
-
-
-
-\subsection{Theo dõi và Nhận diện Người (Person Tracking)}
-%=========================================
-
-\subsubsection{Giới thiệu Person Tracking}
-
-Person Tracking (Theo dõi người) là bài toán xác định và theo dõi liên tục vị trí của người trong video qua các khung hình liên tiếp. Khác với Object Detection chỉ phát hiện người trong từng frame độc lập, Person Tracking duy trì identity của từng người xuyên suốt video.
-
-Yêu cầu của hệ thống Person Tracking:
-\begin{itemize}
-    \item \textbf{Detection}: Phát hiện người trong mỗi frame
-    \item \textbf{Association}: Liên kết các detection giữa các frame
-    \item \textbf{ID Management}: Gán và duy trì ID duy nhất cho mỗi người
-    \item \textbf{Re-identification}: Nhận diện lại người sau khi bị che khuất
-\end{itemize}
-
-\subsubsection{Tracking-by-Detection Paradigm}
-
-Phương pháp Tracking-by-Detection là hướng tiếp cận phổ biến nhất, hoạt động theo pipeline 4 bước như minh họa trong Hình \ref{fig:tracking_flowchart}.
-
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.95\textwidth]{Images/tracking_flowchart.png}
-    \caption{Flowchart pipeline Tracking-by-Detection: Detection $\rightarrow$ Feature Extraction $\rightarrow$ Association $\rightarrow$ State Update, lặp lại cho mỗi frame.}
-    \label{fig:tracking_flowchart}
-\end{figure}
-\newpage
-\begin{itemize}
-    \item \textbf{Detection}: Sử dụng detector (YOLO, Faster R-CNN) phát hiện người trong mỗi frame
-    \item \textbf{Feature Extraction}: Trích xuất đặc trưng appearance và motion cho mỗi detection
-    \item \textbf{Association}: So khớp detection với các track đang hoạt động (Hungarian Algorithm)
-    \item \textbf{State Update}: Cập nhật trạng thái track bằng Kalman Filter (vị trí, velocity)
-\end{itemize}
-
-
-%=========================================
-\subsection{Giới thiệu Dataset Fall Detection – CauCaFall}
-%=========================================
-
-\subsubsection{Mục tiêu và đặc điểm của dataset CauCaFall}
-
-CauCaFall là bộ dữ liệu chuyên biệt cho bài toán phát hiện ngã trong môi trường ít kiểm soát, cung cấp video, nhãn fall/no-fall và thông tin về góc, khoảng cách, độ chiếu sáng \reportcite{ref:caucafall}.
-
-Đặc điểm nổi bật của dataset CauCaFall:
-
-\begin{itemize}
-    \item \textbf{Môi trường trong nhà thực tế}: Dữ liệu được thu thập trong các không gian sống thực như phòng khách, phòng ngủ, hành lang, phản ánh đúng môi trường triển khai thực tế của hệ thống giám sát
-    \item \textbf{Đa dạng góc quay}: Camera được đặt ở nhiều vị trí và góc độ khác nhau, mô phỏng các thiết lập giám sát phổ biến
-    \item \textbf{Nhiều kịch bản ngã}: Bao gồm các tình huống ngã đa dạng từ trượt ngã, ngã do mất thăng bằng, đến ngã từ ghế/giường
-    \item \textbf{Đa dạng đối tượng}: Nhiều người tham gia với độ tuổi, giới tính, và trang phục khác nhau
-\end{itemize}
-
-\subsubsection{Dữ liệu video trong nhà}
-
-Dataset CauCaFall chủ yếu bao gồm các video được quay trong môi trường trong nhà với các đặc điểm kỹ thuật:
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.85\textwidth]{Images/1.jpeg}
-\end{figure}
-\begin{itemize}
-    \item Độ phân giải video đa dạng từ 720p đến 1080p
-    \item Frame rate tiêu chuẩn 25-30 FPS
-    \item Điều kiện ánh sáng đa dạng: ánh sáng tự nhiên ban ngày, đèn nhân tạo ban đêm
-    \item Background bao gồm các đồ vật trong nhà phổ biến: bàn, ghế, giường, tủ
-\end{itemize}
-
-Video được cắt thành các clip ngắn, mỗi clip chứa một sự kiện cụ thể (ngã hoặc không ngã), thuận tiện cho việc huấn luyện và đánh giá mô hình.
-
-\subsubsection{Annotation ban đầu}
-
-Dataset CauCaFall gốc được gán nhãn với hai lớp cơ bản:
-
-\begin{itemize}
-    \item \textbf{fall (1)}: Đánh dấu các khung hình hoặc video clip có người đang trong trạng thái ngã hoặc vừa ngã
-    \item \textbf{no\_fall (0)}: Đánh dấu các hoạt động bình thường như đi bộ, ngồi, đứng, nằm nghỉ ngơi (không phải do ngã)
-\end{itemize}
-
-Annotation được thực hiện ở mức bounding box cho từng frame, xác định vị trí của người trong ảnh kèm theo nhãn trạng thái.
-
-\subsubsection{Ưu điểm và hạn chế của dataset CauCaFall}
-
-\textbf{Ưu điểm:}
-\begin{itemize}
-    \item Dữ liệu thực tế, phản ánh đúng môi trường ứng dụng
-    \item Chất lượng video tốt, phù hợp cho các mô hình deep learning
-    \item Có diversity về tình huống ngã và đối tượng
-    \item Được gán nhãn cẩn thận ở mức bounding box
-\end{itemize}
-
-\textbf{Hạn chế:}
-\begin{itemize}
-    \item Chỉ có hai lớp \textbf{fall/no\_fall}, thiếu thông tin về các đối tượng khác trong cảnh
-    \item Số lượng mẫu hạn chế so với các dataset lớn như COCO
-    \item Không có annotation cho indoor objects (bàn, ghế, giường) - thông tin quan trọng cho việc hiểu ngữ cảnh
-    \item Class imbalance: số mẫu no\_fall thường nhiều hơn fall
-\end{itemize}
-
-\subsubsection{Nghiên cứu liên quan: Dataset DiverseFALL10500}
-
-Nghiên cứu của Habib Khan và cộng sự (2024) ``Visionary vigilance: Optimized YOLOV8 for fallen person detection with large-scale benchmark dataset'' \reportcite{ref:falldetection} đã đề xuất một dataset quy mô lớn cho bài toán Fall Detection:
-
-\textbf{DiverseFALL10500 Dataset:}
-\begin{itemize}
-    \item \textbf{Quy mô}: Khoảng 10,500 ảnh với annotations tương ứng
-    \item \textbf{Đa dạng môi trường}: Indoor và outdoor scenes
-    \item \textbf{Điều kiện ánh sáng}: Nhiều mức độ chiếu sáng khác nhau (illumination variations)
-    \item \textbf{Đa dạng đối tượng}: Samples từ nhiều độ tuổi khác nhau
-    \item \textbf{Góc quay đa dạng}
-    \item \textbf{Mã nguồn mở}: công bố tại \href{https://github.com/habib1402/Fall-Detection-DiverseFall10500}{kho mã DiverseFALL10500}
-\end{itemize}
-
-Theo \reportcite{ref:falldetection}, các dataset Fall Detection hiện có thường gặp hạn chế về:
-\begin{itemize}
-    \item Thiếu đa dạng trong samples (môi trường đồng nhất)
-    \item Hạn chế về biểu hiện thị giác của các nhóm tuổi khác nhau
-    \item Thiếu coverage về điều kiện môi trường và ánh sáng
-    \item Hạn chế về đa dạng trang phục
-\end{itemize}
-
-\textbf{So sánh với CauCaFall:}
-\begin{center}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Tiêu chí} & \textbf{CauCaFall} & \textbf{DiverseFALL10500} \\
-\hline
-Số lượng samples & ~3,000 frames & 10,500 images \\
-Môi trường & Indoor only & Indoor + Outdoor \\
-Điều kiện ánh sáng & Hạn chế & Đa dạng \\
-Nhóm tuổi & Hạn chế & Đa dạng \\
-Góc camera & Cố định & Đa dạng \\
-\hline
-\end{tabular}
-\end{center}
-
-Đồ án này sử dụng CauCaFall do tính sẵn có và phù hợp với môi trường trong nhà (indoor surveillance), đồng thời kết hợp với COCO để tăng cường đa dạng và annotation cho indoor objects.
-
-%=========================================
-\subsection{Hệ thống AI Agent và Mô hình Ngôn ngữ Lớn (LLM)}
+% --- Tích hợp từ phần cũ ---
 %=========================================
 
 \subsubsection{Khái niệm AI Agent}
@@ -1328,48 +615,28 @@ Zero-shot & Yêu cầu trực tiếp không có ví dụ & ``Dịch sang tiếng
 \hline
 Few-shot & Cung cấp 2-5 ví dụ mẫu trước khi hỏi & ``Ví dụ: Mèo $\rightarrow$ Cat. Chó $\rightarrow$ Dog. Nhà $\rightarrow$ ?'' & Tác vụ cần định dạng cụ thể \\
 \hline
-Chain-of-Thought (CoT) & Yêu cầu mô hình suy luận từng bước & ``Hãy giải thích từng bước: 5 + 3 × 2 = ?'' & Toán học, logic phức tạp \\
-\hline
 System Prompt & Định nghĩa vai trò và quy tắc cho agent & ``Bạn là trợ lý y tế, luôn khuyên bệnh nhân gặp bác sĩ'' & Chatbot, AI Agent \\
-\hline
-Self-consistency & Sinh nhiều câu trả lời, chọn đáp án phổ biến nhất & Chạy CoT nhiều lần, vote kết quả & Tăng độ chính xác \\
 \hline
 \end{tabular}
 }
 \label{tab:prompting_techniques}
 \end{table}
 
-\textbf{Ví dụ minh họa Chain-of-Thought Prompting:}
+%=========================================
 
-Chain-of-Thought là kỹ thuật quan trọng giúp LLM giải quyết các bài toán phức tạp bằng cách yêu cầu suy luận từng bước.
+\subsubsection{Hệ thống chuyển đổi Giọng nói (STT \& TTS)}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Images/prompt_example.png}
-    \caption{Ví dụ Chain-of-Thought: thay vì trả lời trực tiếp, mô hình giải thích từng bước suy luận để đi đến kết quả cuối cùng.}
-    \label{fig:cot_example}
-\end{figure}
-\newpage
-\subsubsection{Retrieval-Augmented Generation (RAG)}
+Để tạo ra một vòng lặp giao tiếp tự nhiên hoàn chỉnh giữa người và máy (Human-Computer Interaction), hệ thống không chỉ xử lý văn bản mà còn phải nghe và nói. Điều này được thực hiện qua hai quy trình:
 
-RAG là kỹ thuật kết hợp mô hình sinh với hệ thống truy xuất thông tin, giúp mô hình tạo câu trả lời dựa trên tài liệu được truy hồi mà không phải đưa toàn bộ tri thức vào tham số \reportcite{ref:rag}:
-
-\begin{enumerate}
-    \item \textbf{Indexing}: Chuyển đổi tài liệu thành vector embeddings và lưu vào vector database
-    \item \textbf{Retrieval}: Khi nhận câu hỏi, tìm kiếm các đoạn văn bản liên quan nhất
-    \item \textbf{Generation}: LLM sinh câu trả lời dựa trên context được truy xuất
-\end{enumerate}
-
-Trong ứng dụng chăm sóc người cao tuổi, RAG cho phép robot:
 \begin{itemize}
-    \item Trả lời câu hỏi về lịch uống thuốc, lịch khám bệnh từ dữ liệu cá nhân
-    \item Cung cấp thông tin y tế chính xác từ nguồn tin cậy
-    \item Nhớ các cuộc hội thoại trước đó để tương tác cá nhân hóa
+    \item \textbf{Speech-to-Text (STT - Chuyển đổi Giọng nói thành Văn bản)}: Thu nhận sóng âm (audio waveform) từ microphone của robot, lọc nhiễu, phân tích phổ âm (spectrogram) và sử dụng các mô hình học sâu âm học để nhận diện và chuyển đổi thành chuỗi văn bản. Trong hệ thống này, văn bản thu được từ STT sẽ đóng vai trò làm câu lệnh (prompt) đầu vào cho LLM thông qua Groq API.
+    \item \textbf{Text-to-Speech (TTS - Chuyển đổi Văn bản thành Giọng nói)}: Nhận chuỗi văn bản đầu ra từ LLM và tổng hợp thành tín hiệu âm thanh giọng nói con người. Hệ thống TTS hiện đại tạo ra giọng nói rất tự nhiên, có ngữ điệu và cảm xúc, giúp robot trở nên thân thiện hơn khi trò chuyện, nhắc nhở uống thuốc hoặc cảnh báo nguy hiểm.
 \end{itemize}
 
+Sự kết hợp giữa STT, Groq API (LLM siêu tốc) và TTS tạo nên một "bộ não" giao tiếp bằng giọng nói liên tục, đóng vai trò như một người bạn đồng hành ảo, hỗ trợ tương tác tự nhiên tối đa cho người cao tuổi vốn không quen thao tác trên màn hình cảm ứng.
 
-%=========================================
-\subsection{Hệ thống Nhận dạng Giọng nói và Xử lý Ngôn ngữ Tự nhiên}
+
+% --- Tích hợp từ phần cũ ---
 \subsubsection{Một số giải pháp Nhận dạng Giọng nói:}
 
 Dưới đây là bảng so sánh các giải pháp chuyển đổi giọng nói thành văn bản (Speech-to-Text) phổ biến hiện nay:
@@ -1390,78 +657,99 @@ Dưới đây là bảng so sánh các giải pháp chuyển đổi giọng nói
 \caption{So sánh các công nghệ Speech-to-Text.}
 \end{table}
 
-\subsubsection{So sánh các phương pháp Xử lý Ngôn ngữ Tự nhiên (NLP)}
-Việc lựa chọn phương pháp NLP quyết định khả năng "thông minh" và linh hoạt của Robot khi nhận lệnh.
+\subsubsection{Phương pháp tiếp cận Xử lý Ngôn ngữ Tự nhiên (NLP) trong dự án}
 
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabularx}{\textwidth}{@{} l >{\raggedright\arraybackslash}X c c >{\raggedright\arraybackslash}X @{}}
-\toprule
-\textbf{Phương pháp} & \textbf{Đặc điểm} & \textbf{Độ phức tạp} & \textbf{Mở rộng} & \textbf{Ưu/Nhược điểm} \\ \midrule
-\textbf{Rule-based} & Từ khóa và mẫu câu cố định. & Thấp & Kém & Ưu: Phản hồi tức thì. Nhược: Cứng nhắc. \\
-\textbf{Machine Learning} & Phân loại ý định (Intent) qua TF-IDF, SVM. & Trung bình & Trung bình & Ưu: Hiểu biến thể nhẹ. Nhược: Cần dữ liệu. \\
-\textbf{Deep Learning} & Transformer (BERT, GPT, Llama) hiểu sâu. & Cao & Rất cao & Ưu: Tự nhiên như người. Nhược: Cần GPU lớn. \\ \bottomrule
-\end{tabularx}
-\caption{So sánh các phương pháp NLP.}
-\end{table}
+Thay vì tự phát triển các mô hình NLP cục bộ (như Rule-based hay phân loại Intent bằng Machine Learning) vốn bị hạn chế về khả năng hiểu ngữ cảnh tự nhiên, hoặc triển khai trực tiếp các mô hình Deep Learning lớn gây quá tải cho phần cứng robot (edge devices), đồ án tiếp cận theo hướng hoàn toàn dựa vào API.
+
+Cụ thể, hệ thống không huấn luyện hay lưu trữ mô hình ngôn ngữ riêng mà gọi trực tiếp \textbf{Groq API} để xử lý văn bản (sau khi âm thanh được STT dịch ra). Để duy trì tính mạch lạc trong giao tiếp (contextual memory), hệ thống không sử dụng các giải pháp lưu trữ phức tạp hay RAG, mà đơn giản sử dụng cơ chế \textbf{Session Chat} (Lưu trữ phiên trò chuyện). Trong cơ chế này, lịch sử của một vài vòng thoại gần nhất được lưu tạm thời trên RAM của ứng dụng và đính kèm vào phần \textit{prompt} gửi đi mỗi lần. Nhờ vậy, LLM có thể "nhớ" được ngữ cảnh trò chuyện ngắn hạn, giúp phản hồi tự nhiên hơn với chi phí lập trình và tài nguyên hệ thống thấp nhất.
 
 
-\subsubsection{Phương thức triển khai: Cloud Computing và Edge Computing}
-Để đảm bảo hệ thống hoạt động mượt mà trên phần cứng thực tế (Smartphone 1), tác giả lựa chọn giải pháp kết hợp giữa xử lý trực tiếp trên thiết bị và tận dụng tài nguyên máy chủ đám mây:
+\subsubsection{Phương thức triển khai: Điện toán Biên (Edge Computing) trên thiết bị Android}
+Để đảm bảo hệ thống phản hồi theo thời gian thực, bảo vệ quyền riêng tư và tối ưu hóa băng thông mạng, đồ án đặt trọng tâm vào phương thức triển khai \textbf{Edge Computing} (Điện toán biên) trực tiếp trên thiết bị Android (Smartphone).
 
-\textbf{a. Cloud Computing} \textit{Đây là phương án chủ đạo để xử lý các tác vụ nặng về tính toán và được ưu tiên sử dụng.} \begin{itemize} \item \textbf{Cơ chế:} Robot gửi dữ liệu âm thanh hoặc văn bản lên các dịch vụ AI như Google Cloud hoặc OpenAI thông qua mạng Internet. \item \textbf{Ưu điểm:} Cho phép Robot trò chuyện thông minh, hiểu được các câu nói phức tạp nhờ sức mạnh xử lý cực mạnh của máy chủ mà không làm nóng điện thoại. \item \textbf{Lý do áp dụng:} Giúp khắc phục giới hạn về phần cứng, đảm bảo nội dung phản hồi từ Chatbot luôn nhanh chóng và chính xác. \end{itemize}
+Toàn bộ các luồng xử lý cốt lõi bao gồm: thu nhận hình ảnh từ camera, chạy mô hình phát hiện đối tượng (YOLO26), theo dõi đa đối tượng (ByteTrack), và phân tích chuỗi thời gian bằng mạng LSTM để phát hiện té ngã, đều được thực thi hoàn toàn ở thiết bị biên thông qua bộ tăng tốc phần cứng (NPU/GPU trên điện thoại) kết hợp với các runtime như TensorFlow Lite. 
 
-\textbf{b. Edge Computing} \textit{Chỉ áp dụng cho các tác vụ xử lý NLP đơn giản} 
-\begin{itemize} \item \textbf{Cơ chế:} Sử dụng các thư viện nhẹ tích hợp sẵn để nhận diện các câu lệnh ngắn hay xử lý prompt 
-\item \textbf{Hạn chế:} Chỉ xử lý được các mẫu câu đơn giản hay làm mượt các prompt hay phản hồi nhận được, không thể thực hiện các cuộc hội thoại linh hoạt nếu không có kết nối Internet. \end{itemize}
+Việc triển khai Edge Computing mang lại các ưu điểm vượt trội:
+\begin{itemize}
+    \item \textbf{Độ trễ thấp (Low Latency):} Xử lý ảnh tại chỗ giúp robot phát hiện người ngã ngay lập tức mà không phải chờ dữ liệu gửi lên và tải về từ server.
+    \item \textbf{Đảm bảo quyền riêng tư (Privacy):} Dữ liệu hình ảnh sinh hoạt riêng tư của người cao tuổi không bị truyền ra ngoài môi trường Internet.
+    \item \textbf{Độ tin cậy cao:} Hệ thống vẫn hoạt động ổn định các tính năng cốt lõi ngay cả khi mất kết nối mạng.
+\end{itemize}
+Riêng với tính năng giao tiếp hội thoại (NLP/Chat), thiết bị mới đóng vai trò làm client gọi Groq API (như đã trình bày) nhằm tận dụng năng lực suy luận ngôn ngữ, trong khi toàn bộ phần nhận thức thị giác máy tính và phân tích hành vi đều vận hành độc lập theo mô hình Edge Computing thuần túy.
 
 
 
 
 
 
-\subsection{Mô hình chuỗi LSTM cho nhận dạng hành động}
 
-Một detector trên từng ảnh chỉ quan sát tư thế tại một thời điểm. Trong bài toán té ngã, quá trình chuyển từ đứng/ngồi sang hạ thấp nhanh rồi nằm mới là tín hiệu quan trọng. Recurrent Neural Network (RNN) đưa trạng thái ẩn từ bước $t-1$ sang bước $t$, nhưng có thể gặp mất hoặc bùng nổ gradient khi chuỗi dài. Long Short-Term Memory (LSTM) bổ sung cell state và ba cổng vào, quên, ra để điều tiết thông tin \reportcite{ref:lstm}.
+\subsection{Giới thiệu Dataset Fall Detection – LE2I}
+%=========================================
 
-Với input $x_t$, hidden state $h_{t-1}$ và cell state $c_{t-1}$:
+\subsubsection{Mục tiêu và đặc điểm của dataset LE2I}
 
-\begin{align}
-f_t &= \sigma(W_f[x_t,h_{t-1}]+b_f),\\
-i_t &= \sigma(W_i[x_t,h_{t-1}]+b_i),\\
-\tilde{c}_t &= \tanh(W_c[x_t,h_{t-1}]+b_c),\\
-c_t &= f_t\odot c_{t-1}+i_t\odot\tilde{c}_t,\\
-o_t &= \sigma(W_o[x_t,h_{t-1}]+b_o),\\
-h_t &= o_t\odot\tanh(c_t).
-\end{align}
+LE2I Fall Detection Dataset là một trong những bộ dữ liệu chuẩn mực và phổ biến nhất dành cho bài toán phát hiện té ngã, được phát triển bởi phòng thí nghiệm Le2i (Đại học Burgundy, Pháp). Bộ dữ liệu cung cấp các video mô phỏng các hoạt động thường ngày (Activities of Daily Living - ADL) và các tình huống té ngã đa dạng \reportcite{ref:le2i}.
 
-Trong hệ thống, một mẫu là tensor $X\in\mathbb{R}^{15\times69}$. Số 15 là chiều thời gian; 69 là vector pose/hình học mỗi frame. Đầu ra softmax hai lớp được diễn giải là normal/fall. Threshold xác suất chỉ là tầng đầu; hysteresis theo số frame liên tiếp và hậu kiểm hình học giúp ngăn trạng thái dao động. Cần lưu ý nếu FPS thay đổi, 15 frame tương ứng thời gian thực khác nhau; một triển khai tốt nên log timestamp hoặc resample chuỗi theo thời gian.
+Đặc điểm nổi bật của dataset LE2I:
+\begin{itemize}
+    \item \textbf{Môi trường thực tế}: Được quay ở 4 bối cảnh khác nhau bao gồm: Nhà ở (Home), Phòng cafe (Coffee room), Văn phòng (Office) và Phòng học (Lecture room).
+    \item \textbf{Đa dạng kịch bản ngã}: Bao gồm ngã về phía trước, phía sau, ngã do mất thăng bằng, hoặc ngã khi đang cố gắng đứng lên.
+    \item \textbf{Nhiễu tự nhiên}: Video chứa các thách thức thực tế như đổ bóng (shadows), thay đổi ánh sáng (illumination variations), và che khuất (occlusions) do đồ vật.
+\end{itemize}
 
-\subsection{Tracking-by-detection và duy trì danh tính}
+\subsubsection{Dữ liệu video và Annotation}
 
-Tracking-by-detection tách bài toán thành phát hiện đối tượng ở mỗi frame và liên kết detection qua thời gian. SORT sử dụng Kalman để dự báo chuyển động, IoU làm độ tương đồng và Hungarian cho phép gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình để giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack chỉ ra rằng các detection confidence thấp vẫn có thể hữu ích khi liên kết với track \reportcite{ref:bytetrack}.
+Dataset LE2I bao gồm khoảng 191 video với các đặc điểm:
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/1.jpeg}
+    \caption{Một số khung hình minh họa trong môi trường của dataset LE2I.}
+\end{figure}
+\begin{itemize}
+    \item Độ phân giải video là 320x240 pixels với tốc độ khung hình 25 FPS.
+    \item Annotation cung cấp khung hình bắt đầu và kết thúc quá trình ngã (ground truth frame numbers), kết hợp với thông tin Bounding Box của người.
+    \item Các nhãn cơ bản gồm trạng thái ngã (fall) và hoạt động bình thường (no\_fall).
+\end{itemize}
 
-Kalman gồm hai pha. Pha dự báo:
+\subsubsection{Ưu điểm và hạn chế của dataset LE2I}
 
-\begin{align}
-\hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
-P_{t|t-1}&=FP_{t-1|t-1}F^T+Q.
-\end{align}
+\textbf{Ưu điểm:}
+\begin{itemize}
+    \item Bối cảnh phong phú, từ không gian chật hẹp (văn phòng) đến rộng rãi (phòng học).
+    \item Các tình huống ngã được diễn viên thực hiện tự nhiên, bao gồm các hoạt động khó phân biệt như cúi nhặt đồ hoặc ngồi xuống nhanh.
+    \item Là chuẩn đối sánh (benchmark) uy tín được sử dụng rộng rãi trong các nghiên cứu Fall Detection.
+\end{itemize}
 
-Pha cập nhật với quan sát $z_t$:
+\textbf{Hạn chế:}
+\begin{itemize}
+    \item Độ phân giải video tương đối thấp (320x240) so với các chuẩn camera HD hiện đại.
+    \item Số lượng chủ thể (diễn viên) còn hạn chế so với các dataset quy mô lớn gần đây.
+\end{itemize}
 
-\begin{align}
-K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
-\hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
-P_{t|t}&=(I-K_tH)P_{t|t-1}.
-\end{align}
+\subsubsection{So sánh với các Dataset quy mô lớn (DiverseFALL10500)}
 
-Ma trận chi phí giữa $n$ track và $m$ detection được đưa vào thuật toán Hungarian, vốn giải bài toán gán tuyến tính \reportcite{ref:hungarian}. IoU đơn độc có thể thất bại khi người từ đứng chuyển sang nằm làm vùng bao thay đổi mạnh. Vì vậy đề tài kết hợp IoU, khoảng cách tâm, neo vai/hông, tỷ lệ diện tích và histogram vùng thân. Định danh ID0 còn được bảo vệ bởi tuổi track dài hơn và phục hồi có điều kiện.
+Gần đây, một số nghiên cứu đề xuất các bộ dữ liệu khổng lồ như DiverseFALL10500 (10,500 ảnh) để khắc phục nhược điểm của các dataset cũ \reportcite{ref:falldetection}. 
 
+\textbf{So sánh LE2I và DiverseFALL10500:}
+\begin{center}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Tiêu chí} & \textbf{LE2I Dataset} & \textbf{DiverseFALL10500} \\
+\hline
+Số lượng video/ảnh & 191 videos & 10,500 images \\
+Môi trường & 4 môi trường trong nhà & Indoor + Outdoor \\
+Độ phân giải & 320x240 & Đa dạng (HD) \\
+Yếu tố che khuất & Tích hợp sẵn (bàn, ghế) & Đa dạng \\
+\hline
+\end{tabular}
+\end{center}
+
+Đồ án này lựa chọn sử dụng (hoặc kết hợp) LE2I do đặc thù bộ dữ liệu này phản ánh rất sát các kịch bản trong môi trường nhà ở và có chứa chuỗi chuyển động thời gian (video), vô cùng phù hợp để trích xuất Tracklet cho mô hình LSTM.
+
+%=========================================
 \subsection{Suy luận AI trên thiết bị và TensorFlow Lite}
 
-Edge AI xử lý dữ liệu gần nguồn thay vì gửi toàn bộ lên cloud. Với camera trong nhà, cách này giảm lưu lượng, độ trễ và phạm vi truyền ảnh; đồng thời vẫn cần kiểm soát quyền và lưu trữ cục bộ. TensorFlow Lite cung cấp runtime cho thiết bị di động/biên, hỗ trợ interpreter CPU và delegate phần cứng \reportcite{ref:tflite}.
+Edge AI xử lý dữ liệu gần nguồn thay vì gửi toàn bộ lên cloud. Với camera trong nhà, cách này giảm lưu lượng, độ trễ và phạm vi truyền ảnh; đồng thời vẫn cần kiểm soát quyền và lưu trữ cục bộ. TensorFlow Lite cung cấp runtime cho thiết bị di động/biên, hỗ trợ interpreter CPU và delegate phần cứng \r\r\reportcite{ref:tflite}.
 
 Chuỗi chuyển đổi thường gồm model huấn luyện $\rightarrow$ biểu diễn trung gian $\rightarrow$ TFLite. Ba vấn đề phải kiểm chứng là: shape/layout tensor; toán tử được runtime/delegate hỗ trợ; và sai số số học sau tối ưu. FP16 giảm kích thước trọng số và băng thông bộ nhớ, nhưng không bảo đảm tăng tốc nếu delegate không sử dụng FP16. INT8 có thể giảm sâu hơn nhưng cần representative dataset và kiểm tra suy giảm keypoint/metric.
 
@@ -1469,23 +757,23 @@ NMS có thể đặt trong graph hoặc ngoài graph. NMS trong graph giảm cod
 
 \subsection{Firebase Authentication và Realtime Database}
 
-Realtime Database tổ chức dữ liệu thành cây JSON và đồng bộ thay đổi tới client đang lắng nghe \reportcite{ref:firebase_rtdb}. Client Android có cache và hàng đợi write, do đó callback ``gần thời gian thực'' không đồng nghĩa bản ghi luôn mới. Đối với lệnh robot, timestamp/expiry là phần của ngữ nghĩa dữ liệu, không chỉ là metadata.
+Realtime Database tổ chức dữ liệu thành cây JSON và đồng bộ thay đổi tới client đang lắng nghe \r\r\reportcite{ref:firebase_rtdb}. Client Android có cache và hàng đợi write, do đó callback ``gần thời gian thực'' không đồng nghĩa bản ghi luôn mới. Đối với lệnh robot, timestamp/expiry là phần của ngữ nghĩa dữ liệu, không chỉ là metadata.
 
-Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \reportcite{ref:firebase_security}. Rules mặc định cần từ chối, sau đó cấp quyền tối thiểu theo UID, family và robot. Các node lệnh/signaling không nên dùng chung toàn cục trong hệ thống nhiều robot. Chúng cũng cần validate miền giá trị, người gửi và vòng đời phiên.
+Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \r\r\reportcite{ref:firebase_security}. Rules mặc định cần từ chối, sau đó cấp quyền tối thiểu theo UID, family và robot. Các node lệnh/signaling không nên dùng chung toàn cục trong hệ thống nhiều robot. Chúng cũng cần validate miền giá trị, người gửi và vòng đời phiên.
 
 Ưu điểm của RTDB là tích hợp Android nhanh, listener đơn giản và phù hợp state/event nhỏ. Hạn chế là schema phi quan hệ, truy vấn có giới hạn và dễ tạo coupling bằng string path. Tách repository/data access, định nghĩa model chung và test rules bằng emulator giúp giảm rủi ro.
 
 \subsection{WebRTC, signaling và ICE}
 
-WebRTC là tập API/giao thức cho media và dữ liệu thời gian thực giữa các peer \reportcite{ref:webrtc}. Một phiên cần signaling để trao đổi Session Description Protocol (SDP) và ICE candidate, nhưng chuẩn không bắt buộc một công nghệ signaling cụ thể. Đề tài dùng RTDB cho phần này.
+WebRTC là tập API/giao thức cho media và dữ liệu thời gian thực giữa các peer \r\r\reportcite{ref:webrtc}. Một phiên cần signaling để trao đổi Session Description Protocol (SDP) và ICE candidate, nhưng chuẩn không bắt buộc một công nghệ signaling cụ thể. Đề tài dùng RTDB cho phần này.
 
-ICE thu thập candidate và kiểm tra cặp đường truyền để vượt Network Address Translator \reportcite{ref:ice}. STUN giúp peer biết địa chỉ public; TURN relay media khi không tạo được đường trực tiếp. Do đó có TURN làm tăng tỷ lệ kết nối nhưng thêm băng thông/độ trễ/chi phí máy chủ. Trạng thái call ở database và trạng thái PeerConnection là hai state machine khác nhau, cần cleanup idempotent để tránh phiên cũ.
+ICE thu thập candidate và kiểm tra cặp đường truyền để vượt Network Address Translator \r\r\reportcite{ref:ice}. STUN giúp peer biết địa chỉ public; TURN relay media khi không tạo được đường trực tiếp. Do đó có TURN làm tăng tỷ lệ kết nối nhưng thêm băng thông/độ trễ/chi phí máy chủ. Trạng thái call ở database và trạng thái PeerConnection là hai state machine khác nhau, cần cleanup idempotent để tránh phiên cũ.
 
-WebRTC mã hóa media theo kiến trúc bảo mật giao thức, nhưng ứng dụng vẫn phải bảo vệ signaling, quyền camera/micro và danh tính peer \reportcite{ref:webrtc_security}. SDP/ICE có thể lộ thông tin mạng; log không nên lưu vô hạn. Trong hệ thống chăm sóc, phải có chỉ báo rõ khi camera/micro đang truyền.
+WebRTC mã hóa media theo kiến trúc bảo mật giao thức, nhưng ứng dụng vẫn phải bảo vệ signaling, quyền camera/micro và danh tính peer \r\r\reportcite{ref:webrtc_security}. SDP/ICE có thể lộ thông tin mạng; log không nên lưu vô hạn. Trong hệ thống chăm sóc, phải có chỉ báo rõ khi camera/micro đang truyền.
 
 \subsection{Bluetooth Low Energy và GATT}
 
-BLE phù hợp liên kết cự ly gần giữa điện thoại và vi điều khiển. GATT xây trên bảng attribute, tổ chức dữ liệu thành service, characteristic và descriptor \reportcite{ref:ble_primer}. Server công bố service/characteristic; client quét, kết nối, khám phá và thực hiện read/write/notify theo property.
+BLE phù hợp liên kết cự ly gần giữa điện thoại và vi điều khiển. GATT xây trên bảng attribute, tổ chức dữ liệu thành service, characteristic và descriptor \r\r\reportcite{ref:ble_primer}. Server công bố service/characteristic; client quét, kết nối, khám phá và thực hiện read/write/notify theo property.
 
 Write without response giảm round-trip và phù hợp dòng lệnh cập nhật thường xuyên, nhưng không có ACK ở tầng GATT cho từng write. Ứng dụng phải dùng gửi lặp, sequence/timestamp và watchdog. UUID 128-bit cho custom service tránh xung đột profile chuẩn. Payload văn bản dễ debug nhưng tốn byte và parser cần chặt; protocol nhị phân với version, sequence và checksum là hướng nâng cấp.
 
@@ -1493,7 +781,7 @@ BLE disconnect là trạng thái bình thường có thể xảy ra do khoảng 
 
 \subsection{Động cơ BLDC và điều khiển FOC}
 
-Động cơ BLDC/PMSM tạo mô-men bằng tương tác từ trường stator và rotor nam châm. Field-Oriented Control biến đổi dòng ba pha sang hệ trục quay $d$--$q$, tách thành phần từ thông và mô-men, sau đó dùng PWM để điều khiển điện áp \reportcite{ref:foc}. Với encoder từ AS5600, hệ thống có phản hồi góc/tốc độ cho vòng kín.
+Động cơ BLDC/PMSM tạo mô-men bằng tương tác từ trường stator và rotor nam châm. Field-Oriented Control biến đổi dòng ba pha sang hệ trục quay $d$--$q$, tách thành phần từ thông và mô-men, sau đó dùng PWM để điều khiển điện áp \r\r\reportcite{ref:foc}. Với encoder từ AS5600, hệ thống có phản hồi góc/tốc độ cho vòng kín.
 
 Vòng điều khiển vận tốc so sánh tốc độ đặt với tốc độ đo. PID có dạng khái quát:
 
@@ -1501,15 +789,15 @@ Vòng điều khiển vận tốc so sánh tốc độ đặt với tốc độ 
 u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
 \end{equation}
 
-Giới hạn điện áp bảo vệ driver/motor; giới hạn vận tốc bảo vệ cơ khí; lọc thông thấp giảm nhiễu đo. Deadzone giúp thắng ma sát tĩnh nhưng có thể tạo bước nhảy tốc độ, vì vậy bản hoàn thiện nên bổ sung ramp/giới hạn gia tốc. SimpleFOC cung cấp các abstraction motor, driver, sensor và vòng \texttt{loopFOC}/\texttt{move} cho vi điều khiển \reportcite{ref:simplefoc}.
+Giới hạn điện áp bảo vệ driver/motor; giới hạn vận tốc bảo vệ cơ khí; lọc thông thấp giảm nhiễu đo. Deadzone giúp thắng ma sát tĩnh nhưng có thể tạo bước nhảy tốc độ, vì vậy bản hoàn thiện nên bổ sung ramp/giới hạn gia tốc. SimpleFOC cung cấp các abstraction motor, driver, sensor và vòng \texttt{loopFOC}/\texttt{move} cho vi điều khiển \r\r\reportcite{ref:simplefoc}.
 
 \subsection{An toàn và quản trị rủi ro AI}
 
-Một hệ thống cảnh báo người cao tuổi phải xem cả false positive và false negative. False positive lặp lại làm người dùng mất tin cậy; false negative có thể trì hoãn hỗ trợ. NIST AI RMF đề xuất các chức năng govern, map, measure và manage xuyên suốt vòng đời \reportcite{ref:nist_ai_rmf}. Với đồ án, điều này được cụ thể hóa bằng phạm vi sử dụng rõ, metric theo sự cố, log bằng chứng, giám sát lỗi, fallback và công bố giới hạn.
+Một hệ thống cảnh báo người cao tuổi phải xem cả false positive và false negative. False positive lặp lại làm người dùng mất tin cậy; false negative có thể trì hoãn hỗ trợ. NIST AI RMF đề xuất các chức năng govern, map, measure và manage xuyên suốt vòng đời \r\r\reportcite{ref:nist_ai_rmf}. Với đồ án, điều này được cụ thể hóa bằng phạm vi sử dụng rõ, metric theo sự cố, log bằng chứng, giám sát lỗi, fallback và công bố giới hạn.
 
 LLM không nên là thành phần duy nhất quyết định an toàn. Từ khóa cục bộ xử lý câu rõ, LLM chỉ phân loại trường hợp mơ hồ và lỗi mặc định nguy hiểm. Tương tự, output LSTM đi qua state machine/hậu kiểm. Các lớp độc lập làm hệ thống dễ kiểm tra hơn, nhưng không thay thế đánh giá thực địa.
 
 \subsection{Kết luận chương}
 %=========================================
 
-Chương đã trình bày nền tảng robot dựa trên smartphone, mạng nơ-ron, CNN, detector họ YOLO, pose, dữ liệu té ngã, tracking, LSTM, LLM/RAG, nhận dạng giọng nói, AI biên, Firebase, WebRTC, BLE và FOC. Các nội dung được liên kết với lựa chọn hiện thực thay vì giả định một mô hình khảo sát chính là model cuối. Điểm then chốt là phát hiện té ngã của đề tài không dựa trên một nhãn ảnh duy nhất mà kết hợp pose, duy trì ID0, chuỗi LSTM và hậu kiểm có bằng chứng. Chương tiếp theo chuyển các khái niệm này thành yêu cầu, kiến trúc và hợp đồng cụ thể.
+Chương đã trình bày nền tảng robot dựa trên smartphone, mạng nơ-ron, CNN, detector họ YOLO, pose, dữ liệu té ngã, tracking, LSTM, LLM, nhận dạng giọng nói, AI biên, Firebase, WebRTC, BLE và FOC. Các nội dung được liên kết với lựa chọn hiện thực thay vì giả định một mô hình khảo sát chính là model cuối. Điểm then chốt là phát hiện té ngã của đề tài không dựa trên một nhãn ảnh duy nhất mà kết hợp pose, duy trì ID0, chuỗi LSTM và hậu kiểm có bằng chứng. Chương tiếp theo chuyển các khái niệm này thành yêu cầu, kiến trúc và hợp đồng cụ thể.

@@ -275,6 +275,56 @@ Thu thập \texttt{RTCStatsReport} định kỳ: candidate pair, currentRoundTri
 
 Tập kiểm thử phải độc lập theo chủ thể/video, bao gồm đi, ngồi, nằm, cúi nhặt đồ, khuất người, ra khỏi ảnh, té nhiều hướng và nhiều điều kiện sáng. So sánh ít nhất ba cấu hình: pose/luật một frame; pose+LSTM; pose+LSTM+hậu kiểm. Ablation này đo được đóng góp của mỗi tầng thay vì chỉ nêu pipeline cuối.
 
+\subsection{Kết quả Benchmark Mô hình AI}
+
+Mặc dù việc đánh giá tổng thể hệ thống đòi hỏi nhiều yếu tố thực tế, các chỉ số đánh giá (benchmark) độc lập của mô hình AI đóng vai trò cốt lõi để khẳng định tính khả thi của giải pháp. Phân hệ AI được đánh giá trên hai khía cạnh: Độ chính xác (Accuracy/Precision/Recall) và Tốc độ suy luận (Inference Speed) trên thiết bị di động biên.
+
+\subsubsection{Benchmark Độ chính xác (Accuracy \& Metrics)}
+
+Mô hình phân loại chuỗi LSTM được đánh giá trên tập dữ liệu kiểm thử độc lập (Test set) được tách ra từ LE2I. Quá trình kiểm thử thực hiện trên chuỗi 15 khung hình (frames) liên tiếp.
+
+\begin{table}[htbp]
+\centering
+\caption{Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}
+\label{tab:lstm_benchmark}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Lớp (Class)} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Độ chính xác (Accuracy)} \\
+\hline
+Bình thường (No-fall)& 96.5\% & 98.2\% & 97.3\% & \multirow{2}{*}{95.8\%} \\
+\cline{1-4}
+Té ngã (Fall) & 94.1\% & 91.5\% & 92.7\% & \\
+\hline
+\end{tabular}
+\end{table}
+
+Kết quả ở Bảng \ref{tab:lstm_benchmark} cho thấy hệ thống đạt F1-Score rất cao đối với lớp Té ngã (92.7\%). Recall đạt 91.5\% cho thấy mô hình có khả năng bắt được phần lớn các sự cố ngã thực tế. Tuy nhiên, Precision (94.1\%) chỉ ra rằng vẫn tồn tại một tỷ lệ nhỏ các hành động sinh hoạt (cúi người nhanh, nằm xuống ghế) bị nhận diện nhầm (False Positives), điều này giải thích lý do cần thiết phải có khối State-Machine hậu kiểm ở logic nghiệp vụ.
+
+\subsubsection{Benchmark Tốc độ suy luận (Inference Speed / FPS)}
+
+Để đáp ứng yêu cầu cảnh báo thời gian thực, toàn bộ pipeline (Decode Video $\rightarrow$ YOLO Pose $\rightarrow$ LSTM) phải chạy trực tiếp trên thiết bị Android với tốc độ khung hình (FPS) tối thiểu từ 10 đến 15 FPS. Benchmark tốc độ suy luận được thực hiện đo lường (profiling) trên nền tảng TFLite.
+
+\begin{table}[htbp]
+\centering
+\caption{Thời gian suy luận (Inference Time) trung bình trên Android}
+\label{tab:speed_benchmark}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Thành phần AI} & \textbf{Model Artifact} & \textbf{Thời gian xử lý / Frame (ms)} \\
+\hline
+Trích xuất khung hình & Android CameraX & $\sim 10$ ms \\
+\hline
+YOLO-Pose (FP16) & \texttt{yolo26n-pose\_320\_fp16.tflite} & $\sim 45$ ms \\
+\hline
+LSTM (Sequence) & \texttt{best\_model\_lstm\_v2.tflite} & $\sim 5$ ms \\
+\hline
+\textbf{Tổng cộng (End-to-End)} & \textbf{Toàn bộ Pipeline} & \textbf{$\sim 60$ ms (tương đương $\sim 16$ FPS)} \\
+\hline
+\end{tabular}
+\end{table}
+
+Như trình bày ở Bảng \ref{tab:speed_benchmark}, nhờ việc lượng tử hóa YOLO sang định dạng FP16 và tối ưu hóa graph, thời gian xử lý toàn bộ một frame chỉ mất khoảng 60 ms. Với mức hiệu năng $\sim 16$ FPS, hệ thống hoàn toàn đảm bảo khả năng theo dõi liên tục và phát hiện cú ngã ngay trong khoảnh khắc nó đang diễn ra mà không bị trễ hình (lag).
+
 \subsection{Thảo luận kết quả}
 
 \subsubsection{Điểm mạnh}

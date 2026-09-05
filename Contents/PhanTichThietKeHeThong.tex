@@ -190,6 +190,45 @@ UC10 & Xem nhật ký & Người chăm sóc & Danh sách sự kiện theo thời
 
 Đặc tả đầy đủ tiền điều kiện, luồng chính, ngoại lệ và hậu điều kiện được trình bày ở Phụ lục. Việc tách đặc tả giúp chương thiết kế tập trung vào quan hệ giữa use case và kiến trúc.
 
+\subsection{Giải pháp AI cho chức năng phát hiện té ngã (Fall Detection)}
+
+Việc xây dựng một hệ thống phát hiện té ngã đáng tin cậy trong môi trường thực tế gặp phải nhiều thách thức lớn, từ dữ liệu, giới hạn của mô hình học sâu tĩnh, cho đến các logic nghiệp vụ hậu xử lý. Dưới đây là phân tích chi tiết về các giải pháp thiết kế được áp dụng.
+
+\subsubsection{Những khó khăn từ dữ liệu (Dataset)}
+\begin{itemize}
+    \item \textbf{Tính khan hiếm và thiếu tự nhiên}: Rất khó để thu thập dữ liệu té ngã thực tế của người cao tuổi do các vấn đề y đức và an toàn. Hầu hết các bộ dữ liệu hiện nay (như LE2I) đều do diễn viên mô phỏng. Chuyển động mô phỏng thường có phản xạ bảo vệ, đôi khi khác biệt so với cú ngã thực sự của người già yếu.
+    \item \textbf{Mất cân bằng lớp (Class Imbalance)}: Các hoạt động sinh hoạt hàng ngày (ADL - Activities of Daily Living) như đi lại, ngồi, đứng chiếm đến hơn 90\% thời lượng video, trong khi khoảnh khắc ngã chỉ diễn ra trong vòng 1-2 giây.
+    \item \textbf{Các hoạt động dễ gây nhầm lẫn (False Positives)}: Một số hành động bình thường như cúi người nhặt đồ, ngồi phịch xuống ghế sâu, hoặc chủ động nằm xuống giường/sàn nhà có tính chất động lực học rất giống với té ngã, khiến mô hình dễ báo động nhầm.
+\end{itemize}
+
+\subsubsection{Tại sao YOLO thường không đủ mà phải kết hợp LSTM?}
+YOLO (You Only Look Once) là một mạng nơ-ron tích chập (CNN) xuất sắc trong việc trích xuất đặc trưng không gian (spatial features). Nó có thể nhận diện chính xác vị trí, hộp bao (bounding box) và các điểm khớp xương (keypoints) của người trong \textit{một khung hình tĩnh}.
+
+Tuy nhiên, YOLO hoàn toàn thiếu đi \textbf{nhận thức về mặt thời gian (temporal context)}. Giả sử YOLO phân tích một bức ảnh và thấy một người đang ở tư thế nằm ngang trên sàn nhà. YOLO không thể trả lời câu hỏi: Người này đang chủ động nằm ngủ, hay vừa bị vấp ngã đập người xuống đất? 
+
+Để giải quyết vấn đề này, hệ thống cần quan sát một chuỗi thời gian liên tục. Giải pháp ở đây là kết hợp YOLO với mạng hồi quy LSTM:
+\begin{enumerate}
+    \item \textbf{YOLO (Trích xuất đặc trưng)}: Đóng vai trò là con mắt, liên tục trích xuất tọa độ bộ xương (Skeleton) của đối tượng theo từng frame.
+    \item \textbf{LSTM (Phân tích chuyển động)}: Nhận đầu vào là một chuỗi liên tiếp (ví dụ 30 frames gần nhất) các tọa độ xương từ YOLO. LSTM sẽ học được động lực học của quá trình ngã (sự sụp đổ đột ngột của trọng tâm, gia tốc thay đổi), từ đó phân biệt rõ ràng giữa một cú ngã thật sự (chuyển động nhanh từ đứng sang nằm) với hành động nằm xuống từ từ.
+\end{enumerate}
+
+\subsubsection{Vì sao LSTM vẫn chưa đủ nên cần thêm State-Machine?}
+Mặc dù sự kết hợp YOLO + LSTM có thể nhận diện chính xác khoảnh khắc té ngã, nhưng áp dụng trực tiếp kết quả này vào ứng dụng y tế là chưa đủ. Các vấn đề phát sinh bao gồm:
+\begin{itemize}
+    \item \textbf{Nhiễu mô hình (Model Noise)}: Đôi khi LSTM xuất ra dự đoán "Fall" trong 1-2 frame lẻ tẻ do bị che khuất hoặc góc cam bất lợi, sau đó lại chuyển về "Normal".
+    \item \textbf{Khả năng tự phục hồi (Recovery)}: Người cao tuổi có thể trượt chân ngã nhẹ nhưng không chấn thương và tự đứng dậy được ngay lập tức. Nếu hệ thống lập tức hú còi báo động khẩn cấp và gọi cho người thân, điều này sẽ tạo ra sự phiền toái rất lớn (false alarm).
+\end{itemize}
+
+Do đó, đồ án tích hợp thêm một \textbf{Máy trạng thái (State-Machine)} nằm trên cùng của tầng suy luận AI nhằm hậu kiểm và đưa ra quyết định cuối cùng:
+\begin{itemize}
+    \item \textbf{Trạng thái Bình thường (Normal)}: Hệ thống theo dõi liên tục.
+    \item \textbf{Trạng thái Nghi ngờ (Fall Detected)}: Khi LSTM liên tục dự đoán "Fall" vượt qua một số frame ngưỡng, máy trạng thái không báo động ngay mà chuyển sang trạng thái chờ.
+    \item \textbf{Trạng thái Hậu kiểm (Wait \& Check)}: Khởi động bộ đếm thời gian (ví dụ 5 giây). Trong thời gian này, máy trạng thái tiếp tục nhận tín hiệu từ YOLO. Nếu phát hiện đối tượng đã đứng thẳng trở lại hoặc đang di chuyển bình thường, máy trạng thái sẽ tự động hủy cảnh báo và quay về Normal.
+    \item \textbf{Trạng thái Khẩn cấp (Emergency)}: Nếu sau khoảng thời gian chờ, đối tượng vẫn nằm bất động trên sàn, máy trạng thái mới chính thức chốt sự kiện ngã, kích hoạt còi báo động cục bộ và tự động thực hiện cuộc gọi WebRTC khẩn cấp cho Caregiver.
+\end{itemize}
+Sự kết hợp hoàn chỉnh giữa \textbf{YOLO (Không gian) + LSTM (Thời gian) + State-Machine (Logic nghiệp vụ)} là chìa khóa để đồ án giải quyết bài toán phát hiện té ngã một cách sát thực tế và đáng tin cậy.
+
+
 \subsection{Kiến trúc triển khai}
 
 Hình \ref{fig:implementation_architecture} là sơ đồ triển khai được đối chiếu với mã nguồn. Firebase RTDB vừa là kho dữ liệu dùng chung vừa là bus điều phối gần thời gian thực và kênh signaling. Đây không phải MQTT broker. STUN/TURN chỉ hỗ trợ WebRTC đi qua NAT hoặc relay, không lưu hồ sơ/lịch. Groq được gọi qua HTTPS từ RobotApp; CaregiverApp không chạy chatbot LLM trong snapshot hiện tại.

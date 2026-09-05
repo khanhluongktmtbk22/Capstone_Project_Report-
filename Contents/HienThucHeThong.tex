@@ -149,68 +149,76 @@ Snapshot hiện dùng kết hợp node theo UID và node toàn cục. Điều n�
 
 \subsection{Huấn luyện và chuyển đổi mô hình AI}
 
-\subsubsection{Dữ liệu và bài toán}
+Quy trình phát triển các mô hình học sâu cho bài toán phát hiện té ngã trên thiết bị di động (Android) đòi hỏi một pipeline khép kín từ việc xử lý dữ liệu thô, trích xuất đặc trưng, huấn luyện LSTM, cho đến tối ưu hóa và chuyển đổi định dạng.
 
-Khối thị giác dùng mô hình pose tổng quát để lấy 17 keypoint người và mô hình LSTM phân loại chuỗi. Dữ liệu té ngã tham khảo CAUCAFall, vốn cung cấp video fall/no-fall trong điều kiện ít kiểm soát \reportcite{ref:caucafall}. Dữ liệu dạng frame cần được tách theo video/chủ thể trước khi train/validation/test; nếu chia ngẫu nhiên từng frame, các frame gần nhau có thể lọt sang tập test và làm chỉ số lạc quan.
+\subsubsection{Xử lý dữ liệu (Dataset Processing)}
 
-Hình \ref{fig:dataset_distribution} cho thấy ví dụ phân bố nhãn của một tập dữ liệu liên quan: các lớp có chênh lệch lớn. Đối với bài toán nhị phân fall/normal, mất cân bằng phải được xử lý bằng lấy mẫu, trọng số lớp và báo cáo precision/recall thay vì chỉ accuracy.
+Dữ liệu gốc từ LE2I Dataset ban đầu tồn tại dưới dạng các video liên tục chứa chuỗi hành động bình thường và té ngã. Quá trình tiền xử lý bao gồm:
+\begin{itemize}
+    \item \textbf{Trích xuất khung hình (Frame Extraction)}: Phân tách video thành các frame riêng lẻ với tốc độ 25 FPS để khớp với dữ liệu thời gian thực từ camera robot.
+    \item \textbf{Phân chia tập dữ liệu (Train/Val/Test Split)}: Việc chia dữ liệu được thực hiện chặt chẽ theo từng video và chủ thể (subject-wise), tuyệt đối không chia ngẫu nhiên từng frame để tránh rò rỉ dữ liệu (data leakage) khiến các frame gần nhau lọt sang tập test và gây ra hiện tượng overfitting (chỉ số đánh giá bị lạc quan ảo).
+    \item \textbf{Xử lý mất cân bằng lớp (Class Imbalance)}: Trong thực tế, số lượng mẫu của trạng thái bình thường (Normal/No-fall) thường áp đảo trạng thái ngã (Fall). Quá trình huấn luyện sử dụng các kỹ thuật như trọng số lớp (class weights) và oversampling để đảm bảo mô hình không bị thiên lệch.
+\end{itemize}
+
+\subsubsection{Kỹ thuật trích xuất đặc trưng (Feature Engineering)}
+
+Mô hình LSTM không học trực tiếp từ ảnh RGB thô mà học từ một chuỗi các tọa độ điểm neo (keypoints). Khối thị giác YOLOv8-pose được dùng làm công cụ trích xuất đặc trưng không gian:
+\begin{enumerate}
+    \item \textbf{Chuẩn hóa tọa độ}: Tọa độ của 17 keypoints người được chuẩn hóa (normalize) theo kích thước khung hình hoặc bounding box để giảm thiểu sự phụ thuộc vào khoảng cách từ người đến camera robot.
+    \item \textbf{Tích hợp độ tin cậy (Confidence)}: Giá trị confidence của từng keypoint được giữ lại để giúp mạng LSTM nhận biết được các điểm bị che khuất (occlusion).
+    \item \textbf{Cửa sổ trượt thời gian (Sliding Window)}: Dữ liệu được gom thành các cửa sổ trượt (sliding windows) với kích thước cố định $T = 15$ frames (tương đương 0.5-0.6 giây). Cửa sổ này tạo ra một tensor đặc trưng có shape $(15, 51)$ để làm đầu vào cho LSTM.
+\end{enumerate}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.72\textwidth]{2.jpg}
-    \caption{Ví dụ phân bố số lượng thể hiện sự mất cân bằng lớp trong dữ liệu}
-    \label{fig:dataset_distribution}
+    \includegraphics[width=0.6\textwidth]{Images/lstm_arch.jpg}
+    \caption{Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}
+    \label{fig:lstm_example}
 \end{figure}
 
-\subsubsection{Xây dựng vector đặc trưng chuỗi}
+\subsubsection{Huấn luyện mô hình (Model Training)}
 
-Từ pose, tọa độ keypoint được chuẩn hóa theo vùng bao hoặc kích thước ảnh để giảm phụ thuộc khoảng cách camera. Confidence giúp biểu diễn keypoint bị khuất. Các đặc trưng hình học bổ sung tỷ lệ vùng bao và trạng thái thân người. Cửa sổ trượt 15 frame cân bằng giữa đủ thông tin chuyển động và độ trễ. Mỗi cửa sổ có nhãn normal/fall; các chuỗi chuyển tiếp cần được gán nhất quán để tránh model học sai thời điểm.
+Mô hình LSTM được xây dựng bằng framework TensorFlow/Keras. Các bước huấn luyện bao gồm:
+\begin{itemize}
+    \item Thiết lập seed cố định để đảm bảo tính tái lập (reproducibility).
+    \item Sử dụng hàm mất mát Binary Cross-Entropy cho bài toán phân loại nhị phân.
+    \item Tích hợp cơ chế Early Stopping để dừng huấn luyện sớm khi validation loss không còn giảm, kết hợp lưu lại mô hình tốt nhất (\texttt{best\_model\_lstm.h5}).
+\end{itemize}
 
-Quy trình huấn luyện LSTM cần lưu seed, split, scaler/chuẩn hóa, class mapping và phiên bản thư viện. Chỉ artifact \texttt{best\_model\_lstm.h5} và model đã chuyển đổi hiện có trong thư mục bàn giao; vì vậy báo cáo không suy diễn epoch hay metric không còn log. Việc tái lập đầy đủ yêu cầu bổ sung notebook/script huấn luyện và lịch sử loss/metric.
+\subsubsection{Chuyển đổi và tối ưu mô hình (Model Conversion)}
 
-\subsubsection{Chuyển Keras LSTM sang TFLite}
+Để triển khai các mô hình AI phức tạp lên điện thoại Android (thiết bị biên), kích thước và tốc độ suy luận là hai rào cản lớn nhất. Do đó, các mô hình gốc cần được chuyển đổi sang định dạng TensorFlow Lite (.tflite):
 
-Script \path|convert_to_tflite.py| nạp model H5, đọc \texttt{input\_shape} để xác nhận sequence length và feature count, sau đó dùng \path|TFLiteConverter.from_keras_model|. Supported ops gồm TFLite built-ins và Select TF Ops để bao phủ toán tử LSTM. Model đầu ra được nạp lại bằng Interpreter, allocate tensor và kiểm tra shape. Artifact cuối \texttt{best\_model\_lstm\_v2.tflite} được sao chép vào assets RobotApp.
+\textbf{1. Đối với mô hình LSTM:} \\
+Script \path|convert_to_tflite.py| nạp mô hình \texttt{best\_model\_lstm.h5}, đọc \texttt{input\_shape} để xác nhận chiều dài chuỗi. Quá trình chuyển đổi sử dụng \path|TFLiteConverter.from_keras_model|. Các toán tử hỗ trợ bao gồm TFLite built-ins và Select TF Ops. Kết quả đầu ra là file \texttt{best\_model\_lstm\_v2.tflite} dung lượng cực nhỏ, sẵn sàng nhúng vào assets của RobotApp.
 
-\subsubsection{Xuất mô hình pose qua ONNX}
-
-Các script dùng Ultralytics nạp \texttt{yolo26n-pose.pt}, xuất ONNX với batch 1 và kích thước ảnh cố định. Biến thể \texttt{convert\_to\_tflite\_320.py} cố định input 320$\times$320 ở bước export; kích thước này được ``bake'' vào graph nên Android phải tiền xử lý đúng. ONNX đóng vai trò biểu diễn trung gian để kiểm tra input/output và chuyển bằng onnx2tf.
-
-Một khó khăn là graph end-to-end chứa NMS có thể tạo toán tử không tương thích GPU delegate. \texttt{convert\_to\_tflite\_gpu.py} đặt \texttt{module.end2end=false} trước export để bỏ NMS head, chuyển NMS sang Kotlin. Điều này làm output thô lớn hơn nhưng graph chỉ còn các toán tử thuận lợi hơn cho delegate. Android chịu trách nhiệm decode, threshold và NMS.
-
-\subsubsection{Chuyển ONNX sang TFLite và FP16}
-
-onnx2tf chuyển graph ONNX tĩnh sang SavedModel/TFLite. Script FP16 dùng \texttt{TFLiteConverter.from\_saved\_model}, bật \texttt{Optimize.DEFAULT} và đặt \texttt{supported\_types=[tf.float16]}. Trọng số FP16 giảm kích thước và băng thông bộ nhớ; input/output có thể vẫn float32 tùy converter/delegate. Sau chuyển đổi, script kiểm tra tensor shape/type, chạy một input thử và kiểm tra output hữu hạn trước khi copy vào assets.
+\textbf{2. Đối với mô hình YOLO-Pose:} \\
+Đầu tiên, mô hình gốc PyTorch (\texttt{yolo26n-pose.pt}) được xuất qua định dạng trung gian ONNX với batch size cố định là 1 và kích thước ảnh $320\times320$. 
+Sau đó, thư viện \texttt{onnx2tf} được dùng để chuyển đổi ONNX sang SavedModel/TFLite. Ở bước này, kỹ thuật lượng tử hóa (Quantization) được áp dụng để đưa trọng số về định dạng dấu phẩy động 16-bit (FP16). Điều này giúp giảm một nửa kích thước mô hình (từ $\sim 12$ MB xuống còn hơn $6$ MB) và giảm băng thông bộ nhớ mà gần như không suy giảm độ chính xác.
 
 \begin{table}[htbp]
 \centering
-\caption{Các artifact mô hình chính}
+\caption{Các artifact mô hình chính sau khi huấn luyện và chuyển đổi}
 \label{tab:model_artifacts}
 \small
 \begin{tabularx}{\textwidth}{|p{4.3cm}|p{2.5cm}|p{2.2cm}|X|}
 \hline
-\textbf{Artifact} & \textbf{Định dạng} & \textbf{Kích thước gần đúng} & \textbf{Mục đích} \\
+\textbf{Artifact} & \textbf{Định dạng} & \textbf{Dung lượng} & \textbf{Mục đích} \\
 \hline
-best\_model\_lstm.h5 & Keras H5 & 193,8 KB & Model huấn luyện/nguồn chuyển đổi \\
+best\_model\_lstm.h5 & Keras H5 & 193,8 KB & Mô hình gốc để huấn luyện và đánh giá \\
 \hline
-best\_model\_lstm\_v2.tflite & TFLite & 63,9 KB & LSTM triển khai Android \\
+best\_model\_lstm\_v2.tflite & TFLite & 63,9 KB & Mô hình LSTM đã tối ưu cho Android \\
 \hline
-yolo26n-pose.pt & PyTorch & 7,88 MB & Trọng số pose nguồn \\
+yolo26n-pose.pt & PyTorch & 7,88 MB & Mô hình Pose gốc \\
 \hline
-yolo26n-pose\_320.onnx & ONNX & Theo artifact & Graph trung gian input cố định \\
-\hline
-yolo26n-pose\_320.tflite & TFLite & 12,03 MB & Model CPU/fallback trong RobotApp \\
-\hline
-yolo26n-pose\_320\_gpu.tflite & TFLite & 11,84 MB & Graph hướng tới GPU delegate \\
-\hline
-yolo26n-pose\_320\_fp16.tflite & TFLite FP16 & 6,28 MB & Biến thể giảm trọng số/băng thông \\
+yolo26n-pose\_320\_fp16.tflite & TFLite FP16 & 6,28 MB & Biến thể YOLO đã lượng tử hóa FP16, tối ưu kích thước và tốc độ \\
 \hline
 \end{tabularx}
 \end{table}
 
 \subsubsection{Kiểm tra tương đương sau chuyển đổi}
+Kiểm tra mô hình load thành công trên Android là chưa đủ. Hệ thống cần chạy qua một tập ảnh mẫu nghiệm thu trên cả hai phiên bản PyTorch gốc và TFLite FP16. Mọi sai số số học (từ bounding box, confidence score đến vector xác suất của LSTM) đều được đối chiếu chặt chẽ để đảm bảo hiệu năng (precision/recall) không bị đánh đổi quá mức khi chạy thực tế.
 
-Kiểm tra ``model mở được'' chưa đủ để kết luận tương đương. Cần chạy cùng tập ảnh qua PyTorch, ONNX và TFLite; đưa output về cùng layout; so sai số số học; rồi so detection sau decode/NMS theo confidence, IoU, keypoint và số lượng người. Với LSTM, cần so vector xác suất trên cùng cửa sổ 15$\times$69. Chênh lệch FP16 phải được đánh giá ở metric cuối, không chỉ chênh tensor trung gian.
 
 \subsection{Hiện thực firmware phần thân robot}
 

@@ -1,20 +1,14 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces So sánh giữa neuron sinh học (trái) và neuron nhân tạo (phải). Các thành phần tương ứng: dendrite $\leftrightarrow $ input, synapse $\leftrightarrow $ weight, soma $\leftrightarrow $ summation, axon $\leftrightarrow $ activation function và output.}}{13}{figure.caption.10}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Computational Graph minh họa quá trình Forward Pass (mũi tên xanh) và Backward Pass (mũi tên đỏ) với các gradient được tính ngược từ Loss về các tham số.}}{15}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Bề mặt hàm mất mát $J(\theta _0, \theta _1)$ và quỹ đạo của Gradient Descent (đường đen) tìm điểm cực tiểu.}}{17}{figure.caption.12}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Bốn bài toán chính trong Thị giác Máy tính: Phân loại ảnh, Phát hiện đối tượng, Phân vùng ngữ nghĩa, và Nhận dạng hành động.}}{18}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Kiến trúc mạng Perceptron Đa tầng (MLP) với lớp đầu vào, hai lớp ẩn và lớp đầu ra. Mỗi neuron trong một lớp kết nối đầy đủ với tất cả neuron của lớp liền kề.}}{22}{figure.caption.14}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Minh họa phép tích chập (Convolution) và Max Pooling trong CNN: bộ lọc 3×3 trượt qua ảnh đầu vào tạo ra feature map, sau đó Max Pooling 2×2 giảm kích thước không gian.}}{25}{figure.caption.16}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces AlexNet}}{27}{figure.caption.17}%
-\contentsline {figure}{\numberline {2.8}{\ignorespaces VGG}}{27}{figure.caption.18}%
-\contentsline {figure}{\numberline {2.9}{\ignorespaces Ví dụ minh họa Bounding Box trong Object Detection.}}{30}{figure.caption.19}%
-\contentsline {figure}{\numberline {2.10}{\ignorespaces Minh họa chia lưới $7 \times 7$ trong YOLO: mỗi ô chịu trách nhiệm phát hiện đối tượng có tâm nằm trong ô đó.}}{34}{figure.caption.20}%
-\contentsline {figure}{\numberline {2.11}{\ignorespaces Flowchart pipeline Tracking-by-Detection: Detection $\rightarrow $ Feature Extraction $\rightarrow $ Association $\rightarrow $ State Update, lặp lại cho mỗi frame.}}{37}{figure.caption.22}%
-\contentsline {figure}{\numberline {2.12}{\ignorespaces Minh họa không gian vector embedding và độ tương đồng cosine giữa các từ}}{42}{figure.caption.24}%
-\contentsline {figure}{\numberline {2.13}{\ignorespaces Kiến trúc Transformer với các khối Encoder và Decoder}}{43}{figure.caption.25}%
-\contentsline {figure}{\numberline {2.14}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{44}{figure.caption.26}%
-\contentsline {figure}{\numberline {2.15}{\ignorespaces Ví dụ Chain-of-Thought: thay vì trả lời trực tiếp, mô hình giải thích từng bước suy luận để đi đến kết quả cuối cùng.}}{49}{figure.caption.30}%
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc mức cao của hệ thống robot chăm sóc người cao tuổi}}{58}{figure.caption.33}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{62}{figure.caption.36}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{76}{figure.caption.40}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ phân bố số lượng thể hiện sự mất cân bằng lớp trong dữ liệu}}{80}{figure.caption.41}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Minh họa cấu trúc tiêu biểu của mạng nơ-ron tích chập (CNN) gồm các lớp Convolution, Pooling và Fully Connected.}}{13}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Minh họa một kiến trúc mạng YOLO tiêu biểu với Backbone, Neck và Head.}}{14}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Thuật toán ByteTrack với cơ chế Dual-threshold Association giúp duy trì Track ID ổn định.}}{15}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}}{17}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Sơ đồ kiến trúc của mô hình Transformer với cơ chế Multi-Head Attention.}}{19}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Minh họa không gian vector embedding và độ tương đồng cosine giữa các từ}}{21}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Kiến trúc Transformer với các khối Encoder và Decoder}}{22}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{23}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{30}{figure.caption.22}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc mức cao của hệ thống robot chăm sóc người cao tuổi}}{36}{figure.caption.23}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{43}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{57}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{62}{figure.caption.31}%
