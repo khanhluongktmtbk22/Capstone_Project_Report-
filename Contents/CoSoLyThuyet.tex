@@ -330,6 +330,261 @@ Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nú
 
 
 
+\subsection{Giới thiệu YOLO (You Only Look Once)}
+%=========================================
+
+\subsubsection{Bài toán Object Detection}
+
+Object Detection (Phát hiện đối tượng) là một trong những bài toán cơ bản và quan trọng nhất trong thị giác máy tính \reportcite{ref:odsurvey}. Khác với Image Classification chỉ xác định loại đối tượng chính trong ảnh, Object Detection yêu cầu đồng thời:
+
+\begin{itemize}
+    \item \textbf{Định vị (Localization)}: Xác định vị trí của đối tượng trong ảnh thông qua bounding box (hộp giới hạn)
+    \item \textbf{Phân loại (Classification)}: Xác định loại của mỗi đối tượng được phát hiện
+\end{itemize}
+
+Trong bài toán phát hiện ngã, Object Detection đóng vai trò then chốt: mô hình cần xác định vị trí con người trong khung hình và phân loại trạng thái của họ (đang đứng, đi lại, hay đã ngã).
+
+\subsubsection{Lịch sử phát triển Object Detection}
+
+Theo khảo sát ``Object Detection in 20 Years'' của Zou và cộng sự \reportcite{ref:odsurvey}, lĩnh vực Object Detection đã trải qua sự phát triển đáng kể trong hơn hai thập kỷ:
+
+\textbf{a) Giai đoạn truyền thống (1990s-2012)}
+
+\begin{itemize}
+    \item \textbf{Viola-Jones Detector (2001)}: Detector đầu tiên đạt tốc độ real-time cho face detection, sử dụng Haar-like features và AdaBoost
+    \item \textbf{HOG Detector (2005)}: Histogram of Oriented Gradients cho pedestrian detection
+    \item \textbf{DPM - Deformable Parts Model (2010)}: Mô hình biến dạng các phần, đạt SOTA trên PASCAL VOC nhiều năm
+\end{itemize}
+
+\textbf{b) Giai đoạn Deep Learning (2012-nay)}
+
+\begin{itemize}
+    \item \textbf{AlexNet (2012)}: Bước ngoặt của deep learning trong computer vision
+    \item \textbf{R-CNN (2014)}: Kết hợp region proposals với CNN features
+    \item \textbf{Fast R-CNN, Faster R-CNN (2015)}: Cải tiến tốc độ với RoI pooling và Region Proposal Network
+    \item \textbf{YOLO v1 (2016)}: Đột phá với one-stage detection, real-time
+    \item \textbf{SSD (2016)}: Single Shot MultiBox Detector với multi-scale features
+    \item \textbf{RetinaNet (2017)}: Giới thiệu Focal Loss để giải quyết class imbalance
+    \item \textbf{YOLO v3-v11 (2018-2024)}: Liên tục cải tiến về accuracy và speed
+\end{itemize}
+
+\textbf{c) Xu hướng hiện tại}
+
+Theo \reportcite{ref:odsurvey}, các xu hướng chính trong Object Detection bao gồm:
+\begin{itemize}
+    \item Anchor-free detectors (loại bỏ anchor boxes)
+    \item Transformer-based detectors (DETR, Swin Transformer)
+    \item NAS-based architecture search (tự động tìm kiếm kiến trúc)
+    \item Real-time detection trên edge devices
+\end{itemize}
+
+\subsubsection{Khái niệm Bounding Box}
+
+Bounding Box (hộp giới hạn) là hình chữ nhật bao quanh đối tượng trong ảnh, được sử dụng để xác định vị trí và kích thước của đối tượng.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Images/bounding_box_example.png}
+    \vspace{8pt}
+    \caption{Ví dụ minh họa Bounding Box trong Object Detection.}
+    \label{fig:bounding_box}
+\end{figure}
+
+Có hai cách biểu diễn bounding box phổ biến:
+
+\textbf{a) Format $(x_{min}, y_{min}, x_{max}, y_{max})$ - PASCAL VOC format}
+
+\begin{itemize}
+    \item $(x_{min}, y_{min})$: Tọa độ góc trên bên trái của box
+    \item $(x_{max}, y_{max})$: Tọa độ góc dưới bên phải của box
+    \item Đơn vị: pixel tuyệt đối
+\end{itemize}
+
+\textbf{b) Format $(x_{center}, y_{center}, w, h)$ - YOLO format}
+
+\begin{itemize}
+    \item $(x_{center}, y_{center})$: Tọa độ tâm của box
+    \item $w$: Chiều rộng của box
+    \item $h$: Chiều cao của box
+    \item Đơn vị: normalized (chia cho kích thước ảnh, giá trị từ 0 đến 1)
+\end{itemize}
+
+\textbf{c) Công thức chuyển đổi}
+
+Từ PASCAL VOC sang YOLO (với ảnh kích thước $W \times H$):
+\begin{equation}
+x_{center} = \frac{x_{min} + x_{max}}{2W}, \quad y_{center} = \frac{y_{min} + y_{max}}{2H}
+\end{equation}
+\begin{equation}
+w = \frac{x_{max} - x_{min}}{W}, \quad h = \frac{y_{max} - y_{min}}{H}
+\end{equation}
+
+\subsubsection{Intersection over Union (IoU)}
+
+IoU là metric đo độ chồng lấp giữa hai bounding box, được sử dụng rộng rãi trong đánh giá object detection:
+
+\begin{equation}
+IoU = \frac{\text{Area of Intersection}}{\text{Area of Union}} = \frac{|A \cap B|}{|A \cup B|}
+\end{equation}
+
+Trong đó:
+\begin{itemize}
+    \item $A$: Bounding box dự đoán (predicted)
+    \item $B$: Bounding box ground truth (thực tế)
+    \item IoU = 1: Hai box trùng khớp hoàn toàn
+    \item IoU = 0: Hai box không có phần giao nhau
+\end{itemize}
+
+Ngưỡng IoU thường được sử dụng để xác định dự đoán đúng:
+\begin{itemize}
+    \item IoU $\geq 0.5$: Ngưỡng phổ biến (PASCAL VOC, COCO mAP@0.5)
+    \item IoU $\geq 0.75$: Ngưỡng nghiêm ngặt (COCO mAP@0.75)
+    \item IoU từ 0.5 đến 0.95: Đánh giá đa ngưỡng (COCO mAP@[.5:.95])
+\end{itemize}
+
+\subsubsection{Các khái niệm True Positive, False Positive, False Negative}
+
+Để đánh giá kết quả detection, cần phân loại các dự đoán:
+
+\begin{itemize}
+    \item \textbf{True Positive (TP)}: Dự đoán đúng - có bounding box dự đoán khớp với ground truth (IoU $\geq$ threshold) và đúng class
+    \item \textbf{False Positive (FP)}: Dự đoán sai - bounding box dự đoán không khớp với bất kỳ ground truth nào, hoặc sai class
+    \item \textbf{False Negative (FN)}: Bỏ sót - ground truth không được detect bởi bất kỳ dự đoán nào
+\end{itemize}
+
+Từ đó tính được:
+\begin{equation}
+\text{Precision} = \frac{TP}{TP + FP} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số dự đoán}}
+\end{equation}
+\begin{equation}
+\text{Recall} = \frac{TP}{TP + FN} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số ground truth}}
+\end{equation}
+
+\subsubsection{Đánh giá hiệu suất: Mean Average Precision (mAP)}
+
+Mean Average Precision (mAP) là metric chuẩn để đánh giá hiệu suất của mô hình object detection, tổng hợp cả precision và recall.
+
+\textbf{a) Precision-Recall Curve}
+
+Với mỗi class, sắp xếp các dự đoán theo confidence score giảm dần. Tại mỗi điểm, tính precision và recall tích lũy, từ đó vẽ được đường cong Precision-Recall.
+
+\textbf{b) Average Precision (AP)}
+
+AP là diện tích dưới đường cong Precision-Recall:
+\begin{equation}
+AP = \int_0^1 p(r) \, dr
+\end{equation}
+
+Trong thực tế, sử dụng phép nội suy (interpolation):
+\begin{equation}
+AP = \sum_{i=1}^{n} (r_i - r_{i-1}) \cdot p_{interp}(r_i)
+\end{equation}
+
+với $p_{interp}(r) = \max_{r' \geq r} p(r')$ là precision nội suy tại recall $r$.
+
+\textbf{c) Mean Average Precision (mAP)}
+
+mAP là trung bình của AP trên tất cả các class:
+\begin{equation}
+mAP = \frac{1}{N} \sum_{i=1}^{N} AP_i
+\end{equation}
+
+với $N$ là số class trong dataset.
+
+\textbf{d) Các biến thể mAP}
+
+\begin{itemize}
+    \item \textbf{mAP@0.5 (mAP50)}: AP tính với ngưỡng IoU = 0.5, được sử dụng trong PASCAL VOC
+    \item \textbf{mAP@0.75 (mAP75)}: AP với ngưỡng IoU = 0.75, nghiêm ngặt hơn
+    \item \textbf{mAP@[.5:.95]}: Trung bình AP với IoU từ 0.5 đến 0.95 (bước 0.05), metric chính của COCO
+    \item \textbf{mAP Small/Medium/Large}: mAP theo kích thước đối tượng
+\end{itemize}
+
+\textbf{e) Ý nghĩa của mAP}
+
+\begin{itemize}
+    \item mAP cao $\rightarrow$ Mô hình phát hiện đúng nhiều đối tượng và định vị chính xác
+    \item mAP50 cao nhưng mAP75 thấp $\rightarrow$ Phát hiện được nhưng định vị chưa chính xác
+    \item Precision cao, Recall thấp $\rightarrow$ Mô hình thận trọng, ít false positive nhưng bỏ sót nhiều
+    \item Precision thấp, Recall cao $\rightarrow$ Mô hình phát hiện nhiều nhưng có nhiều false positive
+\end{itemize}
+
+\subsubsection{Ý tưởng YOLO: Phát hiện trong một lần suy luận}
+
+YOLO (You Only Look Once) được Joseph Redmon, Santosh Divvala, Ross Girshick và Ali Farhadi đề xuất năm 2016 trong bài báo ``You Only Look Once: Unified, Real-Time Object Detection'' \reportcite{ref:yolo}. Đây là bước đột phá mang đến cách tiếp cận hợp nhất cho Object Detection.
+
+\textbf{Ý tưởng cốt lõi của YOLO} (theo \reportcite{ref:yolo}):
+
+``We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are.''
+
+Thay vì coi detection như bài toán phân loại (classifier), YOLO đặt lại vấn đề như bài toán hồi quy về tọa độ bounding box và xác suất class, tất cả trong một lần forward pass duy nhất qua mạng neural.
+
+\textbf{Nguyên lý hoạt động của YOLO:}
+
+\begin{enumerate}
+    \item \textbf{Chia lưới}: Ảnh đầu vào được chia thành lưới $S \times S$ ô (grid cells). Trong paper gốc, $S = 7$.
+
+    \begin{figure}[h!]
+        \centering
+        \includegraphics[width=0.7\textwidth]{Images/7x7.jpg}
+        \vspace{8pt}
+        \caption{Minh họa chia lưới $7 \times 7$ trong YOLO: mỗi ô chịu trách nhiệm phát hiện đối tượng có tâm nằm trong ô đó.}
+        \label{fig:yolo_grid}
+    \end{figure}
+    \item \textbf{Dự đoán bounding boxes}: Mỗi ô dự đoán $B$ bounding boxes (mặc định $B = 2$) cùng với điểm confidence.
+    \item \textbf{Dự đoán class probabilities}: Mỗi ô dự đoán $C$ xác suất class có điều kiện $Pr(Class_i|Object)$.
+    \item \textbf{Tensor đầu ra}: Kích thước $S \times S \times (B \times 5 + C)$. Với PASCAL VOC ($C=20$), tensor có kích thước $7 \times 7 \times 30$.
+    \item \textbf{Post-processing}: Non-Maximum Suppression (NMS) loại bỏ các box trùng lặp.
+\end{enumerate}
+
+\textbf{Đầu ra của mỗi bounding box bao gồm 5 giá trị:}
+\begin{itemize}
+    \item $(x, y)$: Tọa độ tâm của box tương đối với ô lưới (normalized 0-1 trong ô)
+    \item $(w, h)$: Chiều rộng và chiều cao của box tương đối với toàn ảnh (normalized 0-1)
+    \item $confidence = Pr(Object) \times IOU^{truth}_{pred}$: Độ tin cậy rằng box chứa đối tượng VÀ độ chính xác của box so với ground truth
+\end{itemize}
+
+\textbf{Hiệu suất của YOLO theo bài báo gốc:}
+\begin{itemize}
+    \item Base YOLO: 45 FPS (frames per second) trên GPU
+    \item Fast YOLO: 155 FPS - nhanh hơn gấp đôi các detector real-time khác
+    \item mAP trên PASCAL VOC 2007: 63.4\% (base), 52.7\% (fast)
+\end{itemize}
+
+\subsubsection{So sánh YOLO với phương pháp truyền thống}
+
+\begin{table}[h]
+\centering
+\caption{So sánh YOLO với các phương pháp Object Detection khác}
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Phương pháp} & \textbf{Tốc độ (FPS)} & \textbf{mAP} & \textbf{Thời gian thực} \\
+\hline
+R-CNN & 0.02 & 53.7 & Không \\
+Fast R-CNN & 0.5 & 70.0 & Không \\
+Faster R-CNN & 7-17 & 73.2 & Khó \\
+YOLO v1 & 45 & 63.4 & Có \\
+YOLOv3 & 30-50 & 57.9 & Có \\
+YOLOv5 & 100+ & 68.9 & Có \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Ưu điểm của YOLO:}
+\begin{itemize}
+    \item Tốc độ: Xử lý real-time với hàng chục đến hàng trăm FPS
+    \item Đơn giản: Một mạng duy nhất, dễ huấn luyện end-to-end
+    \item Nhìn toàn cục: Xem xét toàn bộ ảnh khi dự đoán, hiểu được ngữ cảnh tốt hơn
+    \item Tổng quát hóa tốt: Ít false positive trên background so với các phương pháp dựa trên sliding window
+\end{itemize}
+
+\textbf{Hạn chế:}
+\begin{itemize}
+    \item Khó phát hiện các đối tượng nhỏ hoặc xếp chồng nhau
+    \item Độ chính xác định vị có thể kém hơn phương pháp hai giai đoạn ở một số trường hợp
+\end{itemize}
+
+%=========================================
 \subsection{Nền tảng Thị giác máy tính (Computer Vision)}
 
 Thị giác máy tính (Computer Vision) đóng vai trò cốt lõi trong hệ thống giám sát và nhận diện té ngã. Bằng cách phân tích luồng video từ camera, hệ thống có khả năng nhận biết, định vị và theo dõi con người trong không gian. Phần này trình bày các nền tảng kỹ thuật được sử dụng bao gồm Mạng nơ-ron tích chập (CNN), kiến trúc YOLO cho bài toán phát hiện đối tượng và thuật toán ByteTrack cho bài toán theo dõi.

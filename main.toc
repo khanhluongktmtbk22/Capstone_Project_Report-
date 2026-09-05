@@ -3,9 +3,9 @@
 \contentsline {section}{Lời cảm ơn}{ii}{section*.2}%
 \contentsline {section}{Tóm tắt}{iii}{section*.3}%
 \contentsline {section}{Mục lục}{iv}{section*.4}%
-\contentsline {section}{Danh mục hình ảnh}{x}{section*.5}%
-\contentsline {section}{Danh mục bảng biểu}{xi}{section*.6}%
-\contentsline {section}{Danh mục từ viết tắt}{xiii}{section*.7}%
+\contentsline {section}{Danh mục hình ảnh}{xi}{section*.5}%
+\contentsline {section}{Danh mục bảng biểu}{xii}{section*.6}%
+\contentsline {section}{Danh mục từ viết tắt}{xiv}{section*.7}%
 \contentsline {section}{\numberline {1}Giới thiệu}{1}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Bối cảnh và tính cấp thiết của đề tài}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Phát biểu bài toán}{2}{subsection.1.2}%
@@ -54,146 +54,155 @@
 \contentsline {subsubsection}{\numberline {2.1.3}Giải pháp kết nối và điều khiển}{25}{subsubsection.2.1.3}%
 \contentsline {subsubsection}{\numberline {2.1.4}AI và cơ chế theo dõi đối tượng}{26}{subsubsection.2.1.4}%
 \contentsline {subsubsection}{\numberline {2.1.5}Khả năng áp dụng cho đồ án}{27}{subsubsection.2.1.5}%
-\contentsline {subsection}{\numberline {2.2}Nền tảng Thị giác máy tính (Computer Vision)}{27}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Mạng nơ-ron tích chập (CNN) và Kiến trúc YOLO26}{28}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Thuật toán theo dõi đa đối tượng ByteTrack}{29}{subsubsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.3}Mô hình chuỗi thời gian (Sequence Modeling)}{32}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Mạng nơ-ron hồi quy (RNN)}{32}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Mạng Bộ nhớ Ngắn-Dài hạn (LSTM)}{32}{subsubsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.4}Xử lý Ngôn ngữ Tự nhiên (NLP) và Hệ thống Giọng nói}{34}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Mô hình ngôn ngữ lớn (LLM) và Kiến trúc Transformer}{34}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Khái niệm AI Agent}{36}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Mô hình Ngôn ngữ Lớn (Large Language Models)}{36}{subsubsection.2.4.3}%
-\contentsline {subsubsection}{\numberline {2.4.4}Hệ thống chuyển đổi Giọng nói (STT \& TTS)}{43}{subsubsection.2.4.4}%
-\contentsline {subsubsection}{\numberline {2.4.5}Một số giải pháp Nhận dạng Giọng nói:}{43}{subsubsection.2.4.5}%
-\contentsline {subsubsection}{\numberline {2.4.6}Phương pháp tiếp cận Xử lý Ngôn ngữ Tự nhiên (NLP) trong dự án}{43}{subsubsection.2.4.6}%
-\contentsline {subsubsection}{\numberline {2.4.7}Phương thức triển khai: Điện toán Biên (Edge Computing) trên thiết bị Android}{44}{subsubsection.2.4.7}%
-\contentsline {subsection}{\numberline {2.5}Giới thiệu Dataset Fall Detection – LE2I}{45}{subsection.2.5}%
-\contentsline {subsubsection}{\numberline {2.5.1}Mục tiêu và đặc điểm của dataset LE2I}{45}{subsubsection.2.5.1}%
-\contentsline {subsubsection}{\numberline {2.5.2}Dữ liệu video và Annotation}{45}{subsubsection.2.5.2}%
-\contentsline {subsubsection}{\numberline {2.5.3}Ưu điểm và hạn chế của dataset LE2I}{46}{subsubsection.2.5.3}%
-\contentsline {subsubsection}{\numberline {2.5.4}So sánh với các Dataset quy mô lớn (DiverseFALL10500)}{46}{subsubsection.2.5.4}%
-\contentsline {subsection}{\numberline {2.6}Suy luận AI trên thiết bị và TensorFlow Lite}{47}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Firebase Authentication và Realtime Database}{47}{subsection.2.7}%
-\contentsline {subsection}{\numberline {2.8}WebRTC, signaling và ICE}{48}{subsection.2.8}%
-\contentsline {subsection}{\numberline {2.9}Bluetooth Low Energy và GATT}{48}{subsection.2.9}%
-\contentsline {subsection}{\numberline {2.10}Động cơ BLDC và điều khiển FOC}{49}{subsection.2.10}%
-\contentsline {subsection}{\numberline {2.11}An toàn và quản trị rủi ro AI}{49}{subsection.2.11}%
-\contentsline {subsection}{\numberline {2.12}Kết luận chương}{49}{subsection.2.12}%
-\contentsline {section}{\numberline {3}Phân tích và thiết kế hệ thống}{51}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Mục tiêu và nguyên tắc thiết kế}{51}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Mô hình bối cảnh và tác nhân}{51}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Phân tích yêu cầu}{53}{subsection.3.3}%
-\contentsline {subsubsection}{\numberline {3.3.1}Yêu cầu chức năng}{53}{subsubsection.3.3.1}%
-\contentsline {subsubsection}{\numberline {3.3.2}Yêu cầu phi chức năng}{54}{subsubsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.4}Mô hình use case}{55}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Giải pháp AI cho chức năng phát hiện té ngã (Fall Detection)}{56}{subsection.3.5}%
-\contentsline {subsubsection}{\numberline {3.5.1}Những khó khăn từ dữ liệu (Dataset)}{56}{subsubsection.3.5.1}%
-\contentsline {subsubsection}{\numberline {3.5.2}Tại sao YOLO thường không đủ mà phải kết hợp LSTM?}{57}{subsubsection.3.5.2}%
-\contentsline {subsubsection}{\numberline {3.5.3}Vì sao LSTM vẫn chưa đủ nên cần thêm State-Machine?}{57}{subsubsection.3.5.3}%
-\contentsline {subsection}{\numberline {3.6}Kiến trúc triển khai}{58}{subsection.3.6}%
-\contentsline {subsection}{\numberline {3.7}Thiết kế dữ liệu Firebase}{58}{subsection.3.7}%
-\contentsline {subsection}{\numberline {3.8}Thiết kế kênh điều khiển chuyển động}{61}{subsection.3.8}%
-\contentsline {subsubsection}{\numberline {3.8.1}Hợp đồng lệnh trên RTDB}{61}{subsubsection.3.8.1}%
-\contentsline {subsubsection}{\numberline {3.8.2}Ánh xạ joystick sang hai bánh}{61}{subsubsection.3.8.2}%
-\contentsline {subsubsection}{\numberline {3.8.3}Hợp đồng BLE và chuỗi dừng an toàn}{62}{subsubsection.3.8.3}%
-\contentsline {subsection}{\numberline {3.9}Thiết kế pipeline thị giác và té ngã}{62}{subsection.3.9}%
-\contentsline {subsubsection}{\numberline {3.9.1}Luồng dữ liệu}{63}{subsubsection.3.9.1}%
-\contentsline {subsubsection}{\numberline {3.9.2}Khóa người mục tiêu ID0}{63}{subsubsection.3.9.2}%
-\contentsline {subsubsection}{\numberline {3.9.3}Đặc trưng LSTM và máy trạng thái}{63}{subsubsection.3.9.3}%
-\contentsline {subsubsection}{\numberline {3.9.4}Hậu kiểm và quản lý một sự cố}{64}{subsubsection.3.9.4}%
-\contentsline {subsection}{\numberline {3.10}Thiết kế cuộc gọi WebRTC và quyền sở hữu camera}{64}{subsection.3.10}%
-\contentsline {subsection}{\numberline {3.11}Thiết kế hội thoại và lịch nhắc}{65}{subsection.3.11}%
-\contentsline {subsection}{\numberline {3.12}Thiết kế firmware và điều khiển động cơ}{65}{subsection.3.12}%
-\contentsline {subsection}{\numberline {3.13}An toàn, bảo mật và quyền riêng tư}{65}{subsection.3.13}%
-\contentsline {subsection}{\numberline {3.14}Ma trận truy vết yêu cầu}{66}{subsection.3.14}%
-\contentsline {subsection}{\numberline {3.15}Đánh đổi và quyết định kiến trúc}{67}{subsection.3.15}%
-\contentsline {subsection}{\numberline {3.16}Kết luận chương}{68}{subsection.3.16}%
-\contentsline {section}{\numberline {4}Hiện thực hệ thống}{69}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Môi trường và tổ chức mã nguồn}{69}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Hiện thực RobotApp}{69}{subsection.4.2}%
-\contentsline {subsubsection}{\numberline {4.2.1}Khởi động, điều hướng và vòng đời dịch vụ}{69}{subsubsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2}TrackingFragment và quyền sở hữu camera}{70}{subsubsection.4.2.2}%
-\contentsline {subsubsection}{\numberline {4.2.3}Nạp và suy luận mô hình pose}{70}{subsubsection.4.2.3}%
-\contentsline {subsubsection}{\numberline {4.2.4}SORT, Kalman, Hungarian và Re-ID}{71}{subsubsection.4.2.4}%
-\contentsline {subsubsection}{\numberline {4.2.5}Khóa mục tiêu ID0 và sinh lệnh auto-follow}{71}{subsubsection.4.2.5}%
-\contentsline {subsubsection}{\numberline {4.2.6}LSTM phát hiện té ngã}{72}{subsubsection.4.2.6}%
-\contentsline {subsubsection}{\numberline {4.2.7}Hậu kiểm té ngã}{72}{subsubsection.4.2.7}%
-\contentsline {subsubsection}{\numberline {4.2.8}Luồng xác nhận và cảnh báo}{72}{subsubsection.4.2.8}%
-\contentsline {subsubsection}{\numberline {4.2.9}Chatbot giọng nói}{73}{subsubsection.4.2.9}%
-\contentsline {subsubsection}{\numberline {4.2.10}Lịch nhắc}{74}{subsubsection.4.2.10}%
-\contentsline {subsubsection}{\numberline {4.2.11}WebRTC trong RobotApp}{74}{subsubsection.4.2.11}%
-\contentsline {subsubsection}{\numberline {4.2.12}RobotControlManager và BLE}{74}{subsubsection.4.2.12}%
-\contentsline {subsection}{\numberline {4.3}Hiện thực CaregiverApp}{75}{subsection.4.3}%
-\contentsline {subsubsection}{\numberline {4.3.1}Khởi động, xác thực và hồ sơ}{75}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}Bật/tắt chức năng theo dõi}{75}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Lịch và nhật ký}{75}{subsubsection.4.3.3}%
-\contentsline {subsubsection}{\numberline {4.3.4}Cuộc gọi đến nền}{75}{subsubsection.4.3.4}%
-\contentsline {subsubsection}{\numberline {4.3.5}Video call và joystick}{75}{subsubsection.4.3.5}%
-\contentsline {subsection}{\numberline {4.4}Hiện thực dữ liệu dùng chung}{76}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Huấn luyện và chuyển đổi mô hình AI}{76}{subsection.4.5}%
-\contentsline {subsubsection}{\numberline {4.5.1}Xử lý dữ liệu (Dataset Processing)}{76}{subsubsection.4.5.1}%
-\contentsline {subsubsection}{\numberline {4.5.2}Kỹ thuật trích xuất đặc trưng (Feature Engineering)}{77}{subsubsection.4.5.2}%
-\contentsline {subsubsection}{\numberline {4.5.3}Huấn luyện mô hình (Model Training)}{78}{subsubsection.4.5.3}%
-\contentsline {subsubsection}{\numberline {4.5.4}Chuyển đổi và tối ưu mô hình (Model Conversion)}{78}{subsubsection.4.5.4}%
-\contentsline {subsubsection}{\numberline {4.5.5}Kiểm tra tương đương sau chuyển đổi}{78}{subsubsection.4.5.5}%
-\contentsline {subsection}{\numberline {4.6}Hiện thực firmware phần thân robot}{79}{subsection.4.6}%
-\contentsline {subsubsection}{\numberline {4.6.1}Khởi tạo phần cứng}{79}{subsubsection.4.6.1}%
-\contentsline {subsubsection}{\numberline {4.6.2}BLE GATT server}{79}{subsubsection.4.6.2}%
-\contentsline {subsubsection}{\numberline {4.6.3}Deadzone và watchdog}{79}{subsubsection.4.6.3}%
-\contentsline {subsection}{\numberline {4.7}Cấu hình và triển khai}{80}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Những điểm hiện thực cần lưu ý}{80}{subsection.4.8}%
-\contentsline {subsection}{\numberline {4.9}Kết luận chương}{81}{subsection.4.9}%
-\contentsline {section}{\numberline {5}Kết quả và thảo luận}{82}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{82}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{82}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{83}{subsection.5.3}%
-\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{83}{subsubsection.5.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{84}{subsubsection.5.3.2}%
-\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{84}{subsubsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{85}{subsection.5.4}%
-\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ điều khiển}{85}{subsubsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã}{85}{subsubsection.5.4.2}%
-\contentsline {subsection}{\numberline {5.5}Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}{86}{subsection.5.5}%
-\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{86}{subsubsection.5.5.1}%
-\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{86}{subsubsection.5.5.2}%
-\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{86}{subsubsection.5.5.3}%
-\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{87}{subsubsection.5.5.4}%
-\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{87}{subsection.5.6}%
-\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{89}{subsection.5.7}%
-\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{89}{subsubsection.5.7.1}%
-\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{89}{subsubsection.5.7.2}%
-\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{89}{subsubsection.5.7.3}%
-\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{89}{subsubsection.5.7.4}%
-\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{90}{subsection.5.8}%
-\contentsline {subsubsection}{\numberline {5.8.1}Benchmark Độ chính xác (Accuracy \& Metrics)}{90}{subsubsection.5.8.1}%
-\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{90}{subsubsection.5.8.2}%
-\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{91}{subsection.5.9}%
-\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{91}{subsubsection.5.9.1}%
-\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{91}{subsubsection.5.9.2}%
-\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{92}{subsubsection.5.9.3}%
-\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{92}{subsection.5.10}%
-\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{92}{subsection.5.11}%
-\contentsline {subsection}{\numberline {5.12}Kết luận chương}{93}{subsection.5.12}%
-\contentsline {section}{\numberline {6}Kết luận}{94}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng kết}{94}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{95}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Hạn chế}{95}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{96}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Đánh giá AI có thể tái lập}{96}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Tăng độ bền theo dõi và phát hiện}{96}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}An toàn và điều khiển robot}{97}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Backend và bảo mật nhiều người dùng}{97}{subsubsection.6.4.4}%
-\contentsline {subsubsection}{\numberline {6.4.5}Khả năng hoạt động khi mất mạng}{97}{subsubsection.6.4.5}%
-\contentsline {subsubsection}{\numberline {6.4.6}Cải thiện trải nghiệm người cao tuổi}{97}{subsubsection.6.4.6}%
-\contentsline {subsubsection}{\numberline {6.4.7}Tối ưu triển khai}{97}{subsubsection.6.4.7}%
-\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{98}{subsection.6.5}%
-\contentsline {section}{Tài liệu tham khảo}{99}{section*.61}%
-\contentsline {section}{Phụ lục}{108}{section*.62}%
-\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{108}{section*.63}%
-\contentsline {subsection}{Phụ lục B -- Hợp đồng dữ liệu và giao thức}{112}{table.6.10}%
-\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{113}{table.caption.64}%
-\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{115}{table.6.13}%
-\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{116}{lstnumber.7.21}%
-\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{117}{lstnumber.8.7}%
-\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{117}{table.caption.67}%
+\contentsline {subsection}{\numberline {2.2}Giới thiệu YOLO (You Only Look Once)}{27}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Bài toán Object Detection}{27}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Lịch sử phát triển Object Detection}{28}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Khái niệm Bounding Box}{29}{subsubsection.2.2.3}%
+\contentsline {subsubsection}{\numberline {2.2.4}Intersection over Union (IoU)}{30}{subsubsection.2.2.4}%
+\contentsline {subsubsection}{\numberline {2.2.5}Các khái niệm True Positive, False Positive, False Negative}{31}{subsubsection.2.2.5}%
+\contentsline {subsubsection}{\numberline {2.2.6}Đánh giá hiệu suất: Mean Average Precision (mAP)}{31}{subsubsection.2.2.6}%
+\contentsline {subsubsection}{\numberline {2.2.7}Ý tưởng YOLO: Phát hiện trong một lần suy luận}{32}{subsubsection.2.2.7}%
+\contentsline {subsubsection}{\numberline {2.2.8}So sánh YOLO với phương pháp truyền thống}{34}{subsubsection.2.2.8}%
+\contentsline {subsection}{\numberline {2.3}Nền tảng Thị giác máy tính (Computer Vision)}{35}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Mạng nơ-ron tích chập (CNN) và Kiến trúc YOLO26}{35}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Thuật toán theo dõi đa đối tượng ByteTrack}{37}{subsubsection.2.3.2}%
+\contentsline {subsection}{\numberline {2.4}Mô hình chuỗi thời gian (Sequence Modeling)}{39}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Mạng nơ-ron hồi quy (RNN)}{39}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Mạng Bộ nhớ Ngắn-Dài hạn (LSTM)}{39}{subsubsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.5}Xử lý Ngôn ngữ Tự nhiên (NLP) và Hệ thống Giọng nói}{41}{subsection.2.5}%
+\contentsline {subsubsection}{\numberline {2.5.1}Mô hình ngôn ngữ lớn (LLM) và Kiến trúc Transformer}{41}{subsubsection.2.5.1}%
+\contentsline {subsubsection}{\numberline {2.5.2}Khái niệm AI Agent}{43}{subsubsection.2.5.2}%
+\contentsline {subsubsection}{\numberline {2.5.3}Mô hình Ngôn ngữ Lớn (Large Language Models)}{43}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.4}Hệ thống chuyển đổi Giọng nói (STT \& TTS)}{50}{subsubsection.2.5.4}%
+\contentsline {subsubsection}{\numberline {2.5.5}Một số giải pháp Nhận dạng Giọng nói:}{51}{subsubsection.2.5.5}%
+\contentsline {subsubsection}{\numberline {2.5.6}Phương pháp tiếp cận Xử lý Ngôn ngữ Tự nhiên (NLP) trong dự án}{51}{subsubsection.2.5.6}%
+\contentsline {subsubsection}{\numberline {2.5.7}Phương thức triển khai: Điện toán Biên (Edge Computing) trên thiết bị Android}{52}{subsubsection.2.5.7}%
+\contentsline {subsection}{\numberline {2.6}Giới thiệu Dataset Fall Detection – LE2I}{52}{subsection.2.6}%
+\contentsline {subsubsection}{\numberline {2.6.1}Mục tiêu và đặc điểm của dataset LE2I}{52}{subsubsection.2.6.1}%
+\contentsline {subsubsection}{\numberline {2.6.2}Dữ liệu video và Annotation}{53}{subsubsection.2.6.2}%
+\contentsline {subsubsection}{\numberline {2.6.3}Ưu điểm và hạn chế của dataset LE2I}{53}{subsubsection.2.6.3}%
+\contentsline {subsubsection}{\numberline {2.6.4}So sánh với các Dataset quy mô lớn (DiverseFALL10500)}{54}{subsubsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.7}Suy luận AI trên thiết bị và TensorFlow Lite}{54}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Firebase Authentication và Realtime Database}{55}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}WebRTC, signaling và ICE}{55}{subsection.2.9}%
+\contentsline {subsection}{\numberline {2.10}Bluetooth Low Energy và GATT}{56}{subsection.2.10}%
+\contentsline {subsection}{\numberline {2.11}Động cơ BLDC và điều khiển FOC}{56}{subsection.2.11}%
+\contentsline {subsection}{\numberline {2.12}An toàn và quản trị rủi ro AI}{56}{subsection.2.12}%
+\contentsline {subsection}{\numberline {2.13}Kết luận chương}{57}{subsection.2.13}%
+\contentsline {section}{\numberline {3}Phân tích và thiết kế hệ thống}{58}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Mục tiêu và nguyên tắc thiết kế}{58}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Mô hình bối cảnh và tác nhân}{58}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Phân tích yêu cầu}{60}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Yêu cầu chức năng}{60}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Yêu cầu phi chức năng}{61}{subsubsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.4}Mô hình use case}{62}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Giải pháp AI cho chức năng phát hiện té ngã (Fall Detection)}{63}{subsection.3.5}%
+\contentsline {subsubsection}{\numberline {3.5.1}Những khó khăn từ dữ liệu (Dataset)}{63}{subsubsection.3.5.1}%
+\contentsline {subsubsection}{\numberline {3.5.2}Tại sao YOLO thường không đủ mà phải kết hợp LSTM?}{64}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.5.3}Vì sao LSTM vẫn chưa đủ nên cần thêm State-Machine?}{64}{subsubsection.3.5.3}%
+\contentsline {subsection}{\numberline {3.6}Kiến trúc triển khai}{65}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}Thiết kế dữ liệu Firebase}{65}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}Thiết kế kênh điều khiển chuyển động}{68}{subsection.3.8}%
+\contentsline {subsubsection}{\numberline {3.8.1}Hợp đồng lệnh trên RTDB}{68}{subsubsection.3.8.1}%
+\contentsline {subsubsection}{\numberline {3.8.2}Ánh xạ joystick sang hai bánh}{68}{subsubsection.3.8.2}%
+\contentsline {subsubsection}{\numberline {3.8.3}Hợp đồng BLE và chuỗi dừng an toàn}{69}{subsubsection.3.8.3}%
+\contentsline {subsection}{\numberline {3.9}Thiết kế pipeline thị giác và té ngã}{69}{subsection.3.9}%
+\contentsline {subsubsection}{\numberline {3.9.1}Luồng dữ liệu}{70}{subsubsection.3.9.1}%
+\contentsline {subsubsection}{\numberline {3.9.2}Khóa người mục tiêu ID0}{70}{subsubsection.3.9.2}%
+\contentsline {subsubsection}{\numberline {3.9.3}Đặc trưng LSTM và máy trạng thái}{70}{subsubsection.3.9.3}%
+\contentsline {subsubsection}{\numberline {3.9.4}Hậu kiểm và quản lý một sự cố}{71}{subsubsection.3.9.4}%
+\contentsline {subsection}{\numberline {3.10}Thiết kế cuộc gọi WebRTC và quyền sở hữu camera}{71}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.11}Thiết kế hội thoại và lịch nhắc}{72}{subsection.3.11}%
+\contentsline {subsection}{\numberline {3.12}Thiết kế firmware và điều khiển động cơ}{72}{subsection.3.12}%
+\contentsline {subsection}{\numberline {3.13}An toàn, bảo mật và quyền riêng tư}{72}{subsection.3.13}%
+\contentsline {subsection}{\numberline {3.14}Ma trận truy vết yêu cầu}{73}{subsection.3.14}%
+\contentsline {subsection}{\numberline {3.15}Đánh đổi và quyết định kiến trúc}{74}{subsection.3.15}%
+\contentsline {subsection}{\numberline {3.16}Kết luận chương}{75}{subsection.3.16}%
+\contentsline {section}{\numberline {4}Hiện thực hệ thống}{76}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Môi trường và tổ chức mã nguồn}{76}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Hiện thực RobotApp}{76}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Khởi động, điều hướng và vòng đời dịch vụ}{76}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}TrackingFragment và quyền sở hữu camera}{77}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Nạp và suy luận mô hình pose}{77}{subsubsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.4}SORT, Kalman, Hungarian và Re-ID}{78}{subsubsection.4.2.4}%
+\contentsline {subsubsection}{\numberline {4.2.5}Khóa mục tiêu ID0 và sinh lệnh auto-follow}{78}{subsubsection.4.2.5}%
+\contentsline {subsubsection}{\numberline {4.2.6}LSTM phát hiện té ngã}{79}{subsubsection.4.2.6}%
+\contentsline {subsubsection}{\numberline {4.2.7}Hậu kiểm té ngã}{79}{subsubsection.4.2.7}%
+\contentsline {subsubsection}{\numberline {4.2.8}Luồng xác nhận và cảnh báo}{79}{subsubsection.4.2.8}%
+\contentsline {subsubsection}{\numberline {4.2.9}Chatbot giọng nói}{80}{subsubsection.4.2.9}%
+\contentsline {subsubsection}{\numberline {4.2.10}Lịch nhắc}{81}{subsubsection.4.2.10}%
+\contentsline {subsubsection}{\numberline {4.2.11}WebRTC trong RobotApp}{81}{subsubsection.4.2.11}%
+\contentsline {subsubsection}{\numberline {4.2.12}RobotControlManager và BLE}{81}{subsubsection.4.2.12}%
+\contentsline {subsection}{\numberline {4.3}Hiện thực CaregiverApp}{82}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}Khởi động, xác thực và hồ sơ}{82}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}Bật/tắt chức năng theo dõi}{82}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Lịch và nhật ký}{82}{subsubsection.4.3.3}%
+\contentsline {subsubsection}{\numberline {4.3.4}Cuộc gọi đến nền}{82}{subsubsection.4.3.4}%
+\contentsline {subsubsection}{\numberline {4.3.5}Video call và joystick}{82}{subsubsection.4.3.5}%
+\contentsline {subsection}{\numberline {4.4}Hiện thực dữ liệu dùng chung}{83}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Huấn luyện và chuyển đổi mô hình AI}{83}{subsection.4.5}%
+\contentsline {subsubsection}{\numberline {4.5.1}Xử lý dữ liệu (Dataset Processing)}{83}{subsubsection.4.5.1}%
+\contentsline {subsubsection}{\numberline {4.5.2}Kỹ thuật trích xuất đặc trưng (Feature Engineering)}{84}{subsubsection.4.5.2}%
+\contentsline {subsubsection}{\numberline {4.5.3}Huấn luyện mô hình (Model Training)}{85}{subsubsection.4.5.3}%
+\contentsline {subsubsection}{\numberline {4.5.4}Chuyển đổi và tối ưu mô hình (Model Conversion)}{85}{subsubsection.4.5.4}%
+\contentsline {subsubsection}{\numberline {4.5.5}Kiểm tra tương đương sau chuyển đổi}{85}{subsubsection.4.5.5}%
+\contentsline {subsection}{\numberline {4.6}Hiện thực firmware phần thân robot}{86}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}Khởi tạo phần cứng}{86}{subsubsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.2}BLE GATT server}{86}{subsubsection.4.6.2}%
+\contentsline {subsubsection}{\numberline {4.6.3}Deadzone và watchdog}{86}{subsubsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.7}Cấu hình và triển khai}{87}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Những điểm hiện thực cần lưu ý}{87}{subsection.4.8}%
+\contentsline {subsection}{\numberline {4.9}Kết luận chương}{88}{subsection.4.9}%
+\contentsline {section}{\numberline {5}Kết quả và thảo luận}{89}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{89}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{89}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{90}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{90}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{91}{subsubsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{91}{subsubsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{92}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ điều khiển}{92}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã}{92}{subsubsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.5}Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}{93}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{93}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{93}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{93}{subsubsection.5.5.3}%
+\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{94}{subsubsection.5.5.4}%
+\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{94}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{96}{subsection.5.7}%
+\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{96}{subsubsection.5.7.1}%
+\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{96}{subsubsection.5.7.2}%
+\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{96}{subsubsection.5.7.3}%
+\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{96}{subsubsection.5.7.4}%
+\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{97}{subsection.5.8}%
+\contentsline {subsubsection}{\numberline {5.8.1}Benchmark Độ chính xác (Accuracy \& Metrics)}{97}{subsubsection.5.8.1}%
+\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{97}{subsubsection.5.8.2}%
+\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{98}{subsection.5.9}%
+\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{98}{subsubsection.5.9.1}%
+\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{98}{subsubsection.5.9.2}%
+\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{99}{subsubsection.5.9.3}%
+\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{99}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{99}{subsection.5.11}%
+\contentsline {subsection}{\numberline {5.12}Kết luận chương}{100}{subsection.5.12}%
+\contentsline {section}{\numberline {6}Kết luận}{101}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng kết}{101}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{102}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Hạn chế}{102}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{103}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Đánh giá AI có thể tái lập}{103}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Tăng độ bền theo dõi và phát hiện}{103}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}An toàn và điều khiển robot}{104}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Backend và bảo mật nhiều người dùng}{104}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Khả năng hoạt động khi mất mạng}{104}{subsubsection.6.4.5}%
+\contentsline {subsubsection}{\numberline {6.4.6}Cải thiện trải nghiệm người cao tuổi}{104}{subsubsection.6.4.6}%
+\contentsline {subsubsection}{\numberline {6.4.7}Tối ưu triển khai}{104}{subsubsection.6.4.7}%
+\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{105}{subsection.6.5}%
+\contentsline {section}{Tài liệu tham khảo}{106}{section*.64}%
+\contentsline {section}{Phụ lục}{115}{section*.65}%
+\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{115}{section*.66}%
+\contentsline {subsection}{Phụ lục B -- Hợp đồng dữ liệu và giao thức}{119}{table.6.10}%
+\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{120}{table.caption.67}%
+\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{122}{table.6.13}%
+\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{123}{lstnumber.7.21}%
+\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{124}{lstnumber.8.7}%
+\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{124}{table.caption.70}%
