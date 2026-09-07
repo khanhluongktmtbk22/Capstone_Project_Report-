@@ -1,5 +1,20 @@
 \section{Hiện thực hệ thống}
 
+Chương 3 đã xác định các module, luồng phối hợp, hợp đồng giao tiếp và công nghệ phù hợp cho từng loại dữ liệu. Từ các quyết định đó, chương này ánh xạ kiến trúc logic sang các thành phần phần mềm và phần cứng cụ thể, sau đó trình bày cách hiện thực RobotApp, CaregiverApp, pipeline mô hình AI và firmware thân robot.
+
+\subsection{Kiến trúc hiện thực và ánh xạ công nghệ}
+
+Hình \ref{fig:implementation_architecture} là kết quả tổng hợp của quá trình thiết kế ở Chương 3. Miền người chăm sóc được hiện thực bằng CaregiverApp; miền dịch vụ dùng chung sử dụng Firebase Authentication, Firebase Realtime Database, dịch vụ LLM và hạ tầng STUN/TURN; miền trí tuệ tại robot được hiện thực bằng RobotApp; tầng chấp hành gồm ESP32, BLE GATT, SimpleFOC, encoder, driver và hai động cơ BLDC.
+
+Trong kiến trúc này, Firebase RTDB vừa lưu cây JSON đồng bộ gần thời gian thực, vừa chuyển cờ chức năng, lệnh điều khiển và signaling WebRTC. Firebase không mang media: audio/video được truyền bởi WebRTC. Groq chỉ phục vụ tác vụ ngôn ngữ và không nằm trong vòng điều khiển motor. CaregiverApp không kết nối BLE trực tiếp; RobotApp là cầu nối duy nhất từ lệnh trên RTDB hoặc auto-follow tới ESP32. Cách ánh xạ này bảo toàn các ranh giới đã chốt ở Chương 3: AI trả kết quả nhận thức, RobotApp quyết định nghiệp vụ, còn firmware chịu trách nhiệm chấp hành và dừng mức thấp.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{System_Implementation_Architecture.png}
+    \caption{Kiến trúc hiện thực của hệ thống}
+    \label{fig:implementation_architecture}
+\end{figure}
+
 \subsection{Môi trường và tổ chức mã nguồn}
 
 Đồ án được hiện thực thành bốn khối mã/tài nguyên độc lập nhưng dùng chung hợp đồng dữ liệu. Hai ứng dụng Android được viết bằng Kotlin, giao diện XML và ViewBinding. RobotApp có package \texttt{com.example.datn\_v1}; CaregiverApp có package \texttt{com.example.datn\_caregiver}. Cả hai đặt \texttt{minSdk=23}, \texttt{targetSdk=36}, Java/Kotlin JVM target 11. Firmware là một sketch Arduino cho ESP32. Khối AI chứa mô hình huấn luyện, mô hình trung gian ONNX, mô hình TFLite và các script chuyển đổi/thử suy luận.
@@ -52,13 +67,13 @@ Pipeline tiền xử lý chuẩn hóa ảnh về kích thước 320$\times$320. 
 
 Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực tracking-by-detection. Mỗi detection gồm \texttt{bbox}, \texttt{score}, \texttt{classId} và keypoint. Kalman dự báo vùng bao kế tiếp; ma trận chi phí ghép được giải bằng Hungarian. Cách tiếp cận giữ độ phức tạp thấp phù hợp suy luận trên điện thoại, kế thừa tinh thần SORT \reportcite{ref:sort} nhưng bổ sung tín hiệu pose và ngoại hình.
 
-Hàm chi phí sử dụng 30\% sai khác IoU, 32\% khoảng cách tâm, 23\% khoảng cách pose và 15\% thay đổi diện tích. Match thông thường có chi phí tối đa 0,76; track được bảo vệ cho phép đến 0,88. Ngưỡng IoU cơ sở là 0,15 vì pose/bbox có thể rung mạnh. Track mới cần hai hit để xuất hiện. Track ID0 được giữ tối đa 45 frame, track nhiễu 10 frame.
+Hàm chi phí sử dụng 30\% sai khác IoU, 30\% khoảng cách tâm, 30\% khoảng cách pose và 10\% thay đổi diện tích. Tracker được cấu hình với ngưỡng IoU cơ sở 0,25; track mới cần hai hit để xác nhận. Track ID0 được bảo vệ và giữ tối đa 45 frame không khớp, còn track nhiễu giữ 10 frame.
 
 Re-ID trích histogram HSV vùng thân, nơi ít bị thay đổi hơn nền và mặt khi người quay. Histogram không được cập nhật liên tục khi thiếu keypoint vì một vùng crop sai có thể làm ``học nhầm'' người khác. Khi detection mới phù hợp với hồ sơ track cũ, \texttt{restoreWithId} khôi phục định danh. Đây là Re-ID nhẹ, không tương đương embedding sâu của Deep SORT \reportcite{ref:deepsort}; ưu điểm là chi phí tính toán thấp, hạn chế là nhạy với quần áo giống nhau và ánh sáng.
 
 \subsubsection{Khóa mục tiêu ID0 và sinh lệnh auto-follow}
 
-Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ở lần chọn đầu, người có vùng bao lớn thường được xem là gần robot nhất. Sau đó ID0 được truyền qua pipeline LSTM và điều khiển. Khi mất mục tiêu, logic phục hồi yêu cầu một người duy nhất, ở gần vị trí cũ, thuộc vùng trung tâm và ổn định; trong cảnh nhiều người, robot chờ thay vì tự đổi chủ thể.
+Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ứng viên đầu tiên được xếp hạng theo diện tích vùng bao, confidence, tỷ lệ keypoint nhìn thấy, độ gần tâm ảnh và mức cắt biên. Sau đó ID0 được dùng cho cả pipeline LSTM và điều khiển. Khi mất mục tiêu, logic chỉ tìm lại trong 2 s; ứng viên phải cách vị trí cuối không quá 35\% đường chéo ảnh, thuộc vùng trung tâm và ổn định ba frame. Trong khi sự cố té ngã còn hoạt động, robot không chọn một track khác thay ID0.
 
 Auto-follow so sánh tâm vùng bao với vùng mục tiêu. Nếu lệch ngang, hệ thống phát lệnh quay; nếu kích thước người cho thấy khoảng cách xa, phát lệnh tiến. Các mức quay hiện dùng kênh $y=\pm0,50$ theo hệ tọa độ camera. Cách đặt dấu khác trực giác joystick nhưng đã được tách rõ theo từng hệ tọa độ. Lệnh cuối vẫn đi qua \texttt{RobotControlManager}, nhờ đó cùng được kiểm tra và format.
 
@@ -66,11 +81,11 @@ Auto-follow so sánh tâm vùng bao với vùng mục tiêu. Nếu lệch ngang,
 
 \texttt{LstmFallDetector} nạp \texttt{best\_model\_lstm\_v2.tflite} khoảng 63,9 KB, dùng hai luồng CPU. Mỗi track có \texttt{FallDetectionQueue}; queue đủ 15 frame mới tạo tensor $1\times15\times69$ kiểu float. Output $1\times2$ được diễn giải là xác suất normal/fall. Model gốc Keras khoảng 193,8 KB, cho thấy TFLite giảm đáng kể kích thước đóng gói.
 
-Máy trạng thái dùng threshold 0,5 và nhiều bộ đếm: 10 frame fall liên tiếp để vào Falling; 15 frame phù hợp để xác nhận trạng thái nằm; 20 frame đứng để phục hồi; track mất quá 60 frame thì dọn state. Khi tracker đổi ID hợp lệ, \texttt{transferStateTo} chuyển queue và trạng thái để chuỗi thời gian không bị mất. LSTM được dùng vì khả năng mô hình hóa phụ thuộc theo thời gian \reportcite{ref:lstm}, nhưng đầu ra không được dùng đơn độc để phát cảnh báo.
+Lớp FALL được chọn khi xác suất FALL lớn hơn xác suất NO FALL. Kết quả này được chuyển cho \texttt{FallVerificationEngine}; năm frame FALL liên tiếp mới tạo một chuỗi ứng viên. Khi tracker khôi phục ID0 hợp lệ, hàng đợi đặc trưng tiếp tục gắn với đúng người mục tiêu. LSTM được dùng vì khả năng mô hình hóa phụ thuộc theo thời gian \reportcite{ref:lstm}, nhưng đầu ra không được dùng đơn độc để phát cảnh báo.
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence}: mục tiêu có thấy hay không, tỷ lệ $y$ của thân trên, số keypoint, vùng bao có nằm trọn ảnh và aspect ratio. Baseline thân trên được cập nhật bằng trung bình trượt mũ với $\alpha=0,08$ trong trạng thái bình thường. Khi có sự kiện, engine chấm bằng chứng qua các ngưỡng đã mô tả ở Chương 3.
+\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence} gồm trạng thái nhìn thấy mục tiêu, tỷ lệ $y$ của thân trên, số keypoint, tình trạng vùng bao và aspect ratio. Phiên bản hiện tại dùng trực tiếp trạng thái mục tiêu cùng vị trí mũi/vai cho hậu kiểm: ba frame thân trên ở vùng trên ảnh loại ứng viên; ba frame ở dưới ngưỡng hoặc 12 frame mất dữ liệu dẫn đến hỏi xác nhận.
 
 Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reason)} hoặc \texttt{AskForConfirmation(reason, score, evidence)}. Tách quyết định khỏi UI giúp unit test từng nhánh mà không cần camera. \texttt{isIncidentActive} và \texttt{canAcquireNewTarget} ngăn một sự cố tạo nhiều yêu cầu đồng thời. \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} làm rõ vòng đời sự cố.
 
@@ -83,7 +98,7 @@ Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reas
 
 \subsubsection{Luồng xác nhận và cảnh báo}
 
-TrackingService truyền \texttt{FallEvent} đến chatbot. Chatbot là owner duy nhất tạo \texttt{fall\_alerts}, bảo đảm một record cho một sự cố. Robot trước hết dừng, phát câu hỏi TTS và mở cửa sổ nghe tối đa 10 s. Các cụm từ an toàn/nguy hiểm rõ được đối chiếu cục bộ để giảm độ trễ và tránh phụ thuộc LLM. Phản hồi mơ hồ gọi model phân loại không streaming và yêu cầu kết quả cấu trúc. Nếu phân loại lỗi hoặc người dùng im lặng, trạng thái được cập nhật nguy hiểm và gọi caregiver sau khi TTS hoàn tất.
+TrackingService truyền đúng một \texttt{FallEvent} đến chatbot. Robot trước hết dừng, phát câu hỏi TTS và mở cửa sổ nghe tối đa 10 s. Các cụm từ an toàn/nguy hiểm rõ được đối chiếu cục bộ để giảm độ trễ và tránh phụ thuộc LLM. Phản hồi mơ hồ gọi model phân loại không streaming và yêu cầu kết quả cấu trúc. Nhánh xác nhận an toàn chỉ giải quyết sự cố cục bộ; nhánh nguy hiểm, lỗi phân loại hoặc im lặng mới ghi \texttt{fall\_alerts} và gọi caregiver sau khi TTS hoàn tất.
 
 Bản ghi cảnh báo chứa timestamp, trạng thái, phản hồi và bằng chứng như \path|verificationReason|, \path|visibleKeypoints|, \path|bboxFullyInside|, \path|upperBodyYRatio|. Thông tin này giúp truy vết vì sao engine yêu cầu xác nhận, nhưng không phải là giải thích đầy đủ của mô hình LSTM.
 
