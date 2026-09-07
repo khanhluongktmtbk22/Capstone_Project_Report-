@@ -330,355 +330,157 @@ Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nú
 
 
 
-\subsection{Giới thiệu YOLO (You Only Look Once)}
+\subsection{Nền tảng Thị giác máy tính (Computer Vision)}
 %=========================================
+
+Thị giác máy tính cung cấp dữ liệu cảm nhận cho hai chức năng chính của robot: giám sát tư thế nhằm phát hiện té ngã và xác định vị trí người để tự động bám theo. Một pipeline điển hình gồm thu nhận khung hình, trích xuất đặc trưng bằng mạng nơ-ron tích chập (Convolutional Neural Network -- CNN), phát hiện người và các điểm khớp, liên kết kết quả qua thời gian, sau đó chuyển chuỗi đặc trưng sang bộ phân loại hành vi. CNN học trực tiếp các bộ lọc không gian từ dữ liệu, nhờ đó thay thế phần lớn quá trình thiết kế đặc trưng thủ công của các phương pháp thị giác cổ điển \reportcite{ref:cnn}. Các khái niệm từ phát hiện đối tượng đến đánh giá mô hình dưới đây là nền tảng chung để phân tích MobileNet SSD, YOLO và EfficientDet, không phụ thuộc vào một họ kiến trúc cụ thể.
 
 \subsubsection{Bài toán Object Detection}
 
-Object Detection (Phát hiện đối tượng) là một trong những bài toán cơ bản và quan trọng nhất trong thị giác máy tính \reportcite{ref:odsurvey}. Khác với Image Classification chỉ xác định loại đối tượng chính trong ảnh, Object Detection yêu cầu đồng thời:
+Phát hiện đối tượng (Object Detection) trả lời đồng thời hai câu hỏi: trong ảnh có những đối tượng thuộc lớp nào và chúng nằm ở đâu. Vì vậy, khác với phân loại ảnh chỉ sinh một hoặc một số nhãn cho toàn ảnh, đầu ra của bộ phát hiện là một tập
+\begin{equation}
+\mathcal{D}=\{(b_i,c_i,s_i)\}_{i=1}^{M},
+\end{equation}
+trong đó $b_i$ là hộp giới hạn, $c_i$ là nhãn lớp và $s_i\in[0,1]$ là độ tin cậy của dự đoán thứ $i$. Số lượng đối tượng $M$ thay đổi theo từng khung hình. Tổng quan của Zou và cộng sự phân Object Detection thành hai nhóm lớn: detector hai giai đoạn, trước hết sinh vùng ứng viên rồi phân loại/tinh chỉnh vùng; và detector một giai đoạn, dự đoán trực tiếp lớp cùng vị trí trên bản đồ đặc trưng \reportcite{ref:odsurvey}.
 
-\begin{itemize}
-    \item \textbf{Định vị (Localization)}: Xác định vị trí của đối tượng trong ảnh thông qua bounding box (hộp giới hạn)
-    \item \textbf{Phân loại (Classification)}: Xác định loại của mỗi đối tượng được phát hiện
-\end{itemize}
-
-Trong bài toán phát hiện ngã, Object Detection đóng vai trò then chốt: mô hình cần xác định vị trí con người trong khung hình và phân loại trạng thái của họ (đang đứng, đi lại, hay đã ngã).
+Trong đồ án, đầu ra cần thiết không chỉ là hộp bao quanh người. Bộ ước lượng tư thế còn trả về các điểm khớp của cơ thể; hộp người hỗ trợ theo dõi và điều khiển bám mục tiêu, trong khi tọa độ khớp tạo chuỗi đặc trưng cho mô hình LSTM. Do đó, phát hiện một người trong từng khung hình mới là tầng cảm nhận ban đầu, chưa đồng nghĩa với kết luận người đó đã té ngã.
 
 \subsubsection{Lịch sử phát triển Object Detection}
 
-Theo khảo sát ``Object Detection in 20 Years'' của Zou và cộng sự \reportcite{ref:odsurvey}, lĩnh vực Object Detection đã trải qua sự phát triển đáng kể trong hơn hai thập kỷ:
-
-\textbf{a) Giai đoạn truyền thống (1990s-2012)}
+Quá trình phát triển của Object Detection có thể khái quát qua ba giai đoạn \reportcite{ref:odsurvey}:
 
 \begin{itemize}
-    \item \textbf{Viola-Jones Detector (2001)}: Detector đầu tiên đạt tốc độ real-time cho face detection, sử dụng Haar-like features và AdaBoost
-    \item \textbf{HOG Detector (2005)}: Histogram of Oriented Gradients cho pedestrian detection
-    \item \textbf{DPM - Deformable Parts Model (2010)}: Mô hình biến dạng các phần, đạt SOTA trên PASCAL VOC nhiều năm
+    \item \textbf{Đặc trưng thủ công và cửa sổ trượt}: các bộ phát hiện như Viola--Jones, HOG và DPM sử dụng đặc trưng được thiết kế trước kết hợp bộ phân loại. Chúng đặt nền móng cho phát hiện khuôn mặt và người đi bộ, nhưng việc quét nhiều vị trí, tỉ lệ và thiết kế đặc trưng riêng cho từng bài toán làm hạn chế khả năng mở rộng.
+    \item \textbf{Detector hai giai đoạn dựa trên học sâu}: R-CNN áp dụng CNN lên các vùng ứng viên \reportcite{ref:rcnn}; Faster R-CNN đưa mạng sinh vùng đề xuất vào cùng kiến trúc, cải thiện đáng kể tính thống nhất và tốc độ \reportcite{ref:faster_rcnn}. Nhóm này thường có lợi thế về độ chính xác định vị nhưng chi phí suy luận và bộ nhớ có thể lớn đối với thiết bị di động.
+    \item \textbf{Detector một giai đoạn và tối ưu cho thiết bị biên}: SSD dự đoán đối tượng trên nhiều bản đồ đặc trưng chỉ trong một lần suy luận \reportcite{ref:ssd}; YOLO hợp nhất bài toán thành ánh xạ trực tiếp từ ảnh đến hộp và xác suất lớp \reportcite{ref:yolo}. Sau đó, các thiết kế backbone nhẹ, hợp nhất đặc trưng đa tỉ lệ và tìm kiếm kiến trúc tạo ra MobileNet SSD, EfficientDet và nhiều biến thể YOLO hướng đến cân bằng độ chính xác--độ trễ.
 \end{itemize}
 
-\textbf{b) Giai đoạn Deep Learning (2012-nay)}
-
-\begin{itemize}
-    \item \textbf{AlexNet (2012)}: Bước ngoặt của deep learning trong computer vision
-    \item \textbf{R-CNN (2014)}: Kết hợp region proposals với CNN features
-    \item \textbf{Fast R-CNN, Faster R-CNN (2015)}: Cải tiến tốc độ với RoI pooling và Region Proposal Network
-    \item \textbf{YOLO v1 (2016)}: Đột phá với one-stage detection, real-time
-    \item \textbf{SSD (2016)}: Single Shot MultiBox Detector với multi-scale features
-    \item \textbf{RetinaNet (2017)}: Giới thiệu Focal Loss để giải quyết class imbalance
-    \item \textbf{YOLO v3-v11 (2018-2024)}: Liên tục cải tiến về accuracy và speed
-\end{itemize}
-
-\textbf{c) Xu hướng hiện tại}
-
-Theo \reportcite{ref:odsurvey}, các xu hướng chính trong Object Detection bao gồm:
-\begin{itemize}
-    \item Anchor-free detectors (loại bỏ anchor boxes)
-    \item Transformer-based detectors (DETR, Swin Transformer)
-    \item NAS-based architecture search (tự động tìm kiếm kiến trúc)
-    \item Real-time detection trên edge devices
-\end{itemize}
+Xu hướng hiện nay không chỉ tối ưu độ chính xác trên tập kiểm thử mà còn quan tâm độ trễ, bộ nhớ, mức tiêu thụ năng lượng và khả năng chuyển đổi mô hình. Đây là các tiêu chí đặc biệt quan trọng khi camera và suy luận AI cùng hoạt động liên tục trên smartphone gắn trên robot.
 
 \subsubsection{Khái niệm Bounding Box}
 
-Bounding Box (hộp giới hạn) là hình chữ nhật bao quanh đối tượng trong ảnh, được sử dụng để xác định vị trí và kích thước của đối tượng.
+Bounding box là hình chữ nhật song song với các trục ảnh dùng để mô tả vị trí và kích thước đối tượng. Hai cách biểu diễn thường gặp là $(x_{min},y_{min},x_{max},y_{max})$, với hai góc đối diện của hộp, và $(x_c,y_c,w,h)$, với tâm, chiều rộng và chiều cao. Tọa độ có thể ở đơn vị pixel hoặc được chuẩn hóa về $[0,1]$ theo kích thước ảnh.
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.6\textwidth]{Images/bounding_box_example.png}
     \vspace{8pt}
-    \caption{Ví dụ minh họa Bounding Box trong Object Detection.}
+    \caption{Minh họa hộp giới hạn của đối tượng trong ảnh.}
     \label{fig:bounding_box}
 \end{figure}
 
-Có hai cách biểu diễn bounding box phổ biến:
+Với ảnh có kích thước $W\times H$, phép chuyển từ tọa độ hai góc sang dạng tâm đã chuẩn hóa được xác định bởi
+\begin{align}
+x_c&=\frac{x_{min}+x_{max}}{2W}, &
+y_c&=\frac{y_{min}+y_{max}}{2H},\\
+w&=\frac{x_{max}-x_{min}}{W}, &
+h&=\frac{y_{max}-y_{min}}{H}.
+\end{align}
 
-\textbf{a) Format $(x_{min}, y_{min}, x_{max}, y_{max})$ - PASCAL VOC format}
-
-\begin{itemize}
-    \item $(x_{min}, y_{min})$: Tọa độ góc trên bên trái của box
-    \item $(x_{max}, y_{max})$: Tọa độ góc dưới bên phải của box
-    \item Đơn vị: pixel tuyệt đối
-\end{itemize}
-
-\textbf{b) Format $(x_{center}, y_{center}, w, h)$ - YOLO format}
-
-\begin{itemize}
-    \item $(x_{center}, y_{center})$: Tọa độ tâm của box
-    \item $w$: Chiều rộng của box
-    \item $h$: Chiều cao của box
-    \item Đơn vị: normalized (chia cho kích thước ảnh, giá trị từ 0 đến 1)
-\end{itemize}
-
-\textbf{c) Công thức chuyển đổi}
-
-Từ PASCAL VOC sang YOLO (với ảnh kích thước $W \times H$):
-\begin{equation}
-x_{center} = \frac{x_{min} + x_{max}}{2W}, \quad y_{center} = \frac{y_{min} + y_{max}}{2H}
-\end{equation}
-\begin{equation}
-w = \frac{x_{max} - x_{min}}{W}, \quad h = \frac{y_{max} - y_{min}}{H}
-\end{equation}
+Khi triển khai, cần phân biệt hệ tọa độ của ảnh gốc, tensor đầu vào sau khi co giãn hoặc thêm biên và lớp hiển thị trên màn hình. Hộp dự đoán phải được ánh xạ ngược đúng tỉ lệ; nếu không, sai số tiền xử lý có thể làm lệch cả kết quả theo dõi lẫn lệnh quay của robot dù mô hình vẫn dự đoán chính xác trong không gian tensor.
 
 \subsubsection{Intersection over Union (IoU)}
 
-IoU là metric đo độ chồng lấp giữa hai bounding box, được sử dụng rộng rãi trong đánh giá object detection:
-
+Intersection over Union đo mức chồng lấp giữa hộp dự đoán $B_p$ và hộp nhãn chuẩn $B_g$:
 \begin{equation}
-IoU = \frac{\text{Area of Intersection}}{\text{Area of Union}} = \frac{|A \cap B|}{|A \cup B|}
+\operatorname{IoU}(B_p,B_g)=
+\frac{|B_p\cap B_g|}{|B_p\cup B_g|}.
+\end{equation}
+IoU bằng 0 khi hai hộp không giao nhau và bằng 1 khi trùng khít. Trong đánh giá, một dự đoán chỉ có thể ghép với nhãn chuẩn khi đúng lớp và IoU đạt ngưỡng quy định. Trong hậu xử lý, IoU còn được dùng bởi Non-Maximum Suppression (NMS) để loại các dự đoán trùng lặp; trong tracking-by-detection, nó có thể đóng vai trò độ tương đồng giữa hộp dự báo của track và detection mới.
+
+Không có một ngưỡng IoU phù hợp cho mọi mục đích. PASCAL VOC thường báo cáo AP tại IoU $0{,}5$ \reportcite{ref:pascal_voc}, trong khi giao thức COCO đánh giá trên dãy ngưỡng từ $0{,}50$ đến $0{,}95$, bước $0{,}05$, nhằm phản ánh chặt chẽ hơn chất lượng định vị \reportcite{ref:coco}. Vì vậy, mọi kết quả mAP phải đi kèm giao thức và ngưỡng IoU; không nên so sánh trực tiếp các con số được tính theo chuẩn khác nhau.
+
+\subsubsection{True Positive, False Positive, False Negative}
+
+Tại một lớp và một ngưỡng IoU xác định, các dự đoán được sắp theo độ tin cậy giảm dần rồi ghép một--một với nhãn chuẩn:
+
+\begin{itemize}
+    \item \textbf{True Positive (TP)} là dự đoán đúng lớp, đạt ngưỡng IoU và được ghép với một nhãn chuẩn chưa có dự đoán nào nhận trước đó.
+    \item \textbf{False Positive (FP)} là dự đoán sai lớp, không đạt ngưỡng IoU, không có nhãn tương ứng hoặc là dự đoán trùng lặp cho một nhãn đã được ghép.
+    \item \textbf{False Negative (FN)} là đối tượng có trong nhãn chuẩn nhưng không được bất kỳ dự đoán hợp lệ nào phát hiện.
+\end{itemize}
+
+Quy tắc ghép một--một là cần thiết: nếu nhiều hộp cùng bao quanh một người, chỉ hộp hợp lệ có độ tin cậy cao nhất được tính là TP, các hộp dư được tính là FP. Ba đại lượng này là cơ sở để xây dựng Precision, Recall, đường cong Precision--Recall, AP và cuối cùng là mAP.
+
+\subsubsection{Đánh giá hiệu suất Mean Average Precision (mAP)}
+
+\textbf{Precision và Recall.} Precision biểu thị mức đáng tin của các cảnh báo dương, còn Recall biểu thị khả năng tìm đủ các đối tượng thực sự tồn tại:
+\begin{align}
+\operatorname{Precision}&=\frac{TP}{TP+FP}, &
+\operatorname{Recall}&=\frac{TP}{TP+FN}.
+\end{align}
+Tăng ngưỡng confidence thường loại bớt dự đoán yếu, có thể làm Precision tăng nhưng Recall giảm. Với hệ thống chăm sóc người cao tuổi, Recall thấp có nghĩa là nguy cơ bỏ sót người hoặc sự kiện cần giám sát; ngược lại, Precision thấp làm tăng nhiễu cho tracker và các bước xử lý sau. Vì thế không thể đánh giá detector chỉ bằng một trong hai chỉ số.
+
+\textbf{Đường cong Precision--Recall.} Với từng lớp, các dự đoán được sắp theo confidence giảm dần. Khi lần lượt chấp nhận thêm dự đoán, cặp $(Recall,Precision)$ thay đổi và tạo thành đường cong Precision--Recall (PR). Đường cong mô tả hiệu năng trên toàn bộ miền ngưỡng confidence, thay vì tại một ngưỡng vận hành duy nhất.
+
+\textbf{Average Precision.} AP tóm tắt đường cong PR của một lớp tại một ngưỡng khớp xác định. Với bao chính xác nội suy $p_{interp}(r)=\max_{r'\geq r}p(r')$, AP có thể được diễn đạt như diện tích dưới đường cong:
+\begin{equation}
+AP=\int_0^1 p_{interp}(r)\,dr.
+\end{equation}
+Trong tính toán rời rạc, giao thức đánh giá quy định cụ thể các mức recall lấy mẫu và cách nội suy. Do đó AP không chỉ phụ thuộc mô hình mà còn phụ thuộc tập dữ liệu và quy ước đánh giá.
+
+\textbf{Mean Average Precision.} Với tập $C$ lớp và một ngưỡng IoU $\tau$, mAP là trung bình AP trên các lớp:
+\begin{equation}
+mAP_{\tau}=\frac{1}{|C|}\sum_{c\in C}AP_{c,\tau}.
+\end{equation}
+Theo COCO, chỉ số chính tiếp tục lấy trung bình trên mười ngưỡng $T=\{0{,}50,0{,}55,\ldots,0{,}95\}$ \reportcite{ref:coco}:
+\begin{equation}
+mAP_{[.50:.95]}=\frac{1}{|C||T|}
+\sum_{c\in C}\sum_{\tau\in T}AP_{c,\tau}.
 \end{equation}
 
-Trong đó:
-\begin{itemize}
-    \item $A$: Bounding box dự đoán (predicted)
-    \item $B$: Bounding box ground truth (thực tế)
-    \item IoU = 1: Hai box trùng khớp hoàn toàn
-    \item IoU = 0: Hai box không có phần giao nhau
-\end{itemize}
+$AP_{50}$ dễ đạt hơn $AP_{75}$ vì chấp nhận hộp ít khít hơn; $mAP_{[.50:.95]}$ phản ánh đồng thời khả năng nhận biết và chất lượng định vị. Ngoài ra, COCO còn tách kết quả theo đối tượng nhỏ, vừa và lớn. Đối với mô hình pose, chuỗi Precision--Recall--AP--mAP vẫn được giữ nguyên nhưng điều kiện ghép keypoint thường dựa trên Object Keypoint Similarity (OKS), vì vậy cần phân biệt rõ box mAP và pose mAP khi trình bày benchmark.
 
-Ngưỡng IoU thường được sử dụng để xác định dự đoán đúng:
-\begin{itemize}
-    \item IoU $\geq 0.5$: Ngưỡng phổ biến (PASCAL VOC, COCO mAP@0.5)
-    \item IoU $\geq 0.75$: Ngưỡng nghiêm ngặt (COCO mAP@0.75)
-    \item IoU từ 0.5 đến 0.95: Đánh giá đa ngưỡng (COCO mAP@[.5:.95])
-\end{itemize}
+\subsubsection{Các kiến trúc phát hiện đối tượng phù hợp thiết bị di động}
 
-\subsubsection{Các khái niệm True Positive, False Positive, False Negative}
+Sau khi thống nhất đầu ra, quy tắc ghép và cách đánh giá, có thể so sánh các kiến trúc ứng viên trên cùng hệ tiêu chí. Ba hướng phổ biến đối với ứng dụng Android là MobileNet SSD, YOLO và EfficientDet.
 
-Để đánh giá kết quả detection, cần phân loại các dự đoán:
+\textbf{MobileNet SSD.} SSD thực hiện dự đoán hộp và lớp trên nhiều mức bản đồ đặc trưng để xử lý các kích thước đối tượng khác nhau \reportcite{ref:ssd}. Khi ghép với MobileNet---backbone sử dụng tích chập tách theo chiều sâu nhằm giảm lượng phép tính---mô hình có kích thước nhỏ, dễ lượng tử hóa và phù hợp với TensorFlow Lite \reportcite{ref:mobilenet}. Hạn chế là cấu hình chuẩn chủ yếu trả về bounding box; nếu cần 17 điểm khớp cơ thể, hệ thống phải bổ sung một mô hình pose hoặc thay đổi đầu dự đoán.
 
-\begin{itemize}
-    \item \textbf{True Positive (TP)}: Dự đoán đúng - có bounding box dự đoán khớp với ground truth (IoU $\geq$ threshold) và đúng class
-    \item \textbf{False Positive (FP)}: Dự đoán sai - bounding box dự đoán không khớp với bất kỳ ground truth nào, hoặc sai class
-    \item \textbf{False Negative (FN)}: Bỏ sót - ground truth không được detect bởi bất kỳ dự đoán nào
-\end{itemize}
+\textbf{YOLO.} YOLO mô hình hóa detection như một mạng hợp nhất, dự đoán trực tiếp vị trí và xác suất lớp trong một lần forward \reportcite{ref:yolo}. Các biến thể nhỏ phù hợp với xử lý thời gian thực, đồng thời họ mô hình có phiên bản pose trả về cả hộp người và keypoint. Lợi thế này giúp tránh một tầng ước lượng tư thế riêng; đổi lại, việc chuyển đổi sang TensorFlow Lite và giải mã đầu ra phải khớp đúng phiên bản xuất mô hình, còn tốc độ thực tế phụ thuộc thiết bị, kích thước đầu vào và delegate được sử dụng.
 
-Từ đó tính được:
-\begin{equation}
-\text{Precision} = \frac{TP}{TP + FP} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số dự đoán}}
-\end{equation}
-\begin{equation}
-\text{Recall} = \frac{TP}{TP + FN} = \frac{\text{Số dự đoán đúng}}{\text{Tổng số ground truth}}
-\end{equation}
+\textbf{EfficientDet.} EfficientDet kết hợp backbone EfficientNet, mạng hợp nhất đặc trưng hai chiều có trọng số (BiFPN) và compound scaling để đồng thời thay đổi độ sâu, độ rộng và độ phân giải \reportcite{ref:efficientdet}. Họ mô hình tạo nhiều mức quy mô để lựa chọn theo ngân sách tính toán. Tuy nhiên, tương tự SSD chuẩn, EfficientDet là detector hộp; pipeline cần thêm thành phần pose nếu muốn tạo trực tiếp chuỗi khớp cho LSTM.
 
-\subsubsection{Đánh giá hiệu suất: Mean Average Precision (mAP)}
-
-Mean Average Precision (mAP) là metric chuẩn để đánh giá hiệu suất của mô hình object detection, tổng hợp cả precision và recall.
-
-\textbf{a) Precision-Recall Curve}
-
-Với mỗi class, sắp xếp các dự đoán theo confidence score giảm dần. Tại mỗi điểm, tính precision và recall tích lũy, từ đó vẽ được đường cong Precision-Recall.
-
-\textbf{b) Average Precision (AP)}
-
-AP là diện tích dưới đường cong Precision-Recall:
-\begin{equation}
-AP = \int_0^1 p(r) \, dr
-\end{equation}
-
-Trong thực tế, sử dụng phép nội suy (interpolation):
-\begin{equation}
-AP = \sum_{i=1}^{n} (r_i - r_{i-1}) \cdot p_{interp}(r_i)
-\end{equation}
-
-với $p_{interp}(r) = \max_{r' \geq r} p(r')$ là precision nội suy tại recall $r$.
-
-\textbf{c) Mean Average Precision (mAP)}
-
-mAP là trung bình của AP trên tất cả các class:
-\begin{equation}
-mAP = \frac{1}{N} \sum_{i=1}^{N} AP_i
-\end{equation}
-
-với $N$ là số class trong dataset.
-
-\textbf{d) Các biến thể mAP}
-
-\begin{itemize}
-    \item \textbf{mAP@0.5 (mAP50)}: AP tính với ngưỡng IoU = 0.5, được sử dụng trong PASCAL VOC
-    \item \textbf{mAP@0.75 (mAP75)}: AP với ngưỡng IoU = 0.75, nghiêm ngặt hơn
-    \item \textbf{mAP@[.5:.95]}: Trung bình AP với IoU từ 0.5 đến 0.95 (bước 0.05), metric chính của COCO
-    \item \textbf{mAP Small/Medium/Large}: mAP theo kích thước đối tượng
-\end{itemize}
-
-\textbf{e) Ý nghĩa của mAP}
-
-\begin{itemize}
-    \item mAP cao $\rightarrow$ Mô hình phát hiện đúng nhiều đối tượng và định vị chính xác
-    \item mAP50 cao nhưng mAP75 thấp $\rightarrow$ Phát hiện được nhưng định vị chưa chính xác
-    \item Precision cao, Recall thấp $\rightarrow$ Mô hình thận trọng, ít false positive nhưng bỏ sót nhiều
-    \item Precision thấp, Recall cao $\rightarrow$ Mô hình phát hiện nhiều nhưng có nhiều false positive
-\end{itemize}
-
-\subsubsection{Ý tưởng YOLO: Phát hiện trong một lần suy luận}
-
-YOLO (You Only Look Once) được Joseph Redmon, Santosh Divvala, Ross Girshick và Ali Farhadi đề xuất năm 2016 trong bài báo ``You Only Look Once: Unified, Real-Time Object Detection'' \reportcite{ref:yolo}. Đây là bước đột phá mang đến cách tiếp cận hợp nhất cho Object Detection.
-
-\textbf{Ý tưởng cốt lõi của YOLO} (theo \reportcite{ref:yolo}):
-
-``We reframe object detection as a single regression problem, straight from image pixels to bounding box coordinates and class probabilities. Using our system, you only look once (YOLO) at an image to predict what objects are present and where they are.''
-
-Thay vì coi detection như bài toán phân loại (classifier), YOLO đặt lại vấn đề như bài toán hồi quy về tọa độ bounding box và xác suất class, tất cả trong một lần forward pass duy nhất qua mạng neural.
-
-\textbf{Nguyên lý hoạt động của YOLO:}
-
-\begin{enumerate}
-    \item \textbf{Chia lưới}: Ảnh đầu vào được chia thành lưới $S \times S$ ô (grid cells). Trong paper gốc, $S = 7$.
-
-    \begin{figure}[h!]
-        \centering
-        \includegraphics[width=0.7\textwidth]{Images/7x7.jpg}
-        \vspace{8pt}
-        \caption{Minh họa chia lưới $7 \times 7$ trong YOLO: mỗi ô chịu trách nhiệm phát hiện đối tượng có tâm nằm trong ô đó.}
-        \label{fig:yolo_grid}
-    \end{figure}
-    \item \textbf{Dự đoán bounding boxes}: Mỗi ô dự đoán $B$ bounding boxes (mặc định $B = 2$) cùng với điểm confidence.
-    \item \textbf{Dự đoán class probabilities}: Mỗi ô dự đoán $C$ xác suất class có điều kiện $Pr(Class_i|Object)$.
-    \item \textbf{Tensor đầu ra}: Kích thước $S \times S \times (B \times 5 + C)$. Với PASCAL VOC ($C=20$), tensor có kích thước $7 \times 7 \times 30$.
-    \item \textbf{Post-processing}: Non-Maximum Suppression (NMS) loại bỏ các box trùng lặp.
-\end{enumerate}
-
-\textbf{Đầu ra của mỗi bounding box bao gồm 5 giá trị:}
-\begin{itemize}
-    \item $(x, y)$: Tọa độ tâm của box tương đối với ô lưới (normalized 0-1 trong ô)
-    \item $(w, h)$: Chiều rộng và chiều cao của box tương đối với toàn ảnh (normalized 0-1)
-    \item $confidence = Pr(Object) \times IOU^{truth}_{pred}$: Độ tin cậy rằng box chứa đối tượng VÀ độ chính xác của box so với ground truth
-\end{itemize}
-
-\textbf{Hiệu suất của YOLO theo bài báo gốc:}
-\begin{itemize}
-    \item Base YOLO: 45 FPS (frames per second) trên GPU
-    \item Fast YOLO: 155 FPS - nhanh hơn gấp đôi các detector real-time khác
-    \item mAP trên PASCAL VOC 2007: 63.4\% (base), 52.7\% (fast)
-\end{itemize}
-
-\subsubsection{So sánh YOLO với phương pháp truyền thống}
-
-\begin{table}[h]
+\begin{table}[htbp]
 \centering
-\caption{So sánh YOLO với các phương pháp Object Detection khác}
-\begin{tabular}{|l|c|c|c|}
+\caption{So sánh định tính các họ detector liên quan đến đồ án}
+\label{tab:mobile_detector_comparison}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\textwidth}{|p{2.5cm}|p{3.2cm}|X|X|}
 \hline
-\textbf{Phương pháp} & \textbf{Tốc độ (FPS)} & \textbf{mAP} & \textbf{Thời gian thực} \\
+\textbf{Họ mô hình} & \textbf{Đặc điểm chính} & \textbf{Ưu điểm khi triển khai Android} & \textbf{Hạn chế đối với bài toán của đồ án} \\
 \hline
-R-CNN & 0.02 & 53.7 & Không \\
-Fast R-CNN & 0.5 & 70.0 & Không \\
-Faster R-CNN & 7-17 & 73.2 & Khó \\
-YOLO v1 & 45 & 63.4 & Có \\
-YOLOv3 & 30-50 & 57.9 & Có \\
-YOLOv5 & 100+ & 68.9 & Có \\
+MobileNet SSD & SSD một giai đoạn với backbone nhẹ & Mô hình gọn; hệ sinh thái TensorFlow Lite phổ biến; dễ tạo baseline phát hiện người & Đầu ra chuẩn chỉ có hộp và lớp; cần thêm tầng pose để cung cấp keypoint cho LSTM \\
 \hline
-\end{tabular}
+YOLO & Detector hợp nhất; có các biến thể detection và pose & Cân bằng tốc độ--độ chính xác; biến thể pose sinh đồng thời hộp người và keypoint & Hậu xử lý và tensor đầu ra phụ thuộc phiên bản export; cần kiểm chứng trên đúng thiết bị đích \\
+\hline
+EfficientDet & EfficientNet, BiFPN và compound scaling & Có nhiều mức mô hình; khai thác đặc trưng đa tỉ lệ hiệu quả & Phiên bản chuẩn không sinh keypoint; cấu hình lớn có thể vượt ngân sách độ trễ của smartphone \\
+\hline
+\end{tabularx}
 \end{table}
 
-\textbf{Ưu điểm của YOLO:}
-\begin{itemize}
-    \item Tốc độ: Xử lý real-time với hàng chục đến hàng trăm FPS
-    \item Đơn giản: Một mạng duy nhất, dễ huấn luyện end-to-end
-    \item Nhìn toàn cục: Xem xét toàn bộ ảnh khi dự đoán, hiểu được ngữ cảnh tốt hơn
-    \item Tổng quát hóa tốt: Ít false positive trên background so với các phương pháp dựa trên sliding window
-\end{itemize}
+Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau không được đặt cạnh nhau như một phép so sánh trực tiếp nếu khác tập dữ liệu, độ phân giải, phần cứng và giao thức đo. Với yêu cầu của đồ án, tiêu chí quyết định là khả năng sinh đồng thời hộp người và 17 keypoint trong một mô hình đủ nhẹ để chạy trên Android. Vì vậy hướng YOLO-Pose được chọn để huấn luyện và chuyển đổi sang TensorFlow Lite; phiên bản mô hình, delegate và số đo thực nghiệm được trình bày tại Chương 4 và Chương 5.
 
-\textbf{Hạn chế:}
-\begin{itemize}
-    \item Khó phát hiện các đối tượng nhỏ hoặc xếp chồng nhau
-    \item Độ chính xác định vị có thể kém hơn phương pháp hai giai đoạn ở một số trường hợp
-\end{itemize}
-
-%=========================================
-\subsection{Nền tảng Thị giác máy tính (Computer Vision)}
-
-Thị giác máy tính (Computer Vision) đóng vai trò cốt lõi trong hệ thống giám sát và nhận diện té ngã. Bằng cách phân tích luồng video từ camera, hệ thống có khả năng nhận biết, định vị và theo dõi con người trong không gian. Phần này trình bày các nền tảng kỹ thuật được sử dụng bao gồm Mạng nơ-ron tích chập (CNN), kiến trúc YOLO cho bài toán phát hiện đối tượng và thuật toán ByteTrack cho bài toán theo dõi.
-
-\subsubsection{Mạng nơ-ron tích chập (CNN) và Kiến trúc YOLO26}
-
-\textbf{Mạng nơ-ron tích chập (CNN)}
-
-Mạng nơ-ron tích chập (Convolutional Neural Network - CNN) là một lớp mạng học sâu (Deep Learning) chuyên biệt, được thiết kế để xử lý dữ liệu có dạng lưới tĩnh như hình ảnh 2D
-\reportcite{ref:cnn}. Khác với mạng đa tầng (MLP) truyền thống yêu cầu làm phẳng (flatten) hình ảnh gây mất thông tin không gian, CNN bảo toàn cấu trúc không gian của pixel bằng cách sử dụng các bộ lọc (filters/kernels) trượt qua toàn bộ bức ảnh.
-
-Kiến trúc cốt lõi của một mạng CNN tiêu chuẩn bao gồm 3 loại lớp chính:
-\begin{itemize}
-    \item \textbf{Lớp tích chập (Convolutional Layer)}: Đóng vai trò là bộ trích xuất đặc trưng (feature extractor). Nó áp dụng các phép tính tích chập giữa một bộ lọc ma trận (kernel) và vùng ảnh đầu vào để tạo ra các bản đồ đặc trưng (feature maps). Ở các lớp đầu, CNN học cách nhận diện các đặc trưng cấp thấp như cạnh, góc; ở các lớp sâu hơn, nó nhận diện các đặc trưng phức tạp như hình khối, khuôn mặt.
-    \item \textbf{Lớp gộp (Pooling Layer)}: Thường theo ngay sau lớp tích chập (như Max Pooling hoặc Average Pooling), có nhiệm vụ giảm độ phân giải không gian của bản đồ đặc trưng. Quá trình này không chỉ giúp giảm đáng kể khối lượng tính toán, tránh hiện tượng quá khớp (overfitting) mà còn mang lại tính bất biến cục bộ (translation invariance) -- giúp mô hình vẫn nhận diện được đối tượng dù chúng bị dịch chuyển nhẹ trong khung hình.
-    \item \textbf{Lớp kết nối đầy đủ (Fully Connected Layer)}: Nằm ở phần cuối mạng, làm nhiệm vụ tổng hợp các đặc trưng cao cấp đã được trích xuất để thực hiện dự đoán cuối cùng (phân loại hoặc hồi quy tọa độ).
-\end{itemize}
-
-Bên cạnh đó, sau mỗi lớp tích chập, một hàm kích hoạt phi tuyến (như ReLU, SiLU) được áp dụng để đưa tính phi tuyến vào mô hình, cho phép CNN học được các mối quan hệ phức tạp. Sự kết hợp luân phiên giữa Convolution và Pooling giúp CNN tự động học cách phân tích hình ảnh mà không cần đến các chuyên gia thiết kế đặc trưng thủ công (manual feature engineering) như các phương pháp thị giác máy tính cổ điển.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{Images/cnn_arch.png}
-    \caption{Minh họa cấu trúc tiêu biểu của mạng nơ-ron tích chập (CNN) gồm các lớp Convolution, Pooling và Fully Connected.}
-    \label{fig:typical_cnn}
-\end{figure}
-
-\textbf{Kiến trúc YOLO26 (Kế thừa từ YOLOv8/YOLOv11)}
-YOLO (You Only Look Once) là một trong những họ mô hình Object Detection tốc độ cao phổ biến nhất. Khác với các phương pháp dựa trên region-proposal (như Faster R-CNN) yêu cầu chạy mô hình nhiều lần trên một ảnh, YOLO định hình bài toán detection như một bài toán hồi quy đơn lẻ (single regression problem) dự đoán trực tiếp tọa độ Bounding Box và xác suất nhãn lớp từ các pixel hình ảnh trong một lần quét duy nhất
-\reportcite{ref:yolo}.
-
-Trong hệ thống, mô hình YOLO26 (phiên bản nano tối ưu từ YOLO-Pose) được sử dụng nhằm mục đích trích xuất khung xương (pose landmarks) thay vì chỉ lấy bounding box thông thường.
-Mô hình này nổi bật với các cải tiến kiến trúc như:
-\begin{itemize}
-    \item \textbf{Backbone hiệu năng cao}: Sử dụng các khối C3k2 (Cross Stage Partial) giúp giảm tham số nhưng vẫn duy trì độ chính xác cao.
-    \item \textbf{Đầu ra đa nhiệm (Multi-task Head)}: Hỗ trợ dự đoán đồng thời vị trí Bounding Box và 17 điểm khớp xương (keypoints) của con người.
-    \item \textbf{Tối ưu hóa cho thiết bị biên (Edge Devices)}: Phiên bản nano (yolo26n-pose) có dung lượng cực nhẹ, phù hợp để chuyển đổi sang định dạng TFLite hoặc ONNX, giúp hệ thống đạt tốc độ Real-time trên các phần cứng hạn chế như Raspberry Pi hay điện thoại di động.
-\end{itemize}
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{yolo_arch.jpg}
-    \caption{Minh họa một kiến trúc mạng YOLO tiêu biểu với Backbone, Neck và Head.}
+    \caption{Cấu trúc khái quát của một detector YOLO gồm backbone, neck và head.}
     \label{fig:yolo_architecture}
 \end{figure}
 
-\subsubsection{Thuật toán theo dõi đa đối tượng ByteTrack}
+\subsubsection{Theo dõi đối tượng và tạo chuỗi thời gian}
 
-Trong bài toán nhận diện té ngã, không chỉ cần phát hiện người ở từng khung hình (frame) riêng lẻ, mà còn phải liên kết các phát hiện đó xuyên suốt thời gian để tạo thành một chuỗi hành động (tracklet). Đây là vai trò của bài toán Theo dõi đa đối tượng (Multi-Object Tracking - MOT).
+Detector xử lý từng khung hình độc lập nên chưa bảo đảm cùng một người giữ nguyên định danh theo thời gian. Tracking-by-detection bổ sung bước dự báo trạng thái và liên kết detection để tạo tracklet. SORT sử dụng bộ lọc Kalman cho dự báo chuyển động, IoU cho độ tương đồng và thuật toán Hungarian cho bài toán gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình nhằm giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack khai thác cả detection có confidence thấp trong bước liên kết thứ hai để phục hồi đối tượng khó quan sát \reportcite{ref:bytetrack}.
 
-Hệ thống ứng dụng thuật toán \textbf{ByteTrack}, một trong những thuật toán tracking State-of-the-Art hiện nay với phương pháp tiếp cận độc đáo về ghép nối dữ liệu (data association)
-\reportcite{ref:bytetrack}.
-
-\textbf{Cơ chế hoạt động của ByteTrack:}
-Các thuật toán tracking truyền thống thường loại bỏ hoàn toàn các detection có độ tin cậy thấp (low-confidence) nhằm giảm thiểu nhiễu. Tuy nhiên, điều này dẫn đến việc mất dấu đối tượng khi họ bị che khuất một phần (occlusion) hoặc hình ảnh bị mờ do chuyển động nhanh (thường gặp khi nạn nhân đang ngã).
-
-ByteTrack giải quyết vấn đề này bằng kỹ thuật \textbf{Dual-threshold Association} (Liên kết hai ngưỡng):
-\begin{enumerate}
-    \item \textbf{Ghép nối lần 1 (High-score association)}: Thuật toán sử dụng bộ lọc Kalman (Kalman Filter) để dự đoán vị trí của đối tượng ở frame tiếp theo. Sau đó, nó tính toán khoảng cách IoU (Intersection over Union) giữa vị trí dự đoán và các bounding box có độ tin cậy \textit{cao} do YOLO trả về. Các cặp phù hợp sẽ được liên kết với nhau.
-    \item \textbf{Ghép nối lần 2 (Low-score association)}: Đối với các đối tượng chưa tìm được ghép nối (unmatched tracks) ở lần 1, ByteTrack không xóa chúng đi mà tiếp tục tìm kiếm trong nhóm các bounding box có độ tin cậy \textit{thấp}. Nếu nạn nhân đang ngã bị mờ, YOLO có thể trả về box với độ tin cậy thấp. Nhờ bước thứ hai này, ByteTrack có thể "cứu" lại tracklet của nạn nhân, giúp chuỗi hành động không bị ngắt quãng.
-\end{enumerate}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.9\textwidth]{bytetrack_arch.jpg}
-    \caption{Thuật toán ByteTrack với cơ chế Dual-threshold Association giúp duy trì Track ID ổn định.}
-    \label{fig:bytetrack}
-\end{figure}
-
-Sự kết hợp giữa YOLO26 (nhận diện chính xác, nhanh) và ByteTrack (liên kết mạnh mẽ, chống đứt gãy) tạo nên một nền tảng vững chắc để trích xuất dữ liệu chuỗi thời gian chất lượng cao, trước khi đưa vào mạng LSTM phân tích hành vi ngã.
-
-
-
-
-% --- Tích hợp từ phần cũ ---
-
-Tracking-by-detection tách bài toán thành phát hiện đối tượng ở mỗi frame và liên kết detection qua thời gian. SORT sử dụng Kalman để dự báo chuyển động, IoU làm độ tương đồng và Hungarian cho phép gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình để giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack chỉ ra rằng các detection confidence thấp vẫn có thể hữu ích khi liên kết với track \reportcite{ref:bytetrack}.
-
-Kalman gồm hai pha. Pha dự báo:
-
+Với trạng thái $x_t$, ma trận chuyển trạng thái $F$, điều khiển $u_t$ và quan sát $z_t$, hai pha cơ bản của bộ lọc Kalman là
 \begin{align}
 \hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
-P_{t|t-1}&=FP_{t-1|t-1}F^T+Q.
-\end{align}
-
-Pha cập nhật với quan sát $z_t$:
-
-\begin{align}
+P_{t|t-1}&=FP_{t-1|t-1}F^T+Q,\\
 K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
 \hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
 P_{t|t}&=(I-K_tH)P_{t|t-1}.
 \end{align}
-
-Ma trận chi phí giữa $n$ track và $m$ detection được đưa vào thuật toán Hungarian, vốn giải bài toán gán tuyến tính \reportcite{ref:hungarian}. IoU đơn độc có thể thất bại khi người từ đứng chuyển sang nằm làm vùng bao thay đổi mạnh. Vì vậy đề tài kết hợp IoU, khoảng cách tâm, neo vai/hông, tỷ lệ diện tích và histogram vùng thân. Định danh ID0 còn được bảo vệ bởi tuổi track dài hơn và phục hồi có điều kiện.
+Ma trận chi phí giữa các track và detection được giải bằng thuật toán Hungarian \reportcite{ref:hungarian}. Tuy nhiên, IoU đơn lẻ có thể suy giảm mạnh khi người chuyển nhanh từ tư thế đứng sang nằm. Theo mã nguồn hiện tại, đồ án dùng SORT được mở rộng bằng khoảng cách tâm, tỉ lệ kích thước, khoảng cách pose và histogram vùng thân; mục tiêu chính được gán ID0, có tuổi track dài hơn và cơ chế phục hồi có điều kiện. Cách lựa chọn này giữ pipeline nhẹ trên Android nhưng vẫn cung cấp chuỗi keypoint nhất quán cho LSTM và tín hiệu vị trí ổn định cho bộ điều khiển bám người.
 
 
 \subsection{Mô hình chuỗi thời gian (Sequence Modeling)}
@@ -711,7 +513,7 @@ Cốt lõi của kiến trúc LSTM nằm ở ba cổng (gates) đóng vai trò k
     \label{fig:lstm_architecture}
 \end{figure}
 
-Trong kiến trúc của hệ thống nhận diện té ngã, LSTM đóng vai trò cực kỳ quan trọng ở khâu cuối cùng. Sau khi mạng YOLO và thuật toán ByteTrack trích xuất ra một chuỗi các tọa độ điểm neo (keypoints) xuyên suốt các khung hình, dữ liệu này mang tính chất chuỗi thời gian. Mạng LSTM sẽ tiếp nhận chuỗi tọa độ này, phân tích sự thay đổi vị trí không gian của cơ thể con người theo thời gian, từ đó nhận diện được hành động ngã một cách chính xác so với các hành động bình thường như ngồi, cúi người hay nằm.
+Trong kiến trúc phát hiện té ngã, YOLO-Pose trích xuất các điểm khớp ở từng khung hình và bộ theo dõi SORT mở rộng liên kết chúng theo đúng người. LSTM tiếp nhận chuỗi tọa độ đã chuẩn hóa để học sự biến đổi tư thế theo thời gian. Nhờ vậy, quyết định không chỉ dựa trên một ảnh tức thời mà còn xét quá trình chuyển động, hỗ trợ phân biệt té ngã với các hoạt động gần giống như ngồi xuống, cúi người hoặc chủ động nằm.
 
 
 
@@ -1044,7 +846,7 @@ Cụ thể, hệ thống không huấn luyện hay lưu trữ mô hình ngôn ng
 \subsubsection{Phương thức triển khai: Điện toán Biên (Edge Computing) trên thiết bị Android}
 Để đảm bảo hệ thống phản hồi theo thời gian thực, bảo vệ quyền riêng tư và tối ưu hóa băng thông mạng, đồ án đặt trọng tâm vào phương thức triển khai \textbf{Edge Computing} (Điện toán biên) trực tiếp trên thiết bị Android (Smartphone).
 
-Toàn bộ các luồng xử lý cốt lõi bao gồm: thu nhận hình ảnh từ camera, chạy mô hình phát hiện đối tượng (YOLO26), theo dõi đa đối tượng (ByteTrack), và phân tích chuỗi thời gian bằng mạng LSTM để phát hiện té ngã, đều được thực thi hoàn toàn ở thiết bị biên thông qua bộ tăng tốc phần cứng (NPU/GPU trên điện thoại) kết hợp với các runtime như TensorFlow Lite.
+Các luồng thị giác cốt lõi gồm thu nhận ảnh từ camera, suy luận YOLO-Pose, theo dõi bằng SORT mở rộng và phân tích chuỗi bằng LSTM đều được thực thi trên smartphone qua TensorFlow Lite. Ứng dụng ưu tiên GPU delegate cho mô hình tương thích và có đường dự phòng CPU; cấu hình cụ thể được trình bày ở Chương 4.
 
 Việc triển khai Edge Computing mang lại các ưu điểm vượt trội:
 \begin{itemize}
