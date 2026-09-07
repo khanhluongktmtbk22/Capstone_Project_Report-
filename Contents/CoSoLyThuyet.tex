@@ -461,6 +461,28 @@ EfficientDet & EfficientNet, BiFPN và compound scaling & Có nhiều mức mô 
 
 Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau không được đặt cạnh nhau như một phép so sánh trực tiếp nếu khác tập dữ liệu, độ phân giải, phần cứng và giao thức đo. Với yêu cầu của đồ án, tiêu chí quyết định là khả năng sinh đồng thời hộp người và 17 keypoint trong một mô hình đủ nhẹ để chạy trên Android. Vì vậy hướng YOLO-Pose được chọn để huấn luyện và chuyển đổi sang TensorFlow Lite; phiên bản mô hình, delegate và số đo thực nghiệm được trình bày tại Chương 4 và Chương 5.
 
+\subsection{Họ mô hình YOLO và YOLO26-Pose}
+
+\subsubsection{Quá trình phát triển của họ YOLO}
+
+YOLOv1 đặt nền móng cho detector một giai đoạn bằng cách dự đoán đồng thời hộp và xác suất lớp từ toàn ảnh \reportcite{ref:yolo}. Từ ý tưởng này, nhiều nhánh nghiên cứu và hiện thực cùng sử dụng tên YOLO nhưng không phải tất cả đều do một nhóm tác giả phát triển liên tục. Vì vậy, số phiên bản chỉ nên được xem là một phần của định danh; khi so sánh còn phải xác định đơn vị phát triển, nhiệm vụ, kích thước mô hình, tập dữ liệu và chế độ xuất.
+
+Những mốc có ảnh hưởng trực tiếp đến lựa chọn mô hình trong đồ án được tóm tắt như sau:
+
+\begin{itemize}
+    \item \textbf{YOLOv1} hợp nhất định vị và phân loại trong một mạng, ưu tiên tốc độ thời gian thực nhưng còn hạn chế với vật thể nhỏ và các đối tượng nằm gần nhau \reportcite{ref:yolo}.
+    \item \textbf{YOLOv3} tăng cường backbone và dự đoán ở nhiều tỉ lệ, giúp xử lý tốt hơn sự thay đổi kích thước đối tượng \reportcite{ref:yolov3}.
+    \item \textbf{YOLOv5} nhấn mạnh tính thực dụng của pipeline huấn luyện--suy luận--xuất mô hình, tạo tiền đề cho việc triển khai YOLO trên nhiều runtime \reportcite{ref:yolov5}.
+    \item \textbf{YOLOv8} chuyển sang đầu dự đoán anchor-free và tách nhánh hồi quy hộp với phân loại, giảm phụ thuộc vào thiết kế anchor thủ công \reportcite{ref:yolo_arch_docs}.
+    \item \textbf{YOLOv10} sử dụng hai chiến lược gán nhãn one-to-many và one-to-one để huấn luyện detector end-to-end không cần NMS ở đường suy luận \reportcite{ref:yolov10}.
+    \item \textbf{YOLO11} tiếp tục tinh chỉnh các khối trích xuất và hợp nhất đặc trưng, đồng thời duy trì nhiều tác vụ như detection, segmentation và pose \reportcite{ref:yolov11}.
+    \item \textbf{YOLO26} kế thừa nền tảng YOLO11 nhưng tập trung vào suy luận end-to-end, đầu hồi quy nhẹ và các đầu dự đoán chuyên biệt cho từng tác vụ \reportcite{ref:yolo26}.
+\end{itemize}
+
+\subsubsection{Cấu trúc backbone--neck--head}
+
+Dù chi tiết từng phiên bản khác nhau, các mô hình YOLO hiện đại có thể được đọc theo ba khối. Backbone biến ảnh thành các bản đồ đặc trưng phân cấp; các lớp nông giữ nhiều chi tiết vị trí, còn lớp sâu biểu diễn ngữ nghĩa mạnh hơn. Neck hợp nhất đặc trưng theo cả hướng từ sâu đến nông và từ nông đến sâu để tạo các mức P3, P4, P5. Với stride lần lượt là 8, 16 và 32, mỗi phần tử trên các mức này quan sát một vùng ảnh có kích thước và ngữ cảnh khác nhau. Head chuyển đặc trưng đa tỉ lệ thành dự đoán hộp, độ tin cậy, lớp và---đối với biến thể pose---tọa độ keypoint. Cách phân tách này hữu ích khi đọc tệp YAML của mô hình, kiểm tra lớp không được runtime hỗ trợ hoặc xác định phần đầu ra cần giải mã \reportcite{ref:yolo_arch_docs}.
+
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{yolo_arch.jpg}
@@ -468,7 +490,88 @@ Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau kh�
     \label{fig:yolo_architecture}
 \end{figure}
 
-\subsubsection{Theo dõi đối tượng và tạo chuỗi thời gian}
+\subsubsection{Các thay đổi chính của YOLO26}
+
+YOLO26 sử dụng kiến trúc hai đầu trong quá trình huấn luyện. Đầu one-to-many tạo nhiều ứng viên dương cho mỗi đối tượng, cung cấp tín hiệu học dày; đầu one-to-one học ánh xạ một dự đoán chính cho mỗi nhãn chuẩn. Ở chế độ end-to-end mặc định, chỉ đầu one-to-one được giữ lại khi suy luận, trả về tối đa 300 detection và không cần NMS. Khi ưu tiên độ chính xác hoặc runtime không hỗ trợ toán tử top-$K$ của đường end-to-end, mô hình có thể dùng đầu one-to-many và NMS như detector dense thông thường \reportcite{ref:yolo26}.
+
+YOLO26 đồng thời loại Distribution Focal Loss (DFL) khỏi đầu hồi quy hộp, thể hiện trong cấu hình bởi \texttt{reg\_max=1}. Thay vì dự đoán phân phối trên nhiều bin cho mỗi cạnh hộp, đầu mới hồi quy trực tiếp, nhờ đó giảm số kênh và chi phí giải mã. Trong huấn luyện, MuSGD được dùng để cải thiện hội tụ; Progressive Loss dịch dần trọng số giám sát từ đầu one-to-many sang one-to-one; STAL bảo đảm các đối tượng rất nhỏ vẫn nhận được ứng viên dương. Ba kỹ thuật sau tác động đến quá trình tối ưu trọng số, không làm tăng giao diện đầu vào của ứng dụng Android \reportcite{ref:yolo26}.
+
+\subsubsection{YOLO26-Pose và biểu diễn keypoint}
+
+Ước lượng tư thế có thể được thực hiện theo top-down, tức phát hiện người rồi chạy một mạng pose riêng trên từng vùng, hoặc theo mô hình hợp nhất dự đoán người và keypoint trong một lần suy luận. YOLO26-Pose đi theo hướng thứ hai. Với cấu hình người COCO, mỗi đối tượng có $K=17$ điểm và mỗi điểm được biểu diễn bởi
+\begin{equation}
+k_j=(x_j,y_j,v_j),\qquad j=1,\ldots,17,
+\end{equation}
+trong đó $(x_j,y_j)$ là tọa độ và $v_j$ là độ tin cậy/khả năng quan sát. Tệp cấu hình chính thức mô tả giao diện này bằng \texttt{kpt\_shape=[17,3]} \reportcite{ref:yolo26_pose_config}. Trong huấn luyện, YOLO26 kết hợp loss dựa trên OKS với Residual Log-Likelihood Estimation (RLE). OKS chuẩn hóa sai số theo kích thước người và độ khó của từng loại khớp; RLE học phân phối phần dư cùng độ bất định của tọa độ, qua đó xử lý tốt hơn các khớp khó định vị \reportcite{ref:yolo26}. Khi suy luận, ứng dụng vẫn nhận tọa độ và confidence nên không phải hiện thực normalizing flow trong Android.
+
+Thứ tự 17 keypoint phải được giữ nhất quán từ dữ liệu, mô hình đến mã hậu xử lý:
+
+\begin{table}[htbp]
+\centering
+\caption{Thứ tự keypoint người theo cấu hình COCO-Pose của YOLO26}
+\label{tab:yolo26_keypoint_order}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{|c|l|c|l|}
+\hline
+\textbf{Chỉ số} & \textbf{Điểm cơ thể} & \textbf{Chỉ số} & \textbf{Điểm cơ thể} \\
+\hline
+0 & Mũi & 9 & Cổ tay trái \\
+1 & Mắt trái & 10 & Cổ tay phải \\
+2 & Mắt phải & 11 & Hông trái \\
+3 & Tai trái & 12 & Hông phải \\
+4 & Tai phải & 13 & Gối trái \\
+5 & Vai trái & 14 & Gối phải \\
+6 & Vai phải & 15 & Cổ chân trái \\
+7 & Khuỷu tay trái & 16 & Cổ chân phải \\
+8 & Khuỷu tay phải & -- & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+Các cặp vai, hông, gối và cổ chân đặc biệt quan trọng đối với đồ án. Chúng cho phép chuẩn hóa pose theo tâm và kích thước thân người, ước lượng hướng trục cơ thể, tốc độ hạ thấp và mức nằm ngang. Confidence của từng keypoint phải được dùng như mặt nạ chất lượng; thay một khớp bị che khuất bằng tọa độ không đáng tin có thể tạo vận tốc giả lớn và gây nhiễu chuỗi LSTM.
+
+\subsubsection{Các mức kích thước của YOLO26-Pose}
+
+Họ mô hình cung cấp năm mức n, s, m, l và x. Tăng mức mô hình thường làm tăng khả năng biểu diễn và pose mAP, đồng thời tăng số tham số, phép tính, bộ nhớ và độ trễ. Bảng \ref{tab:yolo26_pose_scales} sử dụng kết quả E2E chính thức tại đầu vào $640\times640$ trên COCO Keypoints val2017 \reportcite{ref:yolo26}; số liệu CPU ONNX và T4 TensorRT chỉ cho thấy xu hướng giữa các mức, không phải tốc độ dự kiến trên Android/TensorFlow Lite.
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh các mức YOLO26-Pose ở chế độ end-to-end trên COCO}
+\label{tab:yolo26_pose_scales}
+\renewcommand{\arraystretch}{1.1}
+\small
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|c|c|c|c|c|}
+\hline
+\textbf{Mô hình} & \shortstack{\textbf{Tham số}\\\textbf{(M)}} & \textbf{GFLOPs} & \shortstack{\textbf{Pose}\\\textbf{mAP}} & \shortstack{\textbf{CPU ONNX}\\\textbf{(ms)}} & \shortstack{\textbf{T4 TRT}\\\textbf{(ms)}} \\
+\hline
+YOLO26n-Pose & 2,9 & 7,5 & 57,2 & 40,3 & 1,8 \\
+YOLO26s-Pose & 10,4 & 23,9 & 63,0 & 85,3 & 2,7 \\
+YOLO26m-Pose & 21,5 & 73,1 & 68,8 & 218,0 & 5,0 \\
+YOLO26l-Pose & 25,9 & 91,3 & 70,4 & 275,4 & 6,5 \\
+YOLO26x-Pose & 57,6 & 201,7 & 71,6 & 565,4 & 12,2 \\
+\hline
+\end{tabularx}
+\end{table}
+
+Mức nano giảm mạnh chi phí so với các mức còn lại trong khi vẫn giữ đầy đủ đầu pose. Đây là điểm phù hợp với robot dùng smartphone, nơi camera, UI, Firebase, BLE và LSTM cùng chia sẻ CPU/GPU và bộ nhớ. Các mức m, l và x có mAP cao hơn nhưng không phù hợp nếu độ trễ làm giảm tần số lấy mẫu của chuỗi hoặc gây nóng máy. Vì vậy, lựa chọn không dựa riêng vào mAP lớn nhất mà dựa vào chất lượng chuỗi pose đạt được dưới ngân sách thời gian của toàn hệ thống.
+
+\subsubsection{Đầu vào, đầu ra và hậu xử lý trên Android}
+
+Mô hình trong đồ án dùng batch 1, ảnh $320\times320$, dữ liệu RGB kiểu \texttt{float32} được chuẩn hóa từ $[0,255]$ về $[0,1]$. Với ba mức đặc trưng có stride 8, 16 và 32, số vị trí ứng viên dense là
+\begin{equation}
+N=\left(\frac{320}{8}\right)^2+
+  \left(\frac{320}{16}\right)^2+
+  \left(\frac{320}{32}\right)^2=2100.
+\end{equation}
+Vì bài toán chỉ có lớp người, mỗi ứng viên raw gồm 4 giá trị hộp, 1 confidence và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Tùy exporter, tensor có thể ở dạng \texttt{[1,2100,56]} hoặc chuyển vị \texttt{[1,56,2100]}. Biến thể E2E giữ tối đa 300 kết quả; mỗi hàng chứa 4 tọa độ hộp, score, chỉ số lớp và 51 giá trị keypoint, tạo tensor \texttt{[1,300,57]}. Việc hiểu rõ hai hợp đồng này giúp tránh lỗi đọc nhầm chiều tensor hoặc lấy sai vị trí bắt đầu của keypoint.
+
+Pipeline hậu xử lý phải thực hiện nhất quán các bước: xác định dạng tensor; đổi hộp từ $(x_c,y_c,w,h)$ sang hai góc nếu là raw; lọc confidence; áp dụng NMS cho đầu dense; tách 17 bộ ba keypoint; ánh xạ tọa độ từ không gian $320\times320$ về khung camera; và phản chiếu trục $x$ khi dùng camera trước. Trong mã hiện tại, các ngưỡng vận hành khởi đầu là confidence detection $0{,}20$, IoU NMS $0{,}45$ và confidence keypoint $0{,}30$. Đây là siêu tham số của hệ thống, không phải hằng số nội tại của YOLO; chúng cần được hiệu chỉnh trên video thực tế và được giữ đồng nhất khi benchmark.
+
+\subsubsection{Cơ sở lựa chọn mô hình cho đồ án}
+
+Từ các phân tích trên, YOLO26n-Pose được chọn vì thỏa đồng thời ba điều kiện: sinh hộp và keypoint bằng một mạng; có quy mô nano phù hợp suy luận liên tục; và hỗ trợ xuất sang định dạng TFLite/LiteRT cho thiết bị biên \reportcite{ref:yolo_pose_docs}. Đồ án duy trì hai artifact: đầu raw với tensor tĩnh để ưu tiên GPU delegate và đầu E2E làm đường dự phòng. Trình nạp đọc shape thực tế khi khởi tạo thay vì gắn cứng một hợp đồng duy nhất; cách thiết kế này cho phép thay artifact hoặc exporter mà không phải viết lại toàn bộ pipeline theo dõi và phát hiện té ngã.
+
+\subsection{Theo dõi đối tượng và tạo chuỗi thời gian}
 
 Detector xử lý từng khung hình độc lập nên chưa bảo đảm cùng một người giữ nguyên định danh theo thời gian. Tracking-by-detection bổ sung bước dự báo trạng thái và liên kết detection để tạo tracklet. SORT sử dụng bộ lọc Kalman cho dự báo chuyển động, IoU cho độ tương đồng và thuật toán Hungarian cho bài toán gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình nhằm giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack khai thác cả detection có confidence thấp trong bước liên kết thứ hai để phục hồi đối tượng khó quan sát \reportcite{ref:bytetrack}.
 
