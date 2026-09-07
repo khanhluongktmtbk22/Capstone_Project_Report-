@@ -1,6 +1,6 @@
 \section{Phân tích và thiết kế hệ thống}
 
-Chương này chuyển mục tiêu của đề tài \textbf{``Nghiên cứu và phát triển robot trợ lý ảo ứng dụng trí tuệ nhân tạo hỗ trợ chăm sóc và giám sát người cao tuổi tại nhà''} thành các yêu cầu có thể thiết kế, hiện thực và kiểm thử. Nội dung được xây dựng bằng cách đối chiếu đồng thời RobotApp, CaregiverApp, firmware ESP32, các mô hình và mã chuyển đổi trong thư mục AI. Vì vậy, các mô tả dưới đây phản ánh nguyên mẫu hiện tại; những chức năng chưa có trong mã nguồn được nêu như giới hạn hoặc hướng phát triển, không được trình bày như kết quả đã hoàn thành.
+Chương này trình bày quá trình phân tích yêu cầu và thiết kế hệ thống robot trợ lý hỗ trợ chăm sóc người cao tuổi tại nhà. Từ mục tiêu giao tiếp, nhắc lịch, giám sát, cảnh báo té ngã và hỗ trợ can thiệp từ xa, các yêu cầu được cụ thể hóa thành những chức năng, module và luồng xử lý có thể kiểm thử. Trên cơ sở đó, kiến trúc tổng quan được xây dựng theo bốn thành phần chính gồm ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý mô hình AI và phần thân robot. Chương cũng phân tích các phương án công nghệ, xác định hợp đồng giao tiếp và những cơ chế an toàn làm cơ sở cho quá trình hiện thực ở Chương 4.
 
 \subsection{Phân tích yêu cầu hệ thống}
 
@@ -8,10 +8,10 @@ Chương này chuyển mục tiêu của đề tài \textbf{``Nghiên cứu và 
 
 Đề tài hướng đến một robot di động đặt trong nhà, sử dụng điện thoại thông minh gắn trên robot làm bộ xử lý cấp cao. Hệ thống hỗ trợ người cao tuổi qua hội thoại bằng giọng nói, lịch nhắc, giám sát bằng thị giác, phát hiện tình huống nghi té ngã và liên lạc với người chăm sóc. Người chăm sóc sử dụng một ứng dụng Android riêng để cấu hình, theo dõi sự kiện, gọi video và điều khiển robot từ xa. Phần thân robot chỉ nhận vận tốc hai động cơ từ điện thoại qua BLE và duy trì vòng điều khiển thời gian thực trên ESP32.
 
-So với mô tả ban đầu của luận văn, phạm vi được cụ thể hóa theo các thành phần đã hiện thực như Bảng \ref{tab:thesis_requirement_refinement}. Cụm từ ``hiểu ngôn ngữ tự nhiên để diễn giải các lệnh'' được giới hạn thành hội thoại hằng ngày, nhận biết ý định gọi người chăm sóc và phân loại phản hồi xác nhận té ngã. Hệ thống không được xem là thiết bị chẩn đoán y khoa, không thay thế người chăm sóc và không tự thực hiện các quyết định điều trị.
+Các định hướng của luận văn được cụ thể hóa trong Bảng \ref{tab:thesis_requirement_refinement}. Trong phạm vi đề tài, khả năng hiểu ngôn ngữ tự nhiên tập trung vào hội thoại hằng ngày, nhận biết ý định gọi người chăm sóc và phân loại câu trả lời khi xác nhận sự cố té ngã. Hệ thống đóng vai trò hỗ trợ giám sát và liên lạc, không phải thiết bị chẩn đoán y khoa, không thay thế người chăm sóc và không tự đưa ra quyết định điều trị.
 
 \begin{longtable}{|p{4.0cm}|p{5.0cm}|p{4.5cm}|}
-\caption{Cụ thể hóa yêu cầu luận văn theo phạm vi nguyên mẫu}\label{tab:thesis_requirement_refinement}\\
+\caption{Cụ thể hóa yêu cầu luận văn theo phạm vi đề tài}\label{tab:thesis_requirement_refinement}\\
 \hline
 \textbf{Định hướng ban đầu} & \textbf{Cụ thể hóa trong đề tài} & \textbf{Thành phần kiểm chứng} \\
 \hline
@@ -32,11 +32,11 @@ Thị giác máy tính cho giám sát và theo dõi & Phát hiện pose, duy tr�
 \hline
 \end{longtable}
 
-Phạm vi chức năng của nguyên mẫu gồm: quản lý hồ sơ và lịch nhắc; hội thoại giọng nói; phát hiện pose, theo dõi một người mục tiêu, tự bám theo và phát hiện té ngã; gọi video hai chiều; điều khiển robot bằng joystick; ghi nhật ký nhắc việc, cảnh báo và cuộc gọi. Các nội dung như định vị và lập bản đồ toàn căn nhà, tránh vật cản bằng cảm biến chuyên dụng, đo chỉ số sinh tồn, gọi trực tiếp đến tổng đài y tế và quản lý đồng thời nhiều robot không thuộc phạm vi hiện thực hiện tại.
+Phạm vi của đề tài gồm quản lý hồ sơ và lịch nhắc; hội thoại bằng giọng nói; ước lượng tư thế, theo dõi một người mục tiêu, tự động bám theo và phát hiện té ngã; gọi video hai chiều; điều khiển robot bằng cần điều khiển ảo; ghi nhật ký nhắc việc, cảnh báo và cuộc gọi. Các chức năng định vị và lập bản đồ toàn bộ ngôi nhà, tránh vật cản bằng cảm biến chuyên dụng, đo chỉ số sinh tồn, gọi trực tiếp đến tổng đài y tế và quản lý đồng thời nhiều robot chưa được xem xét trong phạm vi này.
 
 \subsubsection{Tác nhân, điều kiện vận hành và ranh giới hệ thống}
 
-Hai tác nhân nghiệp vụ là người cao tuổi và người chăm sóc. Các dịch vụ Firebase, Groq, STUN/TURN và phần thân robot là tác nhân hỗ trợ kỹ thuật. Trong cấu hình hiện tại, RobotApp và CaregiverApp đăng nhập cùng một tài khoản Firebase; UID của tài khoản tạo không gian dữ liệu riêng cho một cặp thiết bị tại \path|pair_sessions/{uid}|. Cơ chế này đơn giản cho nguyên mẫu một người chăm sóc--một robot, nhưng chưa phải mô hình phân quyền cho nhiều thành viên gia đình hoặc nhiều robot.
+Hai tác nhân chính của hệ thống là người cao tuổi và người chăm sóc; Firebase, Groq, STUN/TURN và phần thân robot đảm nhiệm vai trò hỗ trợ kỹ thuật. RobotApp và CaregiverApp sử dụng cùng một tài khoản Firebase, trong đó UID xác định không gian dữ liệu riêng của cặp thiết bị tại \path|pair_sessions/{uid}|. Cách ghép cặp này phù hợp với mô hình một người chăm sóc--một robot của đề tài, nhưng chưa đáp ứng bài toán phân quyền cho nhiều thành viên gia đình hoặc quản lý nhiều robot.
 
 \begin{table}[htbp]
 \centering
@@ -66,7 +66,7 @@ Hệ thống giả định điện thoại gắn trên robot có camera, micro, 
 
 \subsubsection{Yêu cầu chức năng}
 
-Các yêu cầu chức năng được gán mã để truy vết đến module và kiểm thử. Từ ``phải'' biểu thị hành vi bắt buộc của nguyên mẫu; các ngưỡng định lượng dưới đây là cấu hình của phiên bản mã nguồn hiện tại.
+Các yêu cầu chức năng được gán mã để thuận tiện liên kết với module thiết kế và kịch bản kiểm thử. Từ ``phải'' biểu thị hành vi bắt buộc của hệ thống; những ngưỡng định lượng trong bảng là các giá trị được sử dụng cho nguyên mẫu của đề tài.
 
 \begin{longtable}{|p{1.2cm}|p{4.0cm}|p{8.1cm}|}
 \caption{Danh sách yêu cầu chức năng}\label{tab:functional_requirements}\\
@@ -114,7 +114,7 @@ FR17 & Điều khiển động cơ & ESP32 phân tích payload, áp dụng vùng
 \hline
 FR18 & Nhật ký chăm sóc & CaregiverApp hiển thị lịch sử lời nhắc, cảnh báo té ngã và cuộc gọi theo thời gian. \\
 \hline
-FR19 & Chuyển đổi và triển khai mô hình & Công cụ ngoại tuyến chuyển mô hình pose từ PyTorch qua ONNX/TFLite và LSTM từ Keras H5 sang TFLite, kiểm tra tensor rồi chép artifact vào Android assets. \\
+FR19 & Chuyển đổi và triển khai mô hình & Công cụ ngoại tuyến chuyển mô hình pose từ PyTorch qua ONNX/TFLite và LSTM từ Keras H5 sang TFLite, kiểm tra tensor rồi đưa mô hình vào thư mục assets của Android. \\
 \hline
 FR20 & Dừng khi lỗi & Lệnh thiếu/cũ/không hữu hạn, hết thời gian chờ ở Android, mất BLE hoặc timeout firmware phải dẫn đến setpoint 0. \\
 \hline
@@ -122,7 +122,7 @@ FR20 & Dừng khi lỗi & Lệnh thiếu/cũ/không hữu hạn, hết thời gi
 
 \subsubsection{Yêu cầu phi chức năng}
 
-Các thuộc tính chất lượng được lựa chọn theo tinh thần ISO/IEC 25010 \reportcite{ref:iso25010}. Do hệ thống là nguyên mẫu nghiên cứu, các con số về hiệu năng và độ chính xác chỉ được kết luận sau thực nghiệm; bảng dưới đây phân biệt rõ yêu cầu thiết kế với kết quả đo ở Chương 5.
+Các thuộc tính chất lượng được lựa chọn theo mô hình ISO/IEC 25010 \reportcite{ref:iso25010}. Ở giai đoạn thiết kế, các thuộc tính này được dùng để định hướng giải pháp và xây dựng tiêu chí kiểm thử; các giá trị về hiệu năng và độ chính xác được đánh giá bằng thực nghiệm ở Chương 5.
 
 \begin{longtable}{|p{1.2cm}|p{3.1cm}|p{9.1cm}|}
 \caption{Yêu cầu phi chức năng}\label{tab:nonfunctional_requirements}\\
@@ -154,7 +154,7 @@ NFR09 & Khả năng bảo trì & Tách module UI, tracking, hậu kiểm, hội 
 \hline
 NFR10 & Khả năng giải thích & Cảnh báo lưu xác suất, lý do hậu kiểm, số keypoint, tình trạng vùng bao và vị trí thân trên; kết quả không được diễn giải như chẩn đoán. \\
 \hline
-NFR11 & Khả năng mở rộng & Kiến trúc phải cho phép bổ sung robotId/quyền thành viên; phiên bản hiện tại mới ghép cặp bằng cùng UID và tối ưu cho một robot. \\
+NFR11 & Khả năng mở rộng & Kiến trúc cho phép bổ sung định danh robot và quyền thành viên; phạm vi hiện thực sử dụng cùng UID để ghép một robot với một người chăm sóc. \\
 \hline
 NFR12 & Khả năng đánh giá & Thời gian suy luận, FPS, chất lượng mô hình, độ trễ điều khiển và các nhánh lỗi phải quan sát hoặc tái hiện được bằng benchmark/test. \\
 \hline
@@ -192,7 +192,7 @@ NFR05--NFR06 & Hồ sơ, hình ảnh và cảnh báo là dữ liệu nhạy cả
 \end{tabularx}
 \end{table}
 
-Như vậy, kiến trúc phải chứa bốn vùng trách nhiệm: giao diện và giám sát từ xa; dịch vụ dùng chung; trí tuệ và điều phối tại robot; chấp hành cơ điện. Pipeline chuẩn bị mô hình AI là một khối ngoại tuyến hỗ trợ vùng trí tuệ tại robot. Cách phân rã này cũng tạo ranh giới lỗi: mất dịch vụ ngôn ngữ không được làm mất khả năng STOP, mất kết nối CaregiverApp không được duy trì lệnh cũ, và lỗi media không được chiếm camera vĩnh viễn.
+Từ những phân tích trên, hệ thống được chia thành bốn vùng trách nhiệm: giao diện giám sát từ xa, dịch vụ dùng chung, xử lý và điều phối tại robot, cùng tầng chấp hành cơ điện. Quy trình chuẩn bị mô hình AI được tổ chức riêng ở chế độ ngoại tuyến để cung cấp mô hình cho khối xử lý trên robot. Cách phân rã này đồng thời cô lập các dạng sự cố: việc gián đoạn dịch vụ ngôn ngữ không làm mất khả năng dừng robot, mất kết nối với CaregiverApp không khiến lệnh cũ tiếp tục có hiệu lực, còn lỗi truyền thông đa phương tiện không chiếm giữ camera sau khi phiên gọi kết thúc.
 
 \subsubsection{Kiến trúc logic tổng quan}
 
@@ -237,13 +237,13 @@ Hội thoại và lời nhắc & Giọng nói, hồ sơ, lịch và sự kiện 
 \hline
 Liên lạc thời gian thực & Yêu cầu gọi và tín hiệu thiết lập phiên & Thiết lập/kết thúc phiên, quản lý camera và truyền media hai chiều & Audio/video và trạng thái cuộc gọi \\
 \hline
-Dữ liệu và điều phối dùng chung & Hồ sơ, lịch, cờ, lệnh, cảnh báo và signaling & Xác thực, phân vùng dữ liệu và phân phối thay đổi giữa hai thiết bị & Snapshot/sự kiện theo danh tính cặp thiết bị \\
+Dữ liệu và điều phối dùng chung & Hồ sơ, lịch, cờ, lệnh, cảnh báo và dữ liệu thiết lập cuộc gọi & Xác thực, phân vùng dữ liệu và phân phối thay đổi giữa hai thiết bị & Bản cập nhật và sự kiện theo danh tính cặp thiết bị \\
 \hline
 Cầu nối điều khiển & Vector điều khiển từ xa hoặc auto-follow & Chọn nguồn lệnh, kiểm tra miền/timestamp và ánh xạ vận tốc hai bánh & Setpoint trái/phải \\
 \hline
 Chấp hành thân robot & Setpoint hai bánh và góc rotor & Điều khiển vận tốc kín, giới hạn lệnh và watchdog & PWM động cơ và trạng thái dừng \\
 \hline
-Chuẩn bị mô hình ngoại tuyến & Model huấn luyện và cấu hình chuyển đổi & Chuyển đổi định dạng, kiểm tra tensor và tạo artifact mobile & Mô hình sẵn sàng triển khai \\
+Chuẩn bị mô hình ngoại tuyến & Mô hình đã huấn luyện và cấu hình chuyển đổi & Chuyển đổi định dạng, kiểm tra tensor và tạo mô hình cho thiết bị di động & Mô hình sẵn sàng triển khai \\
 \hline
 \end{longtable}
 
@@ -300,7 +300,7 @@ UC10 & Xem nhật ký & Người chăm sóc & Danh sách lời nhắc, cảnh b�
 
 Hình \ref{fig:activity_fall_detection} mô tả luồng từ lúc người chăm sóc bật phát hiện té ngã. Mỗi frame hợp lệ đi qua YOLO pose, tracker và LSTM. Khi LSTM trả FALL trong ít nhất 5 frame liên tiếp, ứng viên được ``vũ trang'' nhưng chưa cảnh báo ngay. Frame NO FALL đầu tiên kết thúc chuỗi và kích hoạt hậu kiểm điểm mũi/vai: ba frame có điểm thân trên trong 70\% phía trên ảnh làm ứng viên bị loại; ba frame có điểm thân trên thấp hơn ngưỡng làm hệ thống hỏi xác nhận. Nếu mục tiêu hoặc điểm thân trên mất liên tục 12 frame, hệ thống cũng hỏi theo nguyên tắc thận trọng.
 
-Khi hỏi xác nhận, RobotApp khóa sự cố, dừng robot và chuyển quyền tương tác cho chatbot. Phản hồi rõ là an toàn chỉ giải quyết sự cố cục bộ; code hiện tại không ghi bản ghi cảnh báo cho nhánh này. Phản hồi nguy hiểm, mơ hồ/lỗi phân loại hoặc không phản hồi trong 10 s sẽ tạo \path|fall_alerts|, đặt mức độ phù hợp và chuyển sang cuộc gọi khẩn cấp. Bộ hậu kiểm chỉ trở về trạng thái giám sát sau 10 frame NO FALL, nhờ đó một sự cố không tạo nhiều phiên hỏi liên tiếp.
+Khi cần xác nhận, RobotApp khóa sự cố đang xử lý, dừng robot và chuyển quyền tương tác cho chatbot. Nếu người dùng trả lời rõ ràng rằng mình an toàn, sự cố được kết thúc tại robot và không tạo bản ghi cảnh báo. Ngược lại, phản hồi nguy hiểm, câu trả lời không rõ, lỗi phân loại hoặc không có phản hồi trong 10 s sẽ tạo bản ghi tại \path|fall_alerts| và khởi tạo cuộc gọi khẩn cấp. Bộ hậu kiểm chỉ trở về trạng thái giám sát sau 10 khung hình liên tiếp được phân loại NO FALL, nhờ đó một sự cố không tạo ra nhiều lượt xác nhận trùng lặp.
 
 \begin{figure}[H]
     \centering
@@ -332,7 +332,7 @@ Trong hội thoại thông thường, STT tạo văn bản, \texttt{GroqChatServ
 
 \subsection{Thiết kế và lựa chọn công nghệ cho các module}
 
-Sau khi xác định module và luồng phối hợp, bước tiếp theo là lựa chọn công nghệ đáp ứng đồng thời độ trễ, tài nguyên điện thoại, khả năng tích hợp và quy mô của nguyên mẫu. Việc lựa chọn không chỉ dựa trên số lượng tính năng: một giải pháp thuận tiện cho lưu trữ chưa chắc phù hợp truyền video, và một mô hình AI chính xác trên máy trạm chưa chắc chạy được liên tục trên điện thoại. Bảng \ref{tab:crosscutting_technology_choices} tóm tắt các quyết định nền tảng; các mục sau trình bày thiết kế chi tiết của từng khối.
+Sau khi xác định các module và luồng phối hợp, những công nghệ phù hợp được lựa chọn dựa trên độ trễ, tài nguyên của điện thoại, khả năng tích hợp và phạm vi hệ thống. Mỗi loại dữ liệu có đặc điểm riêng: giải pháp phù hợp để lưu trữ hồ sơ chưa chắc đáp ứng việc truyền video thời gian thực, còn một mô hình đạt độ chính xác cao trên máy trạm có thể không duy trì được tốc độ suy luận trên điện thoại. Bảng \ref{tab:crosscutting_technology_choices} tóm tắt các quyết định nền tảng; các mục tiếp theo trình bày thiết kế chi tiết của từng khối.
 
 \begin{longtable}{|p{2.8cm}|p{3.4cm}|p{3.5cm}|p{3.8cm}|}
 \caption{So sánh các lựa chọn công nghệ xuyên suốt hệ thống}\label{tab:crosscutting_technology_choices}\\
@@ -348,7 +348,7 @@ Sau khi xác định module và luồng phối hợp, bước tiếp theo là l�
 \hline
 Suy luận AI & Cloud inference; suy luận trên thiết bị & Cloud dễ nâng cấp model nhưng phụ thuộc mạng, tăng độ trễ và phải tải ảnh; on-device bảo vệ ảnh và tiếp tục hoạt động khi mạng gián đoạn nhưng bị giới hạn CPU/GPU, RAM và nhiệt & TFLite trên RobotApp, ưu tiên GPU/NNAPI và có CPU dự phòng \reportcite{ref:tflite} \\
 \hline
-Đồng bộ dữ liệu & REST tự xây dựng; MQTT; cơ sở dữ liệu thời gian thực & REST kiểm soát cao nhưng phải tự xây backend; MQTT nhẹ cho telemetry nhưng cần broker và mô hình lưu trữ bổ sung; RTDB cung cấp listener và cây JSON nhưng schema/Rules phải được quản lý chặt & Firebase Authentication và Realtime Database cho quy mô nguyên mẫu \reportcite{ref:firebase_rtdb} \\
+Đồng bộ dữ liệu & REST tự xây dựng; MQTT; cơ sở dữ liệu thời gian thực & REST cho phép kiểm soát cao nhưng cần xây dựng máy chủ; MQTT phù hợp dữ liệu đo và điều khiển nhưng cần broker cùng cơ chế lưu trữ bổ sung; RTDB cung cấp listener và cây JSON nhưng đòi hỏi quản lý chặt cấu trúc dữ liệu và quy tắc truy cập & Firebase Authentication và Realtime Database cho mô hình một cặp thiết bị \reportcite{ref:firebase_rtdb} \\
 \hline
 Truyền media & Tải frame qua cơ sở dữ liệu; streaming server tập trung; WebRTC & Cơ sở dữ liệu không phù hợp media liên tục; server tập trung dễ quản lý nhưng tăng hạ tầng/băng thông; WebRTC có media thời gian thực và vượt NAT nhưng signaling/vòng đời phức tạp & WebRTC cho audio/video; RTDB chỉ làm signaling \reportcite{ref:webrtc} \\
 \hline
@@ -360,21 +360,21 @@ Hội thoại & Mô hình cục bộ; API LLM; kịch bản cố định & Mô h
 
 \subsubsection{Module ứng dụng người chăm sóc và điều phối tại robot}
 
-CaregiverApp được thiết kế như một giao diện quản lý từ xa, gồm bốn nhóm màn hình: hồ sơ--lịch, điều khiển cờ giám sát, cuộc gọi--joystick và nhật ký. Đầu vào của module là thao tác người chăm sóc và sự kiện đồng bộ; đầu ra là cấu hình, lệnh, phản hồi cuộc gọi hoặc yêu cầu truy vấn lịch sử. Ứng dụng không suy luận pose, không gọi chatbot chính và không kết nối ESP32. Ranh giới này giúp thiết bị người chăm sóc không phụ thuộc model TFLite hay driver BLE của robot.
+CaregiverApp đảm nhiệm vai trò giao diện quản lý từ xa với bốn nhóm chức năng: hồ sơ và lịch nhắc, cấu hình giám sát, cuộc gọi kèm cần điều khiển ảo, và tra cứu nhật ký. Ứng dụng tiếp nhận thao tác của người chăm sóc, đồng bộ cấu hình, gửi lệnh và xử lý yêu cầu cuộc gọi. Các tác vụ ước lượng tư thế, hội thoại chính và kết nối ESP32 không được đặt tại đây, nhờ đó thiết bị của người chăm sóc không phụ thuộc vào mô hình TFLite hoặc trình điều khiển BLE của robot.
 
-RobotApp là module điều phối tại nhà. Nó tiếp nhận frame, âm thanh, lịch, cờ chức năng và lệnh từ xa; sau đó phân phối tới khối cảm nhận, hội thoại, cuộc gọi hoặc điều khiển. Các máy trạng thái nghiệp vụ không được đặt trong model AI. Kết quả tracking được chuyển thành sự kiện; bộ điều phối mới quyết định dừng, hỏi xác nhận hoặc mở cuộc gọi. Một owner duy nhất quản lý BLE để tránh hai GATT client tranh kết nối; CameraX và WebRTC cũng luân phiên quyền sở hữu camera.
+RobotApp là bộ điều phối đặt trên robot. Ứng dụng tiếp nhận khung hình, âm thanh, lịch nhắc, cờ chức năng và lệnh từ xa, sau đó chuyển dữ liệu đến khối cảm nhận, hội thoại, cuộc gọi hoặc điều khiển tương ứng. Mô hình AI chỉ cung cấp kết quả nhận dạng và dự đoán; quyết định dừng, hỏi xác nhận hay mở cuộc gọi được thực hiện bởi máy trạng thái nghiệp vụ. Kết nối BLE được quản lý tại một đầu mối duy nhất để tránh nhiều GATT client cùng truy cập ESP32, trong khi CameraX và WebRTC luân phiên sử dụng camera theo trạng thái cuộc gọi.
 
-Native Android được chọn thay cho framework đa nền tảng vì hai ứng dụng cần foreground service, lifecycle camera, Bluetooth theo nhiều phiên bản Android, SpeechRecognizer, TTS và WebRTC native. Đổi lại, giải pháp gắn với Android và phải quản lý vòng đời tài nguyên thủ công. Các module UI được tách theo fragment/service để giới hạn phạm vi trạng thái và cho phép thay đổi từng màn hình mà không sửa thuật toán AI hoặc firmware.
+Android gốc được lựa chọn thay cho framework đa nền tảng vì hai ứng dụng cần truy cập trực tiếp dịch vụ nền, vòng đời camera, Bluetooth trên nhiều phiên bản Android, SpeechRecognizer, TTS và WebRTC. Hạn chế của lựa chọn này là hệ thống chỉ hỗ trợ Android và phải quản lý chặt vòng đời của các tài nguyên phần cứng. Giao diện và dịch vụ được tách thành các fragment và service, qua đó giới hạn phạm vi trạng thái và giảm ảnh hưởng giữa phần giao diện, thuật toán AI và firmware.
 
 \subsubsection{Module cảm nhận, phát hiện pose và theo dõi ID0}
 
-Từ yêu cầu giám sát liên tục và phát hiện té ngã trên điện thoại robot, module cảm nhận phải cung cấp đồng thời hộp bao người và các điểm khớp cơ thể, duy trì tốc độ đủ tạo chuỗi thời gian và không phụ thuộc việc tải frame lên máy chủ. Một detector hộp kết hợp mô hình pose riêng có ưu điểm thay thế từng thành phần độc lập, nhưng phải thực hiện hai lượt suy luận và truyền thêm vùng ảnh trung gian. Mô hình pose hợp nhất giảm số tầng xử lý vì hộp và keypoint được sinh trong cùng một lần forward.
+Để giám sát liên tục và phát hiện té ngã ngay trên điện thoại robot, module cảm nhận phải cung cấp đồng thời hộp bao người và các điểm khớp cơ thể, duy trì tốc độ đủ để hình thành chuỗi thời gian và không phụ thuộc vào việc tải ảnh lên máy chủ. Phương án kết hợp một bộ phát hiện hộp với một mô hình ước lượng tư thế riêng cho phép thay thế từng thành phần độc lập, nhưng cần hai lượt suy luận và thêm bước truyền vùng ảnh trung gian. Mô hình pose hợp nhất tạo hộp bao và keypoint trong cùng một lượt suy luận, nhờ đó giảm số tầng xử lý.
 
 Các phương án MobileNet SSD và EfficientDet chuẩn phù hợp làm detector nhẹ nhưng không trực tiếp cung cấp 17 keypoint; hệ thống sẽ cần thêm tầng ước lượng tư thế. Họ YOLO-Pose đáp ứng đồng thời hai loại đầu ra và hỗ trợ xuất sang TFLite/LiteRT \reportcite{ref:yolo_pose_docs}. Dựa trên quy trình ở Mục \ref{sec:yolo_pose_inference_pipeline}, hợp đồng input--output ở Mục \ref{sec:yolo_pose_output_representation} và so sánh quy mô tại Mục \ref{sec:yolo26_pose_scales}, đề tài chọn YOLO26n-Pose. Mức nano được ưu tiên thay cho s, m, l và x vì có số tham số và chi phí tính toán thấp nhất trong họ, phù hợp suy luận liên tục khi điện thoại còn phải chạy CameraX, tracking, LSTM, giao diện, Firebase và BLE. Đánh đổi là pose mAP thấp hơn các mức lớn; quyết định cuối cùng vì thế phải được kiểm chứng bằng độ trễ và chất lượng chuỗi keypoint trên thiết bị đích, thay vì chỉ dựa vào benchmark máy trạm.
 
-Đầu vào của module là frame CameraX hoặc bản sao frame WebRTC. Khung hình được chuẩn hóa về $320\times320$, suy luận YOLO pose, lọc detection theo confidence 0,20, NMS IoU 0,45 và ngưỡng hiển thị keypoint 0,30. Đầu ra không chỉ là hộp bao người mà còn gồm 17 keypoint để phục vụ đồng thời tracking, ước lượng khoảng cách và LSTM. Pipeline giới hạn mục tiêu 25 FPS và bỏ frame mới nếu lượt suy luận trước chưa hoàn tất; cách này giữ độ trễ hiện thời thay vì tạo hàng đợi ảnh ngày càng cũ.
+Module nhận khung hình từ CameraX hoặc bản sao khung hình WebRTC. Ảnh được đưa về kích thước $320\times320$ trước khi suy luận bằng YOLO-Pose; kết quả được lọc với ngưỡng tin cậy 0,20, ngưỡng NMS IoU 0,45 và ngưỡng hiển thị keypoint 0,30. Đầu ra gồm hộp bao người và 17 keypoint, được dùng chung cho theo dõi mục tiêu, ước lượng khoảng cách và LSTM. Tốc độ xử lý mục tiêu được giới hạn ở 25 FPS; nếu lượt suy luận trước chưa hoàn tất, khung hình mới sẽ bị bỏ qua để tránh tích lũy độ trễ.
 
-Về nơi xử lý, gửi frame lên cloud có ưu điểm dễ dùng phần cứng mạnh hơn, nhưng làm tăng độ trễ, băng thông và rủi ro riêng tư. Suy luận trực tiếp trên điện thoại bị giới hạn tài nguyên nhưng phù hợp NFR02, NFR06 và vẫn hoạt động khi Internet gián đoạn. Do đó, TFLite được chọn làm runtime mobile; GPU delegate được ưu tiên, sau đó NNAPI và CPU bốn luồng làm đường dự phòng \reportcite{ref:tflite}.
+Việc gửi khung hình lên dịch vụ đám mây cho phép sử dụng phần cứng mạnh hơn, nhưng làm tăng độ trễ, băng thông và rủi ro đối với dữ liệu hình ảnh. Suy luận trực tiếp trên điện thoại chịu giới hạn về tài nguyên nhưng đáp ứng tốt hơn NFR02, NFR06 và vẫn hoạt động khi Internet gián đoạn. Vì vậy, TFLite được chọn làm môi trường suy luận trên thiết bị; hệ thống ưu tiên GPU, chuyển sang NNAPI khi cần và sử dụng CPU bốn luồng làm phương án cuối \reportcite{ref:tflite}.
 
 Đối với tracking, SORT có ưu điểm gọn và thời gian thực nhưng phụ thuộc chất lượng detection; ByteTrack tận dụng cả detection điểm thấp tốt hơn trong che khuất nhưng tăng số phép ghép \reportcite{ref:sort}\reportcite{ref:bytetrack}. Một mạng Re-ID sâu có thể phân biệt ngoại hình tốt hơn nhưng làm tăng kích thước model và thời gian suy luận. Đề tài chọn cấu trúc SORT/Kalman/Hungarian, bổ sung khoảng cách pose và histogram H--S chỉ khi cần Re-ID. Chi phí ghép được thiết kế:
 
@@ -394,7 +394,7 @@ Q=0,60q_{area}+0,15q_{det}+0,15q_{vis}+0,10q_{center}-p_{edge}.
 
 Module auto-follow nhận hộp bao/keypoint của ID0 và trả vector tiến--lùi--quay chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá, sau đó làm mượt bằng EMA và phân thành ba dải có hysteresis: xa, an toàn và quá gần. Sai lệch tâm ngang tạo thành phần quay với vùng chết 0,07, hệ số 2,2 và biên 0,50; vector được cập nhật khoảng mỗi 120 ms.
 
-Một bộ điều khiển dựa hoàn toàn trên tâm hộp bao có chi phí thấp nhưng dễ tiến sát khi chân bị cắt khỏi ảnh. Dùng depth sensor sẽ cho khoảng cách trực tiếp hơn nhưng làm tăng phần cứng và không thuộc nguyên mẫu. Vì vậy, đề tài kết hợp hộp bao với pose và áp dụng chính sách thận trọng: khi vùng bao quá lớn hoặc chân bị cắt, robot ưu tiên lùi để lấy đủ người vào khung hình. Sau một kết quả FALL, robot không tiến về phía người mà chỉ STOP, lùi chậm hoặc quay tại chỗ; mất ID0 trong chế độ này dẫn đến STOP ngay.
+Bộ điều khiển chỉ dựa vào tâm hộp bao có chi phí tính toán thấp, nhưng có thể đánh giá sai khoảng cách khi phần chân bị cắt khỏi ảnh. Cảm biến chiều sâu cung cấp khoảng cách trực tiếp hơn nhưng làm tăng độ phức tạp phần cứng và nằm ngoài phạm vi đề tài. Do đó, hệ thống kết hợp hộp bao với các keypoint và áp dụng chính sách chuyển động thận trọng: khi vùng bao quá lớn hoặc phần chân không còn trong khung hình, robot ưu tiên lùi để quan sát đầy đủ hơn. Sau khi xuất hiện kết quả FALL, robot không tiến về phía người mà chỉ dừng, lùi chậm hoặc quay tại chỗ; nếu mất ID0 trong trạng thái này, robot dừng ngay.
 
 Nguồn lệnh joystick và auto-follow dùng chung hợp đồng $x,y,ts$ nhưng loại trừ lẫn nhau. Việc hợp nhất tại một module cầu nối giúp mọi nguồn lệnh cùng chịu kiểm tra timestamp, clamp và watchdog, thay vì mỗi tính năng tự ghi BLE theo quy ước riêng.
 
@@ -434,16 +434,16 @@ Module cầu nối là nơi duy nhất kiểm tra timestamp, giới hạn giá t
 
 Mô hình huấn luyện không được nạp trực tiếp vào Android. Pipeline ngoại tuyến chuyển YOLO pose từ PyTorch sang ONNX tĩnh $320\times320$, qua onnx2tf/SavedModel rồi tạo TFLite; LSTM được chuyển từ Keras H5 sang TFLite có \texttt{SELECT\_TF\_OPS}. Biến thể YOLO raw không NMS phục vụ delegate GPU, còn biến thể E2E có NMS làm dự phòng. Khi nạp, ứng dụng đọc kích thước tensor để hỗ trợ đầu ra raw $[1,56,2100]$ và E2E $[1,300,57]$.
 
-ONNX được dùng làm định dạng trung gian vì thuận tiện kiểm tra graph giữa framework huấn luyện và TensorFlow; TFLite được chọn cho artifact cuối vì phù hợp Android và delegate phần cứng. Chuỗi chuyển đổi nhiều bước giúp triển khai linh hoạt nhưng có nguy cơ sai khác toán tử/đầu ra, vì vậy phải kiểm tra shape và suy luận tương đương trước khi đóng gói. Snapshot AI hiện có artifact cùng script chuyển đổi/thử suy luận, nhưng chưa chứa đầy đủ notebook/script tái huấn luyện; đây là giới hạn về khả năng tái lập thí nghiệm cần được bổ sung bằng cấu hình dữ liệu, seed, checkpoint và manifest/hash model.
+ONNX được dùng làm định dạng trung gian để kiểm tra đồ thị tính toán giữa framework huấn luyện và TensorFlow; TFLite là định dạng triển khai cuối vì phù hợp với Android và hỗ trợ các bộ tăng tốc phần cứng. Quy trình chuyển đổi nhiều bước tạo sự linh hoạt nhưng có thể làm thay đổi toán tử hoặc quy ước đầu ra, vì vậy kích thước tensor và tính tương đương suy luận phải được kiểm tra trước khi đóng gói. Quy trình của đề tài đã có các mô hình cùng mã chuyển đổi và kiểm tra suy luận; tuy nhiên, cấu hình tái huấn luyện chưa được chuẩn hóa đầy đủ. Để tăng khả năng tái lập, cần bổ sung cấu hình dữ liệu, seed, checkpoint và tệp kê khai kèm mã băm cho từng phiên bản mô hình.
 
 \subsection{Thiết kế dữ liệu và hợp đồng giao tiếp}
 
 \subsubsection{Cây dữ liệu Firebase}
 
-Firebase RTDB lưu cây JSON và đẩy thay đổi tới listener của hai ứng dụng \reportcite{ref:firebase_rtdb}. Khác với phiên bản thiết kế ban đầu dùng node toàn cục, code hiện tại đã gom dữ liệu vận hành của cặp thiết bị dưới \path|pair_sessions/{uid}|. Hồ sơ, lịch và nhật ký lời nhắc vẫn có nhánh UID riêng ở cấp gốc.
+Firebase RTDB lưu dữ liệu theo cấu trúc cây JSON và chuyển thay đổi đến các bộ lắng nghe của hai ứng dụng \reportcite{ref:firebase_rtdb}. Dữ liệu vận hành của từng cặp thiết bị được gom dưới \path|pair_sessions/{uid}|, trong khi hồ sơ, lịch và nhật ký lời nhắc được tổ chức thành các nhánh theo UID ở cấp gốc.
 
 \begin{longtable}{|p{4.5cm}|p{4.2cm}|p{4.8cm}|}
-\caption{Cây dữ liệu Realtime Database theo mã nguồn hiện tại}\label{tab:rtdb_schema}\\
+\caption{Cấu trúc dữ liệu của Firebase Realtime Database}\label{tab:rtdb_schema}\\
 \hline
 \textbf{Đường dẫn} & \textbf{Trường chính} & \textbf{Mục đích} \\
 \hline
@@ -534,12 +534,12 @@ Chuỗi điều khiển có bốn hàng rào bổ sung nhau:
 
 \begin{enumerate}
     \item UI phát STOP khi thả joystick, ẩn điều khiển, tắt auto-follow hoặc kết thúc cuộc gọi.
-    \item RobotApp loại snapshot RTDB quá 2 s hoặc sai kiểu/không hữu hạn.
+    \item RobotApp loại bản cập nhật RTDB quá 2 s, sai kiểu hoặc chứa giá trị không hữu hạn.
     \item Watchdog \texttt{RobotControlManager} phát \texttt{L0R0} sau 500 ms không nhận cập nhật lệnh.
     \item Firmware đặt hai target về 0 sau 800 ms không nhận payload hoặc ngay khi BLE disconnect.
 \end{enumerate}
 
-Watchdog Android ngắn hơn firmware trong cấu hình hiện tại để ưu tiên gửi lệnh dừng có chủ đích; watchdog ESP32 vẫn là lớp cuối nếu ứng dụng treo hoặc mất kết nối trước khi gửi STOP.
+Thời gian watchdog trên Android được đặt ngắn hơn firmware để ứng dụng ưu tiên gửi lệnh dừng có chủ đích. Watchdog trên ESP32 là lớp bảo vệ cuối cùng khi ứng dụng bị treo hoặc kết nối bị ngắt trước khi lệnh STOP được gửi đi.
 
 \subsection{An toàn, bảo mật và quyền riêng tư}
 
@@ -559,7 +559,7 @@ Ghi lệnh robot trái phép & Firebase Auth, Rules theo UID, timestamp và clam
 \hline
 Replay lệnh cũ & Tuổi lệnh tối đa 2 s và hai watchdog & Nonce/sequence nếu mở rộng sang môi trường đối kháng \\
 \hline
-Rò rỉ thông tin xác thực dịch vụ & HTTPS và phạm vi nguyên mẫu & Mã hiện tại còn cấu hình bí mật phía client; cần thu hồi/đổi khóa, dùng backend hoặc credential ngắn hạn, không commit secret \\
+Rò rỉ thông tin xác thực dịch vụ & HTTPS và phạm vi truy cập giới hạn & Một số thông tin xác thực còn được cấu hình phía ứng dụng; cần thay khóa đã dùng, chuyển sang máy chủ trung gian hoặc thông tin xác thực ngắn hạn và không lưu khóa trong kho mã \\
 \hline
 Đọc hồ sơ/lịch trái phép & Mặc định deny và kiểm tra \texttt{auth.uid} & Mô hình thành viên gia đình và nguyên tắc tối thiểu quyền \\
 \hline
@@ -619,4 +619,4 @@ AI biên giảm độ trễ và bề mặt lộ ảnh, nhưng phụ thuộc GPU/
 
 \subsection{Kết luận chương}
 
-Chương đã cụ thể hóa mô tả luận văn thành phạm vi và yêu cầu có thể kiểm thử; từ đó dẫn xuất kiến trúc logic theo vị trí dữ liệu, mức thời gian thực và mức phụ thuộc mạng. Trên cơ sở các module và luồng phối hợp, chương đã so sánh phương án công nghệ rồi lựa chọn nền tảng di động, suy luận AI biên, cơ chế đồng bộ, media, hội thoại và liên kết với thân robot. Thiết kế cũng xác định rõ ranh giới giữa nhận thức AI, quyết định nghiệp vụ và chấp hành cơ điện, cùng hợp đồng dữ liệu và các lớp dừng an toàn. Sơ đồ ánh xạ cuối cùng từ thiết kế này sang công nghệ và thành phần mã nguồn được trình bày ở đầu Chương 4; Chương 5 tiếp tục đánh giá kết quả trên nguyên mẫu.
+Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng của hệ thống, từ đó xây dựng kiến trúc logic dựa trên vị trí dữ liệu, mức độ thời gian thực và sự phụ thuộc vào mạng. Các module và luồng phối hợp được phân tích trước khi lựa chọn nền tảng di động, cơ chế suy luận AI tại biên, giải pháp đồng bộ dữ liệu, truyền thông đa phương tiện, hội thoại và kết nối với phần thân robot. Thiết kế đồng thời làm rõ ranh giới giữa kết quả nhận thức của AI, quyết định nghiệp vụ và quá trình chấp hành cơ điện, cùng các hợp đồng giao tiếp và cơ chế dừng an toàn. Đây là cơ sở để xây dựng kiến trúc hiện thực ở Chương 4 và tổ chức đánh giá hệ thống ở Chương 5.
