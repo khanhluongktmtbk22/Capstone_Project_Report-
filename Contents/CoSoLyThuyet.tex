@@ -461,6 +461,20 @@ EfficientDet & EfficientNet, BiFPN và compound scaling & Có nhiều mức mô 
 
 Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau không được đặt cạnh nhau như một phép so sánh trực tiếp nếu khác tập dữ liệu, độ phân giải, phần cứng và giao thức đo. Với yêu cầu của đồ án, tiêu chí quyết định là khả năng sinh đồng thời hộp người và 17 keypoint trong một mô hình đủ nhẹ để chạy trên Android. Vì vậy hướng YOLO-Pose được chọn để huấn luyện và chuyển đổi sang TensorFlow Lite; phiên bản mô hình, delegate và số đo thực nghiệm được trình bày tại Chương 4 và Chương 5.
 
+\subsubsection{Theo dõi đối tượng và tạo chuỗi thời gian}
+
+Detector xử lý từng khung hình độc lập nên chưa bảo đảm cùng một người giữ nguyên định danh theo thời gian. Tracking-by-detection bổ sung bước dự báo trạng thái và liên kết detection để tạo tracklet. SORT sử dụng bộ lọc Kalman cho dự báo chuyển động, IoU cho độ tương đồng và thuật toán Hungarian cho bài toán gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình nhằm giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack khai thác cả detection có confidence thấp trong bước liên kết thứ hai để phục hồi đối tượng khó quan sát \reportcite{ref:bytetrack}.
+
+Với trạng thái $x_t$, ma trận chuyển trạng thái $F$, điều khiển $u_t$ và quan sát $z_t$, hai pha cơ bản của bộ lọc Kalman là
+\begin{align}
+\hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
+P_{t|t-1}&=FP_{t-1|t-1}F^T+Q,\\
+K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
+\hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
+P_{t|t}&=(I-K_tH)P_{t|t-1}.
+\end{align}
+Ma trận chi phí giữa các track và detection được giải bằng thuật toán Hungarian \reportcite{ref:hungarian}. Tuy nhiên, IoU đơn lẻ có thể suy giảm mạnh khi người chuyển nhanh từ tư thế đứng sang nằm. Theo mã nguồn hiện tại, đồ án dùng SORT được mở rộng bằng khoảng cách tâm, tỉ lệ kích thước, khoảng cách pose và histogram vùng thân; mục tiêu chính được gán ID0, có tuổi track dài hơn và cơ chế phục hồi có điều kiện. Cách lựa chọn này giữ pipeline nhẹ trên Android nhưng vẫn cung cấp chuỗi keypoint nhất quán cho LSTM và tín hiệu vị trí ổn định cho bộ điều khiển bám người.
+
 \subsection{Họ mô hình YOLO và YOLO26-Pose}
 
 \subsubsection{Quá trình phát triển của họ YOLO}
@@ -530,6 +544,62 @@ Thứ tự 17 keypoint phải được giữ nhất quán từ dữ liệu, mô 
 
 Các cặp vai, hông, gối và cổ chân đặc biệt quan trọng đối với đồ án. Chúng cho phép chuẩn hóa pose theo tâm và kích thước thân người, ước lượng hướng trục cơ thể, tốc độ hạ thấp và mức nằm ngang. Confidence của từng keypoint phải được dùng như mặt nạ chất lượng; thay một khớp bị che khuất bằng tọa độ không đáng tin có thể tạo vận tốc giả lớn và gây nhiễu chuỗi LSTM.
 
+\subsubsection{Hệ tọa độ, bounding box và keypoint}
+
+Đầu ra của mô hình chỉ có ý nghĩa khi xác định rõ nó đang thuộc không gian tọa độ nào. Trong pipeline của đồ án tồn tại bốn không gian liên tiếp như Bảng \ref{tab:yolo_coordinate_systems}. Tất cả đều đặt gốc tại góc trên bên trái; trục $x$ tăng từ trái sang phải và trục $y$ tăng từ trên xuống dưới. Sự khác nhau nằm ở đơn vị đo, kích thước miền và phép biến đổi hiển thị.
+
+\begin{table}[htbp]
+\centering
+\caption{Các hệ tọa độ trong pipeline YOLO26-Pose của Robot App}
+\label{tab:yolo_coordinate_systems}
+\renewcommand{\arraystretch}{1.12}
+\small
+\begin{tabularx}{\textwidth}{|p{2.35cm}|p{2.35cm}|X|X|}
+\hline
+\textbf{Không gian} & \textbf{Miền tọa độ} & \textbf{Vai trò} & \textbf{Dữ liệu sử dụng} \\
+\hline
+Ảnh camera $\mathcal{C}$ & $[0,W_c]\times[0,H_c]$ pixel & Khung hình gốc nhận từ camera & Tracking, điều khiển bám người và tạo đặc trưng LSTM \\
+\hline
+Ảnh mô hình $\mathcal{I}$ & $[0,S]\times[0,S]$ pixel, $S=320$ & Ảnh vuông sau phép resize đưa vào TFLite & Suy luận và đầu ra dạng pixel của một số artifact \\
+\hline
+Chuẩn hóa $\mathcal{N}$ & $[0,1]\times[0,1]$ & Biểu diễn không phụ thuộc độ phân giải & Đầu ra chuẩn hóa và các đại lượng hình học theo tỉ lệ \\
+\hline
+Màn hình $\mathcal{V}$ & $[0,W_v]\times[0,H_v]$ pixel & Lớp overlay chồng lên camera preview & Vẽ hộp, skeleton, nhãn và track ID \\
+\hline
+\end{tabularx}
+\end{table}
+
+Robot App resize trực tiếp khung camera kích thước $W_c\times H_c$ thành ảnh $S\times S$ bằng nội suy song tuyến tính. Với $s_x=S/W_c$ và $s_y=S/H_c$, một điểm camera $(x_c,y_c)$ được đưa sang đầu vào mô hình theo
+\begin{equation}
+x_i=s_xx_c,\qquad y_i=s_yy_c.
+\end{equation}
+Phép ánh xạ ngược là $x_c=x_iW_c/S$ và $y_c=y_iH_c/S$. Nếu mô hình trả tọa độ chuẩn hóa $(x_n,y_n)$ thì có thể đổi trực tiếp bằng $x_c=x_nW_c$, $y_c=y_nH_c$. Mã hiện tại nhận biết hai trường hợp bằng cách khảo sát kênh tọa độ đầu tiên: giá trị lớn nhất không vượt quá 2 được xem là tọa độ chuẩn hóa, ngược lại được xem là pixel trong ảnh mô hình. Quy tắc này phù hợp với hai artifact đã kiểm thử; khi thay exporter, cách chắc chắn hơn là khai báo đơn vị tọa độ cùng metadata của mô hình thay vì chỉ dựa vào giá trị quan sát. Cách resize trực tiếp đơn giản và không sinh vùng đệm, nhưng làm thay đổi tỉ lệ hình học trong ảnh đầu vào khi $W_c\ne H_c$. Phương án letterbox giữ nguyên tỉ lệ tốt hơn, đổi lại hậu xử lý phải trừ phần padding trước khi nhân hệ số tỉ lệ; do mã hiện tại không dùng letterbox nên không được áp dụng công thức loại padding cho hai artifact đang triển khai.
+
+Bounding box có hai cách biểu diễn cần phân biệt. Đầu raw dùng dạng tâm--kích thước
+\begin{equation}
+B_{cxcywh}=(c_x,c_y,w_b,h_b),
+\end{equation}
+và được đổi sang dạng hai góc trước khi tính IoU hoặc vẽ:
+\begin{equation}
+x_{\min}=c_x-\frac{w_b}{2},\quad y_{\min}=c_y-\frac{h_b}{2},\quad
+x_{\max}=c_x+\frac{w_b}{2},\quad y_{\max}=c_y+\frac{h_b}{2}.
+\end{equation}
+Đầu E2E trả trực tiếp $B_{xyxy}=(x_{\min},y_{\min},x_{\max},y_{\max})$. Từ dạng này, chiều rộng $w_b=x_{\max}-x_{\min}$, chiều cao $h_b=y_{\max}-y_{\min}$, tâm hộp và tỉ lệ $w_b/h_b$ được sử dụng lại cho SORT, ước lượng khoảng cách và nhận biết tư thế nằm. Một hộp hợp lệ phải thỏa $x_{\max}>x_{\min}$ và $y_{\max}>y_{\min}$; tọa độ vẫn có thể vượt biên danh nghĩa khi người chỉ xuất hiện một phần trong ảnh. Mỗi hộp luôn đi cùng score, lớp người và đúng bộ 17 keypoint của detection đó; keypoint không phải là tọa độ cục bộ tính từ góc hộp mà nằm trong cùng hệ tọa độ ảnh với bounding box.
+
+Với keypoint thứ $j$, mô hình trả bộ ba $(x_j,y_j,p_j)$, trong đó $p_j\in[0,1]$ là confidence. Ở tensor raw, bộ ba đầu tiên bắt đầu từ kênh 5; ở tensor E2E, chúng bắt đầu từ kênh 6, sau bốn tọa độ hộp, score và trường lớp. Do đó vị trí của keypoint thứ $j$ trong mỗi hàng được đọc từ ba phần tử liên tiếp bắt đầu tại $b+3j$, với $b=5$ cho raw và $b=6$ cho E2E. Chỉ các điểm có $p_j\geq0{,}30$ mới được đánh dấu tin cậy trong mã hiện tại. Việc giữ cả confidence thay vì chỉ giữ cờ đúng/sai cho phép các tầng sau loại khớp bị che khuất hoặc cân nhắc chất lượng pose.
+
+Sau khi đổi về pixel camera, ảnh từ camera trước được phản chiếu theo phương ngang. Một điểm trở thành $x'_c=W_c-x_c$, $y'_c=y_c$; với bounding box phải đồng thời hoán đổi hai cạnh:
+\begin{equation}
+x'_{\min}=W_c-x_{\max},\qquad x'_{\max}=W_c-x_{\min}.
+\end{equation}
+Cuối cùng, overlay sử dụng cách hiển thị center-crop giống camera preview. Đặt
+\begin{equation}
+s_v=\max\!\left(\frac{W_v}{W_c},\frac{H_v}{H_c}\right),\quad
+\Delta_x=\frac{W_v-s_vW_c}{2},\quad
+\Delta_y=\frac{H_v-s_vH_c}{2},
+\end{equation}
+thì điểm được vẽ tại $x_v=s_vx'_c+\Delta_x$, $y_v=s_vy'_c+\Delta_y$. Tọa độ màn hình chỉ phục vụ hiển thị; tracking, LSTM và bộ điều khiển luôn sử dụng tọa độ camera hoặc giá trị đã chia cho $W_c,H_c$. Sự phân tách này tránh việc kết quả điều khiển thay đổi khi kích thước View hoặc tỉ lệ màn hình thay đổi.
+
 \subsubsection{Các mức kích thước của YOLO26-Pose}
 
 Họ mô hình cung cấp năm mức n, s, m, l và x. Tăng mức mô hình thường làm tăng khả năng biểu diễn và pose mAP, đồng thời tăng số tham số, phép tính, bộ nhớ và độ trễ. Bảng \ref{tab:yolo26_pose_scales} sử dụng kết quả E2E chính thức tại đầu vào $640\times640$ trên COCO Keypoints val2017 \reportcite{ref:yolo26}; số liệu CPU ONNX và T4 TensorRT chỉ cho thấy xu hướng giữa các mức, không phải tốc độ dự kiến trên Android/TensorFlow Lite.
@@ -565,26 +635,11 @@ N=\left(\frac{320}{8}\right)^2+
 \end{equation}
 Vì bài toán chỉ có lớp người, mỗi ứng viên raw gồm 4 giá trị hộp, 1 confidence và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Tùy exporter, tensor có thể ở dạng \texttt{[1,2100,56]} hoặc chuyển vị \texttt{[1,56,2100]}. Biến thể E2E giữ tối đa 300 kết quả; mỗi hàng chứa 4 tọa độ hộp, score, chỉ số lớp và 51 giá trị keypoint, tạo tensor \texttt{[1,300,57]}. Việc hiểu rõ hai hợp đồng này giúp tránh lỗi đọc nhầm chiều tensor hoặc lấy sai vị trí bắt đầu của keypoint.
 
-Pipeline hậu xử lý phải thực hiện nhất quán các bước: xác định dạng tensor; đổi hộp từ $(x_c,y_c,w,h)$ sang hai góc nếu là raw; lọc confidence; áp dụng NMS cho đầu dense; tách 17 bộ ba keypoint; ánh xạ tọa độ từ không gian $320\times320$ về khung camera; và phản chiếu trục $x$ khi dùng camera trước. Trong mã hiện tại, các ngưỡng vận hành khởi đầu là confidence detection $0{,}20$, IoU NMS $0{,}45$ và confidence keypoint $0{,}30$. Đây là siêu tham số của hệ thống, không phải hằng số nội tại của YOLO; chúng cần được hiệu chỉnh trên video thực tế và được giữ đồng nhất khi benchmark.
+Pipeline hậu xử lý phải thực hiện nhất quán các bước: xác định dạng tensor; đổi hộp từ $(c_x,c_y,w_b,h_b)$ sang hai góc nếu là raw; lọc confidence; áp dụng NMS cho đầu dense; tách 17 bộ ba keypoint; ánh xạ tọa độ từ không gian $320\times320$ về khung camera; và phản chiếu trục $x$ khi dùng camera trước. Trong mã hiện tại, các ngưỡng vận hành khởi đầu là confidence detection $0{,}20$, IoU NMS $0{,}45$ và confidence keypoint $0{,}30$. Đây là siêu tham số của hệ thống, không phải hằng số nội tại của YOLO; chúng cần được hiệu chỉnh trên video thực tế và được giữ đồng nhất khi benchmark.
 
 \subsubsection{Cơ sở lựa chọn mô hình cho đồ án}
 
 Từ các phân tích trên, YOLO26n-Pose được chọn vì thỏa đồng thời ba điều kiện: sinh hộp và keypoint bằng một mạng; có quy mô nano phù hợp suy luận liên tục; và hỗ trợ xuất sang định dạng TFLite/LiteRT cho thiết bị biên \reportcite{ref:yolo_pose_docs}. Đồ án duy trì hai artifact: đầu raw với tensor tĩnh để ưu tiên GPU delegate và đầu E2E làm đường dự phòng. Trình nạp đọc shape thực tế khi khởi tạo thay vì gắn cứng một hợp đồng duy nhất; cách thiết kế này cho phép thay artifact hoặc exporter mà không phải viết lại toàn bộ pipeline theo dõi và phát hiện té ngã.
-
-\subsection{Theo dõi đối tượng và tạo chuỗi thời gian}
-
-Detector xử lý từng khung hình độc lập nên chưa bảo đảm cùng một người giữ nguyên định danh theo thời gian. Tracking-by-detection bổ sung bước dự báo trạng thái và liên kết detection để tạo tracklet. SORT sử dụng bộ lọc Kalman cho dự báo chuyển động, IoU cho độ tương đồng và thuật toán Hungarian cho bài toán gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình nhằm giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack khai thác cả detection có confidence thấp trong bước liên kết thứ hai để phục hồi đối tượng khó quan sát \reportcite{ref:bytetrack}.
-
-Với trạng thái $x_t$, ma trận chuyển trạng thái $F$, điều khiển $u_t$ và quan sát $z_t$, hai pha cơ bản của bộ lọc Kalman là
-\begin{align}
-\hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
-P_{t|t-1}&=FP_{t-1|t-1}F^T+Q,\\
-K_t&=P_{t|t-1}H^T(HP_{t|t-1}H^T+R)^{-1},\\
-\hat{x}_{t|t}&=\hat{x}_{t|t-1}+K_t(z_t-H\hat{x}_{t|t-1}),\\
-P_{t|t}&=(I-K_tH)P_{t|t-1}.
-\end{align}
-Ma trận chi phí giữa các track và detection được giải bằng thuật toán Hungarian \reportcite{ref:hungarian}. Tuy nhiên, IoU đơn lẻ có thể suy giảm mạnh khi người chuyển nhanh từ tư thế đứng sang nằm. Theo mã nguồn hiện tại, đồ án dùng SORT được mở rộng bằng khoảng cách tâm, tỉ lệ kích thước, khoảng cách pose và histogram vùng thân; mục tiêu chính được gán ID0, có tuổi track dài hơn và cơ chế phục hồi có điều kiện. Cách lựa chọn này giữ pipeline nhẹ trên Android nhưng vẫn cung cấp chuỗi keypoint nhất quán cho LSTM và tín hiệu vị trí ổn định cho bộ điều khiển bám người.
-
 
 \subsection{Mô hình chuỗi thời gian (Sequence Modeling)}
 %=========================================
