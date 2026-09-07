@@ -544,61 +544,31 @@ Thứ tự 17 keypoint phải được giữ nhất quán từ dữ liệu, mô 
 
 Các cặp vai, hông, gối và cổ chân đặc biệt quan trọng đối với đồ án. Chúng cho phép chuẩn hóa pose theo tâm và kích thước thân người, ước lượng hướng trục cơ thể, tốc độ hạ thấp và mức nằm ngang. Confidence của từng keypoint phải được dùng như mặt nạ chất lượng; thay một khớp bị che khuất bằng tọa độ không đáng tin có thể tạo vận tốc giả lớn và gây nhiễu chuỗi LSTM.
 
-\subsubsection{Hệ tọa độ, bounding box và keypoint}
+\subsubsection{Biểu diễn đầu ra YOLO-Pose: bounding box, keypoint và hệ tọa độ}
+\label{sec:yolo_pose_output_representation}
 
-Đầu ra của mô hình chỉ có ý nghĩa khi xác định rõ nó đang thuộc không gian tọa độ nào. Trong pipeline của đồ án tồn tại bốn không gian liên tiếp như Bảng \ref{tab:yolo_coordinate_systems}. Tất cả đều đặt gốc tại góc trên bên trái; trục $x$ tăng từ trái sang phải và trục $y$ tăng từ trên xuống dưới. Sự khác nhau nằm ở đơn vị đo, kích thước miền và phép biến đổi hiển thị.
-
-\begin{table}[htbp]
-\centering
-\caption{Các hệ tọa độ trong pipeline YOLO26-Pose của Robot App}
-\label{tab:yolo_coordinate_systems}
-\renewcommand{\arraystretch}{1.12}
-\small
-\begin{tabularx}{\textwidth}{|p{2.35cm}|p{2.35cm}|X|X|}
-\hline
-\textbf{Không gian} & \textbf{Miền tọa độ} & \textbf{Vai trò} & \textbf{Dữ liệu sử dụng} \\
-\hline
-Ảnh camera $\mathcal{C}$ & $[0,W_c]\times[0,H_c]$ pixel & Khung hình gốc nhận từ camera & Tracking, điều khiển bám người và tạo đặc trưng LSTM \\
-\hline
-Ảnh mô hình $\mathcal{I}$ & $[0,S]\times[0,S]$ pixel, $S=320$ & Ảnh vuông sau phép resize đưa vào TFLite & Suy luận và đầu ra dạng pixel của một số artifact \\
-\hline
-Chuẩn hóa $\mathcal{N}$ & $[0,1]\times[0,1]$ & Biểu diễn không phụ thuộc độ phân giải & Đầu ra chuẩn hóa và các đại lượng hình học theo tỉ lệ \\
-\hline
-Màn hình $\mathcal{V}$ & $[0,W_v]\times[0,H_v]$ pixel & Lớp overlay chồng lên camera preview & Vẽ hộp, skeleton, nhãn và track ID \\
-\hline
-\end{tabularx}
-\end{table}
-
-Robot App resize trực tiếp khung camera kích thước $W_c\times H_c$ thành ảnh $S\times S$ bằng nội suy song tuyến tính. Với $s_x=S/W_c$ và $s_y=S/H_c$, một điểm camera $(x_c,y_c)$ được đưa sang đầu vào mô hình theo
+Trong xử lý ảnh số, hệ tọa độ thường đặt gốc tại góc trên bên trái; trục $x$ tăng từ trái sang phải và trục $y$ tăng từ trên xuống dưới. Một vị trí có thể được biểu diễn theo pixel của ảnh kích thước $W\times H$, hoặc chuẩn hóa về $[0,1]$ theo
 \begin{equation}
-x_i=s_xx_c,\qquad y_i=s_yy_c.
+x_n=\frac{x}{W},\qquad y_n=\frac{y}{H}.
 \end{equation}
-Phép ánh xạ ngược là $x_c=x_iW_c/S$ và $y_c=y_iH_c/S$. Nếu mô hình trả tọa độ chuẩn hóa $(x_n,y_n)$ thì có thể đổi trực tiếp bằng $x_c=x_nW_c$, $y_c=y_nH_c$. Mã hiện tại nhận biết hai trường hợp bằng cách khảo sát kênh tọa độ đầu tiên: giá trị lớn nhất không vượt quá 2 được xem là tọa độ chuẩn hóa, ngược lại được xem là pixel trong ảnh mô hình. Quy tắc này phù hợp với hai artifact đã kiểm thử; khi thay exporter, cách chắc chắn hơn là khai báo đơn vị tọa độ cùng metadata của mô hình thay vì chỉ dựa vào giá trị quan sát. Cách resize trực tiếp đơn giản và không sinh vùng đệm, nhưng làm thay đổi tỉ lệ hình học trong ảnh đầu vào khi $W_c\ne H_c$. Phương án letterbox giữ nguyên tỉ lệ tốt hơn, đổi lại hậu xử lý phải trừ phần padding trước khi nhân hệ số tỉ lệ; do mã hiện tại không dùng letterbox nên không được áp dụng công thức loại padding cho hai artifact đang triển khai.
+Tọa độ chuẩn hóa thuận lợi khi so sánh giữa các độ phân giải, nhưng phải được đổi về đúng không gian ảnh trước khi vẽ hoặc tính khoảng cách pixel.
 
-Bounding box có hai cách biểu diễn cần phân biệt. Đầu raw dùng dạng tâm--kích thước
+Bounding box thường xuất hiện ở hai dạng. Dạng tâm--kích thước được viết là $B_{cxcywh}=(c_x,c_y,w_b,h_b)$; dạng hai góc là $B_{xyxy}=(x_{\min},y_{\min},x_{\max},y_{\max})$. Phép chuyển đổi giữa chúng là
 \begin{equation}
-B_{cxcywh}=(c_x,c_y,w_b,h_b),
+\begin{aligned}
+x_{\min}&=c_x-\frac{w_b}{2}, & y_{\min}&=c_y-\frac{h_b}{2},\\
+x_{\max}&=c_x+\frac{w_b}{2}, & y_{\max}&=c_y+\frac{h_b}{2}.
+\end{aligned}
 \end{equation}
-và được đổi sang dạng hai góc trước khi tính IoU hoặc vẽ:
-\begin{equation}
-x_{\min}=c_x-\frac{w_b}{2},\quad y_{\min}=c_y-\frac{h_b}{2},\quad
-x_{\max}=c_x+\frac{w_b}{2},\quad y_{\max}=c_y+\frac{h_b}{2}.
-\end{equation}
-Đầu E2E trả trực tiếp $B_{xyxy}=(x_{\min},y_{\min},x_{\max},y_{\max})$. Từ dạng này, chiều rộng $w_b=x_{\max}-x_{\min}$, chiều cao $h_b=y_{\max}-y_{\min}$, tâm hộp và tỉ lệ $w_b/h_b$ được sử dụng lại cho SORT, ước lượng khoảng cách và nhận biết tư thế nằm. Một hộp hợp lệ phải thỏa $x_{\max}>x_{\min}$ và $y_{\max}>y_{\min}$; tọa độ vẫn có thể vượt biên danh nghĩa khi người chỉ xuất hiện một phần trong ảnh. Mỗi hộp luôn đi cùng score, lớp người và đúng bộ 17 keypoint của detection đó; keypoint không phải là tọa độ cục bộ tính từ góc hộp mà nằm trong cùng hệ tọa độ ảnh với bounding box.
+Dạng $xyxy$ phù hợp để tính IoU, cắt vùng ảnh và kiểm tra biên; một hộp hợp lệ phải thỏa $x_{\max}>x_{\min}$ và $y_{\max}>y_{\min}$. Dạng $cxcywh$ thuận tiện cho đầu hồi quy của detector. Việc mô hình trả dạng nào phụ thuộc phiên bản và chế độ export, do đó không thể dùng chung một bộ giải mã mà không kiểm tra hợp đồng tensor.
 
-Với keypoint thứ $j$, mô hình trả bộ ba $(x_j,y_j,p_j)$, trong đó $p_j\in[0,1]$ là confidence. Ở tensor raw, bộ ba đầu tiên bắt đầu từ kênh 5; ở tensor E2E, chúng bắt đầu từ kênh 6, sau bốn tọa độ hộp, score và trường lớp. Do đó vị trí của keypoint thứ $j$ trong mỗi hàng được đọc từ ba phần tử liên tiếp bắt đầu tại $b+3j$, với $b=5$ cho raw và $b=6$ cho E2E. Chỉ các điểm có $p_j\geq0{,}30$ mới được đánh dấu tin cậy trong mã hiện tại. Việc giữ cả confidence thay vì chỉ giữ cờ đúng/sai cho phép các tầng sau loại khớp bị che khuất hoặc cân nhắc chất lượng pose.
+Với tác vụ pose, mỗi detection liên kết một bounding box với tập keypoint $\mathcal{K}=\{(x_j,y_j,p_j)\}_{j=1}^{K}$, trong đó $p_j\in[0,1]$ là confidence của điểm thứ $j$. Keypoint không phải tọa độ cục bộ tính từ góc bounding box; nó nằm trong cùng hệ tọa độ ảnh với hộp. Bounding box mô tả phạm vi tổng thể của người, còn các keypoint mô tả cấu trúc hình học bên trong. Confidence được giữ đến các tầng sau để loại hoặc giảm ảnh hưởng của khớp bị che khuất thay vì coi mọi tọa độ dự đoán là đáng tin như nhau.
 
-Sau khi đổi về pixel camera, ảnh từ camera trước được phản chiếu theo phương ngang. Một điểm trở thành $x'_c=W_c-x_c$, $y'_c=y_c$; với bounding box phải đồng thời hoán đổi hai cạnh:
+Khi ảnh nguồn $(W_s,H_s)$ được resize trực tiếp thành ảnh mô hình $(W_i,H_i)$, phép ánh xạ ngược một điểm là
 \begin{equation}
-x'_{\min}=W_c-x_{\max},\qquad x'_{\max}=W_c-x_{\min}.
+x_s=x_i\frac{W_s}{W_i},\qquad y_s=y_i\frac{H_s}{H_i}.
 \end{equation}
-Cuối cùng, overlay sử dụng cách hiển thị center-crop giống camera preview. Đặt
-\begin{equation}
-s_v=\max\!\left(\frac{W_v}{W_c},\frac{H_v}{H_c}\right),\quad
-\Delta_x=\frac{W_v-s_vW_c}{2},\quad
-\Delta_y=\frac{H_v-s_vH_c}{2},
-\end{equation}
-thì điểm được vẽ tại $x_v=s_vx'_c+\Delta_x$, $y_v=s_vy'_c+\Delta_y$. Tọa độ màn hình chỉ phục vụ hiển thị; tracking, LSTM và bộ điều khiển luôn sử dụng tọa độ camera hoặc giá trị đã chia cho $W_c,H_c$. Sự phân tách này tránh việc kết quả điều khiển thay đổi khi kích thước View hoặc tỉ lệ màn hình thay đổi.
+Nếu dùng letterbox, cần xét thêm hệ số $r=\min(W_i/W_s,H_i/H_s)$ và phần đệm $(d_x,d_y)$; khi đó $x_s=(x_i-d_x)/r$, $y_s=(y_i-d_y)/r$. Với ảnh phản chiếu ngang, điểm đổi thành $x'=W-x$, còn bounding box phải hoán đổi hai cạnh theo $x'_{\min}=W-x_{\max}$ và $x'_{\max}=W-x_{\min}$. Các phép biến đổi phải áp dụng đồng nhất cho hộp và toàn bộ keypoint; chi tiết ánh xạ được sử dụng trong RobotApp sẽ được trình bày ở Chương 4.
 
 \subsubsection{Các mức kích thước của YOLO26-Pose}
 
@@ -625,21 +595,20 @@ YOLO26x-Pose & 57,6 & 201,7 & 71,6 & 565,4 & 12,2 \\
 
 Mức nano giảm mạnh chi phí so với các mức còn lại trong khi vẫn giữ đầy đủ đầu pose. Đây là điểm phù hợp với robot dùng smartphone, nơi camera, UI, Firebase, BLE và LSTM cùng chia sẻ CPU/GPU và bộ nhớ. Các mức m, l và x có mAP cao hơn nhưng không phù hợp nếu độ trễ làm giảm tần số lấy mẫu của chuỗi hoặc gây nóng máy. Vì vậy, lựa chọn không dựa riêng vào mAP lớn nhất mà dựa vào chất lượng chuỗi pose đạt được dưới ngân sách thời gian của toàn hệ thống.
 
-\subsubsection{Đầu vào, đầu ra và hậu xử lý trên Android}
+\subsubsection{Quy trình suy luận và hậu xử lý YOLO-Pose}
+\label{sec:yolo_pose_inference_pipeline}
 
-Mô hình trong đồ án dùng batch 1, ảnh $320\times320$, dữ liệu RGB kiểu \texttt{float32} được chuẩn hóa từ $[0,255]$ về $[0,1]$. Với ba mức đặc trưng có stride 8, 16 và 32, số vị trí ứng viên dense là
+Quy trình suy luận YOLO-Pose bắt đầu bằng việc sửa hướng ảnh, chuyển về thứ tự kênh màu mà mô hình yêu cầu, resize hoặc letterbox và chuẩn hóa miền giá trị. Tensor ảnh sau đó đi qua interpreter để tạo tensor dự đoán. Với các mức đặc trưng có stride $s\in\mathcal{S}$, số vị trí ứng viên của đầu dense có dạng tổng quát
 \begin{equation}
-N=\left(\frac{320}{8}\right)^2+
-  \left(\frac{320}{16}\right)^2+
-  \left(\frac{320}{32}\right)^2=2100.
+N=\sum_{s\in\mathcal{S}}\left(\frac{W_i}{s}\right)\left(\frac{H_i}{s}\right).
 \end{equation}
-Vì bài toán chỉ có lớp người, mỗi ứng viên raw gồm 4 giá trị hộp, 1 confidence và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Tùy exporter, tensor có thể ở dạng \texttt{[1,2100,56]} hoặc chuyển vị \texttt{[1,56,2100]}. Biến thể E2E giữ tối đa 300 kết quả; mỗi hàng chứa 4 tọa độ hộp, score, chỉ số lớp và 51 giá trị keypoint, tạo tensor \texttt{[1,300,57]}. Việc hiểu rõ hai hợp đồng này giúp tránh lỗi đọc nhầm chiều tensor hoặc lấy sai vị trí bắt đầu của keypoint.
+Mỗi ứng viên chứa thông tin hộp, score/lớp và $3K$ giá trị keypoint. Tensor có thể sắp theo $[1,N,D]$ hoặc $[1,D,N]$, vì vậy kích thước và thứ tự trục phải được đọc trước khi duyệt các detection.
 
-Pipeline hậu xử lý phải thực hiện nhất quán các bước: xác định dạng tensor; đổi hộp từ $(c_x,c_y,w_b,h_b)$ sang hai góc nếu là raw; lọc confidence; áp dụng NMS cho đầu dense; tách 17 bộ ba keypoint; ánh xạ tọa độ từ không gian $320\times320$ về khung camera; và phản chiếu trục $x$ khi dùng camera trước. Trong mã hiện tại, các ngưỡng vận hành khởi đầu là confidence detection $0{,}20$, IoU NMS $0{,}45$ và confidence keypoint $0{,}30$. Đây là siêu tham số của hệ thống, không phải hằng số nội tại của YOLO; chúng cần được hiệu chỉnh trên video thực tế và được giữ đồng nhất khi benchmark.
+Ở đầu raw, hậu xử lý đổi bounding box sang dạng $xyxy$, lọc score và áp dụng NMS để loại các hộp trùng. Ở đầu end-to-end, mô hình đã chọn một tập dự đoán cuối nên thường không cần NMS bên ngoài. Sau đó, bộ giải mã tách các bộ ba keypoint, lọc theo confidence và ánh xạ đồng nhất cả hộp lẫn keypoint về không gian ảnh nguồn. Kết quả có cấu trúc mới được chuyển cho tracker, mô hình chuỗi thời gian hoặc tầng hiển thị. Trình tự này giúp cô lập sự khác nhau giữa các exporter ở bộ giải mã, thay vì để định dạng tensor lan sang toàn bộ ứng dụng.
 
 \subsubsection{Cơ sở lựa chọn mô hình cho đồ án}
 
-Từ các phân tích trên, YOLO26n-Pose được chọn vì thỏa đồng thời ba điều kiện: sinh hộp và keypoint bằng một mạng; có quy mô nano phù hợp suy luận liên tục; và hỗ trợ xuất sang định dạng TFLite/LiteRT cho thiết bị biên \reportcite{ref:yolo_pose_docs}. Đồ án duy trì hai artifact: đầu raw với tensor tĩnh để ưu tiên GPU delegate và đầu E2E làm đường dự phòng. Trình nạp đọc shape thực tế khi khởi tạo thay vì gắn cứng một hợp đồng duy nhất; cách thiết kế này cho phép thay artifact hoặc exporter mà không phải viết lại toàn bộ pipeline theo dõi và phát hiện té ngã.
+Từ các phân tích trên, YOLO26n-Pose được chọn vì thỏa đồng thời ba điều kiện: sinh hộp và keypoint bằng một mạng; có quy mô nano phù hợp suy luận liên tục; và hỗ trợ xuất sang định dạng TFLite/LiteRT cho thiết bị biên \reportcite{ref:yolo_pose_docs}. Việc tổ chức artifact, lựa chọn delegate và giải mã tensor cụ thể thuộc tầng hiện thực, được trình bày cùng pipeline RobotApp ở Chương 4.
 
 \subsection{Mô hình chuỗi thời gian (Sequence Modeling)}
 %=========================================

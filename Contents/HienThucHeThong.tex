@@ -57,11 +57,96 @@ Khi không có cuộc gọi, fragment bind CameraX. Khi WebRTC bắt đầu, Cam
 
 Thiết kế chỉ tạo một \texttt{RobotControlManager} trong tracking fragment. Video call không tạo GATT client thứ hai. Điều này loại bỏ tranh chấp kết nối với cùng ESP32 và giữ một điểm duy nhất chịu trách nhiệm dừng.
 
-\subsubsection{Nạp và suy luận mô hình pose}
+\subsubsection{Nạp và suy luận mô hình YOLO26n-Pose}
 
-RobotApp đóng gói hai biến thể pose trong \texttt{assets}: \path|yolo26n-pose_320.tflite| kích thước khoảng 12,03 MB và \path|yolo26n-pose_320_gpu.tflite| khoảng 11,84 MB. Tên tệp ``yolo26n'' là định danh artifact đang triển khai của đồ án. Interpreter ưu tiên cấu hình tương thích thiết bị; biến thể GPU nhằm giảm thời gian suy luận trên phần cứng hỗ trợ, còn CPU là đường dự phòng.
+Phần hiện thực này cụ thể hóa các quy ước bounding box, keypoint và hậu xử lý đã trình bày ở Mục \ref{sec:yolo_pose_output_representation} và Mục \ref{sec:yolo_pose_inference_pipeline}. Toàn bộ pipeline nằm trong \texttt{tracking\_fragment.kt}, từ lựa chọn artifact, tạo interpreter, tiền xử lý frame, giải mã tensor đến chuyển kết quả sang SORT, LSTM và lớp hiển thị.
 
-Pipeline tiền xử lý chuẩn hóa ảnh về kích thước 320$\times$320. Đầu ra được giải mã thành detection người, vùng bao, confidence và danh sách keypoint. Detection dưới ngưỡng bị bỏ, sau đó NMS loại vùng bao trùng. TFLite được chọn vì hướng tới triển khai mô hình trên mobile/edge \reportcite{ref:tflite}.
+\paragraph{Artifact và lựa chọn delegate.}
+RobotApp đóng gói hai artifact trong thư mục \texttt{assets}. Biến thể raw có tensor tĩnh được ưu tiên vì phù hợp GPU delegate; biến thể E2E là đường dự phòng khi không nạp được tệp raw. Bảng \ref{tab:yolo_runtime_artifacts} thể hiện hợp đồng mà bộ giải mã phải hỗ trợ.
+
+\begin{table}[htbp]
+\centering
+\caption{Hai artifact YOLO26n-Pose được đóng gói trong RobotApp}
+\label{tab:yolo_runtime_artifacts}
+\renewcommand{\arraystretch}{1.12}
+\footnotesize
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}p{3.55cm}|p{1.7cm}|p{2.45cm}|X|}
+\hline
+\textbf{Artifact} & \textbf{Kích thước} & \textbf{Đầu ra} & \textbf{Vai trò} \\
+\hline
+\path|yolo26n-pose_320_gpu.tflite| & 11.838.836 byte & \texttt{[1,56,2100]} & Đầu raw, tensor tĩnh; được chọn trước để khai thác GPU \\
+\hline
+\path|yolo26n-pose_320.tflite| & 12.031.560 byte & \texttt{[1,300,57]} & Đầu E2E; artifact dự phòng có tập detection giới hạn \\
+\hline
+\end{tabularx}
+\end{table}
+
+Sau khi chọn tệp, \texttt{setupAIModel()} lần lượt thử GPU delegate, NNAPI rồi CPU với bốn luồng. Nếu GPU không khởi tạo được, delegate này được đóng trước khi chuyển sang NNAPI; CPU là tầng cuối khi hai phương án tăng tốc đều thất bại. Interpreter không giả định hoàn toàn kích thước đã ghi trong tên tệp: chương trình đọc \texttt{getInputTensor(0).shape()} và \texttt{getOutputTensor(0).shape()}, cập nhật kích thước đầu vào và cấp lại buffer đầu ra theo shape thực tế. Cơ chế này giúp cùng một pipeline chấp nhận nhiều cách export thay vì thất bại do buffer gắn cứng. TFLite được chọn vì hướng tới triển khai mô hình trên mobile/edge \reportcite{ref:tflite}.
+
+\paragraph{Tiền xử lý khung hình.}
+CameraX sử dụng \texttt{STRATEGY\_KEEP\_ONLY\_LATEST}; bộ khóa suy luận tiếp tục bỏ frame nếu chưa đủ khoảng thời gian cấu hình hoặc lần xử lý trước chưa hoàn tất. Nhờ đó độ trễ không tích lũy thành một hàng đợi khung hình cũ. Khi WebRTC đang sở hữu camera, bản sao \texttt{VideoFrame} được chuyển sang cùng executor và cùng hàm suy luận, nên hai nguồn ảnh không tạo hai pipeline giải mã khác nhau.
+
+Bitmap được nạp vào \texttt{TensorImage} kiểu \texttt{float32}, resize trực tiếp về $320\times320$ bằng \texttt{ResizeOp.ResizeMethod.BILINEAR}, sau đó \texttt{NormalizeOp(0f,255f)} đưa giá trị RGB từ $[0,255]$ về $[0,1]$. Hiện thực không dùng letterbox. Với frame camera $W_c\times H_c$ và $S=320$, ánh xạ từ pixel camera sang ảnh mô hình là
+\begin{equation}
+x_i=x_c\frac{S}{W_c},\qquad y_i=y_c\frac{S}{H_c},
+\end{equation}
+còn phép đổi ngược là $x_c=x_iW_c/S$, $y_c=y_iH_c/S$. Hai hệ số theo hai trục được giữ riêng vì frame nguồn không nhất thiết là ảnh vuông.
+
+\paragraph{Nhận dạng và giải mã hợp đồng tensor.}
+Đầu raw tạo dự đoán tại ba mức stride 8, 16 và 32. Với ảnh $320\times320$, tổng số vị trí là
+\begin{equation}
+N=\left(\frac{320}{8}\right)^2+
+  \left(\frac{320}{16}\right)^2+
+  \left(\frac{320}{32}\right)^2=2100.
+\end{equation}
+Vì mô hình chỉ có lớp người, mỗi vị trí gồm 4 giá trị hộp, 1 confidence và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Artifact hiện tại trả \texttt{[1,56,2100]}; hàm \texttt{getOutputVal()} che giấu khác biệt giữa dạng channels-first này và dạng \texttt{[1,2100,56]} để phần giải mã luôn truy cập theo cặp chỉ số detection--channel. Bốn kênh đầu được hiểu là $(c_x,c_y,w_b,h_b)$, kênh 4 là confidence, còn 51 giá trị từ kênh 5 tạo thành 17 bộ ba $(x_j,y_j,p_j)$.
+
+Đầu E2E được nhận biết khi hai chiều sau batch là $300$ và $57$. Mỗi hàng dùng bốn trường đầu cho $(x_{\min},y_{\min},x_{\max},y_{\max})$, trường 4 cho score, trường 5 cho lớp và các trường từ 6 cho 17 keypoint. Việc tách hai nhánh là cần thiết: nếu đọc đầu raw như E2E, hộp tâm--kích thước sẽ bị hiểu nhầm thành hai góc và toàn bộ keypoint lệch một kênh.
+
+Hai artifact có thể trả tọa độ chuẩn hóa hoặc pixel theo không gian đầu vào. \texttt{detectCoordSystem()} khảo sát kênh tọa độ đầu tiên một lần; giá trị dương lớn nhất không vượt quá 2 được xem là chuẩn hóa, ngược lại được xem là pixel mô hình. Khi chuẩn hóa, tọa độ được nhân trực tiếp với $W_c,H_c$; khi ở pixel mô hình, chúng được nhân với $W_c/320,H_c/320$. Đây là heuristic phù hợp với hai artifact hiện tại, nhưng cần thay bằng metadata hoặc hợp đồng khai báo rõ nếu bổ sung một exporter mới.
+
+Đầu raw được đổi từ $cxcywh$ sang $xyxy$, sau đó loại detection có confidence dưới $0{,}20$. Hàm \texttt{nms()} sắp xếp theo score và loại hộp có IoU lớn hơn $0{,}45$. Mã hiện tại cũng đưa kết quả E2E qua hàm này; đối với đầu đã chọn dự đoán end-to-end, bước đó đóng vai trò lọc an toàn dư thừa thay vì yêu cầu bắt buộc. Mỗi keypoint được giữ cùng confidence và chỉ đánh dấu \texttt{visible} khi $p_j>0{,}30$.
+
+\paragraph{Chuyển đổi tọa độ và hiển thị overlay.}
+Trong pipeline tồn tại bốn không gian tọa độ như Bảng \ref{tab:yolo_coordinate_systems}. Cả bounding box và keypoint phải được chuyển đồng nhất; các phép tính tracking và điều khiển không sử dụng trực tiếp tọa độ của View.
+
+\begin{table}[htbp]
+\centering
+\caption{Các hệ tọa độ trong pipeline YOLO26n-Pose của RobotApp}
+\label{tab:yolo_coordinate_systems}
+\renewcommand{\arraystretch}{1.12}
+\small
+\begin{tabularx}{\textwidth}{|p{2.35cm}|p{2.35cm}|X|X|}
+\hline
+\textbf{Không gian} & \textbf{Miền tọa độ} & \textbf{Vai trò} & \textbf{Dữ liệu sử dụng} \\
+\hline
+Ảnh camera $\mathcal{C}$ & $[0,W_c]\times[0,H_c]$ pixel & Khung hình gốc nhận từ CameraX hoặc WebRTC & SORT, LSTM và điều khiển bám người \\
+\hline
+Ảnh mô hình $\mathcal{I}$ & $[0,320]\times[0,320]$ pixel & Ảnh vuông sau \texttt{ResizeOp} & Suy luận và đầu ra dạng pixel \\
+\hline
+Chuẩn hóa $\mathcal{N}$ & $[0,1]\times[0,1]$ & Biểu diễn không phụ thuộc độ phân giải & Đầu ra chuẩn hóa và các tỉ lệ hình học \\
+\hline
+Màn hình $\mathcal{V}$ & $[0,W_v]\times[0,H_v]$ pixel & \texttt{BoundingBoxOverlay} chồng lên preview & Vẽ hộp, skeleton, nhãn và track ID \\
+\hline
+\end{tabularx}
+\end{table}
+
+Camera trước được hiển thị như gương. Sau khi đổi về pixel camera, tọa độ ngang của keypoint được thay bằng $x'_c=W_c-x_c$. Với bounding box, hai cạnh phải đổi đồng thời:
+\begin{equation}
+x'_{\min}=W_c-x_{\max},\qquad x'_{\max}=W_c-x_{\min}.
+\end{equation}
+Nếu chỉ phản chiếu từng cạnh mà không hoán đổi, kết quả sẽ có cạnh phải nhỏ hơn cạnh trái. Tọa độ $y$ không thay đổi.
+
+\texttt{BoundingBoxOverlay.onDraw()} tiếp tục ánh xạ pixel camera sang View theo center-crop giống \texttt{PreviewView}. Với
+\begin{equation}
+s_v=\max\!\left(\frac{W_v}{W_c},\frac{H_v}{H_c}\right),\quad
+\Delta_x=\frac{W_v-s_vW_c}{2},\quad
+\Delta_y=\frac{H_v-s_vH_c}{2},
+\end{equation}
+một điểm được vẽ tại $x_v=s_vx'_c+\Delta_x$, $y_v=s_vy_c+\Delta_y$. Phần bù có thể âm vì center-crop cắt bớt một chiều. Tọa độ View chỉ phục vụ hiển thị; các đại lượng như tâm mục tiêu, mức chiếm khung và khoảng cách keypoint vẫn được tính trong không gian camera rồi chuẩn hóa bởi $W_c,H_c$.
+
+\paragraph{Bàn giao kết quả cho các module sau.}
+Sau giải mã, mỗi detection được đóng gói thành \texttt{bbox}, \texttt{score}, \texttt{classId} và 17 keypoint rồi chuyển cho \texttt{SortTracker}. Kết quả tracking được dùng chung để chọn đúng mục tiêu ID0, tạo vector 69 đặc trưng cho LSTM, sinh lệnh auto-follow và vẽ overlay. Nhờ chỉ chuyển một biểu diễn thống nhất trong pixel camera, các module sau không cần biết artifact ban đầu là raw hay E2E, channels-first hay channels-last, hoặc tọa độ đầu ra là chuẩn hóa hay pixel.
 
 \subsubsection{SORT, Kalman, Hungarian và Re-ID}
 
