@@ -1,16 +1,16 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Minh họa hộp giới hạn của đối tượng trong ảnh.}}{29}{figure.caption.30}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Cấu trúc khái quát của một detector YOLO gồm backbone, neck và head.}}{35}{figure.caption.32}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}}{40}{figure.caption.35}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Sơ đồ kiến trúc của mô hình Transformer với cơ chế Multi-Head Attention.}}{42}{figure.caption.36}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Minh họa không gian vector embedding và độ tương đồng cosine giữa các từ}}{44}{figure.caption.37}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Kiến trúc Transformer với các khối Encoder và Decoder}}{45}{figure.caption.38}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{46}{figure.caption.39}%
-\contentsline {figure}{\numberline {2.8}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{53}{figure.caption.44}%
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc tổng quan của hệ thống robot hỗ trợ chăm sóc người cao tuổi}}{66}{figure.caption.47}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ ca sử dụng tổng thể của hệ thống}}{70}{figure.caption.48}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}}{71}{figure.caption.50}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{73}{figure.caption.51}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{90}{figure.caption.53}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{97}{figure.caption.62}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{102}{figure.caption.63}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Minh họa hộp giới hạn của đối tượng trong ảnh.}}{30}{figure.caption.30}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Cấu trúc khái quát của một detector YOLO gồm backbone, neck và head.}}{36}{figure.caption.32}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}}{41}{figure.caption.35}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Sơ đồ kiến trúc của mô hình Transformer với cơ chế Multi-Head Attention.}}{43}{figure.caption.36}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Minh họa không gian vector embedding và độ tương đồng cosine giữa các từ}}{45}{figure.caption.37}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Kiến trúc Transformer với các khối Encoder và Decoder}}{46}{figure.caption.38}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Cơ chế Self-Attention: Query, Key, Value và Scaled Dot-Product Attention}}{47}{figure.caption.39}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{54}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc tổng quan của hệ thống robot hỗ trợ chăm sóc người cao tuổi}}{67}{figure.caption.47}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ ca sử dụng tổng thể của hệ thống}}{71}{figure.caption.48}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}}{72}{figure.caption.50}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{74}{figure.caption.51}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{91}{figure.caption.53}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{98}{figure.caption.62}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{103}{figure.caption.63}%

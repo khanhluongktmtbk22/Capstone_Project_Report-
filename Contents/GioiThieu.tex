@@ -76,23 +76,25 @@ Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo h
 
 \subsection{Phương pháp nghiên cứu}
 
+Đề tài được thực hiện qua bốn giai đoạn có quan hệ kế tiếp và bổ sung lẫn nhau: khảo cứu tài liệu, phân tích và thiết kế hệ thống, xây dựng nguyên mẫu, sau đó tiến hành thực nghiệm và đánh giá. Kết quả của mỗi giai đoạn được sử dụng để điều chỉnh nội dung ở giai đoạn tiếp theo, nhờ đó hệ thống được hoàn thiện dần theo các mục tiêu đã đặt ra.
+
 \subsubsection{Khảo cứu và phân tích tài liệu}
 
-Nhóm tổng hợp nguồn từ tổ chức quốc tế, tiêu chuẩn kỹ thuật, bài báo bình duyệt và tài liệu chính thức. Các nhóm tài liệu bao gồm già hóa và té ngã, robot hỗ trợ, phát hiện đối tượng/tư thế, theo dõi, LSTM, giao tiếp thời gian thực, cơ sở dữ liệu thời gian thực, BLE và điều khiển FOC. Kết quả khảo cứu được dùng để xác lập yêu cầu và lựa chọn kiến trúc, không dùng thay thế đánh giá trên nguyên mẫu.
+Phương pháp khảo cứu tài liệu được sử dụng để xác định bối cảnh của bài toán chăm sóc người cao tuổi, các yêu cầu đối với robot trợ lý và những hướng tiếp cận đã được công bố. Nguồn tham khảo gồm báo cáo của các tổ chức có uy tín, bài báo khoa học, tiêu chuẩn kỹ thuật và tài liệu chuyên ngành liên quan đến robot hỗ trợ, thị giác máy tính, theo dõi người, phát hiện té ngã, tương tác bằng giọng nói và hệ thống nhúng. Kết quả khảo cứu là cơ sở để hình thành yêu cầu, lựa chọn hướng giải quyết và xác định phạm vi phù hợp với đồ án.
 
-Riêng đối với phát hiện té ngã, tài liệu được phân loại theo taxonomy của các tổng quan gần đây: IoT/cloud, thiết bị đeo, smartphone, cảm biến môi trường, thị giác và các tín hiệu sinh học/động học \reportcite{ref:newaz_fall_review}. Sau lớp phân loại, nhóm đối chiếu lại các bài nghiên cứu gốc để lấy đúng flow thuật toán, cấu hình cảm biến, bộ dữ liệu và điều kiện thử nghiệm. Cách làm này hạn chế việc dùng một bài tổng quan làm bằng chứng thay cho kết quả thực nghiệm ban đầu.
+Đối với bài toán phát hiện té ngã, các nghiên cứu được xem xét theo loại dữ liệu đầu vào và phương pháp nhận biết sự kiện, từ thiết bị đeo, cảm biến môi trường đến phương pháp dựa trên thị giác \reportcite{ref:newaz_fall_review}. Các phương án được phân tích về khả năng ứng dụng trong nhà, mức độ thuận tiện đối với người cao tuổi, yêu cầu phần cứng và khả năng tích hợp với robot di động. Trên cơ sở đó, đề tài tập trung vào hướng phân tích tư thế và chuyển động từ camera gắn trên robot.
 
-\subsubsection{Phân tích yêu cầu và đồng thiết kế hệ thống}
+\subsubsection{Phân tích yêu cầu và thiết kế hệ thống}
 
-Từ kịch bản chăm sóc tại nhà, nhóm xác định tác nhân, use case, yêu cầu chức năng/phi chức năng và tình huống lỗi. Thiết kế được chia theo ranh giới triển khai: CaregiverApp, dịch vụ Internet, RobotApp và firmware. Các hợp đồng giao tiếp được mô tả bằng cấu trúc dữ liệu, đơn vị, miền giá trị, timestamp, timeout và hành vi khi lỗi.
+Từ các tình huống chăm sóc tại nhà, nhóm xác định những người tham gia, nhu cầu sử dụng, chức năng cần có, điều kiện vận hành và các trường hợp bất thường có thể xảy ra. Các yêu cầu sau đó được phân nhóm và chuyển thành kiến trúc tổng quan, các khối chức năng cùng những luồng xử lý chính của hệ thống. Quá trình thiết kế chú trọng phân chia rõ trách nhiệm giữa ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý AI và phần thân robot; đồng thời xem xét khả năng phối hợp, sử dụng tài nguyên, bảo vệ dữ liệu và dừng an toàn ngay từ đầu.
 
-\subsubsection{Phát triển lặp và kiểm chứng theo mã nguồn}
+\subsubsection{Xây dựng và tích hợp nguyên mẫu}
 
-Các chức năng được phát triển theo lát cắt dọc: từ giao diện người chăm sóc, bản ghi RTDB, xử lý tại RobotApp đến payload BLE và chuyển động động cơ. Đối với AI, quy trình đi từ mô hình huấn luyện, xuất ONNX/TFLite, kiểm tra tensor, tích hợp Android, theo dõi mục tiêu, xử lý chuỗi và hậu kiểm. Mã nguồn đang triển khai được xem là nguồn sự thật khi có khác biệt với tài liệu cũ.
+Trên cơ sở thiết kế đã xây dựng, nguyên mẫu được phát triển theo từng thành phần gồm ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý AI và chương trình điều khiển phần thân robot. Mỗi thành phần được hoàn thiện và kiểm tra riêng trước khi tích hợp vào hệ thống chung. Quá trình tích hợp được thực hiện lần lượt theo các nhóm chức năng: quản lý hồ sơ và lịch nhắc, hội thoại bằng giọng nói, giám sát và phát hiện té ngã, liên lạc từ xa, điều khiển chuyển động và xử lý các tình huống mất kết nối. Những vấn đề phát sinh trong quá trình chạy thử được ghi nhận để điều chỉnh thiết kế và hoàn thiện nguyên mẫu.
 
-\subsubsection{Kiểm thử và đánh giá}
+\subsubsection{Thực nghiệm và đánh giá}
 
-Đánh giá gồm bốn mức: kiểm tra tĩnh hợp đồng và cấu hình; unit test cho ánh xạ lệnh và luật hậu kiểm; build ứng dụng; thử nghiệm tích hợp trên thiết bị với camera, Firebase, WebRTC, BLE và robot. Chỉ số gồm khả năng build, tỷ lệ test đạt, thời gian phản hồi từng chặng, số khung hình xử lý mỗi giây, precision/recall/F1 của cảnh báo té ngã, độ ổn định ID và tỷ lệ dừng an toàn. Khi chưa có log đo đáng tin cậy, báo cáo ghi rõ trạng thái ``chưa đo'' thay vì suy diễn số liệu.
+Nguyên mẫu được kiểm tra từ từng chức năng riêng lẻ đến các luồng hoạt động hoàn chỉnh trong môi trường trong nhà. Phần xử lý AI được đánh giá về chất lượng nhận biết, khả năng duy trì người mục tiêu và tốc độ xử lý trên điện thoại. Các chức năng tương tác, nhắc lịch, cảnh báo, cuộc gọi và điều khiển từ xa được kiểm tra theo những tình huống sử dụng dự kiến. Phần thân robot được thử nghiệm về hướng chuyển động, khả năng đáp ứng lệnh và trạng thái dừng khi xảy ra bất thường. Ngoài điều kiện vận hành bình thường, các tình huống như mất dấu người, người dùng không phản hồi, kết nối bị gián đoạn hoặc một thành phần ngừng hoạt động cũng được xem xét. Kết quả thực nghiệm được dùng để đối chiếu với mục tiêu đề tài, phân tích hạn chế và đề xuất hướng phát triển tiếp theo.
 
 \subsection{Các công trình và giải pháp liên quan}
 
