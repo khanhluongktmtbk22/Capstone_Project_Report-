@@ -14,46 +14,23 @@ Sự phổ biến của điện thoại thông minh tạo điều kiện xây d�
 
 Từ các nhu cầu trên, đề tài \textbf{``Nghiên cứu và phát triển robot trợ lý ảo ứng dụng trí tuệ nhân tạo hỗ trợ chăm sóc và giám sát người cao tuổi tại nhà''} xây dựng một nguyên mẫu tích hợp thay vì các chức năng rời rạc. Hệ thống gồm ứng dụng RobotApp trên thiết bị Android gắn với phần thân robot hỗ trợ di chuyển, ứng dụng CaregiverApp cho người chăm sóc, firmware ESP32 điều khiển hai động cơ BLDC ở thân robot và chuỗi mô hình AI được chuyển đổi để suy luận trên thiết bị. Giá trị cốt lõi nằm ở việc kết nối các giải pháp công nghệ thành một hệ thống tương đối hoàn chỉnh hỗ trợ chăm sóc người cao tuổi tại nhà.
 
-\subsection{Phát biểu bài toán}
-
-Bài toán đặt ra là thiết kế một robot di động trong nhà có thể hỗ trợ người cao tuổi mà vẫn cho phép người chăm sóc theo dõi và can thiệp từ xa. Hệ thống phải giải quyết đồng thời bốn nhóm vấn đề:
-
-\begin{enumerate}
-    \item \textbf{Nhận biết an toàn:} khai thác camera để phát hiện và theo dõi đúng người mục tiêu, nhận biết chuỗi tư thế nghi té ngã trong điều kiện ảnh thay đổi và hạn chế cảnh báo giả từ hành vi nằm/ngồi bình thường.
-    \item \textbf{Tương tác và chăm sóc:} hỗ trợ hội thoại giọng nói tiếng Việt, phát lời nhắc theo lịch và hỏi xác nhận khi phát hiện sự cố.
-    \item \textbf{Liên lạc và điều khiển:} thiết lập cuộc gọi âm thanh/hình ảnh thời gian thực; truyền lệnh joystick từ CaregiverApp qua hạ tầng đám mây tới RobotApp rồi qua BLE tới ESP32.
-    \item \textbf{An toàn hệ thống:} loại bỏ lệnh cũ hoặc không hợp lệ, dừng robot khi mất kết nối, tránh tranh chấp nguồn điều khiển và bảo vệ dữ liệu người dùng.
-\end{enumerate}
-
-Các yêu cầu trên có quan hệ chặt chẽ. Chẳng hạn, camera vừa phục vụ cuộc gọi WebRTC vừa cung cấp ảnh cho AI; nếu hai thành phần đồng thời mở camera sẽ gây xung đột tài nguyên. Tương tự, joystick từ xa và chế độ tự bám đều có thể phát sinh lệnh chuyển động; nếu không xác định quyền sở hữu, robot có thể nhận hai chỉ thị trái ngược. Vì vậy, đề tài được tiếp cận như một bài toán đồng thiết kế phần mềm di động, AI biên, giao tiếp thời gian thực và điều khiển nhúng.
-
-\subsection{Câu hỏi nghiên cứu}
-
-\begin{itemize}
-    \item Có thể tổ chức kiến trúc nào để một thiết bị Android đồng thời đảm nhiệm camera, suy luận AI, hội thoại, liên lạc và cầu nối điều khiển phần thân robot?
-    \item Làm thế nào duy trì danh tính người cần theo dõi khi vùng bao thay đổi mạnh, bị che khuất ngắn hạn hoặc xuất hiện thêm người trong khung hình?
-    \item Làm thế nào kết hợp thông tin tư thế theo thời gian với luật hậu kiểm để giảm cảnh báo giả và vẫn giữ nguyên tắc an toàn khi người dùng không phản hồi?
-    \item Hợp đồng dữ liệu nào bảo đảm lệnh điều khiển từ xa có thể được phát hiện là mới, hợp lệ và được dừng tự động khi đường truyền gián đoạn?
-    \item Những giới hạn nào cần được công bố để phân biệt một hệ thống hỗ trợ nghiên cứu với thiết bị y tế hoặc sản phẩm thương mại hoàn chỉnh?
-\end{itemize}
-
 \subsection{Mục tiêu đề tài}
 
 \subsubsection{Mục tiêu tổng quát}
 
-Nghiên cứu, thiết kế và hiện thực nguyên mẫu robot trợ lý ảo có khả năng tương tác bằng giọng nói, nhắc lịch, theo dõi người, phát hiện tình huống nghi té ngã, gọi video và cho phép người chăm sóc điều khiển từ xa; trong đó điện thoại thông minh là nền tảng tính toán chính và ESP32 đảm nhiệm điều khiển hai động cơ.
+Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc người cao tuổi tại nhà. Hệ thống hướng đến khả năng tương tác bằng giọng nói, nhắc lịch, giám sát an toàn, phát hiện tình huống nghi té ngã, liên lạc trực tuyến và hỗ trợ người chăm sóc can thiệp từ xa thông qua một nền tảng robot di động sử dụng điện thoại thông minh làm bộ xử lý chính.
 
 \subsubsection{Mục tiêu cụ thể}
 
-\begin{itemize}
-    \item Xây dựng RobotApp bằng Android/Kotlin để quản lý camera, suy luận mô hình TFLite, hội thoại, nhắc lịch, WebRTC và kết nối BLE.
-    \item Xây dựng CaregiverApp để quản lý hồ sơ, lịch nhắc, trạng thái theo dõi, cảnh báo, lịch sử, cuộc gọi và joystick điều khiển robot.
-    \item Xây dựng firmware ESP32 dùng BLE GATT, SimpleFOC và phản hồi encoder AS5600 để điều khiển vận tốc hai động cơ BLDC.
-    \item Xây dựng chuỗi xử lý thị giác gồm mô hình pose, giải mã/NMS, SORT, Kalman, Hungarian, Re-ID, khóa người mục tiêu ID0 và LSTM phát hiện té ngã.
-    \item Chuyển đổi mô hình từ định dạng huấn luyện sang ONNX/TensorFlow Lite, tạo biến thể đầu vào 320$\times$320 và FP16/GPU để triển khai trên Android.
-    \item Thiết kế cơ chế xác nhận sự cố bằng giọng nói, ghi nhận cảnh báo và tự khởi tạo cuộc gọi khi phản hồi cho thấy nguy hiểm hoặc không có phản hồi.
-    \item Xác định các yêu cầu an toàn, bảo mật, khả năng bảo trì và giới hạn của nguyên mẫu thông qua kiểm tra mã nguồn và kiểm thử có thể tái lập.
-\end{itemize}
+\begin{enumerate}
+    \item \textbf{Nhận biết và giám sát an toàn:} xây dựng khả năng thu nhận hình ảnh từ môi trường trong nhà, phát hiện người và duy trì đúng đối tượng cần theo dõi khi người hoặc robot di chuyển. Trên cơ sở thông tin tư thế theo thời gian, hệ thống cần nhận biết tình huống nghi té ngã, phân biệt với một số hoạt động thông thường và thực hiện bước xác nhận trước khi phát cảnh báo. Mô hình AI phải được chuẩn bị, chuyển đổi và đánh giá để có thể suy luận trực tiếp trên điện thoại gắn với robot.
+
+    \item \textbf{Tương tác và hỗ trợ chăm sóc:} xây dựng khả năng trò chuyện bằng giọng nói tiếng Việt theo hướng gần gũi, dễ sử dụng đối với người cao tuổi. Hệ thống cần hỗ trợ quản lý và thực hiện lịch nhắc, ghi nhận phản hồi của người dùng, đồng thời kết hợp hội thoại với quy trình xác nhận khi phát hiện dấu hiệu bất thường. Nội dung nhắc nhở và thông tin cá nhân phải được quản lý rõ ràng để người chăm sóc có thể cập nhật khi cần.
+
+    \item \textbf{Liên lạc và điều khiển từ xa:} xây dựng hai ứng dụng dành riêng cho robot và người chăm sóc, cho phép đồng bộ hồ sơ, lịch nhắc, trạng thái giám sát, cảnh báo và lịch sử hoạt động. Khi cần can thiệp, hệ thống phải hỗ trợ cuộc gọi âm thanh, hình ảnh hai chiều và cho phép người chăm sóc điều khiển chuyển động của robot từ xa. Phần thân robot cần tiếp nhận lệnh từ điện thoại và điều khiển hai bánh xe theo yêu cầu di chuyển.
+
+    \item \textbf{An toàn và đánh giá hệ thống:} thiết kế cơ chế dừng robot khi lệnh không hợp lệ, quá thời gian cho phép hoặc đường truyền bị gián đoạn; đồng thời tránh xung đột giữa chế độ tự bám theo và điều khiển thủ công. Dữ liệu cá nhân, lịch sử chăm sóc và thông tin liên lạc cần được giới hạn theo đúng người sử dụng. Cuối cùng, các chức năng chính, tốc độ xử lý, độ ổn định của kết nối, chất lượng phát hiện té ngã và khả năng dừng an toàn phải được kiểm thử trên nguyên mẫu để xác định mức độ đáp ứng và những giới hạn còn tồn tại.
+\end{enumerate}
 
 \subsection{Đối tượng và phạm vi nghiên cứu}
 
