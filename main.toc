@@ -20,7 +20,7 @@
 \contentsline {subsubsection}{\numberline {1.4.2}Phân tích yêu cầu và đồng thiết kế hệ thống}{5}{subsubsection.1.4.2}%
 \contentsline {subsubsection}{\numberline {1.4.3}Phát triển lặp và kiểm chứng theo mã nguồn}{5}{subsubsection.1.4.3}%
 \contentsline {subsubsection}{\numberline {1.4.4}Kiểm thử và đánh giá}{5}{subsubsection.1.4.4}%
-\contentsline {subsection}{\numberline {1.5}Các công trình và giải pháp liên quan}{5}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.5}Các công trình và giải pháp liên quan}{6}{subsection.1.5}%
 \contentsline {subsubsection}{\numberline {1.5.1}Các hướng tiếp cận cho bài toán phát hiện té ngã}{6}{subsubsection.1.5.1}%
 \contentsline {paragraph}{Tổng quan sự phát triển của các phương pháp phát hiện té ngã.}{6}{paragraph*.8}%
 \contentsline {paragraph}{Phương pháp dựa trên thiết bị đeo và tín hiệu chuyển động.}{7}{paragraph*.10}%
@@ -28,17 +28,17 @@
 \contentsline {paragraph}{Phương pháp dựa trên thị giác.}{9}{paragraph*.13}%
 \contentsline {paragraph}{Kết hợp ước lượng tư thế với mô hình thời gian.}{10}{paragraph*.14}%
 \contentsline {paragraph}{Định hướng áp dụng trong đồ án.}{12}{paragraph*.15}%
-\contentsline {subsubsection}{\numberline {1.5.2}Các giải pháp theo dõi người và bám mục tiêu}{12}{subsubsection.1.5.2}%
+\contentsline {subsubsection}{\numberline {1.5.2}Các giải pháp theo dõi người và bám mục tiêu}{13}{subsubsection.1.5.2}%
 \contentsline {paragraph}{SORT.}{13}{paragraph*.16}%
 \contentsline {paragraph}{Deep SORT.}{13}{paragraph*.17}%
 \contentsline {paragraph}{ByteTrack.}{13}{paragraph*.18}%
-\contentsline {paragraph}{OC-SORT và các tracker hợp nhất.}{13}{paragraph*.19}%
+\contentsline {paragraph}{OC-SORT và các tracker hợp nhất.}{14}{paragraph*.19}%
 \contentsline {paragraph}{Từ tracking đến lệnh bám người.}{14}{paragraph*.20}%
 \contentsline {subsubsection}{\numberline {1.5.3}Chatbot AI và hội thoại hỗ trợ người cao tuổi}{15}{subsubsection.1.5.3}%
 \contentsline {paragraph}{Kiến trúc của một chatbot giọng nói.}{15}{paragraph*.22}%
-\contentsline {paragraph}{Các lựa chọn cho khối STT và TTS.}{16}{paragraph*.23}%
+\contentsline {paragraph}{Các lựa chọn cho khối STT và TTS.}{17}{paragraph*.23}%
 \contentsline {paragraph}{LLM qua API và LLM chạy trên thiết bị.}{17}{paragraph*.24}%
-\contentsline {paragraph}{Tổ chức hội thoại phù hợp với người cao tuổi.}{19}{paragraph*.26}%
+\contentsline {paragraph}{Tổ chức hội thoại phù hợp với người cao tuổi.}{18}{paragraph*.26}%
 \contentsline {paragraph}{Giải pháp được hiện thực trong RobotApp.}{19}{paragraph*.27}%
 \contentsline {subsubsection}{\numberline {1.5.4}Các nền tảng robot tích hợp và bài học áp dụng}{20}{subsubsection.1.5.4}%
 \contentsline {subsubsection}{\numberline {1.5.5}Khoảng trống nghiên cứu và định vị của đề tài}{20}{subsubsection.1.5.5}%

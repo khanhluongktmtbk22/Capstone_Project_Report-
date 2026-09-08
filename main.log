@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  9 SEP 2026 03:49
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  9 SEP 2026 04:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1788,6 +1788,9 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [13]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [14]
 Underfull \hbox (badness 10000) in paragraph at lines 316--316
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Bằng chứng
  []
@@ -1854,10 +1857,7 @@ Underfull \hbox (badness 1406) in paragraph at lines 316--316
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[14]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [15]
+[15]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [16]
@@ -1905,6 +1905,9 @@ zer
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 [19]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [20]
 Underfull \hbox (badness 10000) in paragraph at lines 411--411
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Nhóm giải
  []
@@ -2001,23 +2004,20 @@ Underfull \hbox (badness 4859) in paragraph at lines 411--411
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[20]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [21])
+[21])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [22] (Contents/CoSoLyThuyet.tex (Contents/OpenBotTomLuoc.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
-[23
+ [23
 
 
 ]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [24]
+
+[24]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [25]
