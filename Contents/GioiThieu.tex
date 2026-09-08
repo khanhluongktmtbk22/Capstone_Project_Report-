@@ -36,23 +36,43 @@ Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo h
 
 \subsubsection{Đối tượng nghiên cứu}
 
-Đối tượng kỹ thuật của đề tài gồm nền tảng robot sử dụng điện thoại thông minh làm bộ xử lý chính; hai ứng dụng Android dành cho robot và người chăm sóc; thị giác máy tính và học sâu trên thiết bị; bài toán theo dõi đối tượng và phân tích chuỗi tư thế; công nghệ tổng hợp tiếng nói (Text-to-Speech--TTS) và chuyển giọng nói thành văn bản (Speech-to-Text--STT); mô hình ngôn ngữ lớn; các phương thức đồng bộ dữ liệu và truyền thông thời gian thực; kết nối giữa điện thoại với robot; thiết kế firmware cho hệ thống điều khiển phần thân robot; cùng quy trình chuyển đổi mô hình AI để triển khai trên thiết bị di động.
+Đối tượng kỹ thuật của đề tài gồm nền tảng robot sử dụng điện thoại thông minh làm bộ xử lý chính; hai ứng dụng Android dành cho robot và người chăm sóc; thị giác máy tính và học sâu trên thiết bị; bài toán theo dõi đối tượng và phân tích chuỗi tư thế; công nghệ chuyển văn bản thành giọng nói (Text-to-Speech--TTS) và chuyển giọng nói thành văn bản (Speech-to-Text--STT); mô hình ngôn ngữ lớn; các phương thức đồng bộ dữ liệu và truyền thông thời gian thực; kết nối giữa điện thoại với robot; thiết kế firmware cho hệ thống điều khiển phần thân robot; cùng quy trình chuyển đổi mô hình AI để triển khai trên thiết bị di động.
 
 Đối tượng sử dụng gồm người cao tuổi sinh hoạt tại nhà và người thân/người chăm sóc từ xa. Trong nguyên mẫu, RobotApp và CaregiverApp của một cặp thiết bị đăng nhập cùng tài khoản Firebase; toàn bộ kênh điều khiển, trạng thái AI, signaling và nhật ký thời gian thực được cách ly dưới \path|pair_sessions/{uid}|. Cách tổ chức này tách dữ liệu giữa các tài khoản, nhưng mỗi tài khoản hiện mới đại diện cho một cặp robot--caregiver và chưa mô hình hóa nhiều robot hay nhiều vai trò trong cùng gia đình.
 
 \subsubsection{Phạm vi chức năng}
 
 \begin{itemize}
-    \item Theo dõi một người mục tiêu, tự bám theo ở mức điều khiển chuyển động cơ bản và phát hiện tình huống nghi té ngã từ camera RGB.
-    \item Hội thoại bằng giọng nói thông qua SpeechRecognizer, Groq API và Android TextToSpeech; không huấn luyện một LLM riêng.
-    \item Tạo và thực hiện lịch nhắc; ghi nhật ký phản hồi; hiển thị lịch sử cảnh báo và cuộc gọi.
-    \item Gọi video hai chiều bằng WebRTC, sử dụng Firebase RTDB làm kênh trao đổi offer, answer, ICE candidate và trạng thái; không xây dựng signaling server riêng.
-    \item Điều khiển robot qua chuỗi CaregiverApp--Firebase--RobotApp--BLE--ESP32; CaregiverApp không kết nối trực tiếp tới ESP32.
+    \item \textbf{Hỗ trợ tương tác với người cao tuổi:} robot tiếp nhận lời nói, tạo phản hồi và phát lại bằng giọng nói để phục vụ các cuộc trò chuyện hằng ngày. Nội dung tương tác có thể được cá nhân hóa ở mức cơ bản dựa trên hồ sơ và cách xưng hô do người chăm sóc thiết lập.
+
+    \item \textbf{Hỗ trợ nhắc lịch:} người chăm sóc có thể tạo, chỉnh sửa, bật hoặc tắt các lịch nhắc cho những công việc cần thực hiện. Đến thời điểm đã thiết lập, robot phát lời nhắc, tiếp nhận phản hồi của người cao tuổi và lưu lại kết quả để người chăm sóc theo dõi.
+
+    \item \textbf{Giám sát và bám theo người:} robot sử dụng hình ảnh từ camera để phát hiện, lựa chọn và duy trì một người làm đối tượng theo dõi chính. Từ vị trí của người trong khung hình, robot thực hiện các chuyển động tiến, lùi, quay hoặc dừng nhằm giữ khoảng cách quan sát phù hợp trong môi trường trong nhà.
+
+    \item \textbf{Phát hiện và xử lý tình huống nghi té ngã:} hệ thống phân tích sự thay đổi tư thế của người được theo dõi theo thời gian để nhận biết dấu hiệu té ngã. Khi mức nghi ngờ đủ lớn, robot dừng chuyển động và hỏi xác nhận bằng giọng nói; trường hợp người dùng cho biết đang gặp nguy hiểm, trả lời không rõ ràng hoặc không phản hồi sẽ được ghi nhận và thông báo cho người chăm sóc.
+
+    \item \textbf{Liên lạc và can thiệp từ xa:} người chăm sóc có thể nhận thông báo, thực hiện cuộc gọi âm thanh và hình ảnh với người cao tuổi, đồng thời điều khiển chuyển động cơ bản của robot khi cần quan sát hoặc hỗ trợ từ xa. Hệ thống bảo đảm chế độ điều khiển thủ công không hoạt động đồng thời với chế độ tự động bám theo.
+
+    \item \textbf{Quản lý thông tin chăm sóc:} ứng dụng của người chăm sóc hỗ trợ quản lý hồ sơ, lịch nhắc và trạng thái của các chức năng giám sát; đồng thời cung cấp lịch sử thực hiện lời nhắc, cảnh báo té ngã và cuộc gọi để phục vụ việc theo dõi sau sự kiện.
 \end{itemize}
 
 \subsubsection{Giới hạn nghiên cứu}
 
-Nguyên mẫu không được định vị là thiết bị chẩn đoán hay thiết bị y tế. Dữ liệu té ngã chủ yếu là tình huống dựng lại; khả năng tổng quát với người cao tuổi thật, ánh sáng yếu, vật cản, camera rung và nhiều người cần nghiên cứu thực địa có phê duyệt đạo đức. Hệ thống phụ thuộc Internet cho Firebase, Groq và thiết lập cuộc gọi; khi mất Internet, vòng điều khiển cục bộ BLE có thể dừng an toàn nhưng các chức năng từ xa không hoạt động. Việc đánh giá lâm sàng, chứng nhận an toàn điện/cơ khí, khả năng chống nước, độ bền dài hạn và tuân thủ quy định thiết bị y tế nằm ngoài phạm vi đồ án.
+Đề tài được thực hiện ở mức nguyên mẫu kỹ thuật nhằm kiểm chứng sự phối hợp giữa các chức năng hỗ trợ chăm sóc, không hướng đến chẩn đoán bệnh hoặc thay thế quyết định của nhân viên y tế và người chăm sóc. Phạm vi nghiên cứu được giới hạn như sau:
+
+\begin{itemize}
+    \item \textbf{Đối tượng và dữ liệu đánh giá:} các tình huống té ngã được sử dụng trong quá trình phát triển và kiểm thử chủ yếu là dữ liệu công khai hoặc kịch bản dựng lại có kiểm soát. Đề tài chưa tiến hành thử nghiệm dài hạn trên người cao tuổi trong điều kiện sinh hoạt thực tế và chưa thực hiện đánh giá lâm sàng.
+
+    \item \textbf{Không gian hoạt động:} robot được định hướng sử dụng trong nhà, trên bề mặt tương đối bằng phẳng và trong điều kiện camera có thể quan sát người dùng. Các môi trường ngoài trời, cầu thang, ánh sáng quá yếu, vật cản phức tạp hoặc rung động mạnh của camera chưa được khảo sát đầy đủ.
+
+    \item \textbf{Khả năng giám sát:} hệ thống ưu tiên theo dõi một người mục tiêu tại một thời điểm và phát hiện tình huống nghi té ngã từ hình ảnh. Kết quả có thể bị ảnh hưởng khi cơ thể bị che khuất, người đi ra ngoài vùng quan sát hoặc xuất hiện nhiều người có đặc điểm gần giống nhau. Hệ thống không đo dấu hiệu sinh tồn, không dự báo nguy cơ té ngã và không bảo đảm phát hiện được mọi dạng sự cố.
+
+    \item \textbf{Khả năng di chuyển:} robot chỉ thực hiện tự bám theo và các lệnh di chuyển cơ bản. Các bài toán lập bản đồ, định vị trong toàn bộ ngôi nhà, lập kế hoạch đường đi và tránh vật cản chủ động chưa thuộc phạm vi nghiên cứu.
+
+    \item \textbf{Kết nối và quy mô sử dụng:} các chức năng đồng bộ, hội thoại trực tuyến, thông báo và gọi từ xa cần có kết nối mạng. Nguyên mẫu được xây dựng cho một robot và một tài khoản chăm sóc; việc quản lý đồng thời nhiều robot, nhiều người cao tuổi hoặc nhiều thành viên chăm sóc chưa được triển khai.
+
+    \item \textbf{Mức độ hoàn thiện sản phẩm:} đề tài chưa bao gồm đánh giá độ bền trong thời gian dài, khả năng chống nước, an toàn điện và cơ khí theo tiêu chuẩn sản phẩm, bảo trì từ xa hoặc chứng nhận dành cho thiết bị y tế. Những nội dung này cần được tiếp tục nghiên cứu trước khi hệ thống có thể được sử dụng như một sản phẩm thương mại.
+\end{itemize}
 
 \subsection{Phương pháp nghiên cứu}
 

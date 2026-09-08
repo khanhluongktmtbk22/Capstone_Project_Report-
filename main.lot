@@ -1,44 +1,44 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {table}{\numberline {1.1}{\ignorespaces Tỷ lệ các chiến lược phát hiện té ngã trong khảo sát của Newaz và Hanada \hyperref [ref:newaz_fall_review]{[\ref *{ref:newaz_fall_review}]}}}{7}{table.caption.9}%
-\contentsline {table}{\numberline {1.2}{\ignorespaces So sánh bằng chứng và giới hạn của các hướng phát hiện té ngã tiêu biểu}}{9}{table.caption.12}%
-\contentsline {table}{\numberline {1.3}{\ignorespaces So sánh các hướng tracking-by-detection liên quan đến đề tài}}{15}{table.caption.21}%
-\contentsline {table}{\numberline {1.4}{\ignorespaces So sánh các phương án hiện thực chatbot trên Android}}{19}{table.caption.25}%
-\contentsline {table}{\numberline {1.5}{\ignorespaces Đối chiếu các nhóm giải pháp với phạm vi tích hợp của đề tài}}{21}{table.caption.28}%
-\contentsline {table}{\numberline {2.1}{\ignorespaces Các ý tưởng OpenBot được tham khảo trong đồ án}}{26}{table.caption.29}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces So sánh định tính các họ detector liên quan đến đồ án}}{32}{table.caption.31}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Thứ tự keypoint người theo cấu hình COCO-Pose của YOLO26}}{37}{table.caption.33}%
-\contentsline {table}{\numberline {2.4}{\ignorespaces So sánh các mức YOLO26-Pose ở chế độ end-to-end trên COCO}}{38}{table.caption.34}%
-\contentsline {table}{\numberline {2.5}{\ignorespaces So sánh Transformer và CNN}}{46}{table.caption.40}%
-\contentsline {table}{\numberline {2.6}{\ignorespaces So sánh các công nghệ Speech-to-Text.}}{50}{table.caption.43}%
-\contentsline {table}{\numberline {3.1}{\ignorespaces Cụ thể hóa yêu cầu luận văn theo phạm vi đề tài}}{58}{table.3.1}%
-\contentsline {table}{\numberline {3.2}{\ignorespaces Tác nhân và trách nhiệm trong hệ thống}}{59}{table.caption.45}%
-\contentsline {table}{\numberline {3.3}{\ignorespaces Danh sách yêu cầu chức năng}}{60}{table.3.3}%
-\contentsline {table}{\numberline {3.4}{\ignorespaces Yêu cầu phi chức năng}}{62}{table.3.4}%
-\contentsline {table}{\numberline {3.5}{\ignorespaces Từ nhóm yêu cầu đến quyết định phân rã kiến trúc}}{64}{table.caption.46}%
-\contentsline {table}{\numberline {3.6}{\ignorespaces Các module trong kiến trúc logic của hệ thống}}{66}{table.3.6}%
-\contentsline {table}{\numberline {3.7}{\ignorespaces Tóm tắt các ca sử dụng chính}}{68}{table.caption.49}%
-\contentsline {table}{\numberline {3.8}{\ignorespaces So sánh các lựa chọn công nghệ xuyên suốt hệ thống}}{73}{table.3.8}%
-\contentsline {table}{\numberline {3.9}{\ignorespaces Cấu trúc dữ liệu của Firebase Realtime Database}}{81}{table.3.9}%
-\contentsline {table}{\numberline {3.10}{\ignorespaces Các điểm chuẩn ánh xạ lệnh điều khiển}}{83}{table.caption.52}%
-\contentsline {table}{\numberline {3.11}{\ignorespaces Mối đe dọa, bảo vệ hiện có và phần cần hoàn thiện}}{84}{table.3.11}%
-\contentsline {table}{\numberline {3.12}{\ignorespaces Truy vết từ yêu cầu đến module và kiểm thử}}{86}{table.3.12}%
-\contentsline {table}{\numberline {4.1}{\ignorespaces Các thành phần hiện thực của hệ thống}}{89}{table.caption.54}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{91}{table.caption.56}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong pipeline YOLO26n-Pose của RobotApp}}{93}{table.caption.60}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{102}{table.caption.64}%
-\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{105}{table.caption.65}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{106}{table.5.2}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{107}{table.caption.66}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{108}{table.caption.67}%
-\contentsline {table}{\numberline {5.5}{\ignorespaces Bộ unit test ánh xạ điều khiển}}{108}{table.caption.68}%
-\contentsline {table}{\numberline {5.6}{\ignorespaces Bộ unit test hậu kiểm té ngã}}{109}{table.caption.69}%
-\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{110}{table.5.7}%
-\contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{113}{table.caption.70}%
-\contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian suy luận (Inference Time) trung bình trên Android}}{113}{table.caption.71}%
-\contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{115}{table.caption.72}%
-\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{138}{table.caption.76}%
-\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{138}{table.6.12}%
-\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{139}{table.6.13}%
-\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{142}{table.caption.77}%
-\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{142}{table.caption.78}%
-\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{142}{table.caption.79}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces Tỷ lệ các chiến lược phát hiện té ngã trong khảo sát của Newaz và Hanada \hyperref [ref:newaz_fall_review]{[\ref *{ref:newaz_fall_review}]}}}{8}{table.caption.9}%
+\contentsline {table}{\numberline {1.2}{\ignorespaces So sánh bằng chứng và giới hạn của các hướng phát hiện té ngã tiêu biểu}}{10}{table.caption.12}%
+\contentsline {table}{\numberline {1.3}{\ignorespaces So sánh các hướng tracking-by-detection liên quan đến đề tài}}{16}{table.caption.21}%
+\contentsline {table}{\numberline {1.4}{\ignorespaces So sánh các phương án hiện thực chatbot trên Android}}{20}{table.caption.25}%
+\contentsline {table}{\numberline {1.5}{\ignorespaces Đối chiếu các nhóm giải pháp với phạm vi tích hợp của đề tài}}{22}{table.caption.28}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Các ý tưởng OpenBot được tham khảo trong đồ án}}{27}{table.caption.29}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces So sánh định tính các họ detector liên quan đến đồ án}}{33}{table.caption.31}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Thứ tự keypoint người theo cấu hình COCO-Pose của YOLO26}}{38}{table.caption.33}%
+\contentsline {table}{\numberline {2.4}{\ignorespaces So sánh các mức YOLO26-Pose ở chế độ end-to-end trên COCO}}{39}{table.caption.34}%
+\contentsline {table}{\numberline {2.5}{\ignorespaces So sánh Transformer và CNN}}{47}{table.caption.40}%
+\contentsline {table}{\numberline {2.6}{\ignorespaces So sánh các công nghệ Speech-to-Text.}}{51}{table.caption.43}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Cụ thể hóa yêu cầu luận văn theo phạm vi đề tài}}{59}{table.3.1}%
+\contentsline {table}{\numberline {3.2}{\ignorespaces Tác nhân và trách nhiệm trong hệ thống}}{60}{table.caption.45}%
+\contentsline {table}{\numberline {3.3}{\ignorespaces Danh sách yêu cầu chức năng}}{61}{table.3.3}%
+\contentsline {table}{\numberline {3.4}{\ignorespaces Yêu cầu phi chức năng}}{63}{table.3.4}%
+\contentsline {table}{\numberline {3.5}{\ignorespaces Từ nhóm yêu cầu đến quyết định phân rã kiến trúc}}{65}{table.caption.46}%
+\contentsline {table}{\numberline {3.6}{\ignorespaces Các module trong kiến trúc logic của hệ thống}}{67}{table.3.6}%
+\contentsline {table}{\numberline {3.7}{\ignorespaces Tóm tắt các ca sử dụng chính}}{69}{table.caption.49}%
+\contentsline {table}{\numberline {3.8}{\ignorespaces So sánh các lựa chọn công nghệ xuyên suốt hệ thống}}{74}{table.3.8}%
+\contentsline {table}{\numberline {3.9}{\ignorespaces Cấu trúc dữ liệu của Firebase Realtime Database}}{82}{table.3.9}%
+\contentsline {table}{\numberline {3.10}{\ignorespaces Các điểm chuẩn ánh xạ lệnh điều khiển}}{84}{table.caption.52}%
+\contentsline {table}{\numberline {3.11}{\ignorespaces Mối đe dọa, bảo vệ hiện có và phần cần hoàn thiện}}{85}{table.3.11}%
+\contentsline {table}{\numberline {3.12}{\ignorespaces Truy vết từ yêu cầu đến module và kiểm thử}}{87}{table.3.12}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Các thành phần hiện thực của hệ thống}}{90}{table.caption.54}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{92}{table.caption.56}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong pipeline YOLO26n-Pose của RobotApp}}{94}{table.caption.60}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{103}{table.caption.64}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{106}{table.caption.65}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{107}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{108}{table.caption.66}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{109}{table.caption.67}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Bộ unit test ánh xạ điều khiển}}{109}{table.caption.68}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Bộ unit test hậu kiểm té ngã}}{110}{table.caption.69}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{111}{table.5.7}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{114}{table.caption.70}%
+\contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian suy luận (Inference Time) trung bình trên Android}}{114}{table.caption.71}%
+\contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{116}{table.caption.72}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{139}{table.caption.76}%
+\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{139}{table.6.12}%
+\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{140}{table.6.13}%
+\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{143}{table.caption.77}%
+\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{143}{table.caption.78}%
+\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{143}{table.caption.79}%
