@@ -98,46 +98,20 @@ Nguyên mẫu được kiểm tra từ từng chức năng riêng lẻ đến c�
 
 \subsection{Các công trình và giải pháp liên quan}
 
-Phạm vi liên quan trực tiếp đến đề tài không chỉ là robot chăm sóc nói chung mà gồm ba bài toán kỹ thuật có quan hệ chặt chẽ: (i) nhận biết một sự kiện té ngã từ chuỗi ảnh; (ii) duy trì đúng người mục tiêu khi robot và người cùng di chuyển; và (iii) tạo kênh hội thoại tự nhiên nhưng không làm suy yếu quy trình phản ứng an toàn. Newaz và Hanada phân loại nghiên cứu FDS thành các nhóm IoT, thiết bị đeo, cloud, thị giác, smartphone, âm thanh, tín hiệu sinh học và tín hiệu động học; đồng thời khảo sát cảm biến, thuật toán, bộ dữ liệu, kiểm định, bảo mật và riêng tư \reportcite{ref:newaz_fall_review}. Dựa trên khung rộng đó, phần này đi sâu vào các nhánh sát với nguyên mẫu và phân tích theo luồng xử lý, thay vì chỉ liệt kê sản phẩm.
+Robot hỗ trợ người cao tuổi là một bài toán liên ngành, trong đó khả năng di chuyển, quan sát, tương tác và kết nối với người chăm sóc phải được phối hợp trong cùng một hệ thống. Vì vậy, phần tổng quan tập trung vào bốn nhóm công trình có liên hệ trực tiếp với đề tài: phát hiện té ngã, theo dõi và bám người mục tiêu, hội thoại bằng giọng nói và các nền tảng robot hỗ trợ tại nhà. Mỗi nhóm được xem xét theo ý tưởng chính, cách tổ chức luồng xử lý, ưu điểm, hạn chế và khả năng kế thừa vào nguyên mẫu.
+
+Đối với phát hiện té ngã, các bài tổng quan cung cấp cái nhìn hệ thống về cảm biến và phương pháp đã được sử dụng \reportcite{ref:fall_review}\reportcite{ref:newaz_fall_review}, trong khi những nghiên cứu gần đây cho thấy xu hướng chuyển sang mô hình thị giác nhẹ, khai thác tư thế theo thời gian và xử lý trên thiết bị biên \reportcite{ref:falldetection}\reportcite{ref:hfdmia_pose}\reportcite{ref:yosap_lstm}\reportcite{ref:fallnet}. Việc kết hợp hai nhóm tài liệu này giúp tránh đánh giá một giải pháp chỉ qua độ chính xác được báo cáo, đồng thời làm rõ hơn các yêu cầu về dữ liệu, tốc độ, che khuất và khả năng vận hành trong điều kiện thực tế.
 
 \subsubsection{Các hướng tiếp cận cho bài toán phát hiện té ngã}
 
-\paragraph{Tổng quan sự phát triển của các phương pháp phát hiện té ngã.}
-Trong hơn ba thập niên, bài toán phát hiện té ngã đã được nghiên cứu trên nhiều loại tín hiệu và nền tảng tính toán khác nhau. Tổng quan của Newaz và Hanada khảo sát các công trình xuất hiện trên Google Scholar trong giai đoạn 1990--2022, từ đó chọn 75 nghiên cứu để phân tích về cảm biến, thuật toán, bộ dữ liệu, phương pháp kiểm định, bảo mật và quyền riêng tư \reportcite{ref:newaz_fall_review}. Kết quả cho thấy tín hiệu sinh học chiếm 22,69\% số công trình được thống kê, tiếp theo là thị giác với 20,87\%, smartphone 18,56\%, tín hiệu động học 13,27\%, điện toán đám mây 10,38\%, IoT 6,68\%, thiết bị đeo 4,48\% và âm thanh 3,07\%. Phân bố này được trình bày trong Bảng~\ref{tab:fall_strategy_distribution}.
+\paragraph{Bức tranh chung về các phương pháp phát hiện té ngã.}
+Các hệ thống phát hiện té ngã được phát triển từ nhiều nguồn dữ liệu khác nhau, từ gia tốc và vận tốc góc trên thiết bị đeo đến âm thanh, ảnh chiều sâu, radar và video RGB. Hai tổng quan gần đây có cách phân nhóm khác nhau nhưng cùng cho thấy hiệu quả của hệ thống phụ thuộc đồng thời vào cảm biến, thuật toán, bộ dữ liệu và phương pháp đánh giá \reportcite{ref:fall_review}\reportcite{ref:newaz_fall_review}. Vì vậy, tỷ lệ xuất hiện của một hướng nghiên cứu không đồng nghĩa với ưu thế tuyệt đối về độ chính xác hoặc khả năng triển khai.
 
-\begin{table}[htbp]
-\centering
-\caption{Tỷ lệ các chiến lược phát hiện té ngã trong khảo sát của Newaz và Hanada \reportcite{ref:newaz_fall_review}}
-\label{tab:fall_strategy_distribution}
-\small
-\begin{tabularx}{\textwidth}{|c|p{3.3cm}|c|X|}
-\hline
-\textbf{Thứ tự} & \textbf{Chiến lược} & \textbf{Tỷ lệ} & \textbf{Dữ liệu hoặc vai trò điển hình} \\
-\hline
-1 & Tín hiệu sinh học & 22,69\% & ECG, EEG, EMG hoặc các biến đổi sinh lý liên quan tới sự kiện \\
-\hline
-2 & Dựa trên thị giác & 20,87\% & Ảnh RGB/depth, silhouette, optical flow, hộp người và keypoint \\
-\hline
-3 & Dựa trên smartphone & 18,56\% & IMU tích hợp, xử lý cục bộ, định vị và truyền cảnh báo \\
-\hline
-4 & Tín hiệu động học & 13,27\% & Gia tốc, vận tốc góc, tư thế và quỹ đạo chuyển động \\
-\hline
-5 & Dựa trên cloud & 10,38\% & Lưu trữ, suy luận từ xa, tổng hợp sự kiện và thông báo \\
-\hline
-6 & Dựa trên IoT & 6,68\% & Kết nối cảm biến, gateway, dịch vụ giám sát và người chăm sóc \\
-\hline
-7 & Thiết bị đeo & 4,48\% & Cảm biến gắn trên cơ thể, đồng hồ, vòng tay hoặc thắt lưng \\
-\hline
-8 & Phân tích âm thanh & 3,07\% & Va chạm, tiếng kêu cứu, định vị nguồn âm và đặc trưng phổ \\
-\hline
-\end{tabularx}
-\end{table}
+Xét theo cách thu nhận bằng chứng, các phương pháp có thể quy về ba nhóm chính: cảm biến gắn trên cơ thể, cảm biến bố trí trong môi trường và camera quan sát. Điện thoại thông minh, kết nối IoT hoặc điện toán đám mây chủ yếu giữ vai trò xử lý, lưu trữ và chuyển tiếp cảnh báo nên có thể xuất hiện đồng thời trong cả ba nhóm. Cách phân chia theo nguồn dữ liệu phù hợp hơn khi đánh giá một robot hoạt động trong nhà, bởi nó làm rõ người dùng có phải mang thiết bị hay không, phạm vi quan sát, mức độ riêng tư và phần cứng cần bổ sung.
 
-Các tỷ lệ trên phản ánh mức độ xuất hiện của từng chiến lược trong tập tài liệu được khảo sát, không biểu thị thị phần thương mại hay thứ hạng về độ chính xác. Ranh giới giữa các nhóm cũng không hoàn toàn tách biệt: smartphone có thể đồng thời đảm nhiệm vai trò cảm biến, thiết bị xử lý biên và nút kết nối IoT; điện toán đám mây chủ yếu cung cấp năng lực lưu trữ, phân tích và truyền thông báo chứ không trực tiếp tạo ra bằng chứng về cú ngã. Do dữ liệu của bài tổng quan kết thúc ở năm 2022, các tỷ lệ này được sử dụng để mô tả xu hướng lịch sử; những nghiên cứu công bố từ năm 2023 trở đi được xem xét bổ sung trong các phần tiếp theo.
+Trong các công trình từ năm 2024 trở lại đây, hai hướng thị giác nổi bật tiếp tục được phát triển song song. Hướng thứ nhất cải tiến các bộ phát hiện một giai đoạn để nhận biết trực tiếp người ở trạng thái ngã \reportcite{ref:falldetection}; hướng thứ hai khai thác keypoint và diễn biến tư thế, kết hợp thêm theo dõi hoặc mô hình thời gian để phân biệt cú ngã với những hoạt động có hình dạng tương tự \reportcite{ref:hfdmia_pose}\reportcite{ref:yosap_lstm}\reportcite{ref:fallnet}. Xu hướng này phù hợp với yêu cầu xử lý thời gian thực nhưng cũng đặt ra bài toán về độ ổn định của keypoint, che khuất và khả năng chạy trên phần cứng có tài nguyên giới hạn.
 
-Xét theo bản chất dữ liệu đầu vào, các phương pháp có thể được hệ thống thành ba nhóm lớn: tín hiệu thu trực tiếp trên cơ thể, tín hiệu ghi nhận từ môi trường và thông tin thị giác trong video. IoT, smartphone và điện toán đám mây tạo thành lớp hạ tầng hỗ trợ thu nhận, xử lý và chuyển tiếp cảnh báo cho các nhóm phương pháp này. Sự phân chia đó vừa làm rõ ưu thế của từng nguồn dữ liệu, vừa cho phép đánh giá mức độ phù hợp với một robot chăm sóc hoạt động tự chủ trong không gian sống.
-
-\paragraph{Phương pháp dựa trên thiết bị đeo và tín hiệu chuyển động.}
+\paragraph{Phương pháp sử dụng thiết bị đeo.}
 Các hệ thống thuộc nhóm này thường sử dụng gia tốc kế, con quay hồi chuyển hoặc IMU gắn tại thắt lưng, ngực, cổ tay hay tích hợp sẵn trong điện thoại. Tín hiệu được lấy mẫu, lọc nhiễu và chia thành các cửa sổ thời gian trước khi đưa qua luật ngưỡng hoặc mô hình phân loại để xác nhận sự kiện. Một đại lượng thường được sử dụng là độ lớn vector gia tốc
 \begin{equation}
 a=\sqrt{a_x^2+a_y^2+a_z^2},
@@ -155,7 +129,7 @@ Camera chiều sâu và hệ stereo bổ sung quan hệ hình học ba chiều g
 
 Radar mmWave khai thác khoảng cách, vận tốc Doppler hoặc point cloud mà không tạo ra hình ảnh có thể nhận dạng khuôn mặt, đồng thời vẫn hoạt động trong điều kiện thiếu sáng. Hệ thống mmFall sử dụng point cloud 4D và hybrid variational RNN autoencoder để học phân bố của các hoạt động bình thường, sau đó kết hợp điểm bất thường với sự hạ thấp của tâm cơ thể \reportcite{ref:mmfall}. Trong 50 cú ngã thử nghiệm, phương pháp phát hiện được 98\% và tạo hai báo động giả. Tuy nhiên, độ thưa của point cloud, phản xạ đa đường và cách bố trí phòng có thể làm thay đổi đáng kể tín hiệu. Để khắc phục giới hạn của từng cảm biến riêng lẻ, Kwolek và Kepski sử dụng IMU để kích hoạt một sự kiện tiềm năng, rồi xác minh bằng ảnh chiều sâu, đặc trưng hình dạng, khoảng cách tới sàn và SVM \reportcite{ref:kwolek_fusion}. Hợp nhất cảm biến giúp các nguồn dữ liệu bù trừ điểm mù cho nhau, nhưng kéo theo chi phí phần cứng, đồng bộ thời gian, hiệu chuẩn và bảo trì cao hơn.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{So sánh bằng chứng và giới hạn của các hướng phát hiện té ngã tiêu biểu}
 \label{tab:fall_sensing_comparison}
@@ -181,8 +155,8 @@ RGB pose--thời gian & Keypoint, quỹ đạo khớp, thay đổi tư thế the
 \end{tabularx}
 \end{table}
 
-\paragraph{Phương pháp dựa trên thị giác.}
-Với tỷ lệ 20,87\%, thị giác là nhóm lớn thứ hai trong khảo sát của Newaz và Hanada \reportcite{ref:newaz_fall_review}. Sự phát triển của camera tích hợp và bộ xử lý di động khiến hướng tiếp cận này ngày càng phù hợp với các hệ thống giám sát tại biên. Từ video, hệ thống có thể đồng thời ước lượng vị trí người, hình dạng hộp bao, tư thế khớp, tốc độ hạ thấp cơ thể và trạng thái sau va chạm. Khung hình gắn với sự kiện còn hỗ trợ người chăm sóc xác minh tình huống từ xa. Những lợi thế đó đi kèm các vấn đề về quyền riêng tư, ánh sáng yếu, che khuất, góc quan sát và chuyển động nền khi camera được đặt trên robot di động.
+\paragraph{Phương pháp sử dụng camera và thị giác máy tính.}
+Camera cung cấp nhiều thông tin hơn một tín hiệu chuyển động đơn lẻ: từ video, hệ thống có thể xác định vị trí người, hình dạng hộp bao, các điểm khớp, tốc độ hạ thấp cơ thể và trạng thái sau va chạm. Khung hình gắn với sự kiện còn giúp người chăm sóc quan sát lại tình huống khi cần thiết. Sự phổ biến của camera tích hợp và bộ xử lý di động làm cho hướng tiếp cận này ngày càng phù hợp với xử lý tại biên. Tuy nhiên, chất lượng nhận biết vẫn chịu ảnh hưởng của ánh sáng, góc nhìn, che khuất và chuyển động nền; dữ liệu hình ảnh cũng đòi hỏi nguyên tắc bảo vệ quyền riêng tư rõ ràng.
 
 Các phương pháp thị giác ban đầu thường dùng silhouette, tỷ lệ chiều cao--chiều rộng, hướng trục chính hoặc lịch sử chuyển động. Hướng optical flow biểu diễn chuyển động giữa các khung hình; Núñez-Marcos, Azkune và Arganda-Carreras xếp chồng optical flow rồi dùng CNN dựa trên VGG-16 để phân lớp đoạn video \reportcite{ref:opticalflow_fall}. Cách này nắm được động học tốt hơn ảnh tĩnh, nhưng bước tính dòng quang học tốn tài nguyên và đặc biệt nhạy với chuyển động camera của robot.
 
@@ -190,10 +164,12 @@ Với detector một giai đoạn, ảnh RGB đi qua mạng YOLO, ngưỡng đ�
 
 Ước lượng pose chuyển người thành tập keypoint $(x,y,c)$, trong đó $c$ là độ tin cậy. Sau khi chuẩn hóa theo hộp người hoặc kích thước cơ thể, hệ thống có thể tạo các đặc trưng như góc thân, tỷ lệ chiều cao--chiều rộng, độ cao tương đối và vận tốc của hông, vai, gối. So với pixel RGB, skeleton giảm phụ thuộc vào màu quần áo và nền, đồng thời làm rõ diễn biến động học. Tuy nhiên, che khuất và góc nhìn xấu có thể làm mất keypoint; bởi vậy pose phải được gắn với đúng track trước khi ghép thành chuỗi. Juraev và cộng sự cũng chỉ ra các khó khăn về thiếu dữ liệu ngã thực, thay đổi góc camera/ánh sáng và che khuất; dữ liệu tổng hợp có thể hỗ trợ, nhưng lựa chọn mô hình thời gian vẫn phải được kiểm chứng trên miền triển khai \reportcite{ref:pose_synthetic}.
 
-\paragraph{Kết hợp ước lượng tư thế với mô hình thời gian.}
+\paragraph{Kết hợp tư thế với thông tin thời gian.}
 Hạn chế của quyết định dựa trên từng khung hình tạo động lực kết hợp bộ ước lượng tư thế với mô hình chuỗi. Trong kiến trúc này, YOLO-pose xác định vị trí người và các khớp ở mỗi thời điểm, còn LSTM khai thác sự phụ thuộc giữa các khung liên tiếp để phân biệt một quá trình té ngã với tư thế nằm hoặc cúi người thông thường. Luồng xử lý tổng quát gồm
 \begin{center}
-\textit{video RGB $\rightarrow$ YOLO-pose $\rightarrow$ hộp người và keypoint $\rightarrow$ gán ID/track $\rightarrow$ chuẩn hóa và tạo đặc trưng $\rightarrow$ cửa sổ chuỗi $\rightarrow$ LSTM $\rightarrow$ làm mượt/hậu kiểm $\rightarrow$ sự kiện cảnh báo.}
+\small
+\textit{Video RGB $\rightarrow$ ước lượng tư thế và gán ID $\rightarrow$ chuỗi keypoint đã chuẩn hóa}\\
+\textit{$\rightarrow$ mô hình thời gian $\rightarrow$ xác nhận sự kiện $\rightarrow$ phát cảnh báo.}
 \end{center}
 Nhờ duy trì trạng thái theo thời gian, LSTM có thể học sự nối tiếp giữa mất thăng bằng, hạ thấp nhanh, va chạm và trạng thái nằm bất thường thay vì chỉ nhận dạng một dáng người đơn lẻ \reportcite{ref:lstm}. YOLO-pose và LSTM vì thế đảm nhiệm hai vai trò bổ sung: mô hình đầu trích xuất biểu diễn không gian, còn mô hình sau diễn giải sự biến đổi của biểu diễn đó theo thời gian.
 
@@ -203,14 +179,34 @@ Vai trò của bước theo dõi được thể hiện rõ hơn trong YOSAP-LSTM
 
 Ở một biến thể khác, Liu và cộng sự đề xuất HFDMIA-Pose, cải tiến YOLOv8s bằng SPD-Conv, bổ sung đầu phát hiện vật thể nhỏ và sử dụng BCIoU; kết quả của detector được chuyển sang AlphaPose và kết hợp với các đặc trưng tức thời cũng như trạng thái để xác định cú ngã \reportcite{ref:hfdmia_pose}. Trên Le2i và bộ MPFDD nhiều người, phương pháp cải thiện tương đối so với AlphaPose 4,30\% về độ chính xác, 4,57\% về F1 và 37,50\% về FPS. Mặc dù không sử dụng LSTM, nghiên cứu cho thấy chất lượng phát hiện người và keypoint quyết định trực tiếp chất lượng của tầng nhận dạng hành động phía sau; đồng thời, bằng chứng tức thời chỉ trở nên đáng tin cậy khi được đặt trong một trạng thái kéo dài theo thời gian.
 
+Bảng~\ref{tab:recent_vision_fall} tóm tắt một số công trình thị giác tiêu biểu được công bố gần đây. Các nghiên cứu này không hoàn toàn cùng bài toán, nhưng thể hiện rõ ba hướng cải tiến đang được quan tâm: tăng tính đa dạng của dữ liệu, khai thác tư thế theo thời gian và giảm chi phí tính toán để đưa mô hình tới thiết bị biên.
+
+\begin{table}[H]
+\centering
+\caption{Một số nghiên cứu thị giác gần đây về phát hiện té ngã}
+\label{tab:recent_vision_fall}
+\small
+\begin{tabularx}{\textwidth}{|p{2.8cm}|p{4.4cm}|X|}
+\hline
+\textbf{Công trình} & \textbf{Hướng tiếp cận} & \textbf{Kết quả và điểm cần lưu ý} \\
+\hline
+Visionary Vigilance (2024) \reportcite{ref:falldetection} & Cải tiến YOLOv8s và xây dựng DiverseFALL10500 & Bộ dữ liệu có quy mô và bối cảnh đa dạng; phát hiện trực tiếp trên ảnh nhanh nhưng chưa mô tả đầy đủ diễn biến của sự kiện. \\
+\hline
+HFDMIA-Pose (2025) \reportcite{ref:hfdmia_pose} & YOLOv8s cải tiến, AlphaPose và đặc trưng tức thời--trạng thái & Hướng đến nhiều người và thiết bị biên; hiệu quả vẫn phụ thuộc chất lượng pose và mức che khuất. \\
+\hline
+YOSAP-LSTM (2025) \reportcite{ref:yosap_lstm} & YOLOv8, SORT, AlphaPose và 1D CNN--LSTM & Đạt 98,66\% accuracy và 6,44 FPS trên Jetson Xavier NX; miền dữ liệu công trường khác với môi trường nhà ở. \\
+\hline
+FallNet (2026) \reportcite{ref:fallnet} & YOLOv8n-pose cải tiến kết hợp LSTM & Đạt 97\% accuracy với 3,4 triệu tham số; cho thấy tiềm năng của pose--LSTM trên thiết bị có tài nguyên hạn chế. \\
+\hline
+\end{tabularx}
+\end{table}
+
 Các con số trên không nên đặt cạnh nhau như một bảng xếp hạng. FallNet, YOSAP-LSTM và HFDMIA-Pose dùng miền dữ liệu, định nghĩa nhãn, cách chia tập, phần cứng và đơn vị đo khác nhau. Accuracy còn có thể che giấu mất cân bằng lớp; trong chăm sóc dài hạn, recall của cú ngã, precision, F1, số báo giả mỗi giờ, độ trễ phát hiện và khả năng tổng quát sang người/căn phòng chưa thấy đều quan trọng. Đánh giá đáng tin cậy cần tách train/test theo người hoặc video, không chia ngẫu nhiên các khung gần nhau của cùng một cảnh, và phải thử bổ sung trên camera thực của robot. CAUCAFall là một nguồn dữ liệu hữu ích do có thay đổi khoảng cách, hướng ngã và ánh sáng trong môi trường ít kiểm soát, nhưng các cú ngã vẫn chủ yếu phải dàn dựng vì lý do đạo đức và an toàn \reportcite{ref:caucafall}.
 
-\paragraph{Định hướng áp dụng trong đồ án.}
-Từ các kết quả đã phân tích, kiến trúc pose--LSTM phù hợp với nguyên mẫu robot chăm sóc trên cả phương diện chức năng lẫn khả năng triển khai. Camera và bộ xử lý sẵn có trên smartphone cho phép quan sát không tiếp xúc mà không yêu cầu người cao tuổi mang thêm cảm biến. Hộp người và keypoint có thể được dùng chung cho chức năng bám mục tiêu, trong khi chuỗi pose giúp phân biệt quá trình té ngã với một tư thế nằm chủ động. Xử lý cục bộ còn hạn chế việc truyền liên tục video lên đám mây và chỉ phát sinh trao đổi mạng khi cần đồng bộ sự kiện hoặc cảnh báo.
+\paragraph{Hướng tiếp cận được lựa chọn cho đề tài.}
+Từ các kết quả đã phân tích, hướng kết hợp pose và mô hình thời gian phù hợp với nguyên mẫu robot chăm sóc trên cả phương diện chức năng lẫn khả năng triển khai. Camera trên điện thoại cho phép quan sát không tiếp xúc, không yêu cầu người cao tuổi luôn mang thêm cảm biến. Hộp người và keypoint còn có thể được sử dụng chung cho chức năng theo dõi mục tiêu, trong khi chuỗi tư thế cung cấp thêm bằng chứng để phân biệt cú ngã với hành động nằm hoặc cúi người có chủ đích.
 
-Trong hiện thực của đồ án, keypoint thuộc người đang được theo dõi được chuẩn hóa và ghép thành cửa sổ 15 khung hình gồm 69 đặc trưng trước khi đưa vào LSTM. Đầu ra nhị phân chỉ được xem là tín hiệu thô: hệ thống cần năm khung hình FALL liên tiếp mới mở một sự cố và chỉ hậu kiểm khi chuỗi trở lại NO FALL. Ba khung hình đầu/vai ổn định ở phía trên mốc 70\% chiều cao ảnh làm loại ứng viên; ba khung hình đầu/vai nằm dưới mốc này, hoặc 12 khung hình liên tiếp không còn đủ quan sát thân trên, dẫn tới yêu cầu xác nhận bằng giọng nói. Trong lúc xử lý sự cố, robot chuyển sang chế độ tạo khung an toàn: dừng ngay, chỉ được lùi chậm hoặc quay tại chỗ để đưa người nằm vào trọn khung hình, tuyệt đối không tiến gần.
-
-Kiến trúc nhiều tầng cũng làm xuất hiện chuỗi lan truyền sai số: detector bỏ sót có thể khiến tracker mất định danh; chuyển đổi định danh làm gián đoạn hoặc trộn chuỗi pose; keypoint thiếu chính xác tiếp tục ảnh hưởng tới dự đoán của LSTM. Cửa sổ 15 khung hình đồng thời tạo ra một khoảng khởi động và độ trễ không thể loại bỏ hoàn toàn. Vì vậy, hệ thống duy trì ngưỡng tin cậy cho keypoint, không đồng nhất việc mất quan sát với trạng thái an toàn, sử dụng khoảng khóa để tránh lặp cảnh báo và xác minh kết quả ở cấp sự kiện. Trong phạm vi đồ án, YOLO--LSTM được lựa chọn như một phương án cân bằng giữa lượng thông tin thu được, chi phí phần cứng, khả năng xử lý tại biên và sự tích hợp với các chức năng hiện có của robot.
+Nhược điểm của kiến trúc này là sai số có thể truyền qua nhiều giai đoạn: bỏ sót người làm gián đoạn track, track không ổn định làm trộn chuỗi tư thế và keypoint sai tiếp tục ảnh hưởng đến kết quả phân loại. Do đó, dự đoán của mô hình chỉ nên được xem là một nguồn bằng chứng và cần được kiểm tra theo nhiều khung hình trước khi tạo cảnh báo. Đề tài lựa chọn hướng YOLO-pose kết hợp LSTM vì đạt được sự cân bằng giữa thông tin tư thế, chi phí tính toán và khả năng tích hợp với robot di động; các tham số và cơ chế hậu kiểm cụ thể được trình bày tại phần thiết kế và hiện thực hệ thống.
 
 \iffalse
 
@@ -291,7 +287,7 @@ Việc so sánh kết quả giữa các công trình cần đặc biệt thận 
 
 \subsubsection{Các giải pháp theo dõi người và bám mục tiêu}
 
-Phát hiện người trả lời câu hỏi ``có người ở đâu trong khung hình hiện tại'', còn tracking phải trả lời ``người này có phải người ở khung hình trước hay không''. Đây là mắt xích bắt buộc đối với robot bám người: nếu ID thay đổi khi hai người giao nhau hoặc khi mục tiêu bị che khuất, robot có thể đi theo nhầm người; đồng thời chuỗi pose dùng cho phát hiện té ngã sẽ bị trộn giữa nhiều đối tượng.
+Phát hiện người chỉ xác định vị trí của các đối tượng trong một khung hình, còn theo dõi có nhiệm vụ duy trì danh tính của họ qua nhiều khung hình liên tiếp. Đối với robot bám người, đây là bước đặc biệt quan trọng: nếu danh tính bị thay đổi khi hai người đi gần nhau hoặc khi mục tiêu bị che khuất, robot có thể chuyển sang bám nhầm người. Sự nhầm lẫn này cũng làm cho chuỗi tư thế dùng trong phát hiện té ngã chứa dữ liệu của nhiều đối tượng khác nhau.
 
 \paragraph{SORT.}
 SORT là kiến trúc tracking-by-detection gọn nhẹ. Ở mỗi khung hình, detector cung cấp các hộp người; bộ lọc Kalman dự đoán trạng thái hộp của từng track; ma trận chi phí được lập từ mức chồng lấp IoU giữa dự đoán và quan sát; thuật toán Hungarian tìm phép gán có tổng chi phí nhỏ; cuối cùng hệ thống cập nhật track khớp, tạo track mới và loại track mất quá lâu \reportcite{ref:sort}\reportcite{ref:kalman}\reportcite{ref:hungarian}. Luồng này không cần huấn luyện riêng cho tracker và phù hợp suy luận thời gian thực. Điểm yếu là chỉ dựa nhiều vào chuyển động và hình học hộp, nên dễ đổi ID khi che khuất lâu, chuyển động camera nhanh hoặc các đối tượng đứng gần nhau.
@@ -309,19 +305,19 @@ Một nhánh khác là học chung detection và Re-ID trong một mạng. FairM
 
 Việc chọn tracker không nên chỉ dựa trên FPS. MOTA phản ánh tổng hợp false positive, false negative và ID switch; IDF1 đo mức nhất quán nhận dạng; HOTA cân bằng chất lượng detection với association. Đối với robot bám người, số lần đổi ID, thời gian phục hồi sau che khuất và xác suất bám nhầm người còn quan trọng hơn MOTA tổng quát. Thử nghiệm cũng phải có chuyển động camera, vì benchmark camera cố định không biểu diễn đầy đủ việc thân robot quay hoặc rung.
 
-\paragraph{Từ tracking đến lệnh bám người.}
-Sau khi có track mục tiêu, bộ điều khiển thường dùng sai lệch ngang giữa tâm hộp và tâm ảnh để tạo lệnh quay, đồng thời dùng diện tích/chiều cao hộp làm đại lượng gần đúng cho khoảng cách để tạo lệnh tiến--lùi. Có thể mô tả luồng là \textit{camera $\rightarrow$ detector $\rightarrow$ tracker $\rightarrow$ chọn mục tiêu $\rightarrow$ sai lệch vị trí/khoảng cách $\rightarrow$ vận tốc trái--phải $\rightarrow$ BLE $\rightarrow$ firmware}. OpenBot chứng minh cách tận dụng camera, cảm biến và năng lực tính toán của smartphone để điều khiển một thân xe chi phí thấp \reportcite{ref:openbot}. Đồ án kế thừa tư tưởng phân chia smartphone--thân robot, nhưng thay bài toán lái xe tham chiếu bằng bám người và giám sát chăm sóc.
+\paragraph{Từ theo dõi đến bám người.}
+Sau khi xác định được mục tiêu, robot có thể sử dụng vị trí tương đối của người trong khung hình để điều chỉnh hướng quay và ước lượng khoảng cách cần duy trì. Luồng xử lý chung gồm \textit{thu nhận hình ảnh $\rightarrow$ phát hiện và theo dõi người $\rightarrow$ lựa chọn mục tiêu $\rightarrow$ xác định sai lệch vị trí $\rightarrow$ tạo lệnh chuyển động}. OpenBot cho thấy điện thoại thông minh có thể đảm nhiệm việc quan sát, tính toán và gửi quyết định điều khiển xuống thân xe có chi phí thấp \reportcite{ref:openbot}. Đề tài kế thừa cách phân chia này và mở rộng mục đích từ điều khiển robot sang bám người để hỗ trợ giám sát tại nhà.
 
-Trong hiện thực của đề tài, tracker theo hướng SORT được tăng cường bằng khoảng cách pose và đặc trưng màu HSV nhẹ để hỗ trợ liên kết lại; mục tiêu chính được bảo vệ bằng ID0 và có cơ chế phục hồi sau khi mất dấu. Thiết kế này nằm giữa SORT thuần hình học và Deep SORT dùng mạng Re-ID: chi phí tính toán thấp hơn nhưng vẫn khai thác thêm bằng chứng dáng người/màu sắc. Quan trọng hơn, độ tin cậy của track được truyền tới điều khiển: khi mất mục tiêu hoặc quan sát không đủ tin cậy, hành vi đúng là giảm/dừng chuyển động thay vì tiếp tục dùng một lệnh cũ.
+Từ việc so sánh các phương pháp, SORT được chọn làm nền tảng do có cấu trúc gọn và không cần thêm một mạng tái định danh. Để hạn chế điểm yếu khi mục tiêu bị che khuất hoặc xuất hiện trở lại, quá trình liên kết có thể khai thác thêm thông tin về tư thế và đặc điểm màu sắc. Dù sử dụng phương pháp nào, nguyên tắc an toàn vẫn là không tiếp tục di chuyển khi mục tiêu đã mất hoặc kết quả theo dõi không còn đủ tin cậy. Bảng~\ref{tab:tracking_related} tóm tắt những lựa chọn chính và mức độ phù hợp với đề tài.
 
 \begin{table}[H]
 \centering
-\caption{So sánh các hướng tracking-by-detection liên quan đến đề tài}
+\caption{So sánh các phương pháp theo dõi người liên quan đến đề tài}
 \label{tab:tracking_related}
 \small
 \begin{tabularx}{\textwidth}{|p{2.2cm}|p{3.0cm}|X|X|}
 \hline
-\textbf{Giải pháp} & \textbf{Bằng chứng ghép track} & \textbf{Ưu điểm và giới hạn} & \textbf{Khả năng áp dụng} \\
+\textbf{Phương pháp} & \textbf{Cơ sở liên kết} & \textbf{Ưu điểm và giới hạn} & \textbf{Khả năng áp dụng} \\
 \hline
 SORT & Kalman, IoU, Hungarian & Gọn, nhanh, không cần mạng Re-ID; dễ đổi ID khi che khuất hoặc giao nhau & Phù hợp làm lõi tracker trên smartphone \\
 \hline
@@ -333,7 +329,7 @@ OC-SORT & Quan sát, Kalman và quỹ đạo ảo qua che khuất & Bền vững
 \hline
 FairMOT & Học chung detection và embedding Re-ID & Một backbone nhưng cần dữ liệu identity và huấn luyện riêng & Chưa cần thiết cho nguyên mẫu một mục tiêu, phù hợp mở rộng đa người \\
 \hline
-Đề tài & Hình học, pose, HSV và chính sách ID0 & Nhẹ hơn Re-ID sâu; vẫn phụ thuộc góc nhìn, ánh sáng và trang phục & Cân bằng giữa tốc độ, ổn định ID và khả năng chạy Android \\
+Hướng của đề tài & Hình học kết hợp tư thế và màu sắc & Nhẹ hơn Re-ID sâu; vẫn phụ thuộc góc nhìn, ánh sáng và trang phục & Cân bằng giữa tốc độ, độ ổn định và khả năng chạy trên điện thoại \\
 \hline
 \end{tabularx}
 \end{table}
@@ -392,43 +388,43 @@ Một chatbot trò chuyện hằng ngày không cần câu trả lời dài ho�
 
 Kiến trúc lai tách hội thoại mở khỏi tác vụ có tính quyết định. Những câu hỏi thông thường được chuyển tới LLM để sinh phản hồi linh hoạt. Ngược lại, lệnh gọi điện, xác nhận lịch nhắc và phản hồi sau cảnh báo té ngã đi qua bộ nhận diện ý định, từ khóa, timeout và máy trạng thái của ứng dụng. Cách tổ chức này tương đồng với kết luận của tổng quan về conversational agent: khả năng tiếp nhận ngôn ngữ tự nhiên không đồng nghĩa với việc mọi quyết định đều phải do mô hình sinh đảm nhiệm \reportcite{ref:healthcare_chatbot_review}. Nó cũng giới hạn ảnh hưởng của hiện tượng LLM tạo thông tin không chính xác tới các chức năng liên quan an toàn.
 
-\paragraph{Giải pháp được hiện thực trong RobotApp.}
-RobotApp sử dụng \texttt{SpeechRecognizer} với ngôn ngữ \texttt{vi-VN}, nhận cả kết quả tạm thời và kết quả cuối. Khi ở trạng thái ngủ, kết quả nhận dạng được kiểm tra để phát hiện tên gọi của robot; sau khi đánh thức, câu hoàn chỉnh được chuyển tới dịch vụ LLM. Ứng dụng quản lý các trạng thái khởi tạo, ngủ, đánh thức, lắng nghe, suy nghĩ, phát lời, nhắc lịch, xác nhận té ngã và cuộc gọi. Việc biểu diễn rõ trạng thái tránh cho STT tiếp tục thu chính âm thanh do TTS phát ra và cho phép hủy hoặc khởi động lại một lượt khi xảy ra lỗi.
+\paragraph{Hướng lựa chọn cho đề tài.}
+Với mục tiêu tạo một người bạn trò chuyện bằng tiếng Việt trên điện thoại Android, phương án kết hợp dịch vụ nhận dạng và tổng hợp tiếng nói của hệ điều hành với LLM qua API có ưu thế về dung lượng, chi phí thử nghiệm và khả năng triển khai trên nhiều thiết bị. Hội thoại được tổ chức theo các trạng thái nghe, xử lý và phát lời để người dùng dễ nhận biết robot đang thực hiện bước nào, đồng thời hạn chế việc hệ thống thu lại chính câu trả lời vừa phát.
 
-Phần sinh câu trả lời được hiện thực bằng Groq Chat Completions qua OkHttp. System prompt được tạo từ hồ sơ người dùng, lịch sử chỉ giữ một số message gần nhất để giới hạn token, còn phản hồi SSE được nhận dưới dạng luồng. Các đoạn văn bản được tích lũy đến ranh giới câu rồi đưa vào hàng đợi Android TTS; nhờ đó robot có thể bắt đầu nói trước khi LLM hoàn tất toàn bộ câu trả lời. Android TTS được chọn thay cho một dịch vụ giọng nói bên ngoài để giảm phụ thuộc, không phát sinh phí tổng hợp theo ký tự và tận dụng giọng tiếng Việt đã cài trên điện thoại.
-
-Cấu hình này đáp ứng mục tiêu nhẹ và chi phí thấp của nguyên mẫu: mô hình ngôn ngữ không chiếm RAM hay dung lượng APK, STT/TTS tận dụng hệ sinh thái Android, còn API miễn phí được sử dụng trong giới hạn thử nghiệm. Hạn chế còn lại là phụ thuộc mạng, quota, chất lượng engine giọng nói của từng thiết bị và rủi ro bảo mật khi gọi API trực tiếp từ ứng dụng. Hướng phát triển phù hợp là chuyển khóa API sang một proxy được xác thực, ưu tiên on-device SpeechRecognizer khi thiết bị hỗ trợ, bổ sung VAD hoặc wake-word engine cục bộ và đánh giá một LLM lượng tử hóa nhỏ như chế độ dự phòng ngoại tuyến. Các thay đổi này có thể được thực hiện độc lập nhờ ba khối STT, LLM và TTS đã được tách thành các dịch vụ riêng.
+Phương án này vẫn phụ thuộc vào kết nối mạng, hạn mức dịch vụ và chất lượng giọng nói trên từng điện thoại. Vì vậy, nội dung trao đổi cần được giới hạn ở mức cần thiết, thông tin truy cập dịch vụ phải được bảo vệ và ứng dụng phải có cách xử lý khi một thành phần không sẵn sàng. Các chi tiết hiện thực được dành cho Chương 4; tại đây, kết quả khảo sát cho thấy kiến trúc tách riêng STT, LLM và TTS là phù hợp vì từng thành phần có thể được thay thế hoặc chuyển sang xử lý cục bộ khi điều kiện thiết bị cho phép.
 
 \subsubsection{Các nền tảng robot tích hợp và bài học áp dụng}
 
-SocialRobot là một ví dụ về kiến trúc tích hợp robot di động với chăm sóc xã hội ảo theo hướng lấy người dùng làm trung tâm. Nền tảng kết hợp khả năng di chuyển, cảm biến RGB-D/laser, định vị--lập bản đồ trên ROS với hạ tầng mạng quản lý hồ sơ và nhóm chăm sóc để cung cấp dịch vụ cá nhân hóa \reportcite{ref:socialrobot}. Giá trị tham khảo đối với đề tài nằm ở việc tách năng lực robot tại chỗ khỏi dịch vụ và dữ liệu chăm sóc, đồng thời xem người thân/người chăm sóc là một tác nhân của hệ thống, không chỉ là người nhận cảnh báo.
+SocialRobot là một ví dụ về robot di động hỗ trợ chăm sóc theo hướng lấy người dùng làm trung tâm. Nền tảng kết hợp khả năng di chuyển và cảm nhận tại chỗ với hệ thống quản lý hồ sơ, dịch vụ cá nhân hóa và nhóm chăm sóc từ xa \reportcite{ref:socialrobot}. Điểm đáng tham khảo là người thân và người chăm sóc được xem như những tác nhân tham gia vào quá trình hỗ trợ, thay vì chỉ nhận thông báo khi sự cố đã xảy ra.
 
-OpenBot cung cấp bài học bổ sung về tối giản phần cứng: smartphone đảm nhiệm camera, suy luận, giao diện và kết nối; vi điều khiển trên thân xe tập trung vào chấp hành \reportcite{ref:openbot}\reportcite{ref:openbot_repo}. Đây là ý tưởng nền tảng được đồ án vận dụng mạnh. Tuy nhiên, nguyên mẫu của đề tài thay đổi mục tiêu ứng dụng: hai ứng dụng RobotApp--CaregiverApp được phân vai; Firebase đồng bộ lịch và cảnh báo; WebRTC cung cấp hiện diện từ xa; BLE nối quyết định mức ứng dụng với firmware ESP32; pipeline pose--tracking--LSTM cung cấp khả năng giám sát cục bộ. Như vậy, đóng góp không nằm ở một thuật toán hoàn toàn mới mà ở cách ghép các khối thành luồng chăm sóc có phản hồi và điều kiện an toàn.
+OpenBot tiếp cận bài toán từ hướng đơn giản hóa nền tảng robot: điện thoại thông minh đảm nhiệm cảm nhận, tính toán, giao diện và kết nối, còn phần thân xe tập trung thực hiện lệnh chuyển động \reportcite{ref:openbot}\reportcite{ref:openbot_repo}. Cách tổ chức này làm giảm số phần cứng chuyên dụng và tạo điều kiện thuận lợi cho học tập, thử nghiệm. Đề tài kế thừa tư tưởng sử dụng điện thoại làm trung tâm xử lý, đồng thời bổ sung ứng dụng dành cho người chăm sóc và các chức năng phù hợp với bối cảnh hỗ trợ người cao tuổi tại nhà.
 
 \subsubsection{Khoảng trống nghiên cứu và định vị của đề tài}
 
-Các nghiên cứu phát hiện té ngã thường dừng ở kết quả trên bộ dữ liệu; nghiên cứu tracking tập trung chỉ số MOT; chatbot tập trung chất lượng phản hồi; còn nền tảng robot giá thấp tập trung điều khiển và khả năng mở rộng. Tổng quan FDS cũng nhận diện nhu cầu tiếp tục hoàn thiện dữ liệu, khả năng phát hiện nhiều kiểu ngã, bảo mật và riêng tư khi hệ thống kết nối IoT/cloud \reportcite{ref:newaz_fall_review}. Khi triển khai chung, lỗi của một khối lan sang khối sau: detector bỏ sót làm tracker mất ID, mất ID làm trộn chuỗi pose, dự đoán sai tạo cảnh báo, và diễn giải hội thoại sai có thể đóng sự cố không an toàn. Khoảng trống mà đồ án xử lý là luồng liên thành phần từ quan sát đến hành động, có ứng dụng dành riêng cho người chăm sóc và có đường dừng an toàn tới phần cứng thật. Bảng \ref{tab:related_comparison} tổng hợp sự khác biệt.
+Các công trình được khảo sát thường tập trung giải quyết tốt một bài toán riêng. Nghiên cứu phát hiện té ngã chủ yếu đánh giá mô hình trên bộ dữ liệu; nghiên cứu theo dõi chú trọng duy trì danh tính; chatbot tập trung vào chất lượng tương tác; còn các nền tảng robot giá thấp quan tâm đến khả năng điều khiển và mở rộng. Những nghiên cứu thị giác gần đây đã cải thiện đáng kể khả năng xử lý nhiều người, che khuất và triển khai trên thiết bị biên \reportcite{ref:hfdmia_pose}\reportcite{ref:yosap_lstm}\reportcite{ref:fallnet}, nhưng việc đưa kết quả nhận biết vào một quy trình chăm sóc hoàn chỉnh vẫn cần được xem xét thêm.
 
-\begin{table}[htbp]
+Khoảng trống mà đề tài hướng tới là sự phối hợp từ quan sát, nhận biết tình huống đến tương tác và thông báo cho người chăm sóc. Khi các chức năng cùng hoạt động trên robot di động, kết quả của bước trước ảnh hưởng trực tiếp đến bước sau; vì vậy hệ thống không chỉ cần mô hình nhận biết tốt mà còn phải duy trì đúng người mục tiêu, xử lý trường hợp thiếu dữ liệu và chuyển về trạng thái an toàn khi không đủ cơ sở ra quyết định. Bảng~\ref{tab:related_comparison} tổng hợp cách đề tài tiếp thu các nhóm giải pháp đã khảo sát.
+
+\begin{table}[H]
 \centering
 \caption{Đối chiếu các nhóm giải pháp với phạm vi tích hợp của đề tài}
 \label{tab:related_comparison}
 \small
 \begin{tabularx}{\textwidth}{|p{2.7cm}|X|X|X|}
 \hline
-\textbf{Nhóm giải pháp} & \textbf{Ý tưởng/công nghệ chính} & \textbf{Giới hạn khi dùng độc lập} & \textbf{Cách đề tài kế thừa} \\
+\textbf{Nhóm giải pháp} & \textbf{Hướng tiếp cận chính} & \textbf{Giới hạn khi dùng riêng lẻ} & \textbf{Cách đề tài kế thừa} \\
 \hline
-Fall detector ảnh & YOLO, hộp người ngã, suy luận một khung hình & Thiếu diễn biến; dễ nhầm nằm/ngồi thấp & Pose, cửa sổ LSTM và hậu kiểm sự kiện \\
+Phát hiện trên ảnh & Nhận biết trực tiếp trạng thái ngã từ từng khung hình & Thiếu diễn biến; dễ nhầm với tư thế nằm hoặc ngồi thấp & Bổ sung thông tin tư thế và diễn biến theo thời gian \\
 \hline
-Fall detection theo pose & Keypoint, đặc trưng hình học, LSTM/Transformer & Nhạy với che khuất và chất lượng keypoint & Chuẩn hóa pose, tracking mục tiêu, xác nhận nhiều khung hình \\
+Phát hiện theo tư thế & Phân tích keypoint và chuỗi chuyển động & Nhạy với che khuất và chất lượng keypoint & Gắn tư thế với đúng người và xác nhận qua nhiều khung hình \\
 \hline
-Person tracking & SORT, Deep SORT, ByteTrack & Tối ưu ID nhưng không tự bảo đảm chuyển động robot an toàn & ID0, phục hồi bằng pose/HSV và dừng khi mất mục tiêu \\
+Theo dõi người & Liên kết vị trí và danh tính qua các khung hình & Duy trì ID nhưng không tự bảo đảm chuyển động robot an toàn & Ưu tiên một mục tiêu và dừng khi mất dấu \\
 \hline
-Chatbot chăm sóc & NLU/NLG, tri thức, LLM, STT/TTS & Có thể hiểu sai hoặc sinh nội dung không kiểm chứng & LLM cho trò chuyện; luật trạng thái cho phản ứng té ngã \\
+Hội thoại hỗ trợ & Nhận dạng lời nói, sinh phản hồi và tổng hợp giọng nói & Có thể nhận sai hoặc tạo nội dung thiếu chính xác & Dùng cho trò chuyện; tách khỏi quyết định liên quan an toàn \\
 \hline
-OpenBot và SocialRobot & Smartphone hoặc robot di động kết hợp dịch vụ & Không trùng đầy đủ bài toán và phần cứng của đề tài & Kế thừa phân lớp tính toán--chấp hành và mô hình nhóm chăm sóc \\
+OpenBot và SocialRobot & Robot di động kết hợp xử lý tại chỗ và dịch vụ chăm sóc & Chỉ đáp ứng một phần phạm vi hỗ trợ của đề tài & Kế thừa cách phân chia thành phần và vai trò người chăm sóc \\
 \hline
-Nguyên mẫu đề tài & Hai ứng dụng Android, AI biên, Firebase, WebRTC, BLE và firmware & Chưa phải thiết bị y tế; cần đánh giá thực địa và bảo mật đa người dùng & Đóng góp tích hợp, truy vết sự kiện và hợp đồng an toàn xuyên suốt \\
+Nguyên mẫu đề tài & Kết hợp giám sát, hội thoại, liên lạc và robot di động & Mới được đánh giá ở mức nguyên mẫu, chưa phải thiết bị y tế & Tổ chức các chức năng thành một quy trình hỗ trợ thống nhất \\
 \hline
 \end{tabularx}
 \end{table}
