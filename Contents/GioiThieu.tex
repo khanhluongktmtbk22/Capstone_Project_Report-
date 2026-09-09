@@ -435,13 +435,13 @@ Nguyên mẫu đề tài & Hai ứng dụng Android, AI biên, Firebase, WebRTC,
 
 \subsection{Đóng góp của đề tài}
 
+Đề tài hướng đến đóng góp ở khả năng tổ chức nhiều chức năng hỗ trợ thành một hệ thống thống nhất, phù hợp với bối cảnh chăm sóc người cao tuổi tại nhà. Những kết quả chính đạt được gồm:
+
 \begin{itemize}
-    \item Kiến trúc nguyên mẫu gồm hai ứng dụng Android, Firebase, WebRTC, dịch vụ LLM, BLE và firmware điều khiển động cơ.
-    \item Pipeline AI biên kết hợp pose, SORT/Kalman/Hungarian, Re-ID, người mục tiêu ID0, LSTM 15 khung hình với 69 đặc trưng và bộ hậu kiểm theo bằng chứng.
-    \item Cơ chế chuyển quyền camera: CameraX sở hữu camera khi hoạt động bình thường; trong cuộc gọi, WebRTC sở hữu camera và chia sẻ khung hình cục bộ cho pipeline AI.
-    \item Chuỗi an toàn chuyển động gồm giới hạn miền lệnh, timestamp chống lệnh cũ, watchdog ở Android và watchdog 800 ms trong firmware.
-    \item Quy trình phản ứng sự cố: dừng robot, tạo đúng một cảnh báo, hỏi xác nhận bằng giọng nói, phân loại phản hồi và gọi người chăm sóc theo nguyên tắc mặc định an toàn.
-    \item Tài liệu hóa các điểm còn hạn chế: cơ chế ghép cặp hiện dùng chung một UID, chưa phân vai trò/nhiều robot, phụ thuộc dịch vụ đám mây, quản lý khóa API và nhu cầu kiểm thử thực địa.
+    \item Xây dựng nguyên mẫu robot trợ lý có khả năng hỗ trợ giao tiếp, nhắc nhở, giám sát và kết nối người cao tuổi với người chăm sóc. Sự phối hợp giữa các chức năng này góp phần hình thành một hệ sinh thái chăm sóc liên tục, trong đó nhu cầu sinh hoạt hằng ngày và các tình huống cần trợ giúp được tiếp nhận trên cùng một hệ thống.
+    \item Đề xuất cách phân chia chức năng và luồng phối hợp giữa người cao tuổi, robot và người chăm sóc. Kết quả này cho thấy khả năng kết hợp trợ lý ảo, giám sát an toàn và robot di động trong một giải pháp hỗ trợ tại nhà, đồng thời tạo cơ sở để bổ sung các dịch vụ chăm sóc khác trong tương lai.
+    \item Xây dựng một nền tảng thử nghiệm phục vụ việc nghiên cứu các bài toán liên quan đến tương tác người--robot, hỗ trợ sinh hoạt, nhận biết tình huống bất thường và phối hợp chăm sóc từ xa. Nguyên mẫu có thể được tiếp tục sử dụng để khảo sát phương pháp mới, so sánh giải pháp hoặc đánh giá trải nghiệm của người dùng trong những nghiên cứu tiếp theo.
+    \item Góp phần làm rõ tiềm năng ứng dụng của trí tuệ nhân tạo và robot trong hỗ trợ người cao tuổi, qua đó cung cấp một tài liệu tham khảo cho sinh viên và các nhóm nghiên cứu khi phát triển những ứng dụng có mục tiêu tương tự. Kết quả của đề tài cũng đặt nền tảng cho việc hoàn thiện giải pháp theo hướng dễ tiếp cận, tin cậy và phù hợp hơn với điều kiện chăm sóc thực tế.
 \end{itemize}
 
 \subsection{Cấu trúc báo cáo}
