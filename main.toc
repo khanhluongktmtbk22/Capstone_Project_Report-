@@ -29,15 +29,17 @@
 \contentsline {paragraph}{Hướng tiếp cận được lựa chọn cho đề tài.}{14}{paragraph*.14}%
 \contentsline {subsubsection}{\numberline {1.5.2}Các giải pháp theo dõi người và bám mục tiêu}{15}{subsubsection.1.5.2}%
 \contentsline {paragraph}{SORT.}{15}{paragraph*.15}%
-\contentsline {paragraph}{Deep SORT.}{16}{paragraph*.16}%
-\contentsline {paragraph}{Từ theo dõi đến bám người.}{16}{paragraph*.17}%
+\contentsline {paragraph}{Deep SORT.}{15}{paragraph*.16}%
+\contentsline {paragraph}{ByteTrack.}{15}{paragraph*.17}%
+\contentsline {paragraph}{OC-SORT và các tracker hợp nhất.}{16}{paragraph*.18}%
+\contentsline {paragraph}{Từ theo dõi đến bám người.}{16}{paragraph*.19}%
 \contentsline {subsubsection}{\numberline {1.5.3}Chatbot AI và hội thoại hỗ trợ người cao tuổi}{17}{subsubsection.1.5.3}%
-\contentsline {paragraph}{Kiến trúc của một chatbot giọng nói.}{17}{paragraph*.19}%
-\contentsline {paragraph}{Các lựa chọn cho khối STT và TTS.}{18}{paragraph*.20}%
-\contentsline {paragraph}{LLM qua API và LLM chạy trên thiết bị.}{19}{paragraph*.21}%
-\contentsline {paragraph}{Tổ chức hội thoại phù hợp với người cao tuổi.}{20}{paragraph*.23}%
-\contentsline {paragraph}{Hướng lựa chọn cho đề tài.}{21}{paragraph*.24}%
-\contentsline {subsubsection}{\numberline {1.5.4}Các nền tảng robot tích hợp và bài học áp dụng}{21}{subsubsection.1.5.4}%
+\contentsline {paragraph}{Kiến trúc của một chatbot giọng nói.}{18}{paragraph*.21}%
+\contentsline {paragraph}{Các lựa chọn cho khối STT và TTS.}{19}{paragraph*.22}%
+\contentsline {paragraph}{LLM qua API và LLM chạy trên thiết bị.}{19}{paragraph*.23}%
+\contentsline {paragraph}{Tổ chức hội thoại phù hợp với người cao tuổi.}{20}{paragraph*.25}%
+\contentsline {paragraph}{Hướng lựa chọn cho đề tài.}{21}{paragraph*.26}%
+\contentsline {subsubsection}{\numberline {1.5.4}Các nền tảng robot tích hợp và bài học áp dụng}{22}{subsubsection.1.5.4}%
 \contentsline {subsubsection}{\numberline {1.5.5}Khoảng trống nghiên cứu và định vị của đề tài}{22}{subsubsection.1.5.5}%
 \contentsline {subsection}{\numberline {1.6}Đóng góp của đề tài}{23}{subsection.1.6}%
 \contentsline {subsection}{\numberline {1.7}Cấu trúc báo cáo}{24}{subsection.1.7}%
@@ -129,11 +131,11 @@
 \contentsline {subsubsection}{\numberline {4.3.1}Khởi động, điều hướng và vòng đời dịch vụ}{93}{subsubsection.4.3.1}%
 \contentsline {subsubsection}{\numberline {4.3.2}TrackingFragment và quyền sở hữu camera}{93}{subsubsection.4.3.2}%
 \contentsline {subsubsection}{\numberline {4.3.3}Nạp và suy luận mô hình YOLO26n-Pose}{94}{subsubsection.4.3.3}%
-\contentsline {paragraph}{Mô hình triển khai và lựa chọn bộ tăng tốc.}{94}{paragraph*.52}%
-\contentsline {paragraph}{Tiền xử lý khung hình.}{94}{paragraph*.54}%
-\contentsline {paragraph}{Nhận dạng và giải mã hợp đồng tensor.}{95}{paragraph*.55}%
-\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị overlay.}{96}{paragraph*.56}%
-\contentsline {paragraph}{Bàn giao kết quả cho các module sau.}{97}{paragraph*.58}%
+\contentsline {paragraph}{Mô hình triển khai và lựa chọn bộ tăng tốc.}{94}{paragraph*.54}%
+\contentsline {paragraph}{Tiền xử lý khung hình.}{94}{paragraph*.56}%
+\contentsline {paragraph}{Nhận dạng và giải mã hợp đồng tensor.}{95}{paragraph*.57}%
+\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị overlay.}{96}{paragraph*.58}%
+\contentsline {paragraph}{Bàn giao kết quả cho các module sau.}{97}{paragraph*.60}%
 \contentsline {subsubsection}{\numberline {4.3.4}SORT, Kalman, Hungarian và Re-ID}{97}{subsubsection.4.3.4}%
 \contentsline {subsubsection}{\numberline {4.3.5}Khóa mục tiêu ID0 và sinh lệnh auto-follow}{97}{subsubsection.4.3.5}%
 \contentsline {subsubsection}{\numberline {4.3.6}LSTM phát hiện té ngã}{98}{subsubsection.4.3.6}%
@@ -207,12 +209,12 @@
 \contentsline {subsubsection}{\numberline {6.4.6}Cải thiện trải nghiệm người cao tuổi}{123}{subsubsection.6.4.6}%
 \contentsline {subsubsection}{\numberline {6.4.7}Tối ưu triển khai}{123}{subsubsection.6.4.7}%
 \contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{124}{subsection.6.5}%
-\contentsline {section}{Tài liệu tham khảo}{125}{section*.70}%
-\contentsline {section}{Phụ lục}{135}{section*.71}%
-\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{135}{section*.72}%
+\contentsline {section}{Tài liệu tham khảo}{125}{section*.72}%
+\contentsline {section}{Phụ lục}{135}{section*.73}%
+\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{135}{section*.74}%
 \contentsline {subsection}{Phụ lục B -- Hợp đồng dữ liệu và giao thức}{139}{table.6.10}%
-\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{140}{table.caption.73}%
+\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{140}{table.caption.75}%
 \contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{142}{table.6.13}%
 \contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{143}{lstnumber.7.21}%
 \contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{144}{lstnumber.8.7}%
-\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{144}{table.caption.76}%
+\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{144}{table.caption.78}%
