@@ -23,8 +23,8 @@
 \contentsline {subsection}{\numberline {1.5}Các công trình và giải pháp liên quan}{7}{subsection.1.5}%
 \contentsline {subsubsection}{\numberline {1.5.1}Các hướng tiếp cận cho bài toán phát hiện té ngã}{8}{subsubsection.1.5.1}%
 \contentsline {paragraph}{Bức tranh chung về các phương pháp phát hiện té ngã.}{8}{paragraph*.8}%
-\contentsline {paragraph}{Phương pháp sử dụng thiết bị đeo.}{8}{paragraph*.9}%
-\contentsline {paragraph}{Phương pháp dựa trên cảm biến môi trường.}{9}{paragraph*.10}%
+\contentsline {paragraph}{Phương pháp sử dụng thiết bị đeo và tín hiệu cơ thể.}{8}{paragraph*.9}%
+\contentsline {paragraph}{Phương pháp dựa trên cảm biến môi trường.}{10}{paragraph*.10}%
 \contentsline {paragraph}{Phương pháp sử dụng camera và thị giác máy tính.}{11}{paragraph*.12}%
 \contentsline {paragraph}{Kết hợp tư thế với thông tin thời gian.}{12}{paragraph*.13}%
 \contentsline {paragraph}{Hướng tiếp cận được lựa chọn cho đề tài.}{14}{paragraph*.15}%
