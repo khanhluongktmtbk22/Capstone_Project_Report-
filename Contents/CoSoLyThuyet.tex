@@ -651,6 +651,7 @@ h_t &= o_t\odot\tanh(c_t).
 Trong hệ thống, một mẫu là tensor $X\in\mathbb{R}^{15\times69}$. Số 15 là chiều thời gian; 69 là vector pose/hình học mỗi frame. Đầu ra softmax hai lớp được diễn giải là normal/fall. Threshold xác suất chỉ là tầng đầu; hysteresis theo số frame liên tiếp và hậu kiểm hình học giúp ngăn trạng thái dao động. Cần lưu ý nếu FPS thay đổi, 15 frame tương ứng thời gian thực khác nhau; một triển khai tốt nên log timestamp hoặc resample chuỗi theo thời gian.
 
 
+\iffalse
 \subsection{Xử lý Ngôn ngữ Tự nhiên (NLP) và Hệ thống Giọng nói}
 %=========================================
 
@@ -978,6 +979,7 @@ Riêng với tính năng giao tiếp hội thoại (NLP/Chat), thiết bị mớ
 
 
 
+\fi
 \subsection{Giới thiệu Dataset Fall Detection – LE2I}
 %=========================================
 
@@ -1044,55 +1046,231 @@ Yếu tố che khuất & Tích hợp sẵn (bàn, ghế) & Đa dạng \\
 %=========================================
 \subsection{Suy luận AI trên thiết bị và TensorFlow Lite}
 
-Edge AI xử lý dữ liệu gần nguồn thay vì gửi toàn bộ lên cloud. Với camera trong nhà, cách này giảm lưu lượng, độ trễ và phạm vi truyền ảnh; đồng thời vẫn cần kiểm soát quyền và lưu trữ cục bộ. TensorFlow Lite cung cấp runtime cho thiết bị di động/biên, hỗ trợ interpreter CPU và delegate phần cứng \reportcite{ref:tflite}.
+\subsubsection{Suy luận AI trên thiết bị}
 
-Chuỗi chuyển đổi thường gồm model huấn luyện $\rightarrow$ biểu diễn trung gian $\rightarrow$ TFLite. Ba vấn đề phải kiểm chứng là: shape/layout tensor; toán tử được runtime/delegate hỗ trợ; và sai số số học sau tối ưu. FP16 giảm kích thước trọng số và băng thông bộ nhớ, nhưng không bảo đảm tăng tốc nếu delegate không sử dụng FP16. INT8 có thể giảm sâu hơn nhưng cần representative dataset và kiểm tra suy giảm keypoint/metric.
+Suy luận AI trên thiết bị, còn gọi là \textit{on-device AI} hoặc \textit{Edge AI}, là quá trình thực thi mô hình ngay tại nơi dữ liệu được thu nhận thay vì chuyển toàn bộ dữ liệu đến máy chủ đám mây. Cách tiếp cận này giúp rút ngắn đường truyền dữ liệu, giảm độ trễ phản hồi và cho phép một số chức năng tiếp tục hoạt động khi kết nối mạng không ổn định. Dữ liệu đầu vào được xử lý cục bộ cũng làm giảm phạm vi truyền tải thông tin nhạy cảm ra ngoài thiết bị.
 
-NMS có thể đặt trong graph hoặc ngoài graph. NMS trong graph giảm code hậu xử lý nhưng dễ tạo toán tử không tương thích delegate. NMS ngoài graph yêu cầu decoder Kotlin chính xác, đổi lại graph gọn và dễ chạy GPU hơn. Vì vậy kết quả chuyển đổi cần so ở cả tensor và detection cuối cùng.
+Đổi lại, thiết bị biên bị giới hạn về năng lực tính toán, bộ nhớ, dung lượng pin và khả năng tản nhiệt. Mô hình triển khai vì vậy phải đạt sự cân bằng giữa độ chính xác, kích thước, thời gian suy luận và mức tiêu thụ tài nguyên. Hiệu năng không chỉ phụ thuộc số lượng tham số hoặc phép toán mà còn chịu ảnh hưởng bởi kích thước tensor trung gian, khả năng tối ưu toán tử và đặc điểm phần cứng của thiết bị.
+
+\subsubsection{Kiến trúc và quy trình suy luận TensorFlow Lite}
+
+TensorFlow Lite, hiện được Google tiếp tục phát triển trong hệ sinh thái LiteRT, là nền tảng dành cho việc triển khai mô hình học máy trên thiết bị di động và thiết bị biên. Mô hình được lưu dưới định dạng \texttt{.tflite} dựa trên FlatBuffers, giúp biểu diễn cấu trúc mạng, trọng số và metadata trong một tệp có thể nạp trực tiếp bởi runtime \reportcite{ref:tflite}.
+
+Một quy trình triển khai thông thường bắt đầu từ mô hình đã huấn luyện, sau đó sử dụng công cụ chuyển đổi để ánh xạ các toán tử và tham số sang định dạng TensorFlow Lite. Ở phía suy luận, \textit{interpreter} nạp mô hình, cấp phát bộ nhớ cho tensor, nhận dữ liệu đầu vào, thực thi các toán tử theo đồ thị và trả về tensor đầu ra. Dữ liệu trước khi đưa vào mô hình phải được biến đổi đúng kích thước, thứ tự chiều, kiểu số và miền giá trị mà mô hình yêu cầu. Tương tự, tensor đầu ra cần được diễn giải dựa trên cấu trúc đầu ra và metadata của mô hình.
+
+TensorFlow Lite thực thi mô hình trên CPU thông qua các kernel được tối ưu hoặc chuyển một phần đồ thị sang bộ tăng tốc bằng \textit{delegate}. Delegate đóng vai trò ánh xạ những toán tử được hỗ trợ sang GPU, NPU hoặc bộ xử lý chuyên dụng; các toán tử còn lại có thể tiếp tục chạy trên CPU. Do phạm vi hỗ trợ khác nhau giữa các delegate, một mô hình hợp lệ về mặt định dạng chưa chắc đạt cùng hiệu năng trên mọi thiết bị.
+
+\subsubsection{Tối ưu hóa và đánh giá mô hình sau chuyển đổi}
+
+Tối ưu hóa sau huấn luyện được sử dụng để giảm kích thước mô hình và chi phí tính toán. Lượng tử hóa FP16 chuyển trọng số từ số thực 32 bit sang 16 bit, qua đó giảm dung lượng và băng thông bộ nhớ. Lượng tử hóa dải động lưu trọng số ở dạng số nguyên nhưng lượng tử hóa activation trong khi suy luận. Lượng tử hóa số nguyên toàn phần chuyển cả trọng số và activation sang INT8; phương pháp này thường cần một tập dữ liệu đại diện để hiệu chuẩn miền giá trị của các tensor.
+
+Lượng tử hóa có thể cải thiện tốc độ và mức sử dụng bộ nhớ nhưng cũng tạo sai số số học. Mức ảnh hưởng phụ thuộc kiến trúc mạng, phân bố dữ liệu và độ nhạy của từng đầu ra. Vì vậy, mô hình sau chuyển đổi cần được đánh giá lại bằng cùng tập kiểm thử và chỉ số của mô hình ban đầu, thay vì chỉ kiểm tra khả năng nạp và thực thi.
+
+Ba yếu tố cần được kiểm chứng trong quá trình chuyển đổi là tính tương thích của toán tử, tính nhất quán của tensor đầu vào--đầu ra và sai lệch kết quả suy luận. Bên cạnh độ chính xác, việc đánh giá trên thiết bị đích cần xem xét thời gian khởi động, độ trễ trung bình, độ biến thiên độ trễ, bộ nhớ sử dụng và ảnh hưởng của cơ chế tăng tốc. Những chỉ số này phản ánh đầy đủ hơn khả năng triển khai của mô hình trong điều kiện tài nguyên giới hạn.
 
 \subsection{Firebase Authentication và Realtime Database}
 
-Realtime Database tổ chức dữ liệu thành cây JSON và đồng bộ thay đổi tới client đang lắng nghe \reportcite{ref:firebase_rtdb}. Client Android có cache và hàng đợi write, do đó callback ``gần thời gian thực'' không đồng nghĩa bản ghi luôn mới. Đối với lệnh robot, timestamp/expiry là phần của ngữ nghĩa dữ liệu, không chỉ là metadata.
+\subsubsection{Firebase Authentication}
 
-Firebase Authentication cung cấp UID cho người dùng; Security Rules chạy phía máy chủ quyết định read/write và có thể validate kiểu/cấu trúc \reportcite{ref:firebase_security}. Rules mặc định cần từ chối, sau đó cấp quyền tối thiểu theo UID, family và robot. Các node lệnh/signaling không nên dùng chung toàn cục trong hệ thống nhiều robot. Chúng cũng cần validate miền giá trị, người gửi và vòng đời phiên.
+Firebase Authentication là dịch vụ quản lý danh tính và xác thực người dùng. Dịch vụ hỗ trợ nhiều phương thức đăng nhập như tài khoản email--mật khẩu, số điện thoại, nhà cung cấp danh tính liên kết hoặc hệ thống xác thực tùy chỉnh. Sau khi đăng nhập thành công, mỗi tài khoản được gắn với một định danh duy nhất (UID), cho phép các dịch vụ Firebase phân biệt người dùng và liên kết dữ liệu theo danh tính \reportcite{ref:firebase_auth}.
 
-Ưu điểm của RTDB là tích hợp Android nhanh, listener đơn giản và phù hợp state/event nhỏ. Hạn chế là schema phi quan hệ, truy vấn có giới hạn và dễ tạo coupling bằng string path. Tách repository/data access, định nghĩa model chung và test rules bằng emulator giúp giảm rủi ro.
+Kết quả xác thực được thể hiện bằng token chứa thông tin định danh và các thuộc tính liên quan. Token được gửi kèm khi client truy cập tài nguyên Firebase và được phía dịch vụ kiểm tra trước khi áp dụng các quy tắc phân quyền. Cần phân biệt xác thực với phân quyền: xác thực trả lời người dùng là ai, trong khi phân quyền xác định người dùng đó được phép thực hiện thao tác nào trên dữ liệu.
+
+\subsubsection{Firebase Realtime Database}
+
+Firebase Realtime Database (RTDB) là cơ sở dữ liệu NoSQL được lưu trữ trên đám mây. Dữ liệu được biểu diễn dưới dạng một cây JSON thay vì các bảng và quan hệ. Mỗi vị trí trong cây được xác định bởi một đường dẫn; client có thể đọc, ghi hoặc đăng ký lắng nghe thay đổi tại một đường dẫn cụ thể. Khi dữ liệu thay đổi, máy chủ đồng bộ giá trị mới đến các client đang theo dõi vị trí liên quan \reportcite{ref:firebase_rtdb}.
+
+Cơ chế lắng nghe theo sự kiện phù hợp với dữ liệu cần cập nhật nhanh giữa nhiều thiết bị. SDK có thể duy trì bộ nhớ đệm cục bộ và hàng đợi thao tác ghi khi mất kết nối; khi kết nối được khôi phục, dữ liệu tiếp tục được đồng bộ với máy chủ. Tuy nhiên, cập nhật theo thời gian thực không đồng nghĩa mọi client luôn quan sát cùng một trạng thái tại mọi thời điểm, do thông tin vẫn chịu ảnh hưởng của độ trễ mạng, trạng thái kết nối và thứ tự xử lý sự kiện.
+
+Do RTDB sử dụng cây JSON, cấu trúc dữ liệu cần được thiết kế dựa trên cách truy cập. Cây lồng quá sâu làm tăng sự phụ thuộc giữa các nhánh, còn việc đọc tại một nút cha có thể kéo theo toàn bộ dữ liệu bên dưới. Một số trường hợp cần phi chuẩn hóa dữ liệu hoặc cập nhật nhiều vị trí để giảm lượng dữ liệu tải xuống và đơn giản hóa truy vấn. Các thao tác cần bảo đảm tính nhất quán khi nhiều client cùng sửa một giá trị có thể sử dụng transaction.
+
+Ưu điểm của RTDB là khả năng đồng bộ sự kiện nhanh, hỗ trợ hoạt động gián đoạn mạng và cho phép client truy cập dữ liệu mà không cần tự xây dựng toàn bộ máy chủ đồng bộ. Hạn chế chính là mô hình dữ liệu phi quan hệ, khả năng truy vấn chuyên biệt hơn cơ sở dữ liệu quan hệ và chi phí phụ thuộc lượng dữ liệu lưu trữ, truyền tải cũng như số kết nối. Firebase Authentication và Security Rules bổ sung lớp định danh và kiểm soát truy cập, tạo thành nền tảng chung cho các ứng dụng cần chia sẻ trạng thái giữa nhiều thiết bị.
 
 \subsection{WebRTC, signaling và ICE}
 
-WebRTC là tập API/giao thức cho media và dữ liệu thời gian thực giữa các peer \reportcite{ref:webrtc}. Một phiên cần signaling để trao đổi Session Description Protocol (SDP) và ICE candidate, nhưng chuẩn không bắt buộc một công nghệ signaling cụ thể. Đề tài dùng RTDB cho phần này.
+\subsubsection{Tổng quan và kiến trúc truyền thông WebRTC}
 
-ICE thu thập candidate và kiểm tra cặp đường truyền để vượt Network Address Translator \reportcite{ref:ice}. STUN giúp peer biết địa chỉ public; TURN relay media khi không tạo được đường trực tiếp. Do đó có TURN làm tăng tỷ lệ kết nối nhưng thêm băng thông/độ trễ/chi phí máy chủ. Trạng thái call ở database và trạng thái PeerConnection là hai state machine khác nhau, cần cleanup idempotent để tránh phiên cũ.
+Web Real-Time Communication (WebRTC) là tập hợp các giao diện lập trình và giao thức hỗ trợ truyền âm thanh, video và dữ liệu với độ trễ thấp giữa hai đầu cuối. Thành phần trung tâm của một phiên liên lạc là \texttt{RTCPeerConnection}, có nhiệm vụ thương lượng khả năng truyền thông, tìm đường kết nối, quản lý các luồng media và theo dõi trạng thái của phiên. Âm thanh và hình ảnh được biểu diễn dưới dạng các \textit{MediaStreamTrack}; ngoài media, hai đầu cuối còn có thể trao đổi dữ liệu tùy ý thông qua \texttt{RTCDataChannel} \reportcite{ref:webrtc}.
 
-WebRTC mã hóa media theo kiến trúc bảo mật giao thức, nhưng ứng dụng vẫn phải bảo vệ signaling, quyền camera/micro và danh tính peer \reportcite{ref:webrtc_security}. SDP/ICE có thể lộ thông tin mạng; log không nên lưu vô hạn. Trong hệ thống chăm sóc, phải có chỉ báo rõ khi camera/micro đang truyền.
+WebRTC ưu tiên thiết lập đường truyền trực tiếp giữa các peer để giảm độ trễ và hạn chế việc media phải đi qua máy chủ ứng dụng. Tuy nhiên, hai thiết bị thường nằm sau Network Address Translator (NAT), tường lửa hoặc sử dụng các loại mạng khác nhau. Vì vậy, một phiên WebRTC không chỉ bao gồm quá trình truyền media mà còn cần cơ chế signaling để trao đổi thông tin phiên và ICE để tìm đường kết nối khả dụng.
+
+\subsubsection{Signaling và mô hình Offer--Answer}
+
+\textit{Signaling} là quá trình hai đầu cuối trao đổi các thông tin cần thiết trước và trong khi thiết lập phiên. WebRTC không quy định giao thức signaling cụ thể; ứng dụng có thể sử dụng WebSocket, HTTP, cơ sở dữ liệu thời gian thực hoặc một dịch vụ truyền tin khác. Kênh signaling chỉ chuyển tiếp thông tin điều khiển, không phải là đường truyền âm thanh và video sau khi kết nối WebRTC đã được thiết lập.
+
+Thông tin quan trọng nhất được trao đổi qua signaling là Session Description Protocol (SDP). Một mô tả SDP có thể chứa loại media, codec được hỗ trợ, hướng truyền nhận, tham số mã hóa, thông tin ICE và dấu vân tay chứng thư dùng khi thiết lập bảo mật. WebRTC sử dụng mô hình \textit{Offer--Answer}, trong đó một peer đưa ra cấu hình phiên và peer còn lại trả lời bằng cấu hình tương thích. Trình tự cơ bản gồm:
+
+\begin{enumerate}
+    \item Peer khởi tạo tạo một \textit{offer}, lưu offer làm mô tả cục bộ và gửi nó qua kênh signaling.
+
+    \item Peer nhận đặt offer làm mô tả từ xa, lựa chọn các khả năng tương thích, sau đó tạo và lưu \textit{answer} làm mô tả cục bộ.
+
+    \item Answer được gửi ngược lại qua kênh signaling và được peer khởi tạo đặt làm mô tả từ xa. Khi đó, hai bên có cùng thông tin về cấu hình media và các tham số cần thiết để tiếp tục thiết lập kết nối.
+\end{enumerate}
+
+Nếu cấu hình phiên thay đổi, chẳng hạn bổ sung hoặc loại bỏ một luồng media, quá trình thương lượng có thể được thực hiện lại. Do các thao tác tạo và thiết lập SDP diễn ra bất đồng bộ, ứng dụng cần tuân theo trạng thái signaling để tránh xử lý đồng thời nhiều lần thương lượng không tương thích.
+
+\subsubsection{ICE và vòng đời kết nối WebRTC}
+
+Interactive Connectivity Establishment (ICE) là cơ chế tìm kiếm và lựa chọn đường truyền giữa hai peer trong điều kiện tồn tại NAT và tường lửa. Mỗi đầu cuối thu thập một tập \textit{candidate}, tức các địa chỉ IP và cổng có khả năng được sử dụng để liên lạc. Những candidate này được chuyển cho đầu cuối còn lại qua signaling. ICE sau đó ghép candidate cục bộ với candidate từ xa thành các cặp và thực hiện kiểm tra kết nối để xác định cặp có thể truyền dữ liệu hai chiều \reportcite{ref:ice}.
+
+Các loại ICE candidate chính được trình bày trong Bảng \ref{tab:ice_candidate_types}.
+
+\begin{table}[H]
+\centering
+\caption{Các loại ICE candidate trong WebRTC}
+\label{tab:ice_candidate_types}
+\small
+\begin{tabularx}{\textwidth}{|p{3.2cm}|p{3.2cm}|X|}
+\hline
+\textbf{Loại candidate} & \textbf{Nguồn hình thành} & \textbf{Đặc điểm} \\
+\hline
+Host & Giao diện mạng cục bộ & Là địa chỉ IP và cổng trực tiếp của thiết bị; thường hữu ích khi hai peer ở cùng mạng hoặc có thể định tuyến trực tiếp. \\
+\hline
+Server-reflexive & Thu được thông qua STUN & Là địa chỉ công khai mà máy chủ STUN quan sát được sau phép ánh xạ NAT; cho phép thử thiết lập đường truyền trực tiếp qua NAT. \\
+\hline
+Peer-reflexive & Phát hiện khi kiểm tra ICE & Là địa chỉ ánh xạ mới được peer phát hiện trong quá trình kiểm tra kết nối nhưng chưa có trong tập candidate ban đầu. \\
+\hline
+Relay & Được cấp bởi TURN & Đại diện cho địa chỉ trên máy chủ chuyển tiếp; dữ liệu đi qua TURN khi đường truyền trực tiếp không khả dụng. \\
+\hline
+\end{tabularx}
+\end{table}
+
+Mỗi candidate còn mang các thông tin như giao thức truyền, địa chỉ, cổng, mức ưu tiên, \textit{foundation} và loại candidate. ICE sử dụng độ ưu tiên để sắp xếp các cặp cần kiểm tra nhưng không chỉ chọn theo địa chỉ có vẻ ngắn nhất. Một cặp candidate chỉ được sử dụng sau khi các bản tin kiểm tra xác nhận rằng đường truyền đó hoạt động. Khi tìm được cặp phù hợp, ICE đề cử cặp này làm đường truyền của phiên.
+
+Candidate có thể được gửi ngay khi vừa được phát hiện thay vì chờ thu thập toàn bộ; kỹ thuật này được gọi là \textit{Trickle ICE}. Nhờ tiến hành trao đổi candidate và kiểm tra kết nối song song, thời gian thiết lập cuộc gọi có thể được rút ngắn. Khi môi trường mạng thay đổi hoặc đường truyền cũ không còn sử dụng được, quá trình \textit{ICE restart} có thể được thực hiện để thu thập thông tin mới và tìm lại đường kết nối.
+
+Session Traversal Utilities for NAT (STUN) cho phép một thiết bị gửi yêu cầu đến máy chủ trên Internet để xác định địa chỉ IP và cổng công khai mà NAT đã ánh xạ cho nó. Kết quả được dùng để tạo server-reflexive candidate. STUN không chuyển tiếp media và không bảo đảm hai peer sẽ kết nối trực tiếp được, vì khả năng thành công còn phụ thuộc kiểu NAT, quy tắc tường lửa và chính sách của mạng.
+
+Traversal Using Relays around NAT (TURN) được sử dụng khi các candidate trực tiếp và server-reflexive không tạo được đường truyền khả dụng. Peer yêu cầu TURN cấp một địa chỉ relay; peer còn lại gửi dữ liệu đến địa chỉ này và máy chủ chuyển tiếp dữ liệu tới đích. TURN làm tăng khả năng thiết lập phiên trong các mạng hạn chế nhưng toàn bộ lưu lượng đi qua máy chủ, do đó làm tăng nhu cầu băng thông, độ trễ và chi phí vận hành. Trong cấu hình thực tế, ICE thường ưu tiên đường truyền trực tiếp và chỉ sử dụng relay khi cần thiết.
+
+Sau khi ICE lựa chọn được đường truyền, âm thanh và video được vận chuyển bằng RTP và được mã hóa dưới dạng Secure Real-time Transport Protocol (SRTP). Khóa mã hóa cho SRTP được thiết lập thông qua Datagram Transport Layer Security (DTLS). Với \texttt{RTCDataChannel}, dữ liệu ứng dụng được truyền bằng SCTP trên DTLS. Như vậy, signaling có nhiệm vụ giúp hai peer trao đổi thông tin thiết lập, còn media và DataChannel sử dụng đường truyền do ICE lựa chọn.
+
+Các codec và tham số media được thương lượng qua SDP. Trong thời gian truyền, WebRTC theo dõi điều kiện mạng để điều chỉnh tốc độ bit và chất lượng nhằm hạn chế tắc nghẽn. Sự thay đổi băng thông, độ trễ, mất gói và dao động thời gian truyền có thể làm chất lượng âm thanh hoặc hình ảnh thay đổi dù kết nối chưa bị ngắt.
+
+WebRTC yêu cầu bảo vệ media trong quá trình truyền, nhưng tính an toàn của toàn bộ cuộc gọi còn phụ thuộc vào lớp ứng dụng. Kênh signaling cần được bảo vệ để ngăn sửa đổi SDP hoặc ICE candidate; ứng dụng cũng cần kiểm soát danh tính peer và quyền truy cập camera, microphone. Ngoài ra, SDP và candidate có thể chứa thông tin liên quan đến cấu trúc mạng của thiết bị, vì vậy dữ liệu signaling và nhật ký phiên cần được quản lý phù hợp \reportcite{ref:webrtc_security}.
+
+Một \texttt{RTCPeerConnection} duy trì nhiều nhóm trạng thái thay vì chỉ có hai trạng thái kết nối và ngắt kết nối. \texttt{signalingState} phản ánh tiến trình thương lượng SDP; \texttt{iceGatheringState} cho biết quá trình thu thập candidate; \texttt{iceConnectionState} mô tả kết quả kiểm tra ICE; còn \texttt{connectionState} tổng hợp trạng thái các transport bên dưới. Việc phân biệt các trạng thái này giúp xác định phiên đang chờ signaling, đang tìm đường truyền, đã kết nối, tạm thời gián đoạn hay thất bại.
+
+Khi kết thúc phiên, các luồng media cần được dừng, peer connection được đóng và dữ liệu signaling liên quan được loại bỏ. Nếu chỉ xóa trạng thái hiển thị mà không giải phóng camera, microphone hoặc đối tượng kết nối, tài nguyên có thể tiếp tục bị chiếm dụng. Ngược lại, việc chỉ đóng peer connection nhưng giữ lại offer, answer hoặc candidate cũ trên kênh signaling có thể làm lần thiết lập tiếp theo nhận nhầm dữ liệu của phiên trước.
+
+WebRTC phù hợp với giao tiếp âm thanh và hình ảnh thời gian thực nhờ khả năng thương lượng codec, thích nghi với điều kiện mạng, mã hóa media và hỗ trợ xuyên NAT. Hạn chế của công nghệ này nằm ở quy trình thiết lập nhiều bước, sự phụ thuộc vào signaling do ứng dụng xây dựng và nhu cầu triển khai TURN để bảo đảm khả năng kết nối trong các mạng hạn chế. Vì vậy, một hệ thống sử dụng WebRTC cần quản lý đồng thời trạng thái signaling, trạng thái peer connection và vòng đời của tài nguyên media.
 
 \subsection{Bluetooth Low Energy và GATT}
 
-BLE phù hợp liên kết cự ly gần giữa điện thoại và vi điều khiển. GATT xây trên bảng attribute, tổ chức dữ liệu thành service, characteristic và descriptor \reportcite{ref:ble_primer}. Server công bố service/characteristic; client quét, kết nối, khám phá và thực hiện read/write/notify theo property.
+\subsubsection{Tổng quan và quá trình thiết lập kết nối BLE}
 
-Write without response giảm round-trip và phù hợp dòng lệnh cập nhật thường xuyên, nhưng không có ACK ở tầng GATT cho từng write. Ứng dụng phải dùng gửi lặp, sequence/timestamp và watchdog. UUID 128-bit cho custom service tránh xung đột profile chuẩn. Payload văn bản dễ debug nhưng tốn byte và parser cần chặt; protocol nhị phân với version, sequence và checksum là hướng nâng cấp.
+Bluetooth Low Energy (BLE) là một nhánh của công nghệ Bluetooth được giới thiệu từ Bluetooth Core 4.0, hướng đến các thiết bị cần trao đổi lượng dữ liệu vừa và nhỏ với mức tiêu thụ năng lượng thấp. BLE hoạt động trong băng tần ISM 2,4 GHz và sử dụng 40 kênh vô tuyến có độ rộng 2 MHz. Trong đó, các kênh quảng bá chính hỗ trợ việc phát hiện và thiết lập kết nối, còn các kênh dữ liệu được sử dụng để trao đổi thông tin sau khi kết nối được hình thành. Cơ chế truyền theo từng sự kiện và khả năng chuyển về trạng thái nghỉ giữa các lần trao đổi giúp thiết bị giảm thời gian hoạt động của bộ thu phát vô tuyến \reportcite{ref:ble_primer}.
 
-BLE disconnect là trạng thái bình thường có thể xảy ra do khoảng cách, radio hoặc vòng đời Android. Motor vì vậy không được giữ setpoint cuối. Callback disconnect và timeout độc lập ở firmware là yêu cầu an toàn, không nên chỉ dựa vào app.
+Ngăn xếp BLE được chia thành hai khối logic là \textit{Controller} và \textit{Host}. Controller bao gồm lớp vật lý và lớp liên kết dữ liệu, đảm nhiệm việc phát, thu, lựa chọn kênh và duy trì liên kết vô tuyến. Host chứa các giao thức bậc cao như L2CAP, ATT, GATT, GAP và SMP. Hai khối giao tiếp thông qua Host Controller Interface (HCI). Cách phân lớp này cho phép phần cứng vô tuyến và phần mềm ứng dụng phát triển tương đối độc lập, đồng thời giúp BLE có thể được tích hợp trên nhiều loại vi điều khiển và hệ điều hành khác nhau.
 
-\subsection{Động cơ BLDC và điều khiển FOC}
+Generic Access Profile (GAP) quy định cách thiết bị xuất hiện, được phát hiện và thiết lập kết nối trong mạng BLE. Khi chưa kết nối, thiết bị có thể phát các gói \textit{advertising} chứa địa chỉ, tên, cờ khả năng hoặc UUID của dịch vụ. Thiết bị quét tiếp nhận các gói này và có thể gửi yêu cầu tạo kết nối đến thiết bị quảng bá. Sau khi kết nối thành công, hai bên chuyển sang trao đổi dữ liệu theo các sự kiện kết nối định kỳ.
 
-Động cơ BLDC/PMSM tạo mô-men bằng tương tác từ trường stator và rotor nam châm. Field-Oriented Control biến đổi dòng ba pha sang hệ trục quay $d$--$q$, tách thành phần từ thông và mô-men, sau đó dùng PWM để điều khiển điện áp \reportcite{ref:foc}. Với encoder từ AS5600, hệ thống có phản hồi góc/tốc độ cho vòng kín.
+Trong một liên kết, thiết bị khởi tạo kết nối giữ vai trò \textit{central}, còn thiết bị chấp nhận kết nối giữ vai trò \textit{peripheral}. Các vai trò này thuộc GAP và không đồng nhất với vai trò client--server của GATT. Trên thực tế, điện thoại thường là central và GATT client, trong khi thiết bị ngoại vi thường là peripheral và GATT server; tuy nhiên, hai cặp vai trò này độc lập về mặt giao thức. Sau khi liên kết được hình thành, GATT client có thể thực hiện quá trình khám phá để xác định các dịch vụ và đặc tính mà server cung cấp.
 
-Vòng điều khiển vận tốc so sánh tốc độ đặt với tốc độ đo. PID có dạng khái quát:
+\subsubsection{ATT, GATT và phương thức trao đổi dữ liệu}
 
-\begin{equation}
-u(t)=K_pe(t)+K_i\int_0^t e(\tau)d\tau+K_d\frac{de(t)}{dt}.
-\end{equation}
+Attribute Protocol (ATT) tổ chức dữ liệu của server dưới dạng một bảng thuộc tính. Mỗi thuộc tính gồm một \textit{handle} dùng để định địa chỉ trong kết nối, một kiểu dữ liệu được nhận diện bằng UUID, một giá trị và các quyền truy cập. ATT quy định các bản tin mức thấp để client đọc, ghi hoặc nhận dữ liệu từ bảng này. Generic Attribute Profile (GATT) được xây dựng trên ATT và bổ sung cách tổ chức thuộc tính thành các đối tượng có ý nghĩa đối với ứng dụng \reportcite{ref:ble_core}.
 
-Giới hạn điện áp bảo vệ driver/motor; giới hạn vận tốc bảo vệ cơ khí; lọc thông thấp giảm nhiễu đo. Deadzone giúp thắng ma sát tĩnh nhưng có thể tạo bước nhảy tốc độ, vì vậy bản hoàn thiện nên bổ sung ramp/giới hạn gia tốc. SimpleFOC cung cấp các abstraction motor, driver, sensor và vòng \texttt{loopFOC}/\texttt{move} cho vi điều khiển \reportcite{ref:simplefoc}.
+Cấu trúc dữ liệu GATT gồm ba thành phần chính:
 
-\subsection{An toàn và quản trị rủi ro AI}
+\begin{itemize}
+    \item \textbf{Service:} nhóm các dữ liệu và hành vi phục vụ cùng một chức năng. Một server có thể công bố nhiều service; mỗi service được nhận diện bởi một UUID.
 
-Một hệ thống cảnh báo người cao tuổi phải xem cả false positive và false negative. False positive lặp lại làm người dùng mất tin cậy; false negative có thể trì hoãn hỗ trợ. NIST AI RMF đề xuất các chức năng govern, map, measure và manage xuyên suốt vòng đời \reportcite{ref:nist_ai_rmf}. Với đồ án, điều này được cụ thể hóa bằng phạm vi sử dụng rõ, metric theo sự cố, log bằng chứng, giám sát lỗi, fallback và công bố giới hạn.
+    \item \textbf{Characteristic:} đại diện cho một giá trị dữ liệu bên trong service. Characteristic có UUID, giá trị và tập thuộc tính cho biết những thao tác được hỗ trợ, chẳng hạn \textit{read}, \textit{write}, \textit{write without response}, \textit{notify} hoặc \textit{indicate}.
 
-LLM không nên là thành phần duy nhất quyết định an toàn. Từ khóa cục bộ xử lý câu rõ, LLM chỉ phân loại trường hợp mơ hồ và lỗi mặc định nguy hiểm. Tương tự, output LSTM đi qua state machine/hậu kiểm. Các lớp độc lập làm hệ thống dễ kiểm tra hơn, nhưng không thay thế đánh giá thực địa.
+    \item \textbf{Descriptor:} cung cấp thông tin bổ sung hoặc cấu hình cho characteristic. Client Characteristic Configuration Descriptor (CCCD) là descriptor thường gặp, cho phép client đăng ký hoặc hủy đăng ký nhận notification và indication.
+\end{itemize}
+
+Bluetooth SIG quy định các UUID 16 bit cho những dịch vụ và đặc tính tiêu chuẩn. Với chức năng do nhà phát triển tự định nghĩa, UUID 128 bit thường được sử dụng để nhận diện service và characteristic riêng. Cần phân biệt \textit{property} với quyền truy cập: property mô tả thao tác mà characteristic hỗ trợ, còn quyền truy cập xác định điều kiện để thao tác đó được chấp nhận, chẳng hạn chỉ cho phép khi liên kết đã được mã hóa.
+
+GATT hỗ trợ nhiều phương thức trao đổi có đặc điểm khác nhau về hướng truyền, phản hồi và chi phí giao thức. Bảng \ref{tab:gatt_operations} tóm tắt các phương thức thường dùng.
+
+\begin{table}[H]
+\centering
+\caption{Các phương thức trao đổi dữ liệu cơ bản trong GATT}
+\label{tab:gatt_operations}
+\small
+\begin{tabularx}{\textwidth}{|p{3.0cm}|p{2.3cm}|p{3.0cm}|X|}
+\hline
+\textbf{Phương thức} & \textbf{Hướng truyền} & \textbf{Phản hồi ATT} & \textbf{Đặc điểm} \\
+\hline
+Read & Client đến server & Có response & Client yêu cầu và nhận giá trị hiện tại của characteristic. \\
+\hline
+Write Request & Client đến server & Có response & Server xác nhận kết quả xử lý; phù hợp với dữ liệu cần biết thao tác ghi đã được chấp nhận hay từ chối. \\
+\hline
+Write Command & Client đến server & Không & Còn được gọi là \textit{write without response}; giảm số bản tin ATT và phù hợp với dữ liệu cập nhật thường xuyên. \\
+\hline
+Notification & Server đến client & Không & Server chủ động gửi giá trị cho client đã đăng ký mà không chờ xác nhận ở tầng ATT. \\
+\hline
+Indication & Server đến client & Có confirmation & Server chỉ gửi indication tiếp theo sau khi nhận xác nhận; phù hợp với thông tin cần độ tin cậy cao hơn. \\
+\hline
+\end{tabularx}
+\end{table}
+
+Không có phản hồi ở tầng ATT không đồng nghĩa với việc gói tin hoàn toàn không được bảo vệ. Trong chế độ kết nối, lớp liên kết BLE vẫn thực hiện kiểm tra lỗi và truyền lại gói tin khi cần thiết. Tuy nhiên, \textit{Write Command} và \textit{Notification} không cung cấp xác nhận cho ứng dụng rằng dữ liệu đã được xử lý. Vì vậy, lựa chọn phương thức truyền cần dựa trên ý nghĩa của dữ liệu: luồng cập nhật liên tục có thể ưu tiên độ trễ thấp, trong khi cấu hình hoặc sự kiện quan trọng có thể cần cơ chế phản hồi.
+
+\subsubsection{Hiệu năng, bảo mật và khả năng áp dụng}
+
+Khối lượng dữ liệu có thể mang trong mỗi thao tác ATT phụ thuộc vào Maximum Transmission Unit (MTU). Giá trị ATT MTU mặc định là 23 byte; với các bản tin phổ biến phải dành byte cho mã thao tác và handle, phần giá trị characteristic thường còn tối đa 20 byte. Thiết bị có thể thương lượng MTU lớn hơn sau khi kết nối. Nếu dữ liệu vượt quá kích thước cho phép, giao thức phải chia dữ liệu thành nhiều phần hoặc sử dụng thủ tục đọc, ghi dài. Vì vậy, định dạng dữ liệu càng ngắn gọn thì số lần truyền và thời gian xử lý càng giảm.
+
+Độ trễ và mức tiêu thụ năng lượng còn chịu ảnh hưởng bởi \textit{connection interval}, tức khoảng thời gian giữa hai sự kiện kết nối. Khoảng thời gian ngắn cho phép dữ liệu được trao đổi thường xuyên hơn nhưng làm bộ thu phát hoạt động nhiều hơn; khoảng thời gian dài tiết kiệm năng lượng nhưng tăng độ trễ. Thông lượng thực tế còn phụ thuộc vào MTU, kích thước gói ở lớp liên kết, số gói trong mỗi sự kiện kết nối, chất lượng tín hiệu và cách hệ điều hành lập lịch giao tiếp Bluetooth. Do đó, tốc độ danh nghĩa của lớp vật lý không phải là tốc độ dữ liệu mà ứng dụng luôn đạt được.
+
+Security Manager Protocol (SMP) hỗ trợ ghép đôi, xác thực và thiết lập khóa mã hóa cho liên kết BLE. Quá trình \textit{bonding} cho phép hai thiết bị lưu thông tin khóa để tái lập kết nối an toàn trong những lần sử dụng sau. Bên cạnh bảo vệ liên kết, server có thể đặt quyền đọc hoặc ghi riêng cho từng attribute. Mức bảo vệ cần được lựa chọn dựa trên tính nhạy cảm của dữ liệu và khả năng tương tác của thiết bị.
+
+BLE có ưu điểm là được hỗ trợ rộng rãi trên điện thoại và vi điều khiển, không đòi hỏi hạ tầng mạng trung gian và phù hợp với liên kết cự ly gần. GATT cho phép xây dựng mô hình dữ liệu riêng bằng các service và characteristic, nhờ đó có thể tách lệnh điều khiển, dữ liệu trạng thái và thông tin cấu hình hình thành các kênh logic khác nhau trên cùng một kết nối. Hạn chế của BLE là thông lượng thấp hơn Wi-Fi, kích thước bản tin tương đối nhỏ và chất lượng liên kết có thể thay đổi do khoảng cách hoặc nhiễu trong băng tần 2,4 GHz. Đối với các hệ thống điều khiển, các đặc điểm này cần được xem xét khi lựa chọn phương thức ghi, chu kỳ cập nhật và cơ chế xử lý khi kết nối bị gián đoạn.
+
+\subsection{Phần cứng robot và thư viện điều khiển động cơ}
+
+Phần thân robot sử dụng cơ cấu dẫn động vi sai với hai động cơ BLDC bố trí ở hai bên. Mỗi động cơ được nối với một mạch driver 3-PWM và một cảm biến góc từ AS5600, tạo thành hai kênh điều khiển độc lập cho bánh trái và bánh phải. ESP32 là bộ điều khiển trung tâm, đảm nhiệm tiếp nhận lệnh, cập nhật tốc độ đặt và thực hiện vòng điều khiển động cơ. Cấu trúc hai bánh cho phép robot tiến, lùi hoặc đổi hướng bằng cách thay đổi chiều và độ lớn vận tốc giữa hai động cơ.
+
+\begin{table}[H]
+\centering
+\caption{Các thành phần chính của phần cứng thân robot}
+\label{tab:robot_body_hardware}
+\small
+\begin{tabularx}{\textwidth}{|p{3.0cm}|p{4.0cm}|X|}
+\hline
+\textbf{Thành phần} & \textbf{Cấu hình trong firmware} & \textbf{Vai trò} \\
+\hline
+ESP32 & Hai bus I\textsuperscript{2}C, BLE và UART Serial & Điều phối giao tiếp, đọc cảm biến và thực hiện hai vòng điều khiển động cơ \\
+\hline
+Hai động cơ BLDC & 7 cặp cực; giới hạn vận tốc 40 rad/s & Tạo chuyển động cho bánh trái và bánh phải \\
+\hline
+Hai driver 3-PWM & Nguồn khai báo 17,5 V; giới hạn điện áp điều khiển 10 V & Phát ba tín hiệu PWM để cấp điện cho từng động cơ \\
+\hline
+Hai cảm biến AS5600 & Mỗi cảm biến dùng một bus I\textsuperscript{2}C riêng ở 400 kHz & Cung cấp góc rotor để ước lượng vận tốc và khép kín vòng điều khiển \\
+\hline
+\end{tabularx}
+\end{table}
+
+\paragraph{Giám sát và bảo vệ vận hành.}
+UART Serial ở tốc độ 115200 baud được dùng để theo dõi trạng thái khởi tạo, kết nối BLE, lệnh nhận được và cảnh báo timeout. Chương trình kiểm tra động cơ riêng còn cho phép nhập các lệnh tiến, lùi, quay trái, quay phải và dừng qua Serial, thuận tiện khi đánh giá từng phần trước khi ghép với ứng dụng. Trong firmware tích hợp, nếu BLE bị ngắt kết nối hoặc không có lệnh mới trong 800 ms, tốc độ đặt của cả hai động cơ được đưa về 0. Vùng dừng và vùng bù nhỏ quanh giá trị 0 cũng được áp dụng để hạn chế rung hoặc trường hợp động cơ không thắng được ma sát ban đầu.
+
+\paragraph{Giao diện lập trình của thư viện SimpleFOC.}
+SimpleFOC là thư viện mã nguồn mở hỗ trợ điều khiển động cơ BLDC và động cơ bước trên nhiều nền tảng vi điều khiển, trong đó có ESP32. Thư viện tổ chức hệ thống điều khiển thành các đối tượng tương ứng với cảm biến, mạch driver và động cơ; các đối tượng này được liên kết với nhau thông qua một giao diện lập trình thống nhất. Nhờ đó, người phát triển có thể xây dựng vòng điều khiển FOC bằng cách cấu hình và kết hợp các thành phần có sẵn thay vì phải tự hiện thực toàn bộ thuật toán ở mức thấp. Một số đối tượng, thuộc tính và hàm chính của thư viện gồm:
+
+\begin{itemize}
+    \item \textbf{Đối tượng cảm biến \texttt{MagneticSensorI2C}:} biểu diễn cảm biến vị trí từ giao tiếp qua I\textsuperscript{2}C. Đối tượng này cung cấp góc cơ học của rotor và dữ liệu cần thiết để xác định vận tốc. Hàm \texttt{init()} được dùng để khởi tạo cảm biến và giao tiếp với vi điều khiển.
+
+    \item \textbf{Đối tượng driver \texttt{BLDCDriver3PWM}:} mô tả mạch công suất điều khiển động cơ BLDC bằng ba tín hiệu PWM. Các chân PWM và chân cho phép hoạt động được khai báo khi tạo đối tượng; thuộc tính \texttt{voltage\_power\_supply} cho biết điện áp nguồn của driver. Hàm \texttt{init()} thiết lập các ngõ ra PWM và chuẩn bị driver cho quá trình điều khiển.
+
+    \item \textbf{Đối tượng động cơ \texttt{BLDCMotor}:} là thành phần trung tâm của vòng điều khiển và được khởi tạo với số cặp cực của động cơ. Các hàm \texttt{linkSensor()} và \texttt{linkDriver()} lần lượt gắn cảm biến phản hồi và driver công suất với đối tượng động cơ, qua đó hình thành chuỗi đo lường, tính toán và tác động.
+
+    \item \textbf{Thuộc tính cấu hình điều khiển:} \texttt{controller} xác định đại lượng chuyển động cần điều khiển, chẳng hạn mô-men, vận tốc hoặc vị trí. Thuộc tính \texttt{foc\_modulation} lựa chọn phương pháp điều chế điện áp ba pha, trong đó \texttt{FOCModulationType::SpaceVectorPWM} tương ứng với phương pháp điều chế vector không gian.
+
+    \item \textbf{Bộ điều khiển và giới hạn:} các tham số \texttt{PID\_velocity.P}, \texttt{PID\_velocity.I} và \texttt{PID\_velocity.D} dùng để hiệu chỉnh vòng điều khiển vận tốc. \texttt{LPF\_velocity.Tf} thiết lập hằng số thời gian của bộ lọc thông thấp cho tín hiệu vận tốc. Bên cạnh đó, \texttt{voltage\_limit} và \texttt{velocity\_limit} giới hạn đầu ra điện áp và vận tốc nhằm giữ hệ thống trong phạm vi vận hành đã xác định.
+
+    \item \textbf{Các hàm khởi tạo:} \texttt{motor.init()} khởi tạo đối tượng động cơ và kiểm tra các thành phần đã liên kết. Sau đó, \texttt{motor.initFOC()} thực hiện quá trình căn chỉnh cảm biến, xác định chiều quay và góc điện ban đầu cần thiết cho điều khiển FOC.
+
+    \item \textbf{Các hàm điều khiển trong thời gian chạy:} \texttt{loopFOC()} được gọi lặp lại để đọc phản hồi từ cảm biến và cập nhật điện áp điều khiển các pha. Hàm \texttt{move(target)} tiếp nhận giá trị đặt; ý nghĩa của \texttt{target} phụ thuộc vào chế độ điều khiển đã lựa chọn, có thể là mô-men, vận tốc hoặc vị trí.
+\end{itemize}
+
+Cách tổ chức này phân tách rõ ba thành phần cảm biến, driver và động cơ, đồng thời phân biệt giai đoạn khởi tạo với quá trình cập nhật điều khiển theo thời gian thực. Đây là cơ sở để tái sử dụng cùng một cấu trúc chương trình cho nhiều cấu hình phần cứng và chế độ điều khiển khác nhau.
 
 \subsection{Kết luận chương}
 %=========================================
 
-Chương đã trình bày nền tảng robot dựa trên smartphone, mạng nơ-ron, CNN, detector họ YOLO, pose, dữ liệu té ngã, tracking, LSTM, LLM, nhận dạng giọng nói, AI biên, Firebase, WebRTC, BLE và FOC. Các nội dung được liên kết với lựa chọn hiện thực thay vì giả định một mô hình khảo sát chính là model cuối. Điểm then chốt là phát hiện té ngã của đề tài không dựa trên một nhãn ảnh duy nhất mà kết hợp pose, duy trì ID0, chuỗi LSTM và hậu kiểm có bằng chứng. Chương tiếp theo chuyển các khái niệm này thành yêu cầu, kiến trúc và hợp đồng cụ thể.
+Chương này đã hệ thống hóa những cơ sở lý thuyết cần thiết cho quá trình xây dựng robot hỗ trợ chăm sóc người cao tuổi. Trước hết, mô hình robot sử dụng điện thoại thông minh được trình bày nhằm làm rõ khả năng khai thác camera, microphone, năng lực xử lý và kết nối sẵn có của thiết bị di động. Trên nền tảng đó, các kiến thức về thị giác máy tính, phát hiện và theo dõi đối tượng, ước lượng tư thế cùng mô hình chuỗi thời gian cung cấp cơ sở cho bài toán nhận biết trạng thái và phân tích diễn biến chuyển động của con người.
+
+Bên cạnh khối nhận thức, chương cũng trình bày các nền tảng phục vụ triển khai mô hình trên thiết bị, quản lý và đồng bộ dữ liệu, truyền thông thời gian thực cũng như kết nối giữa điện thoại với phần cứng robot. Phần cuối chương giới thiệu cấu trúc phần cứng chuyển động và các đối tượng điều khiển động cơ do thư viện SimpleFOC cung cấp. Các nội dung này hình thành nền tảng để xác định mối quan hệ giữa khối cảm nhận, xử lý, giao tiếp và chấp hành. Từ cơ sở đó, Chương 3 sẽ phân tích yêu cầu và xây dựng kiến trúc tổng thể, các module chức năng cùng những luồng xử lý chính của hệ thống.
