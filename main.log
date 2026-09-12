@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  12 SEP 2026 10:03
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  12 SEP 2026 10:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2976,32 +2976,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 345--345
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 345--345
-[]|\TU/TimesNewRoman(0)/m/n/13 USB ổn định
+\TU/TimesNewRoman(0)/m/n/13 cao nhưng ràng
  []
 
 
-Underfull \hbox (badness 4621) in paragraph at lines 345--345
-\TU/TimesNewRoman(0)/m/n/13 nhưng ràng buộc
+Underfull \hbox (badness 3895) in paragraph at lines 345--345
+\TU/TimesNewRoman(0)/m/n/13 với các gói lệnh
  []
 
 
-Underfull \hbox (badness 5519) in paragraph at lines 345--345
-\TU/TimesNewRoman(0)/m/n/13 thông cao nhưng
+Underfull \hbox (badness 4193) in paragraph at lines 345--346
+[]|\TU/TimesNewRoman(0)/m/n/13 BLE GATT vì dữ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 345--345
-\TU/TimesNewRoman(0)/m/n/13 cấu hình mạng
+Underfull \hbox (badness 3108) in paragraph at lines 345--346
+\TU/TimesNewRoman(0)/m/n/13 liệu điều khiển có
  []
 
 
-Underfull \hbox (badness 3271) in paragraph at lines 345--345
-\TU/TimesNewRoman(0)/m/n/13 cho setpoint nhỏ,
- []
-
-
-Underfull \hbox (badness 5985) in paragraph at lines 345--345
-\TU/TimesNewRoman(0)/m/n/13 tiêu thụ thấp và
+Underfull \hbox (badness 2582) in paragraph at lines 345--346
+\TU/TimesNewRoman(0)/m/n/13 kích thước nhỏ và
  []
 
 
