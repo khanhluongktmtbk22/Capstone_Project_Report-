@@ -6,6 +6,6 @@
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc tổng quan của hệ thống robot hỗ trợ chăm sóc người cao tuổi}}{67}{figure.caption.40}%
 \contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}}{71}{figure.caption.42}%
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{73}{figure.caption.43}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{90}{figure.caption.45}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{97}{figure.caption.54}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{103}{figure.caption.55}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{88}{figure.caption.45}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{95}{figure.caption.54}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{101}{figure.caption.55}%

@@ -348,26 +348,6 @@ rightCommand = applyDeadzone(targetRight)
 move(leftCommand); move(rightCommand)
 \end{lstlisting}
 
-\subsection{Cấu hình và triển khai}
-
-Hai ứng dụng sử dụng cùng một dự án Firebase và mỗi ứng dụng có tệp cấu hình Android tương ứng. Các quy tắc bảo mật RTDB cần được triển khai trước khi lưu dữ liệu người dùng. Máy chủ STUN/TURN phải được cấu hình cho cả hai đầu cuối, trong đó TURN nên sử dụng thông tin xác thực ngắn hạn. Khóa API Groq cần được cung cấp từ cấu hình cục bộ an toàn hoặc máy chủ trung gian, không lưu trực tiếp trong kho mã. Thiết bị robot cần quyền truy cập camera, micro, thông báo và quét/kết nối BLE; thiết bị của người chăm sóc cần quyền camera, micro, thông báo và hiển thị toàn màn hình theo chính sách của hệ điều hành.
-
-Quy trình tích hợp khuyến nghị:
-
-\begin{enumerate}
-    \item Nạp firmware, kiểm tra encoder và motor với bánh nhấc khỏi mặt đất.
-    \item Cài RobotApp, kiểm tra quyền và kết nối BLE; gửi STOP trước mọi thử nghiệm.
-    \item Kiểm tra riêng dấu bốn lệnh chuẩn ở tốc độ thấp.
-    \item Cài CaregiverApp, xác nhận cùng tài khoản/project và đồng bộ profile/lịch.
-    \item Kiểm tra cuộc gọi trên cùng mạng, sau đó hai mạng khác nhau/TURN.
-    \item Bật tracking rồi fall detection; thử kịch bản an toàn trước kịch bản té ngã dựng lại.
-    \item Kiểm tra mất Internet, mất BLE, khóa màn hình và vòng đời ứng dụng.
-\end{enumerate}
-
-\subsection{Giới hạn của phiên bản hiện thực}
-
-Trong phạm vi đồ án, hệ thống tập trung kiểm chứng các luồng chính trên mô hình một robot--một người chăm sóc. Vì vậy, cấu trúc Firebase chưa hỗ trợ đầy đủ quan hệ nhiều người dùng--nhiều robot; chức năng chatbot trên CaregiverApp mới dừng ở giao diện định hướng, còn hội thoại được triển khai trên RobotApp. Trước khi đưa hệ thống vào sử dụng thực tế, thông tin xác thực phải được tách hoàn toàn khỏi ứng dụng, bộ phân tích lệnh của firmware cần kiểm tra dữ liệu chặt chẽ hơn, và mỗi phiên bản mô hình nên đi kèm tệp kê khai cùng mã băm để tránh nhầm lẫn trong quá trình đóng gói. Đây là những nội dung cần tiếp tục hoàn thiện khi mở rộng hệ thống sau đồ án.
-
 \subsection{Kết luận chương}
 
 Chương đã trình bày quá trình hiện thực kiến trúc hệ thống thành hai ứng dụng Android, các mô hình AI và firmware ESP32. RobotApp đảm nhiệm cảm nhận, hội thoại, điều phối và kết nối với thân robot; CaregiverApp cung cấp các chức năng quản lý, giám sát và can thiệp từ xa. Firebase, WebRTC và BLE tạo thành ba kênh giao tiếp tương ứng cho dữ liệu dùng chung, truyền thông đa phương tiện và điều khiển phần cứng. Bên cạnh đó, quy trình chuyển đổi mô hình và các cơ chế dừng nhiều tầng giúp hệ thống phù hợp hơn với điều kiện vận hành trên thiết bị di động. Chương 5 tiến hành kiểm thử, đánh giá kết quả và phân tích những giới hạn của hệ thống.
