@@ -2,7 +2,7 @@
 
 \subsection{Mục tiêu đánh giá}
 
-Đánh giá nguyên mẫu nhằm trả lời bốn câu hỏi: các khối có được hiện thực đúng kiến trúc hay không; hợp đồng liên ứng dụng có nhất quán hay không; các cơ chế an toàn có điểm kiểm chứng hay không; và bằng chứng hiện có cho phép kết luận tới mức nào. Do hệ thống gồm AI, cloud, mobile và phần cứng, một con số accuracy đơn lẻ không đại diện cho toàn hệ thống.
+Đánh giá nguyên mẫu nhằm trả lời bốn câu hỏi: các khối có được hiện thực đúng kiến trúc hay không; quy ước trao đổi dữ liệu giữa các ứng dụng có nhất quán hay không; các cơ chế an toàn có điểm kiểm chứng hay không; và bằng chứng hiện có cho phép kết luận tới mức nào. Do hệ thống gồm AI, cloud, mobile và phần cứng, một con số accuracy đơn lẻ không đại diện cho toàn hệ thống.
 
 Chương này phân biệt ba loại bằng chứng. \textit{Bằng chứng tĩnh} được rút từ mã nguồn, cấu hình và artifact. \textit{Bằng chứng tự động} đến từ unit test/build có thể chạy lặp. \textit{Bằng chứng tích hợp} đến từ thử nghiệm hai điện thoại, Internet, BLE và robot thật. Chỉ các kết quả có artifact hoặc được nhóm dự án xác nhận mới được ghi ``đạt''; hạng mục thiếu log định lượng được ghi rõ để tránh tạo số liệu.
 
@@ -67,7 +67,7 @@ LSTM và hậu kiểm & Đã tích hợp & Model TFLite, queue 15$\times$69, sta
 \hline
 Hội thoại giọng nói & Đã tích hợp RobotApp & SpeechRecognizer, Groq streaming/classify, Android TTS \\
 \hline
-Lịch nhắc và nhật ký & Đã tích hợp & Schedules, reminder\_logs, adapters và service \\
+Lịch nhắc nhở và nhật ký & Đã tích hợp & Schedules, reminder\_logs, adapters và service \\
 \hline
 WebRTC & Đã tích hợp & Caller/callee, SDP/ICE RTDB, incoming foreground service \\
 \hline
@@ -179,7 +179,7 @@ lost target after fall & Mất mục tiêu ba frame & Hỏi xác nhận \\
 
 Các test xác nhận khả năng tách engine khỏi Android UI. Coverage còn thiếu: khóa một sự cố, phục hồi 10 frame, baseline EMA, ngưỡng biên, reset, safe/danger resolution và chuỗi nhiễu xen kẽ.
 
-\subsection{Đánh giá hợp đồng tích hợp bằng kiểm tra tĩnh}
+\subsection{Đánh giá tính nhất quán khi tích hợp bằng kiểm tra tĩnh}
 
 \subsubsection{Nhất quán Firebase}
 
@@ -213,7 +213,7 @@ Mã nguồn chỉ định tracking fragment là owner của RobotControlManager.
 \endhead
 E01 & Đăng nhập dùng chung & Đăng nhập cùng tài khoản hai app & Cùng UID/hồ sơ, không lộ user khác \\
 \hline
-E02 & Tạo lịch nhắc & Tạo lịch từ caregiver, chờ thời điểm & Robot phát TTS, log xuất hiện \\
+E02 & Tạo lịch nhắc nhở & Tạo lịch từ caregiver, chờ thời điểm & Robot phát TTS, log xuất hiện \\
 \hline
 E03 & Hội thoại bình thường & Nói câu tiếng Việt khi robot lắng nghe & STT--LLM--TTS hoàn thành \\
 \hline
@@ -362,7 +362,7 @@ Theo dõi người và auto-follow & Đạt hiện thực & Có ID0, SORT/Re-ID 
 \hline
 Phát hiện/xác nhận té ngã & Đạt hiện thực & Pose+LSTM+hậu kiểm+voice+alert; chưa có metric test độc lập \\
 \hline
-Hội thoại và nhắc lịch & Đạt nguyên mẫu & STT--Groq--TTS và Schedules/logs \\
+Hội thoại và nhắc nhở & Đạt nguyên mẫu & STT--Groq--TTS và Schedules/logs \\
 \hline
 Video call/điều khiển xa & Đạt nguyên mẫu & WebRTC signaling RTDB và joystick \\
 \hline
@@ -381,4 +381,4 @@ Các bảng kết quả định lượng nên được điền từ log thật t
 
 \subsection{Kết luận chương}
 
-Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của hợp đồng Firebase/BLE và các lớp bảo vệ. Bộ unit test hiện có tập trung vào dấu điều khiển và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.
+Nguyên mẫu đã hiện thực đầy đủ các khối kiến trúc và tạo được hai ứng dụng đóng gói, model triển khai cùng firmware. Kiểm tra tĩnh xác nhận sự nhất quán của cấu trúc dữ liệu Firebase, giao thức BLE và các lớp bảo vệ. Bộ unit test hiện có tập trung vào dấu điều khiển và hậu kiểm té ngã. Tuy nhiên, báo cáo không khẳng định độ chính xác hay độ trễ khi chưa có log benchmark; đây là giới hạn quan trọng và cũng là kế hoạch đánh giá tiếp theo. Chương cuối tổng kết đóng góp và hướng phát triển từ các kết quả này.

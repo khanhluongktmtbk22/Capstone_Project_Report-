@@ -2,9 +2,9 @@
 
 \subsection{Tổng kết}
 
-Đồ án đã nghiên cứu và xây dựng một nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc, giám sát người cao tuổi tại nhà. Khác với một ứng dụng AI đơn lẻ, hệ thống bao phủ toàn chuỗi từ cảm nhận bằng camera, theo dõi chủ thể, nhận biết tình huống nghi té ngã, tương tác xác nhận, lưu cảnh báo, gọi người chăm sóc đến điều khiển phần thân robot. Bốn khối sản phẩm gồm RobotApp, CaregiverApp, mô hình/quy trình chuyển đổi AI và firmware ESP32 được kết nối bằng các hợp đồng Firebase, WebRTC và BLE cụ thể.
+Đồ án đã nghiên cứu và xây dựng một nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc, giám sát người cao tuổi tại nhà. Khác với một ứng dụng AI đơn lẻ, hệ thống bao phủ toàn chuỗi từ cảm nhận bằng camera, theo dõi chủ thể, nhận biết tình huống nghi té ngã, tương tác xác nhận, lưu cảnh báo, gọi người chăm sóc đến điều khiển phần thân robot. Bốn khối sản phẩm gồm RobotApp, CaregiverApp, mô hình/quy trình chuyển đổi AI và firmware ESP32 được liên kết thông qua các giao thức truyền thông và phương thức kết nối sử dụng Firebase, WebRTC và BLE.
 
-RobotApp tận dụng smartphone/tablet như bộ não robot theo định hướng OpenBot: camera, microphone, loa, mạng và năng lực suy luận được dùng chung cho nhiều nhiệm vụ. Ứng dụng tích hợp CameraX, TFLite, OpenCV, Firebase, WebRTC, BLE, nhận dạng giọng nói, TTS và Groq. CaregiverApp cung cấp hồ sơ, lịch nhắc, cờ theo dõi/té ngã, nhật ký, cuộc gọi và joystick. Firmware ESP32 dùng NimBLE và SimpleFOC để điều khiển kín hai BLDC theo phản hồi AS5600.
+RobotApp tận dụng smartphone/tablet như bộ não robot theo định hướng OpenBot: camera, microphone, loa, mạng và năng lực suy luận được dùng chung cho nhiều nhiệm vụ. Ứng dụng tích hợp CameraX, TFLite, OpenCV, Firebase, WebRTC, BLE, nhận dạng giọng nói, TTS và Groq. CaregiverApp cung cấp hồ sơ, lịch nhắc nhở, cờ theo dõi/té ngã, nhật ký, cuộc gọi và joystick. Firmware ESP32 dùng NimBLE và SimpleFOC để điều khiển kín hai BLDC theo phản hồi AS5600.
 
 Pipeline thị giác kết hợp mô hình pose với tracking-by-detection, Kalman, Hungarian và Re-ID nhẹ. Người cần chăm sóc được bảo vệ dưới ID0; chỉ ID0 đi vào LSTM. Model xử lý cửa sổ 15 khung hình với 69 đặc trưng và trả nhãn nhị phân. Bộ xác minh yêu cầu năm nhãn FALL liên tiếp, sau đó kiểm tra vị trí mũi/vai trong ba khung hình khi chuỗi kết thúc hoặc chờ tối đa 12 khung hình nếu mất quan sát. Trong sự cố, robot dừng ngay rồi chỉ được lùi/quay để lấy trọn khung người nằm, không tiến gần. Khi cần xác nhận, chatbot hỏi bằng giọng nói và mặc định theo nhánh nguy hiểm nếu người dùng không phản hồi hoặc dịch vụ phân loại lỗi.
 
@@ -16,7 +16,7 @@ Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, 
 
 \begin{itemize}
     \item Xây dựng kiến trúc nhiều tầng phù hợp robot chăm sóc tại nhà với phân công rõ giữa caregiver, cloud, robot Android và vi điều khiển.
-    \item Xây dựng RobotApp có theo dõi người, phát hiện/hậu kiểm té ngã, hội thoại, nhắc lịch, video call và BLE.
+    \item Xây dựng RobotApp có theo dõi người, phát hiện/hậu kiểm té ngã, hội thoại, nhắc nhở, video call và BLE.
     \item Xây dựng CaregiverApp có quản lý tài khoản/hồ sơ/lịch, bật tắt AI, xem lịch sử, nhận cuộc gọi và điều khiển joystick.
     \item Xây dựng firmware ESP32 điều khiển hai động cơ BLDC bằng SimpleFOC, giao tiếp BLE GATT và dừng an toàn.
     \item Tạo pipeline chuyển đổi LSTM Keras và pose PyTorch qua ONNX/SavedModel sang TFLite, gồm biến thể 320$\times$320, GPU và FP16.

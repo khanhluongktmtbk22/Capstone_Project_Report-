@@ -179,7 +179,7 @@ Vai trò smartphone & Camera, cảm biến, AI và logic điều phối trên đ
 \hline
 Phân tầng điều khiển & Android xử lý bậc cao; MCU nhận lệnh và điều khiển PWM & Android xử lý lệnh/AI; ESP32 điều khiển hai BLDC bằng SimpleFOC và encoder AS5600. \\
 \hline
-Ứng dụng thứ hai & Controller App/gamepad phục vụ teleoperation & CaregiverApp quản lý hồ sơ, lịch nhắc, nhật ký, cảnh báo, gọi và joystick từ xa. \\
+Ứng dụng thứ hai & Controller App/gamepad phục vụ teleoperation & CaregiverApp quản lý hồ sơ, lịch nhắc nhở, nhật ký, cảnh báo, gọi và joystick từ xa. \\
 \hline
 Thị giác & Object detection, object tracking, point-goal navigation và driving policy & Pose estimation, SORT/Re-ID, theo dõi người ưu tiên và phát hiện/xác nhận té ngã. \\
 \hline
@@ -194,7 +194,7 @@ Mục tiêu & Nền tảng robot AI chi phí thấp cho nghiên cứu và giáo 
 \end{tabularx}
 \end{table}
 
-Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nút edge thông minh và tách nó khỏi lớp chấp hành. Các phần mang tính đóng góp riêng của đồ án gồm kiến trúc RobotApp--CaregiverApp, Firebase theo nghiệp vụ chăm sóc, pipeline pose--tracking--LSTM--hậu kiểm, xác nhận bằng giọng nói trước khi báo động, lịch nhắc, nhật ký và thân robot BLDC/FOC. Cách trình bày này giúp xác định đúng vai trò của OpenBot: nền tảng tham khảo rất quan trọng về ý tưởng và công nghệ, nhưng không đồng nhất với toàn bộ hệ thống được xây dựng trong đồ án.
+Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nút edge thông minh và tách nó khỏi lớp chấp hành. Các phần mang tính đóng góp riêng của đồ án gồm kiến trúc RobotApp--CaregiverApp, Firebase theo nghiệp vụ chăm sóc, pipeline pose--tracking--LSTM--hậu kiểm, xác nhận bằng giọng nói trước khi báo động, lịch nhắc nhở, nhật ký và thân robot BLDC/FOC. Cách trình bày này giúp xác định đúng vai trò của OpenBot: nền tảng tham khảo rất quan trọng về ý tưởng và công nghệ, nhưng không đồng nhất với toàn bộ hệ thống được xây dựng trong đồ án.
 \fi
 \input{Contents/OpenBotTomLuoc}
 
@@ -297,7 +297,7 @@ Sự kế thừa quan trọng nhất là nguyên tắc dùng smartphone làm nú
 %         \item Nhận push notification khi phát hiện té ngã
 %         \item Xem video stream từ robot theo thời gian thực
 %         \item Điều khiển robot từ xa bằng virtual joystick
-%         \item Thiết lập lịch nhắc uống thuốc và theo dõi tuân thủ
+%         \item Thiết lập lịch nhắc nhở uống thuốc và theo dõi tuân thủ
 %         \item Thực hiện video call với người cao tuổi qua robot
 %     \end{itemize}
     

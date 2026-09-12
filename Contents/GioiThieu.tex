@@ -18,16 +18,16 @@ Từ các nhu cầu trên, đề tài \textbf{``Nghiên cứu và phát triển 
 
 \subsubsection{Mục tiêu tổng quát}
 
-Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc người cao tuổi tại nhà. Hệ thống hướng đến khả năng tương tác bằng giọng nói, nhắc lịch, giám sát an toàn, phát hiện tình huống nghi té ngã, liên lạc trực tuyến và hỗ trợ người chăm sóc can thiệp từ xa thông qua một nền tảng robot di động sử dụng điện thoại thông minh làm bộ xử lý chính.
+Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc người cao tuổi tại nhà. Hệ thống hướng đến khả năng tương tác bằng giọng nói, nhắc nhở theo lịch, giám sát an toàn, phát hiện tình huống nghi té ngã, liên lạc trực tuyến và hỗ trợ người chăm sóc can thiệp từ xa thông qua một nền tảng robot di động sử dụng điện thoại thông minh làm bộ xử lý chính.
 
 \subsubsection{Mục tiêu cụ thể}
 
 \begin{enumerate}
     \item \textbf{Nhận biết và giám sát an toàn:} xây dựng khả năng thu nhận hình ảnh từ môi trường trong nhà, phát hiện người và duy trì đúng đối tượng cần theo dõi khi người hoặc robot di chuyển. Trên cơ sở thông tin tư thế theo thời gian, hệ thống cần nhận biết tình huống nghi té ngã, phân biệt với một số hoạt động thông thường và thực hiện bước xác nhận trước khi phát cảnh báo. Mô hình AI phải được chuẩn bị, chuyển đổi và đánh giá để có thể suy luận trực tiếp trên điện thoại gắn với robot.
 
-    \item \textbf{Tương tác và hỗ trợ chăm sóc:} xây dựng khả năng trò chuyện bằng giọng nói tiếng Việt theo hướng gần gũi, dễ sử dụng đối với người cao tuổi. Hệ thống cần hỗ trợ quản lý và thực hiện lịch nhắc, ghi nhận phản hồi của người dùng, đồng thời kết hợp hội thoại với quy trình xác nhận khi phát hiện dấu hiệu bất thường. Nội dung nhắc nhở và thông tin cá nhân phải được quản lý rõ ràng để người chăm sóc có thể cập nhật khi cần.
+    \item \textbf{Tương tác và hỗ trợ chăm sóc:} xây dựng khả năng trò chuyện bằng giọng nói tiếng Việt theo hướng gần gũi, dễ sử dụng đối với người cao tuổi. Hệ thống cần hỗ trợ quản lý và thực hiện lịch nhắc nhở, ghi nhận phản hồi của người dùng, đồng thời kết hợp hội thoại với quy trình xác nhận khi phát hiện dấu hiệu bất thường. Nội dung nhắc nhở và thông tin cá nhân phải được quản lý rõ ràng để người chăm sóc có thể cập nhật khi cần.
 
-    \item \textbf{Liên lạc và điều khiển từ xa:} xây dựng hai ứng dụng dành riêng cho robot và người chăm sóc, cho phép đồng bộ hồ sơ, lịch nhắc, trạng thái giám sát, cảnh báo và lịch sử hoạt động. Khi cần can thiệp, hệ thống phải hỗ trợ cuộc gọi âm thanh, hình ảnh hai chiều và cho phép người chăm sóc điều khiển chuyển động của robot từ xa. Phần thân robot cần tiếp nhận lệnh từ điện thoại và điều khiển hai bánh xe theo yêu cầu di chuyển.
+    \item \textbf{Liên lạc và điều khiển từ xa:} xây dựng hai ứng dụng dành riêng cho robot và người chăm sóc, cho phép đồng bộ hồ sơ, lịch nhắc nhở, trạng thái giám sát, cảnh báo và lịch sử hoạt động. Khi cần can thiệp, hệ thống phải hỗ trợ cuộc gọi âm thanh, hình ảnh hai chiều và cho phép người chăm sóc điều khiển chuyển động của robot từ xa. Phần thân robot cần tiếp nhận lệnh từ điện thoại và điều khiển hai bánh xe theo yêu cầu di chuyển.
 
     \item \textbf{An toàn và đánh giá hệ thống:} thiết kế cơ chế dừng robot khi lệnh không hợp lệ, quá thời gian cho phép hoặc đường truyền bị gián đoạn; đồng thời tránh xung đột giữa chế độ tự bám theo và điều khiển thủ công. Dữ liệu cá nhân, lịch sử chăm sóc và thông tin liên lạc cần được giới hạn theo đúng người sử dụng. Cuối cùng, các chức năng chính, tốc độ xử lý, độ ổn định của kết nối, chất lượng phát hiện té ngã và khả năng dừng an toàn phải được kiểm thử trên nguyên mẫu để xác định mức độ đáp ứng và những giới hạn còn tồn tại.
 \end{enumerate}
@@ -45,7 +45,7 @@ Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo h
 \begin{itemize}
     \item \textbf{Hỗ trợ tương tác với người cao tuổi:} robot tiếp nhận lời nói, tạo phản hồi và phát lại bằng giọng nói để phục vụ các cuộc trò chuyện hằng ngày. Nội dung tương tác có thể được cá nhân hóa ở mức cơ bản dựa trên hồ sơ và cách xưng hô do người chăm sóc thiết lập.
 
-    \item \textbf{Hỗ trợ nhắc lịch:} người chăm sóc có thể tạo, chỉnh sửa, bật hoặc tắt các lịch nhắc cho những công việc cần thực hiện. Đến thời điểm đã thiết lập, robot phát lời nhắc, tiếp nhận phản hồi của người cao tuổi và lưu lại kết quả để người chăm sóc theo dõi.
+    \item \textbf{Hỗ trợ nhắc nhở:} người chăm sóc có thể tạo, chỉnh sửa, bật hoặc tắt các lịch nhắc nhở cho những công việc cần thực hiện. Đến thời điểm đã thiết lập, robot phát lời nhắc, tiếp nhận phản hồi của người cao tuổi và lưu lại kết quả để người chăm sóc theo dõi.
 
     \item \textbf{Giám sát và bám theo người:} robot sử dụng hình ảnh từ camera để phát hiện, lựa chọn và duy trì một người làm đối tượng theo dõi chính. Từ vị trí của người trong khung hình, robot thực hiện các chuyển động tiến, lùi, quay hoặc dừng nhằm giữ khoảng cách quan sát phù hợp trong môi trường trong nhà.
 
@@ -53,7 +53,7 @@ Nghiên cứu, thiết kế và xây dựng nguyên mẫu robot trợ lý ảo h
 
     \item \textbf{Liên lạc và can thiệp từ xa:} người chăm sóc có thể nhận thông báo, thực hiện cuộc gọi âm thanh và hình ảnh với người cao tuổi, đồng thời điều khiển chuyển động cơ bản của robot khi cần quan sát hoặc hỗ trợ từ xa. Hệ thống bảo đảm chế độ điều khiển thủ công không hoạt động đồng thời với chế độ tự động bám theo.
 
-    \item \textbf{Quản lý thông tin chăm sóc:} ứng dụng của người chăm sóc hỗ trợ quản lý hồ sơ, lịch nhắc và trạng thái của các chức năng giám sát; đồng thời cung cấp lịch sử thực hiện lời nhắc, cảnh báo té ngã và cuộc gọi để phục vụ việc theo dõi sau sự kiện.
+    \item \textbf{Quản lý thông tin chăm sóc:} ứng dụng của người chăm sóc hỗ trợ quản lý hồ sơ, lịch nhắc nhở và trạng thái của các chức năng giám sát; đồng thời cung cấp lịch sử thực hiện lời nhắc, cảnh báo té ngã và cuộc gọi để phục vụ việc theo dõi sau sự kiện.
 \end{itemize}
 
 \subsubsection{Giới hạn nghiên cứu}
@@ -90,11 +90,11 @@ Từ các tình huống chăm sóc tại nhà, nhóm xác định những ngư�
 
 \subsubsection{Xây dựng và tích hợp nguyên mẫu}
 
-Trên cơ sở thiết kế đã xây dựng, nguyên mẫu được phát triển theo từng thành phần gồm ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý AI và chương trình điều khiển phần thân robot. Mỗi thành phần được hoàn thiện và kiểm tra riêng trước khi tích hợp vào hệ thống chung. Quá trình tích hợp được thực hiện lần lượt theo các nhóm chức năng: quản lý hồ sơ và lịch nhắc, hội thoại bằng giọng nói, giám sát và phát hiện té ngã, liên lạc từ xa, điều khiển chuyển động và xử lý các tình huống mất kết nối. Những vấn đề phát sinh trong quá trình chạy thử được ghi nhận để điều chỉnh thiết kế và hoàn thiện nguyên mẫu.
+Trên cơ sở thiết kế đã xây dựng, nguyên mẫu được phát triển theo từng thành phần gồm ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý AI và chương trình điều khiển phần thân robot. Mỗi thành phần được hoàn thiện và kiểm tra riêng trước khi tích hợp vào hệ thống chung. Quá trình tích hợp được thực hiện lần lượt theo các nhóm chức năng: quản lý hồ sơ và lịch nhắc nhở, hội thoại bằng giọng nói, giám sát và phát hiện té ngã, liên lạc từ xa, điều khiển chuyển động và xử lý các tình huống mất kết nối. Những vấn đề phát sinh trong quá trình chạy thử được ghi nhận để điều chỉnh thiết kế và hoàn thiện nguyên mẫu.
 
 \subsubsection{Thực nghiệm và đánh giá}
 
-Nguyên mẫu được kiểm tra từ từng chức năng riêng lẻ đến các luồng hoạt động hoàn chỉnh trong môi trường trong nhà. Phần xử lý AI được đánh giá về chất lượng nhận biết, khả năng duy trì người mục tiêu và tốc độ xử lý trên điện thoại. Các chức năng tương tác, nhắc lịch, cảnh báo, cuộc gọi và điều khiển từ xa được kiểm tra theo những tình huống sử dụng dự kiến. Phần thân robot được thử nghiệm về hướng chuyển động, khả năng đáp ứng lệnh và trạng thái dừng khi xảy ra bất thường. Ngoài điều kiện vận hành bình thường, các tình huống như mất dấu người, người dùng không phản hồi, kết nối bị gián đoạn hoặc một thành phần ngừng hoạt động cũng được xem xét. Kết quả thực nghiệm được dùng để đối chiếu với mục tiêu đề tài, phân tích hạn chế và đề xuất hướng phát triển tiếp theo.
+Nguyên mẫu được kiểm tra từ từng chức năng riêng lẻ đến các luồng hoạt động hoàn chỉnh trong môi trường trong nhà. Phần xử lý AI được đánh giá về chất lượng nhận biết, khả năng duy trì người mục tiêu và tốc độ xử lý trên điện thoại. Các chức năng tương tác, nhắc nhở, cảnh báo, cuộc gọi và điều khiển từ xa được kiểm tra theo những tình huống sử dụng dự kiến. Phần thân robot được thử nghiệm về hướng chuyển động, khả năng đáp ứng lệnh và trạng thái dừng khi xảy ra bất thường. Ngoài điều kiện vận hành bình thường, các tình huống như mất dấu người, người dùng không phản hồi, kết nối bị gián đoạn hoặc một thành phần ngừng hoạt động cũng được xem xét. Kết quả thực nghiệm được dùng để đối chiếu với mục tiêu đề tài, phân tích hạn chế và đề xuất hướng phát triển tiếp theo.
 
 \subsection{Các công trình và giải pháp liên quan}
 
@@ -414,7 +414,7 @@ Báo cáo được tổ chức thành sáu chương, sắp xếp theo trình t�
     \item \textbf{Chương 6 -- Kết luận:} tổng kết quá trình thực hiện, đối chiếu kết quả với mục tiêu đề tài và đề xuất các hướng nghiên cứu, hoàn thiện hệ thống trong tương lai.
 \end{itemize}
 
-Phần phụ lục bổ sung các đặc tả ca sử dụng, cấu trúc dữ liệu, danh mục thành phần, thông tin mô hình và biểu mẫu kiểm thử nhằm hỗ trợ việc tra cứu và kiểm chứng nội dung được trình bày trong báo cáo.
+Phần phụ lục bổ sung các đặc tả trường hợp sử dụng, cấu trúc dữ liệu, danh mục thành phần, thông tin mô hình và biểu mẫu kiểm thử nhằm hỗ trợ việc tra cứu và kiểm chứng nội dung được trình bày trong báo cáo.
 
 \subsection{Kết luận chương}
 

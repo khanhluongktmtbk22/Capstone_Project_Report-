@@ -10,14 +10,14 @@ Trong kiến trúc hiện thực, Firebase RTDB lưu trữ cây dữ liệu JSON
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{System_Implementation_Architecture.png}
+    \includegraphics[width=\textwidth]{System_Implementation_Architecture_Overview_Style_Figma.png}
     \caption{Kiến trúc hiện thực của hệ thống}
     \label{fig:implementation_architecture}
 \end{figure}
 
 \subsection{Môi trường phát triển và tổ chức các thành phần}
 
-Hệ thống gồm bốn thành phần được phát triển độc lập nhưng tuân theo các hợp đồng dữ liệu chung. RobotApp và CaregiverApp được xây dựng bằng Kotlin, giao diện XML và ViewBinding. RobotApp sử dụng package \texttt{com.example.datn\_v1}, còn CaregiverApp sử dụng package \texttt{com.example.datn\_caregiver}; cả hai cùng đặt \texttt{minSdk=23}, \texttt{targetSdk=36} và Java/Kotlin JVM target 11. Firmware được xây dựng dưới dạng chương trình Arduino cho ESP32. Thành phần AI gồm mô hình sau huấn luyện, mô hình ONNX trung gian, mô hình TFLite và các chương trình chuyển đổi, kiểm tra suy luận.
+Hệ thống gồm bốn thành phần được phát triển độc lập nhưng sử dụng cấu trúc dữ liệu và quy ước trao đổi thống nhất. RobotApp và CaregiverApp được xây dựng bằng Kotlin, giao diện XML và ViewBinding. RobotApp sử dụng package \texttt{com.example.datn\_v1}, còn CaregiverApp sử dụng package \texttt{com.example.datn\_caregiver}; cả hai cùng đặt \texttt{minSdk=23}, \texttt{targetSdk=36} và Java/Kotlin JVM target 11. Firmware được xây dựng dưới dạng chương trình Arduino cho ESP32. Thành phần AI gồm mô hình sau huấn luyện, mô hình ONNX trung gian, mô hình TFLite và các chương trình chuyển đổi, kiểm tra suy luận.
 
 \begin{table}[htbp]
 \centering
@@ -92,7 +92,7 @@ x_i=x_c\frac{S}{W_c},\qquad y_i=y_c\frac{S}{H_c},
 \end{equation}
 còn phép đổi ngược là $x_c=x_iW_c/S$, $y_c=y_iH_c/S$. Hai hệ số theo hai trục được giữ riêng vì frame nguồn không nhất thiết là ảnh vuông.
 
-\paragraph{Nhận dạng và giải mã hợp đồng tensor.}
+\paragraph{Nhận dạng và giải mã cấu trúc tensor.}
 Đầu raw tạo dự đoán tại ba mức stride 8, 16 và 32. Với ảnh $320\times320$, tổng số vị trí là
 \begin{equation}
 N=\left(\frac{320}{8}\right)^2+
@@ -195,9 +195,9 @@ Bản ghi cảnh báo chứa timestamp, trạng thái, phản hồi và bằng c
 
 Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào văn bản do LLM sinh ra. Hàm phân loại phản hồi té ngã kiểm tra trước tập từ khóa an toàn và nguy hiểm; API chỉ được gọi khi câu trả lời không rõ nghĩa, sau đó kết quả JSON được phân tích theo cấu trúc định trước. Hàm \texttt{detectCallIntent} áp dụng cách tương tự khi kết hợp từ khóa, tên hoặc quan hệ của người chăm sóc và mô hình phân loại dự phòng. Khóa API được truyền vào lớp dịch vụ và cần được cung cấp từ cấu hình bên ngoài kho mã hoặc thông qua máy chủ trung gian.
 
-\subsubsection{Lịch nhắc}
+\subsubsection{Nhắc nhở theo lịch}
 
-\texttt{ReminderService} lắng nghe \texttt{Schedules/\{uid\}} và hồ sơ \texttt{Users/\{uid\}}. Khi tới thời điểm, service tạo log dưới \texttt{reminder\_logs/\{uid\}}, truyền sự kiện đến chatbot và phát lời nhắc. Người cao tuổi có thể xác nhận, từ chối hoặc không phản hồi; log cập nhật status, câu trả lời, retry count và confirmed time. Cấu trúc này tách định nghĩa lịch khỏi lần thực hiện, cho phép caregiver xem lịch sử mà không làm thay đổi lịch gốc.
+\texttt{ReminderService} lắng nghe \texttt{Schedules/\{uid\}} và hồ sơ \texttt{Users/\{uid\}}. Khi tới thời điểm, service tạo log dưới \texttt{reminder\_logs/\{uid\}}, truyền sự kiện đến chatbot và phát lời nhắc. Người cao tuổi có thể xác nhận, từ chối hoặc không phản hồi; log cập nhật status, câu trả lời, retry count và confirmed time. Cấu trúc này tách lịch nhắc nhở đã thiết lập khỏi từng lần thực hiện, cho phép caregiver xem lịch sử mà không làm thay đổi lịch gốc.
 
 \subsubsection{WebRTC trong RobotApp}
 
@@ -229,7 +229,7 @@ CaregiverApp sử dụng \texttt{LoginActivity} và \texttt{SignUpActivity} cho 
 
 \subsubsection{Lịch và nhật ký}
 
-\texttt{ScheduleFragment} đọc danh sách \texttt{Schedules/uid}; \texttt{AddScheduleFragment} tạo/cập nhật lịch; \texttt{ScheduleAdapter} xử lý RecyclerView và công tắc \texttt{active}. Tên trường được giữ đúng là \texttt{active}, tránh sai lệch với \texttt{isActive}. Ba nhánh nhật ký có fragment/adaptor riêng: reminder, fall alert và call history. Danh sách cảnh báo/cuộc gọi được truy vấn theo timestamp trong bảy ngày gần nhất.
+\texttt{ScheduleFragment} đọc danh sách \texttt{Schedules/uid}; \texttt{AddScheduleFragment} tạo hoặc cập nhật lịch nhắc nhở; \texttt{ScheduleAdapter} xử lý RecyclerView và công tắc \texttt{active}. Tên trường được giữ đúng là \texttt{active}, tránh sai lệch với \texttt{isActive}. Ba nhánh nhật ký có fragment/adaptor riêng: reminder, fall alert và call history. Danh sách cảnh báo/cuộc gọi được truy vấn theo timestamp trong bảy ngày gần nhất.
 
 \subsubsection{Cuộc gọi đến nền}
 
