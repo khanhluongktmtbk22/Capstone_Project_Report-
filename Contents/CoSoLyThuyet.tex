@@ -343,7 +343,7 @@ Phát hiện đối tượng (Object Detection) trả lời đồng thời hai c
 \end{equation}
 trong đó $b_i$ là hộp giới hạn, $c_i$ là nhãn lớp và $s_i\in[0,1]$ là độ tin cậy của dự đoán thứ $i$. Số lượng đối tượng $M$ thay đổi theo từng khung hình. Tổng quan của Zou và cộng sự phân Object Detection thành hai nhóm lớn: detector hai giai đoạn, trước hết sinh vùng ứng viên rồi phân loại/tinh chỉnh vùng; và detector một giai đoạn, dự đoán trực tiếp lớp cùng vị trí trên bản đồ đặc trưng \reportcite{ref:odsurvey}.
 
-Trong đồ án, đầu ra cần thiết không chỉ là hộp bao quanh người. Bộ ước lượng tư thế còn trả về các điểm khớp của cơ thể; hộp người hỗ trợ theo dõi và điều khiển bám mục tiêu, trong khi tọa độ khớp tạo chuỗi đặc trưng cho mô hình LSTM. Do đó, phát hiện một người trong từng khung hình mới là tầng cảm nhận ban đầu, chưa đồng nghĩa với kết luận người đó đã té ngã.
+Trong đồ án, yêu cầu đầu ra không dừng ở việc định vị người bằng bounding box. Bộ ước lượng tư thế còn trả về các điểm khớp của cơ thể; bounding box hỗ trợ theo dõi và điều khiển bám mục tiêu, trong khi tọa độ khớp được dùng để tạo chuỗi đặc trưng cho mô hình LSTM. Do đó, phát hiện một người trong từng khung hình mới là tầng cảm nhận ban đầu, chưa đồng nghĩa với kết luận người đó đã té ngã.
 
 \subsubsection{Lịch sử phát triển Object Detection}
 
@@ -437,7 +437,7 @@ Sau khi thống nhất đầu ra, quy tắc ghép và cách đánh giá, có th�
 
 \textbf{MobileNet SSD.} SSD thực hiện dự đoán hộp và lớp trên nhiều mức bản đồ đặc trưng để xử lý các kích thước đối tượng khác nhau \reportcite{ref:ssd}. Khi ghép với MobileNet---backbone sử dụng tích chập tách theo chiều sâu nhằm giảm lượng phép tính---mô hình có kích thước nhỏ, dễ lượng tử hóa và phù hợp với TensorFlow Lite \reportcite{ref:mobilenet}. Hạn chế là cấu hình chuẩn chủ yếu trả về bounding box; nếu cần 17 điểm khớp cơ thể, hệ thống phải bổ sung một mô hình pose hoặc thay đổi đầu dự đoán.
 
-\textbf{YOLO.} YOLO mô hình hóa detection như một mạng hợp nhất, dự đoán trực tiếp vị trí và xác suất lớp trong một lần forward \reportcite{ref:yolo}. Các biến thể nhỏ phù hợp với xử lý thời gian thực, đồng thời họ mô hình có phiên bản pose trả về cả hộp người và keypoint. Lợi thế này giúp tránh một tầng ước lượng tư thế riêng; đổi lại, việc chuyển đổi sang TensorFlow Lite và giải mã đầu ra phải khớp đúng phiên bản xuất mô hình, còn tốc độ thực tế phụ thuộc thiết bị, kích thước đầu vào và delegate được sử dụng.
+\textbf{YOLO.} YOLO mô hình hóa detection như một mạng hợp nhất, dự đoán trực tiếp vị trí và xác suất lớp trong một lần forward \reportcite{ref:yolo}. Các biến thể nhỏ phù hợp với xử lý thời gian thực, đồng thời họ mô hình có phiên bản pose trả về cả bounding box của người và keypoint. Lợi thế này giúp tránh một tầng ước lượng tư thế riêng; đổi lại, việc chuyển đổi sang TensorFlow Lite và giải mã đầu ra phải khớp đúng phiên bản xuất mô hình, còn tốc độ thực tế phụ thuộc thiết bị, kích thước đầu vào và delegate được sử dụng.
 
 \textbf{EfficientDet.} EfficientDet kết hợp backbone EfficientNet, mạng hợp nhất đặc trưng hai chiều có trọng số (BiFPN) và compound scaling để đồng thời thay đổi độ sâu, độ rộng và độ phân giải \reportcite{ref:efficientdet}. Họ mô hình tạo nhiều mức quy mô để lựa chọn theo ngân sách tính toán. Tuy nhiên, tương tự SSD chuẩn, EfficientDet là detector hộp; pipeline cần thêm thành phần pose nếu muốn tạo trực tiếp chuỗi khớp cho LSTM.
 
@@ -452,14 +452,14 @@ Sau khi thống nhất đầu ra, quy tắc ghép và cách đánh giá, có th�
 \hline
 MobileNet SSD & SSD một giai đoạn với backbone nhẹ & Mô hình gọn; hệ sinh thái TensorFlow Lite phổ biến; dễ tạo baseline phát hiện người & Đầu ra chuẩn chỉ có hộp và lớp; cần thêm tầng pose để cung cấp keypoint cho LSTM \\
 \hline
-YOLO & Detector hợp nhất; có các biến thể detection và pose & Cân bằng tốc độ--độ chính xác; biến thể pose sinh đồng thời hộp người và keypoint & Hậu xử lý và tensor đầu ra phụ thuộc phiên bản export; cần kiểm chứng trên đúng thiết bị đích \\
+YOLO & Detector hợp nhất; có các biến thể detection và pose & Cân bằng tốc độ--độ chính xác; biến thể pose tạo đồng thời bounding box và keypoint của người & Hậu xử lý và tensor đầu ra phụ thuộc phiên bản export; cần kiểm chứng trên đúng thiết bị đích \\
 \hline
 EfficientDet & EfficientNet, BiFPN và compound scaling & Có nhiều mức mô hình; khai thác đặc trưng đa tỉ lệ hiệu quả & Phiên bản chuẩn không sinh keypoint; cấu hình lớn có thể vượt ngân sách độ trễ của smartphone \\
 \hline
 \end{tabularx}
 \end{table}
 
-Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau không được đặt cạnh nhau như một phép so sánh trực tiếp nếu khác tập dữ liệu, độ phân giải, phần cứng và giao thức đo. Với yêu cầu của đồ án, tiêu chí quyết định là khả năng sinh đồng thời hộp người và 17 keypoint trong một mô hình đủ nhẹ để chạy trên Android. Vì vậy hướng YOLO-Pose được chọn để huấn luyện và chuyển đổi sang TensorFlow Lite; phiên bản mô hình, delegate và số đo thực nghiệm được trình bày tại Chương 4 và Chương 5.
+Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau không được đặt cạnh nhau như một phép so sánh trực tiếp nếu khác tập dữ liệu, độ phân giải, phần cứng và giao thức đo. Với yêu cầu của đồ án, tiêu chí quyết định là khả năng tạo đồng thời bounding box và 17 keypoint của người trong một mô hình đủ nhẹ để chạy trên Android. Vì vậy hướng YOLO-Pose được chọn để huấn luyện và chuyển đổi sang TensorFlow Lite; phiên bản mô hình, delegate và số đo thực nghiệm được trình bày tại Chương 4 và Chương 5.
 
 \subsubsection{Theo dõi đối tượng và tạo chuỗi thời gian}
 
@@ -1004,7 +1004,7 @@ Dataset LE2I bao gồm khoảng 191 video với các đặc điểm:
 \end{figure}
 \begin{itemize}
     \item Độ phân giải video là 320x240 pixels với tốc độ khung hình 25 FPS.
-    \item Annotation cung cấp khung hình bắt đầu và kết thúc quá trình ngã (ground truth frame numbers), kết hợp với thông tin Bounding Box của người.
+    \item Annotation cung cấp khung hình bắt đầu và kết thúc quá trình ngã (ground truth frame numbers), kết hợp với thông tin bounding box của người.
     \item Các nhãn cơ bản gồm trạng thái ngã (fall) và hoạt động bình thường (no\_fall).
 \end{itemize}
 

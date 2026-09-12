@@ -1,6 +1,6 @@
 \section{Phân tích và thiết kế hệ thống}
 
-Chương này trình bày quá trình phân tích yêu cầu và thiết kế hệ thống robot trợ lý hỗ trợ chăm sóc người cao tuổi tại nhà. Từ mục tiêu giao tiếp, nhắc nhở, giám sát, cảnh báo té ngã và hỗ trợ can thiệp từ xa, các yêu cầu chức năng và yêu cầu chất lượng được xác định làm cơ sở xây dựng kiến trúc cùng các luồng xử lý. Kiến trúc vận hành gồm ứng dụng trên robot, ứng dụng của người chăm sóc, dịch vụ dùng chung và phần thân robot. Quy trình chuẩn bị mô hình AI được xem xét riêng để cung cấp mô hình cho ứng dụng trên robot. Chương cũng phân tích các phương án công nghệ, giao thức truyền thông và cơ chế an toàn làm cơ sở cho quá trình hiện thực ở Chương 4.
+Chương này trình bày quá trình phân tích yêu cầu và thiết kế hệ thống robot trợ lý hỗ trợ chăm sóc người cao tuổi tại nhà. Từ mục tiêu giao tiếp, nhắc nhở, giám sát, cảnh báo té ngã và hỗ trợ can thiệp từ xa, các yêu cầu chức năng và yêu cầu chất lượng được xác định làm cơ sở xây dựng kiến trúc cùng các luồng xử lý. Kiến trúc vận hành gồm ứng dụng trên robot, ứng dụng của người chăm sóc, hệ thống dịch vụ \& kết nối, cùng phần thân robot. Quy trình chuẩn bị mô hình AI được xem xét riêng để cung cấp mô hình cho ứng dụng trên robot. Chương cũng phân tích các phương án công nghệ, giao thức truyền thông và cơ chế an toàn làm cơ sở cho quá trình hiện thực ở Chương 4.
 
 \subsection{Phân tích yêu cầu hệ thống}
 
@@ -58,7 +58,7 @@ Phần thân robot & Thành phần chấp hành & Tiếp nhận lệnh chuyển 
 \end{tabularx}
 \end{table}
 
-Hệ thống giả định thiết bị gắn trên robot có camera, microphone, loa và khả năng kết nối không dây với phần thân robot. Thiết bị trên robot và thiết bị của người chăm sóc cần có kết nối Internet đối với các chức năng sử dụng dịch vụ trực tuyến. Các chức năng xử lý hình ảnh tại chỗ vẫn có thể tiếp tục khi mạng tạm thời gián đoạn, trong khi hội thoại trực tuyến, đồng bộ từ xa và thiết lập cuộc gọi phụ thuộc vào kết nối mạng.
+Hệ thống giả định thiết bị gắn trên robot có camera, microphone, loa và khả năng kết nối không dây với phần thân robot. Thiết bị trên robot và thiết bị của người chăm sóc cần có kết nối Internet.
 
 \subsubsection{Yêu cầu chức năng}
 
@@ -158,41 +158,34 @@ Các yêu cầu trên cho thấy hệ thống phải phối hợp nhiều nhóm 
 
 \subsection{Kiến trúc tổng quan hệ thống}
 
-\subsubsection{Kiến trúc tổng quan}
+\subsubsection{Cơ sở xây dựng kiến trúc tổng quan}
 
-Các yêu cầu trong Mục 3.1 cho thấy hệ thống gồm năm nhóm chức năng chính: quản lý thông tin chăm sóc và lịch nhắc nhở; tương tác bằng giọng nói; nhận biết người, bám theo và phát hiện té ngã; liên lạc, giám sát từ xa; điều khiển chuyển động của phần thân robot. Ngoài ra, quy trình chuẩn bị mô hình AI cung cấp mô hình đã chuyển đổi cho chức năng thị giác trên thiết bị. Mỗi nhóm có nhiệm vụ riêng nhưng phải phối hợp trong các tình huống xuyên suốt. Chẳng hạn, khi phát hiện té ngã, robot cần dừng di chuyển, hỏi thăm người cao tuổi, tạo cảnh báo và thiết lập liên lạc với người chăm sóc.
+Các yêu cầu ở Mục 3.1 cho thấy hệ thống phải hỗ trợ đồng thời hoạt động chăm sóc tại nhà và khả năng theo dõi từ xa. Những chức năng tương tác trực tiếp với người cao tuổi, xử lý hình ảnh và điều khiển chuyển động cần được bố trí trên robot. Thông tin hồ sơ, lịch nhắc nhở, cảnh báo và trạng thái hoạt động phải được chia sẻ giữa hai ứng dụng. Trong khi đó, người chăm sóc cần một giao diện riêng để quản lý thông tin, tiếp nhận sự kiện, liên lạc và điều khiển robot khi cần. Từ đó, hệ thống được phân chia thành ba khu vực chính: hệ thống robot tại nhà, hệ thống dịch vụ \& kết nối, và hệ thống của người chăm sóc từ xa.
 
-Từ cách phân nhóm chức năng trên, kiến trúc được tổ chức thành bốn thành phần vận hành chính. RobotApp đảm nhiệm tương tác tại nhà, xử lý hình ảnh và điều phối hoạt động của robot. CaregiverApp cung cấp các chức năng quản lý, theo dõi và can thiệp từ xa. Dịch vụ dùng chung hỗ trợ xác thực, đồng bộ dữ liệu và trao đổi thông tin giữa hai ứng dụng. Phần thân robot tiếp nhận lệnh chuyển động và điều khiển các cơ cấu chấp hành. Quy trình chuẩn bị mô hình AI được tách khỏi hệ thống vận hành vì chỉ được thực hiện trước khi mô hình được tích hợp vào RobotApp.
-
-Các yêu cầu phi chức năng không tạo thêm thành phần mới mà được dùng để xác định vị trí xử lý và cách các thành phần kết nối với nhau. Những chức năng cần phản hồi nhanh hoặc liên quan trực tiếp đến an toàn, như nhận biết người, bám theo và dừng robot, được xử lý tại RobotApp hoặc phần thân robot. Các chức năng cần chia sẻ dữ liệu giữa hai ứng dụng, như hồ sơ chăm sóc, lịch nhắc nhở và nhật ký, được thực hiện thông qua dịch vụ dùng chung. Cách bố trí này vừa đáp ứng luồng chức năng của hệ thống, vừa hạn chế việc các thao tác an toàn phụ thuộc vào kết nối Internet.
+Bảng \ref{tab:requirements_to_architecture} trình bày trách nhiệm của từng khu vực và mối liên hệ với các yêu cầu đã xác định. Một số yêu cầu xuất hiện ở nhiều khu vực vì cần sự phối hợp giữa các thành phần. Chẳng hạn, điều khiển từ xa bắt đầu từ thao tác của người chăm sóc, được chuyển qua hệ thống dịch vụ \& kết nối, sau đó được RobotApp kiểm tra trước khi gửi đến phần thân robot.
 
 \begin{table}[htbp]
 \centering
-\caption{Ánh xạ các nhóm chức năng vào kiến trúc hệ thống}
+\caption{Phân chia trách nhiệm giữa các khu vực trong kiến trúc hệ thống}
 \label{tab:requirements_to_architecture}
 \small
-\begin{tabularx}{\textwidth}{|p{3.0cm}|p{2.8cm}|X|}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\textwidth}{|p{3.0cm}|p{3.0cm}|X|}
 \hline
-\textbf{Nhóm chức năng} & \textbf{Yêu cầu liên quan} & \textbf{Phân công trách nhiệm} \\
+\textbf{Khu vực} & \textbf{Yêu cầu liên quan} & \textbf{Trách nhiệm chính} \\
 \hline
-Quản lý chăm sóc và nhắc nhở & FR01--FR04, FR06, FR18 & CaregiverApp quản lý thông tin và lịch; dịch vụ dùng chung lưu trữ, đồng bộ dữ liệu; RobotApp thực hiện lời nhắc và ghi nhận kết quả \\
+Hệ thống robot tại nhà & FR04--FR17, FR20 & Tương tác với người cao tuổi; thu nhận và xử lý hình ảnh; theo dõi người, phát hiện tình huống nghi té ngã; thực hiện lời nhắc và cuộc gọi; tạo hoặc tiếp nhận lệnh chuyển động; điều khiển và dừng phần thân robot \\
 \hline
-Hội thoại và xử lý tình huống khẩn cấp & FR05, FR12--FR14 & RobotApp tương tác với người cao tuổi và khởi tạo yêu cầu hỗ trợ; dịch vụ dùng chung chuyển thông tin; CaregiverApp tiếp nhận cảnh báo và tham gia cuộc gọi \\
+Hệ thống dịch vụ \& kết nối & FR01--FR04, FR06, FR13--FR16, FR18 & Xác thực người dùng; lưu trữ và đồng bộ hồ sơ, lịch, nhật ký; chuyển trạng thái chức năng, cảnh báo và lệnh điều khiển; hỗ trợ thiết lập liên lạc giữa hai ứng dụng \\
 \hline
-Nhận biết, theo dõi và phát hiện té ngã & FR07--FR11 & RobotApp thu nhận hình ảnh, nhận biết tư thế, duy trì người mục tiêu và phân tích diễn biến theo thời gian \\
-\hline
-Giám sát và điều khiển từ xa & FR14--FR16 & CaregiverApp cung cấp giao diện quan sát và điều khiển; dịch vụ dùng chung chuyển thông tin giữa hai ứng dụng; RobotApp tiếp nhận và điều phối lệnh \\
-\hline
-Điều khiển chuyển động & FR09, FR15--FR17, FR20 & RobotApp tạo hoặc tiếp nhận lệnh chuyển động và lựa chọn nguồn điều khiển; phần thân robot điều khiển hai động cơ và thực hiện dừng an toàn \\
-\hline
-Chuẩn bị mô hình AI & FR19 & Thành phần phát triển AI thực hiện chuyển đổi và kiểm tra mô hình trước khi tích hợp vào RobotApp \\
+Hệ thống người chăm sóc từ xa & FR01--FR03, FR06, FR13--FR15, FR18 & Cung cấp giao diện quản lý hồ sơ và lịch; bật hoặc tắt chức năng giám sát; tiếp nhận cảnh báo, xem lịch sử; gọi video và điều khiển robot từ xa \\
 \hline
 \end{tabularx}
 \end{table}
 
-Kết quả phân tích trên xác định rõ trách nhiệm của từng thành phần và mối quan hệ giữa chúng. Đây là cơ sở để xây dựng sơ đồ kiến trúc tổng quan, trong đó các thành phần được biểu diễn theo vị trí sử dụng và các luồng thông tin cần trao đổi.
+Yêu cầu FR19 về chuẩn bị mô hình AI thuộc giai đoạn phát triển, không tham gia như một khu vực vận hành độc lập. Mô hình sau khi chuyển đổi được tích hợp vào khối nhận biết và an toàn của RobotApp. Cách phân chia này giúp Hình \ref{fig:high_level_architecture} tập trung mô tả các thành phần hoạt động và trao đổi dữ liệu khi hệ thống được sử dụng.
 
-Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan theo ba khu vực: hệ thống tại nhà, dịch vụ dùng chung và ứng dụng của người chăm sóc. Tại nhà, điện thoại hoặc máy tính bảng Android gắn trên robot thu nhận hình ảnh, âm thanh, tương tác với người cao tuổi và điều phối chuyển động. Phần thân robot tiếp nhận vận tốc đặt, điều khiển hai động cơ và thực hiện các cơ chế dừng an toàn. Dịch vụ dùng chung hỗ trợ xác thực, lưu trữ, đồng bộ dữ liệu chăm sóc và thiết lập liên lạc. Ứng dụng của người chăm sóc cung cấp giao diện cấu hình, nhận cảnh báo, quan sát và điều khiển từ xa.
+Hình \ref{fig:high_level_architecture} thể hiện kiến trúc tổng quan của hệ thống. Phần phía trên là hệ thống robot tại nhà, gồm thiết bị Android đảm nhiệm xử lý và phần thân robot thực hiện chuyển động. Phần giữa là hệ thống dịch vụ \& kết nối hỗ trợ hai ứng dụng trao đổi dữ liệu. Phần phía dưới là ứng dụng dành cho người chăm sóc. Các mũi tên trong hình biểu diễn bốn nhóm trao đổi chính: lệnh chuyển động và phản hồi từ phần thân robot; trạng thái, cảnh báo và lệnh giữa robot với hệ thống dịch vụ \& kết nối; thông tin chăm sóc và thao tác điều khiển từ phía người chăm sóc; âm thanh và hình ảnh của cuộc gọi giữa hai thiết bị.
 
 \begin{figure}[H]
     \centering
@@ -201,82 +194,83 @@ Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan t
     \label{fig:high_level_architecture}
 \end{figure}
 
-\subsubsection{Các module và trách nhiệm}
+\subsubsection{Các khối chức năng và luồng phối hợp}
 
-Các thành phần trong kiến trúc được chia thành những module có nhiệm vụ và dữ liệu trao đổi xác định. Bảng \ref{tab:logical_modules} tổng hợp đầu vào, chức năng xử lý và đầu ra của từng module, qua đó làm rõ cách các thành phần phối hợp trong quá trình vận hành.
+Trong mỗi khu vực, Hình \ref{fig:high_level_architecture} tiếp tục chia hệ thống thành các khối chức năng. Bảng \ref{tab:logical_modules} sử dụng đúng cách phân nhóm trong hình để làm rõ nhiệm vụ và thông tin trao đổi của từng khối.
 
-\begin{longtable}{|p{3.1cm}|p{3.7cm}|p{3.8cm}|p{3.0cm}|}
-\caption{Các module trong kiến trúc tổng quan của hệ thống}\label{tab:logical_modules}\\
+\begin{longtable}{|p{2.7cm}|p{3.4cm}|p{4.2cm}|p{3.3cm}|}
+\caption{Vai trò của các khối trong kiến trúc tổng quan}\label{tab:logical_modules}\\
 \hline
-\textbf{Module} & \textbf{Đầu vào} & \textbf{Xử lý/trách nhiệm} & \textbf{Đầu ra} \\
+\textbf{Khu vực} & \textbf{Khối chức năng} & \textbf{Nhiệm vụ} & \textbf{Thông tin trao đổi chính} \\
 \hline
 \endfirsthead
 \hline
-\textbf{Module} & \textbf{Đầu vào} & \textbf{Xử lý/trách nhiệm} & \textbf{Đầu ra} \\
+\textbf{Khu vực} & \textbf{Khối chức năng} & \textbf{Nhiệm vụ} & \textbf{Thông tin trao đổi chính} \\
 \hline
 \endhead
-Quản lý chăm sóc & Thao tác cập nhật hồ sơ, lịch và trạng thái chức năng & Kiểm tra dữ liệu nhập, cập nhật cấu hình và truy vấn lịch sử & Hồ sơ, lịch, trạng thái giám sát \\
+Hệ thống robot tại nhà & Nền tảng robot vật lý & Thực hiện chuyển động bằng hai bánh xe, cung cấp phản hồi vị trí rotor và dừng khi mất lệnh & Vận tốc đặt của hai bánh; phản hồi từ cảm biến góc \\
 \hline
-Giám sát và can thiệp từ xa & Cảnh báo, video và thao tác trên cần điều khiển ảo & Hiển thị tình trạng, nhận cuộc gọi và tạo lệnh điều khiển & Phản hồi cuộc gọi, vector điều khiển \\
+Hệ thống robot tại nhà & Nhận biết và an toàn & Thu nhận hình ảnh, ước lượng tư thế, duy trì người mục tiêu và phân tích tình huống nghi té ngã & Khung hình; bounding box của người; điểm khớp; trạng thái mục tiêu; sự kiện nghi té ngã \\
 \hline
-Điều phối RobotApp & Thao tác người dùng, lịch, trạng thái chức năng và kết quả AI & Quản lý camera, kết nối BLE, lựa chọn nguồn lệnh và phối hợp xử lý sự kiện & Yêu cầu hội thoại, cuộc gọi hoặc lệnh chuyển động \\
+Hệ thống robot tại nhà & Tương tác và hỗ trợ & Tiếp nhận tiếng nói, tạo câu trả lời, phát lời nhắc và hỏi xác nhận khi cần & Lời nói; nội dung hội thoại; lịch nhắc nhở; phản hồi của người dùng \\
 \hline
-Cảm nhận và định danh mục tiêu & Khung hình camera & Ước lượng tư thế, liên kết kết quả phát hiện giữa các khung hình và duy trì mục tiêu ID0 & Hộp bao, điểm khớp và định danh mục tiêu \\
+Hệ thống robot tại nhà & Liên lạc và di chuyển & Thiết lập cuộc gọi, phối hợp nguồn lệnh bám theo hoặc điều khiển từ xa và chuyển lệnh đến phần thân robot & Trạng thái cuộc gọi; âm thanh, hình ảnh; vector điều khiển \\
 \hline
-Theo dõi chuyển động & Vị trí mục tiêu ID0 và cấu hình bám theo & Ước lượng độ gần, điều chỉnh hướng và xử lý khi mất dấu & Vector tiến, lùi, quay hoặc lệnh dừng \\
+Hệ thống dịch vụ \& kết nối & Định danh và truy cập & Xác thực tài khoản và xác định vùng dữ liệu mà cặp thiết bị được phép sử dụng & Thông tin xác thực; định danh người dùng \\
 \hline
-Phát hiện và xác nhận té ngã & Chuỗi tư thế của mục tiêu ID0 & Phân loại chuỗi, kiểm tra bổ sung và yêu cầu người dùng xác nhận tình trạng & Kết quả xác nhận an toàn hoặc sự kiện cảnh báo \\
+Hệ thống dịch vụ \& kết nối & Thông tin chăm sóc & Lưu trữ và đồng bộ hồ sơ, lịch nhắc nhở cùng các bản ghi hoạt động & Hồ sơ; lịch; nhật ký lời nhắc, cảnh báo và cuộc gọi \\
 \hline
-Hội thoại và lời nhắc & Giọng nói, hồ sơ, lịch và sự kiện té ngã & Chuyển tiếng nói thành văn bản, tạo câu trả lời, tổng hợp tiếng nói và ghi nhận phản hồi & Âm thanh, yêu cầu của người dùng và trạng thái phản hồi \\
+Hệ thống dịch vụ \& kết nối & Điều phối thời gian thực & Chuyển trạng thái chức năng, cảnh báo, trạng thái cuộc gọi và lệnh điều khiển giữa hai ứng dụng & Trạng thái bật, tắt; cảnh báo; lệnh; thông tin thiết lập cuộc gọi \\
 \hline
-Liên lạc thời gian thực & Yêu cầu gọi và thông tin thiết lập phiên & Thiết lập, kết thúc cuộc gọi, quản lý camera và truyền âm thanh, hình ảnh hai chiều & Âm thanh, hình ảnh và trạng thái cuộc gọi \\
+Hệ thống dịch vụ \& kết nối & Hỗ trợ liên lạc & Hỗ trợ hai thiết bị tìm đường kết nối và thiết lập phiên truyền thông từ xa & Thông tin thiết lập kết nối \\
 \hline
-Dữ liệu và điều phối dùng chung & Hồ sơ, lịch, trạng thái chức năng, lệnh, cảnh báo và thông tin cuộc gọi & Xác thực, phân vùng dữ liệu và đồng bộ thay đổi giữa hai thiết bị & Dữ liệu cập nhật của từng cặp thiết bị \\
+Hệ thống người chăm sóc & Giám sát và điều khiển từ xa & Hiển thị trạng thái robot, bật hoặc tắt chức năng giám sát và tạo lệnh từ cần điều khiển ảo & Trạng thái chức năng; thao tác điều khiển; lệnh dừng \\
 \hline
-Cầu nối điều khiển & Vector điều khiển từ xa hoặc bám theo tự động & Chọn nguồn lệnh, kiểm tra giá trị và thời điểm tạo lệnh, tính vận tốc hai bánh & Vận tốc đặt của bánh trái và bánh phải \\
+Hệ thống người chăm sóc & Liên lạc trực tiếp & Thực hiện cuộc gọi âm thanh và hình ảnh với thiết bị đặt trên robot & Yêu cầu gọi; âm thanh; hình ảnh; trạng thái cuộc gọi \\
 \hline
-Chấp hành thân robot & Vận tốc đặt của hai bánh và góc rotor & Điều khiển vận tốc vòng kín, giới hạn lệnh và dừng khi quá thời gian chờ & Tín hiệu PWM điều khiển động cơ và trạng thái dừng \\
+Hệ thống người chăm sóc & Cảnh báo và lịch sử hoạt động & Thông báo sự kiện cần hỗ trợ và cho phép xem lại các hoạt động đã ghi nhận & Cảnh báo té ngã; nhật ký lời nhắc và cuộc gọi \\
 \hline
-Chuẩn bị mô hình ngoại tuyến & Mô hình đã huấn luyện và cấu hình chuyển đổi & Chuyển đổi định dạng, kiểm tra tensor và tạo mô hình cho thiết bị di động & Mô hình sẵn sàng triển khai \\
+Hệ thống người chăm sóc & Hồ sơ và lịch nhắc nhở & Quản lý thông tin người cao tuổi và thiết lập nội dung, thời điểm nhắc nhở & Hồ sơ chăm sóc; lịch nhắc nhở \\
 \hline
 \end{longtable}
 
-Kết quả nhận dạng của AI được chuyển đến các module xử lý để xác định phản ứng phù hợp của robot. Chẳng hạn, mô hình ước lượng tư thế cung cấp các điểm khớp, còn LSTM trả về xác suất té ngã; bộ hậu kiểm sử dụng các kết quả này để quyết định có cần hỏi xác nhận hay không. Module điều phối tiếp tục xử lý việc dừng robot, ghi cảnh báo và gọi người chăm sóc. Đối với chuyển động, cần điều khiển ảo và chức năng bám theo tạo vector điều khiển chuẩn hóa; module cầu nối kiểm tra tính hợp lệ của lệnh rồi chuyển thành vận tốc đặt cho hai động cơ. Cách phân chia này giúp tập trung các điều kiện kiểm tra trước khi robot thực hiện hành động.
+Các luồng trong hình thể hiện cách các khối phối hợp mà không phụ thuộc vào công nghệ hiện thực. Thứ nhất, thiết bị Android trên robot gửi vận tốc đặt đến phần thân và nhận dữ liệu phản hồi phục vụ điều khiển động cơ. Thứ hai, RobotApp trao đổi trạng thái chức năng, cảnh báo, lệnh và thông tin cuộc gọi với hệ thống dịch vụ \& kết nối. Thứ ba, CaregiverApp đọc hoặc cập nhật hồ sơ, lịch, nhật ký và lệnh điều khiển thông qua hệ thống này. Thứ tư, khi cuộc gọi được thiết lập, âm thanh và hình ảnh được truyền giữa hai thiết bị theo kênh riêng, không lưu cùng hồ sơ và lịch chăm sóc.
+
 
 \subsection{Các luồng xử lý chính}
 
-\subsubsection{Các trường hợp sử dụng chính}
+\subsubsection{Các use case chính}
 
-Các trường hợp sử dụng được chia thành bốn nhóm: quản lý hồ sơ, lịch nhắc nhở và nhật ký; hội thoại và thực hiện lời nhắc; giám sát, bám theo và phát hiện té ngã; liên lạc và điều khiển robot. Người chăm sóc chủ yếu thao tác thông qua ứng dụng quản lý, trong khi người cao tuổi tương tác trực tiếp với robot bằng giọng nói và tham gia cuộc gọi khi cần. Bảng \ref{tab:usecases} tóm tắt tác nhân và kết quả của các trường hợp sử dụng chính.
+Các use case được chia thành bốn nhóm: quản lý hồ sơ, lịch nhắc nhở và nhật ký; hội thoại và thực hiện lời nhắc; giám sát, bám theo và phát hiện té ngã; liên lạc và điều khiển robot. Người chăm sóc chủ yếu thao tác thông qua ứng dụng quản lý, trong khi người cao tuổi tương tác trực tiếp với robot bằng giọng nói. Bảng \ref{tab:usecases} tóm tắt tác nhân và kết quả của các use case chính. Cột kết quả mô tả trạng thái đạt được sau khi use case hoàn tất, không phụ thuộc vào công nghệ được lựa chọn để hiện thực.
 
 \begin{table}[htbp]
 \centering
-\caption{Tóm tắt các trường hợp sử dụng chính}
+\caption{Tóm tắt các use case chính}
 \label{tab:usecases}
 \small
 \begin{tabularx}{\textwidth}{|p{1.3cm}|p{4.0cm}|p{3.0cm}|X|}
 \hline
-\textbf{Mã} & \textbf{Trường hợp sử dụng} & \textbf{Tác nhân chính} & \textbf{Kết quả} \\
+\textbf{Mã} & \textbf{Use case} & \textbf{Tác nhân chính} & \textbf{Kết quả} \\
 \hline
-UC01 & Đăng ký/đăng nhập & Người chăm sóc, thiết bị robot & Phiên Firebase và UID dùng chung cho cặp thiết bị \\
+UC01 & Đăng ký/đăng nhập & Người chăm sóc, thiết bị robot & Tài khoản được tạo hoặc người dùng được xác thực để truy cập đúng dữ liệu chăm sóc \\
 \hline
-UC02 & Quản lý hồ sơ & Người chăm sóc & Hồ sơ và ngữ cảnh xưng hô được cập nhật \\
+UC02 & Quản lý hồ sơ & Người chăm sóc & Thông tin của người cao tuổi được lưu hoặc cập nhật để phục vụ quá trình chăm sóc \\
 \hline
-UC03 & Quản lý lịch nhắc nhở & Người chăm sóc & Lịch được đồng bộ tới RobotApp \\
+UC03 & Quản lý lịch nhắc nhở & Người chăm sóc & Lịch nhắc nhở được tạo, cập nhật, bật, tắt hoặc xóa theo thao tác của người chăm sóc \\
 \hline
-UC04 & Nhận và xác nhận lời nhắc & Người cao tuổi & Nội dung được phát và phản hồi được ghi nhật ký \\
+UC04 & Nhận và xác nhận lời nhắc & Người cao tuổi & Lời nhắc được phát đúng thời điểm và phản hồi của người cao tuổi được ghi nhận \\
 \hline
-UC05 & Hội thoại trợ lý & Người cao tuổi & Câu trả lời được tạo và phát bằng giọng nói \\
+UC05 & Hội thoại trợ lý & Người cao tuổi & Người cao tuổi nhận được câu trả lời bằng giọng nói phù hợp với nội dung trao đổi \\
 \hline
-UC06 & Bật/tắt giám sát & Người chăm sóc & Auto-follow hoặc phát hiện té ngã thay đổi trạng thái \\
+UC06 & Bật/tắt giám sát & Người chăm sóc & Chức năng bám theo và phát hiện té ngã được bật hoặc tắt theo lựa chọn của người chăm sóc \\
 \hline
-UC07 & Phát hiện và xác nhận té ngã & Người cao tuổi, RobotApp & Loại nhiễu, xác nhận an toàn hoặc kích hoạt cảnh báo \\
+UC07 & Phát hiện và xác nhận té ngã & Người cao tuổi, RobotApp & Tình huống được xác nhận là an toàn hoặc cảnh báo cần hỗ trợ được tạo \\
 \hline
-UC08 & Gọi video & Hai người dùng & Phiên WebRTC được thiết lập và kết thúc \\
+UC08 & Gọi video & Hai người dùng & Người cao tuổi và người chăm sóc có thể trao đổi âm thanh, hình ảnh và kết thúc cuộc gọi khi cần \\
 \hline
-UC09 & Điều khiển robot & Người chăm sóc & Lệnh hợp lệ tới hai động cơ hoặc STOP \\
+UC09 & Điều khiển robot & Người chăm sóc & Robot di chuyển theo thao tác của người chăm sóc và dừng khi việc điều khiển kết thúc \\
 \hline
-UC10 & Xem nhật ký & Người chăm sóc & Danh sách lời nhắc, cảnh báo và cuộc gọi \\
+UC10 & Xem nhật ký & Người chăm sóc & Lịch sử lời nhắc, cảnh báo té ngã và cuộc gọi được hiển thị để người chăm sóc theo dõi \\
 \hline
 \end{tabularx}
 \end{table}
@@ -318,7 +312,7 @@ Trong hội thoại thông thường, bộ nhận dạng tiếng nói chuyển l
 
 \subsection{Thiết kế và lựa chọn công nghệ cho các module}
 
-Sau khi xác định các module và luồng phối hợp, những công nghệ phù hợp được lựa chọn dựa trên độ trễ, tài nguyên của điện thoại, khả năng tích hợp và phạm vi hệ thống. Mỗi loại dữ liệu có đặc điểm riêng: giải pháp phù hợp để lưu trữ hồ sơ chưa chắc đáp ứng việc truyền video thời gian thực, còn một mô hình đạt độ chính xác cao trên máy trạm có thể không duy trì được tốc độ suy luận trên điện thoại. Bảng \ref{tab:crosscutting_technology_choices} tóm tắt các quyết định nền tảng; các mục tiếp theo trình bày thiết kế chi tiết của từng khối.
+Sau khi xác định các module và luồng phối hợp, những công nghệ phù hợp được lựa chọn dựa trên độ trễ, tài nguyên của điện thoại, khả năng tích hợp và phạm vi hệ thống. Mỗi loại dữ liệu có đặc điểm riêng: giải pháp phù hợp để lưu trữ hồ sơ chưa chắc đáp ứng việc truyền video thời gian thực, còn một mô hình đạt độ chính xác cao trên máy trạm có thể không duy trì được tốc độ suy luận trên điện thoại. Bảng \ref{tab:crosscutting_technology_choices} tóm tắt các quyết định lựa chọn công nghệ sử dụng; các mục tiếp theo trình bày thiết kế chi tiết của từng khối.
 
 \begin{longtable}{|p{2.8cm}|p{3.4cm}|p{3.5cm}|p{3.8cm}|}
 \caption{So sánh các lựa chọn công nghệ xuyên suốt hệ thống}\label{tab:crosscutting_technology_choices}\\
@@ -350,15 +344,15 @@ CaregiverApp đảm nhiệm vai trò giao diện quản lý từ xa với bốn 
 
 RobotApp điều phối các chức năng trên robot. Ứng dụng tiếp nhận khung hình, âm thanh, lịch nhắc nhở, trạng thái chức năng và lệnh từ xa, sau đó chuyển dữ liệu đến module tương ứng. Kết quả nhận dạng và dự đoán của AI được kết hợp với trạng thái xử lý hiện tại để quyết định dừng robot, hỏi xác nhận hoặc mở cuộc gọi. Kết nối BLE được quản lý tập trung để tránh nhiều thành phần đồng thời tạo kết nối GATT tới ESP32; CameraX và WebRTC luân phiên sử dụng camera theo trạng thái cuộc gọi.
 
-Trong phạm vi đề tài, hai ứng dụng được phát triển trực tiếp trên nền tảng Android bằng Kotlin và XML. Android cung cấp các giao diện lập trình để sử dụng camera, microphone, Bluetooth, nhận dạng và tổng hợp tiếng nói, đồng thời hỗ trợ tổ chức các tác vụ nền. Những khả năng này phù hợp với yêu cầu tích hợp chức năng giám sát, hội thoại và kết nối thân robot. Phần giao diện, xử lý nghiệp vụ và tác vụ nền được phân chia theo chức năng để thuận tiện kiểm thử và bảo trì. Hệ thống hiện hướng đến các thiết bị Android được sử dụng trong đồ án.
+Trong phạm vi đề tài, hai ứng dụng được phát triển trực tiếp trên nền tảng Android bằng Kotlin và XML. Android cung cấp các giao diện lập trình để sử dụng camera, microphone, Bluetooth, nhận dạng và tổng hợp tiếng nói, đồng thời hỗ trợ tổ chức các tác vụ nền. Những khả năng này phù hợp với yêu cầu tích hợp chức năng giám sát, hội thoại và kết nối thân robot. Phần giao diện, xử lý nghiệp vụ và tác vụ nền được phân chia theo chức năng để thuận tiện kiểm thử và bảo trì. 
 
 \subsubsection{Module thu nhận hình ảnh, ước lượng tư thế và theo dõi mục tiêu}
 
-Để giám sát và phát hiện té ngã trên điện thoại gắn trên robot, module thị giác cần cung cấp đồng thời hộp bao người và các điểm khớp cơ thể với tốc độ phù hợp cho việc phân tích chuyển động theo thời gian. Việc kết hợp một bộ phát hiện người với một mô hình ước lượng tư thế riêng cho phép thay thế từng thành phần độc lập, nhưng cần hai lượt suy luận và bước chuyển vùng ảnh giữa hai mô hình. Mô hình tích hợp phát hiện người và ước lượng tư thế tạo cả hai loại kết quả trong cùng một lượt suy luận, giúp đơn giản hóa chuỗi xử lý.
+Để giám sát và phát hiện té ngã trên điện thoại gắn trên robot, module thị giác cần cung cấp đồng thời bounding box của người và các điểm khớp cơ thể với tốc độ phù hợp cho việc phân tích chuyển động theo thời gian. Việc kết hợp một bộ phát hiện người với một mô hình ước lượng tư thế riêng cho phép thay thế từng thành phần độc lập, nhưng cần hai lượt suy luận và bước chuyển vùng ảnh giữa hai mô hình. Mô hình tích hợp phát hiện người và ước lượng tư thế tạo cả hai loại kết quả trong cùng một lượt suy luận, giúp đơn giản hóa chuỗi xử lý.
 
-Các mô hình MobileNet SSD và EfficientDet tiêu chuẩn phục vụ phát hiện đối tượng nhưng không trực tiếp cung cấp 17 điểm khớp, nên cần thêm mô hình ước lượng tư thế. YOLO-Pose cung cấp đồng thời hộp bao và điểm khớp, đồng thời hỗ trợ xuất sang TFLite/LiteRT \reportcite{ref:yolo_pose_docs}. Từ quy trình ở Mục \ref{sec:yolo_pose_inference_pipeline}, cấu trúc đầu vào, đầu ra ở Mục \ref{sec:yolo_pose_output_representation} và so sánh quy mô ở Mục \ref{sec:yolo26_pose_scales}, đề tài lựa chọn YOLO26n-Pose. Biến thể nano có số tham số và chi phí tính toán thấp nhất trong các mức n, s, m, l và x, phù hợp với điện thoại còn phải thực hiện theo dõi, hội thoại, đồng bộ dữ liệu và điều khiển. Tuy nhiên, chỉ số mAP ước lượng tư thế thấp hơn các biến thể lớn, nên lựa chọn này cần được đánh giá thêm về độ trễ và chất lượng điểm khớp trên thiết bị sử dụng.
+Các mô hình MobileNet SSD và EfficientDet tiêu chuẩn phục vụ phát hiện đối tượng nhưng không trực tiếp cung cấp 17 điểm khớp, nên cần thêm mô hình ước lượng tư thế. YOLO-Pose cung cấp đồng thời bounding box và điểm khớp, đồng thời hỗ trợ xuất sang TFLite/LiteRT \reportcite{ref:yolo_pose_docs}. Từ quy trình ở Mục \ref{sec:yolo_pose_inference_pipeline}, cấu trúc đầu vào, đầu ra ở Mục \ref{sec:yolo_pose_output_representation} và so sánh quy mô ở Mục \ref{sec:yolo26_pose_scales}, đề tài lựa chọn YOLO26n-Pose. Biến thể nano có số tham số và chi phí tính toán thấp nhất trong các mức n, s, m, l và x, phù hợp với điện thoại còn phải thực hiện theo dõi, hội thoại, đồng bộ dữ liệu và điều khiển. Tuy nhiên, chỉ số mAP ước lượng tư thế thấp hơn các biến thể lớn, nên lựa chọn này cần được đánh giá thêm về độ trễ và chất lượng điểm khớp trên thiết bị sử dụng.
 
-Module nhận khung hình từ CameraX hoặc bản sao hình ảnh của WebRTC. Ảnh được đổi về kích thước $320\times320$ trước khi suy luận bằng YOLO-Pose. Kết quả được lọc với ngưỡng tin cậy 0,20, ngưỡng IoU của bước NMS là 0,45 và ngưỡng hiển thị điểm khớp là 0,30. Hộp bao người và 17 điểm khớp được dùng chung cho theo dõi mục tiêu, ước lượng độ gần và phân tích bằng LSTM. Tần suất xử lý được đặt giới hạn trên ở 25 FPS; nếu lượt suy luận trước chưa hoàn tất, khung hình mới được bỏ qua để hạn chế tích lũy độ trễ.
+Module nhận khung hình từ CameraX hoặc bản sao hình ảnh của WebRTC. Ảnh được đổi về kích thước $320\times320$ trước khi suy luận bằng YOLO-Pose. Kết quả được lọc với ngưỡng tin cậy 0,20, ngưỡng IoU của bước NMS là 0,45 và ngưỡng hiển thị điểm khớp là 0,30. Bounding box của người và 17 điểm khớp được dùng chung cho theo dõi mục tiêu, ước lượng độ gần và phân tích bằng LSTM. Tần suất xử lý được đặt giới hạn trên ở 25 FPS; nếu lượt suy luận trước chưa hoàn tất, khung hình mới được bỏ qua để hạn chế tích lũy độ trễ.
 
 Việc gửi khung hình lên dịch vụ đám mây cho phép sử dụng phần cứng mạnh hơn, nhưng làm tăng độ trễ, băng thông và rủi ro đối với dữ liệu hình ảnh. Suy luận trực tiếp trên điện thoại chịu giới hạn về tài nguyên nhưng đáp ứng tốt hơn NFR02, NFR06 và vẫn hoạt động khi Internet gián đoạn. Vì vậy, TFLite được chọn làm môi trường suy luận trên thiết bị; hệ thống ưu tiên GPU, chuyển sang NNAPI khi cần và sử dụng CPU bốn luồng làm phương án cuối \reportcite{ref:tflite}.
 
@@ -368,19 +362,19 @@ Việc gửi khung hình lên dịch vụ đám mây cho phép sử dụng phầ
 C=0,30(1-\operatorname{IoU})+0,30\hat d_c+0,30\hat d_p+0,10p_a,
 \end{equation}
 
-trong đó $\hat d_c$ là khoảng cách tâm đã chuẩn hóa, $\hat d_p$ là khoảng cách giữa các điểm mốc tại vai và hông, còn $p_a$ là thành phần chi phí phản ánh sự thay đổi diện tích hộp bao. Khi lựa chọn người mục tiêu ban đầu, mỗi đối tượng được đánh giá theo điểm số:
+trong đó $\hat d_c$ là khoảng cách tâm đã chuẩn hóa, $\hat d_p$ là khoảng cách giữa các điểm mốc tại vai và hông, còn $p_a$ là thành phần chi phí phản ánh sự thay đổi diện tích bounding box. Khi lựa chọn người mục tiêu ban đầu, mỗi đối tượng được đánh giá theo điểm số:
 
 \begin{equation}
 Q=0,60q_{area}+0,15q_{det}+0,15q_{vis}+0,10q_{center}-p_{edge}.
 \end{equation}
 
-Trong biểu thức trên, $q_{area}$ phản ánh diện tích hộp bao, $q_{det}$ là độ tin cậy phát hiện, $q_{vis}$ phản ánh tỷ lệ điểm khớp quan sát được, $q_{center}$ biểu diễn mức độ gần tâm ảnh và $p_{edge}$ là thành phần giảm điểm khi người bị cắt ở biên ảnh. Đối tượng có điểm số cao nhất được gán định danh ID0 để dùng chung cho bám theo và phát hiện té ngã. Bộ theo dõi duy trì ID0 tối đa 45 khung hình không ghép được với kết quả phát hiện; các định danh khác được giữ tối đa 10 khung hình. Cơ chế tìm lại mục tiêu hoạt động trong khoảng 2 s, với điều kiện đối tượng nằm cách vị trí cuối không quá 35\% đường chéo ảnh, thuộc vùng trung tâm và được quan sát ổn định trong ba khung hình. Khi đang xử lý một sự kiện nghi té ngã, hệ thống không tự chuyển sang người khác.
+Trong biểu thức trên, $q_{area}$ phản ánh diện tích bounding box, $q_{det}$ là độ tin cậy phát hiện, $q_{vis}$ phản ánh tỷ lệ điểm khớp quan sát được, $q_{center}$ biểu diễn mức độ gần tâm ảnh và $p_{edge}$ là thành phần giảm điểm khi người bị cắt ở biên ảnh. Đối tượng có điểm số cao nhất được gán định danh ID0 để dùng chung cho bám theo và phát hiện té ngã. Bộ theo dõi duy trì ID0 tối đa 45 khung hình không ghép được với kết quả phát hiện; các định danh khác được giữ tối đa 10 khung hình. Cơ chế tìm lại mục tiêu hoạt động trong khoảng 2 s, với điều kiện đối tượng nằm cách vị trí cuối không quá 35\% đường chéo ảnh, thuộc vùng trung tâm và được quan sát ổn định trong ba khung hình. Khi đang xử lý một sự kiện nghi té ngã, hệ thống không tự chuyển sang người khác.
 
 \subsubsection{Module tự bám theo và điều khiển chuyển động}
 
-Module bám theo tự động nhận hộp bao và các điểm khớp của mục tiêu ID0, sau đó tạo vector điều khiển tịnh tiến và quay đã chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá chân, rồi làm mượt bằng trung bình trượt lũy thừa (Exponential Moving Average -- EMA). Giá trị này được chia thành ba vùng: quá xa, phù hợp và quá gần. Ngưỡng đi vào và rời khỏi mỗi vùng được đặt khác nhau để hạn chế việc robot đổi trạng thái liên tục khi giá trị dao động gần biên. Sai lệch ngang giữa tâm mục tiêu và tâm ảnh tạo thành phần quay, với vùng chết 0,07, hệ số 2,2 và giới hạn độ lớn 0,50. Vector điều khiển được cập nhật khoảng mỗi 120 ms.
+Module bám theo tự động nhận bounding box và các điểm khớp của mục tiêu ID0, sau đó tạo vector điều khiển tịnh tiến và quay đã chuẩn hóa. Độ gần được ước lượng từ diện tích bounding box và các mốc vai, hông, gối, mắt cá chân, rồi làm mượt bằng trung bình trượt lũy thừa (Exponential Moving Average -- EMA). Giá trị này được chia thành ba vùng: quá xa, phù hợp và quá gần. Ngưỡng đi vào và rời khỏi mỗi vùng được đặt khác nhau để hạn chế việc robot đổi trạng thái liên tục khi giá trị dao động gần biên. Sai lệch ngang giữa tâm mục tiêu và tâm ảnh tạo thành phần quay, với vùng chết 0,07, hệ số 2,2 và giới hạn độ lớn 0,50. Vector điều khiển được cập nhật khoảng mỗi 120 ms.
 
-Bộ điều khiển chỉ dựa vào tâm hộp bao có chi phí tính toán thấp, nhưng có thể đánh giá sai khoảng cách khi phần chân bị cắt khỏi ảnh. Cảm biến chiều sâu cung cấp khoảng cách trực tiếp hơn nhưng làm tăng độ phức tạp phần cứng và nằm ngoài phạm vi đề tài. Do đó, hệ thống kết hợp hộp bao với các keypoint và áp dụng chính sách chuyển động thận trọng: khi vùng bao quá lớn hoặc phần chân không còn trong khung hình, robot ưu tiên lùi để quan sát đầy đủ hơn. Sau khi xuất hiện kết quả FALL, robot không tiến về phía người mà chỉ dừng, lùi chậm hoặc quay tại chỗ; nếu mất ID0 trong trạng thái này, robot dừng ngay.
+Bộ điều khiển chỉ dựa vào tâm bounding box có chi phí tính toán thấp, nhưng có thể đánh giá sai khoảng cách khi phần chân bị cắt khỏi ảnh. Cảm biến chiều sâu cung cấp khoảng cách trực tiếp hơn nhưng làm tăng độ phức tạp phần cứng và nằm ngoài phạm vi đề tài. Do đó, hệ thống kết hợp bounding box với các keypoint và áp dụng chính sách chuyển động thận trọng: khi bounding box có kích thước quá lớn hoặc phần chân không còn trong khung hình, robot ưu tiên lùi để quan sát đầy đủ hơn. Sau khi xuất hiện kết quả FALL, robot không tiến về phía người mà chỉ dừng, lùi chậm hoặc quay tại chỗ; nếu mất ID0 trong trạng thái này, robot dừng ngay.
 
 Lệnh từ cần điều khiển ảo và chức năng bám theo tự động sử dụng chung cấu trúc $x,y,ts$, nhưng chỉ một nguồn được quyền điều khiển tại một thời điểm. Module cầu nối tập trung việc kiểm tra thời điểm tạo lệnh, giới hạn giá trị và dừng khi quá thời gian chờ, giúp áp dụng cùng một quy trình kiểm tra cho cả hai nguồn.
 
@@ -529,4 +523,4 @@ Cơ chế giám sát thời gian nhận lệnh, thường gọi là watchdog, đ
 
 \subsection{Kết luận chương}
 
-Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng làm cơ sở phân chia nhiệm vụ cho RobotApp, CaregiverApp, dịch vụ dùng chung và phần thân robot. Trên kiến trúc tổng quan đó, các luồng giám sát, hội thoại, nhắc nhở, liên lạc và điều khiển được phân tích để lựa chọn công nghệ phù hợp. Thiết kế cũng xác định cách chuẩn bị mô hình AI, tổ chức dữ liệu, truyền nhận lệnh và phối hợp các cơ chế dừng an toàn. Những nội dung này là cơ sở để hiện thực hệ thống ở Chương 4 và đánh giá kết quả ở Chương 5.
+Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng làm cơ sở phân chia nhiệm vụ cho RobotApp, CaregiverApp, hệ thống dịch vụ \& kết nối, cùng phần thân robot. Trên kiến trúc tổng quan đó, các luồng giám sát, hội thoại, nhắc nhở, liên lạc và điều khiển được phân tích để lựa chọn công nghệ phù hợp. Thiết kế cũng xác định cách chuẩn bị mô hình AI, tổ chức dữ liệu, truyền nhận lệnh và phối hợp các cơ chế dừng an toàn. Những nội dung này là cơ sở để hiện thực hệ thống ở Chương 4 và đánh giá kết quả ở Chương 5.
