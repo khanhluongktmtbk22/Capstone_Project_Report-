@@ -99,9 +99,8 @@
 \contentsline {subsubsection}{\numberline {3.1.3}Yêu cầu chức năng}{60}{subsubsection.3.1.3}%
 \contentsline {subsubsection}{\numberline {3.1.4}Yêu cầu phi chức năng}{63}{subsubsection.3.1.4}%
 \contentsline {subsection}{\numberline {3.2}Kiến trúc tổng quan hệ thống}{65}{subsection.3.2}%
-\contentsline {subsubsection}{\numberline {3.2.1}Dẫn xuất kiến trúc từ yêu cầu}{65}{subsubsection.3.2.1}%
-\contentsline {subsubsection}{\numberline {3.2.2}Kiến trúc tổng quan}{66}{subsubsection.3.2.2}%
-\contentsline {subsubsection}{\numberline {3.2.3}Các module và trách nhiệm}{67}{subsubsection.3.2.3}%
+\contentsline {subsubsection}{\numberline {3.2.1}Kiến trúc tổng quan}{65}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Các module và trách nhiệm}{67}{subsubsection.3.2.2}%
 \contentsline {subsection}{\numberline {3.3}Các luồng xử lý chính}{69}{subsection.3.3}%
 \contentsline {subsubsection}{\numberline {3.3.1}Các trường hợp sử dụng chính}{69}{subsubsection.3.3.1}%
 \contentsline {subsubsection}{\numberline {3.3.2}Luồng giám sát và xử lý té ngã}{71}{subsubsection.3.3.2}%
@@ -115,11 +114,11 @@
 \contentsline {subsubsection}{\numberline {3.4.5}Module hội thoại và lời nhắc}{80}{subsubsection.3.4.5}%
 \contentsline {subsubsection}{\numberline {3.4.6}Module dữ liệu dùng chung và liên lạc thời gian thực}{81}{subsubsection.3.4.6}%
 \contentsline {subsubsection}{\numberline {3.4.7}Module cầu nối BLE và chấp hành thân robot}{81}{subsubsection.3.4.7}%
-\contentsline {subsubsection}{\numberline {3.4.8}Module chuẩn bị và triển khai mô hình AI}{81}{subsubsection.3.4.8}%
+\contentsline {subsubsection}{\numberline {3.4.8}Module chuẩn bị và triển khai mô hình AI}{82}{subsubsection.3.4.8}%
 \contentsline {subsection}{\numberline {3.5}Thiết kế dữ liệu, giao thức truyền thông và phương thức kết nối}{82}{subsection.3.5}%
 \contentsline {subsubsection}{\numberline {3.5.1}Cây dữ liệu Firebase}{82}{subsubsection.3.5.1}%
-\contentsline {subsubsection}{\numberline {3.5.2}Cấu trúc dữ liệu điều khiển trên RTDB}{83}{subsubsection.3.5.2}%
-\contentsline {subsubsection}{\numberline {3.5.3}Giao tiếp BLE và điều khiển động cơ trên ESP32}{84}{subsubsection.3.5.3}%
+\contentsline {subsubsection}{\numberline {3.5.2}Cấu trúc dữ liệu điều khiển trên RTDB}{84}{subsubsection.3.5.2}%
+\contentsline {subsubsection}{\numberline {3.5.3}Giao tiếp BLE và điều khiển động cơ trên ESP32}{85}{subsubsection.3.5.3}%
 \contentsline {subsubsection}{\numberline {3.5.4}Cơ chế dừng an toàn nhiều tầng}{85}{subsubsection.3.5.4}%
 \contentsline {subsection}{\numberline {3.6}Kết luận chương}{85}{subsection.3.6}%
 \contentsline {section}{\numberline {4}Hiện thực hệ thống}{87}{section.4}%

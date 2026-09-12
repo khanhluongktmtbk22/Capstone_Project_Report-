@@ -158,7 +158,7 @@ Các yêu cầu trên cho thấy hệ thống phải phối hợp nhiều nhóm 
 
 \subsection{Kiến trúc tổng quan hệ thống}
 
-\subsubsection{Dẫn xuất kiến trúc từ yêu cầu}
+\subsubsection{Kiến trúc tổng quan}
 
 Các yêu cầu trong Mục 3.1 cho thấy hệ thống gồm năm nhóm chức năng chính: quản lý thông tin chăm sóc và lịch nhắc nhở; tương tác bằng giọng nói; nhận biết người, bám theo và phát hiện té ngã; liên lạc, giám sát từ xa; điều khiển chuyển động của phần thân robot. Ngoài ra, quy trình chuẩn bị mô hình AI cung cấp mô hình đã chuyển đổi cho chức năng thị giác trên thiết bị. Mỗi nhóm có nhiệm vụ riêng nhưng phải phối hợp trong các tình huống xuyên suốt. Chẳng hạn, khi phát hiện té ngã, robot cần dừng di chuyển, hỏi thăm người cao tuổi, tạo cảnh báo và thiết lập liên lạc với người chăm sóc.
 
@@ -192,9 +192,7 @@ Chuẩn bị mô hình AI & FR19 & Thành phần phát triển AI thực hiện 
 
 Kết quả phân tích trên xác định rõ trách nhiệm của từng thành phần và mối quan hệ giữa chúng. Đây là cơ sở để xây dựng sơ đồ kiến trúc tổng quan, trong đó các thành phần được biểu diễn theo vị trí sử dụng và các luồng thông tin cần trao đổi.
 
-\subsubsection{Kiến trúc tổng quan}
-
-Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc ở mức logic, chưa gắn với thư viện hay nhà cung cấp cụ thể. Ba miền triển khai chính là hệ thống tại nhà, dịch vụ dùng chung và hệ thống người chăm sóc. Trong miền tại nhà, thiết bị android như điện thoại, máy tính bảng gắn trên robot đảm nhiệm cảm nhận, tương tác và điều phối chuyển động; phần thân cơ điện chỉ chấp hành setpoint và duy trì bảo vệ mức thấp. Miền dùng chung cung cấp định danh, dữ liệu chăm sóc, điều phối sự kiện và hỗ trợ liên lạc. Miền người chăm sóc cung cấp giao diện cấu hình, nhận cảnh báo, quan sát và can thiệp.
+Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan hệ thống với ba miền triển khai chính là hệ thống tại nhà, dịch vụ dùng chung và hệ thống người chăm sóc. Trong miền tại nhà, thiết bị android như điện thoại, máy tính bảng gắn trên robot đảm nhiệm cảm nhận, tương tác và điều phối chuyển động; phần thân cơ điện chỉ chấp hành setpoint và duy trì bảo vệ mức thấp. Miền dùng chung cung cấp định danh, dữ liệu chăm sóc, điều phối sự kiện và hỗ trợ liên lạc. Miền người chăm sóc cung cấp giao diện cấu hình, nhận cảnh báo, quan sát và can thiệp.
 
 \begin{figure}[H]
     \centering
@@ -202,8 +200,6 @@ Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc ở mức log
     \caption{Kiến trúc tổng quan của hệ thống robot hỗ trợ chăm sóc người cao tuổi}
     \label{fig:high_level_architecture}
 \end{figure}
-
-Kiến trúc có ba dòng thông tin khác nhau. \textit{Dòng dữ liệu chăm sóc} gồm hồ sơ, lịch và nhật ký, có thể lưu bền và đồng bộ không đồng thời. \textit{Dòng điều khiển--sự kiện} gồm cờ bật chức năng, lệnh vận tốc, cảnh báo và trạng thái cuộc gọi, yêu cầu timestamp và hành vi khi mất cập nhật. \textit{Dòng media} gồm âm thanh/hình ảnh thời gian thực, chỉ tồn tại trong cuộc gọi và không đi qua kho dữ liệu chăm sóc. Việc tách ba dòng giúp lựa chọn cơ chế truyền phù hợp cho từng loại dữ liệu ở Mục 3.4.
 
 \subsubsection{Các module và trách nhiệm}
 
@@ -336,7 +332,7 @@ Sau khi xác định các module và luồng phối hợp, những công nghệ 
 \endhead
 Ứng dụng di động & Native Android; framework đa nền tảng; web app & Native truy cập trực tiếp camera, BLE, Speech API và service nhưng chỉ phục vụ Android; đa nền tảng giảm mã UI nhưng vẫn cần bridge native cho các tài nguyên trên & Kotlin, XML và ViewBinding cho cả hai ứng dụng để giảm lớp trung gian ở các chức năng thời gian thực \\
 \hline
-Suy luận AI & Cloud inference; suy luận trên thiết bị & Cloud dễ nâng cấp model nhưng phụ thuộc mạng, tăng độ trễ và phải tải ảnh; on-device bảo vệ ảnh và tiếp tục hoạt động khi mạng gián đoạn nhưng bị giới hạn CPU/GPU, RAM và nhiệt & TFLite trên RobotApp, ưu tiên GPU/NNAPI và có CPU dự phòng \reportcite{ref:tflite} \\
+Suy luận AI & Cloud inference; suy luận trên thiết bị & Cloud dễ nâng cấp model nhưng phụ thuộc mạng, tăng độ trễ và phải tải ảnh; on-device bảo vệ ảnh và vẫn hoạt động khi mạng gián đoạn nhưng bị giới hạn CPU/GPU, RAM và nhiệt & TFLite trên RobotApp, ưu tiên GPU/NNAPI và có CPU dự phòng \reportcite{ref:tflite} \\
 \hline
 Đồng bộ dữ liệu & REST tự xây dựng; MQTT; cơ sở dữ liệu thời gian thực & REST cho phép kiểm soát cao nhưng cần xây dựng máy chủ; MQTT phù hợp dữ liệu đo và điều khiển nhưng cần broker cùng cơ chế lưu trữ bổ sung; RTDB cung cấp listener và cây JSON nhưng đòi hỏi quản lý chặt cấu trúc dữ liệu và quy tắc truy cập & Firebase Authentication và Realtime Database cho mô hình một cặp thiết bị \reportcite{ref:firebase_rtdb} \\
 \hline
@@ -354,7 +350,7 @@ CaregiverApp đảm nhiệm vai trò giao diện quản lý từ xa với bốn 
 
 RobotApp là bộ điều phối đặt trên robot. Ứng dụng tiếp nhận khung hình, âm thanh, lịch nhắc nhở, cờ chức năng và lệnh từ xa, sau đó chuyển dữ liệu đến khối cảm nhận, hội thoại, cuộc gọi hoặc điều khiển tương ứng. Mô hình AI chỉ cung cấp kết quả nhận dạng và dự đoán; quyết định dừng, hỏi xác nhận hay mở cuộc gọi được thực hiện bởi máy trạng thái nghiệp vụ. Kết nối BLE được quản lý tại một đầu mối duy nhất để tránh nhiều GATT client cùng truy cập ESP32, trong khi CameraX và WebRTC luân phiên sử dụng camera theo trạng thái cuộc gọi.
 
-Android gốc được lựa chọn thay cho framework đa nền tảng vì hai ứng dụng cần truy cập trực tiếp dịch vụ nền, vòng đời camera, Bluetooth trên nhiều phiên bản Android, SpeechRecognizer, TTS và WebRTC. Hạn chế của lựa chọn này là hệ thống chỉ hỗ trợ Android và phải quản lý chặt vòng đời của các tài nguyên phần cứng. Giao diện và dịch vụ được tách thành các fragment và service, qua đó giới hạn phạm vi trạng thái và giảm ảnh hưởng giữa phần giao diện, thuật toán AI và firmware.
+Trong phạm vi đề tài, hai ứng dụng được phát triển trực tiếp trên nền tảng Android bằng Kotlin và XML. Android cung cấp các giao diện lập trình cần thiết để khai thác camera, microphone, Bluetooth, nhận dạng và tổng hợp tiếng nói, đồng thời hỗ trợ duy trì những tác vụ cần hoạt động ở chế độ nền. Nhờ đó, các chức năng giám sát, hội thoại và kết nối với thân robot có thể được tích hợp trong cùng một môi trường phát triển. Phần giao diện, xử lý nghiệp vụ và các tác vụ nền được tổ chức thành những thành phần riêng theo chức năng, giúp hạn chế sự phụ thuộc giữa các khối và thuận tiện hơn cho quá trình kiểm thử, bảo trì. Hệ thống hiện chỉ hướng đến các thiết bị sử dụng Android tuy nhiên, lựa chọn này đáp ứng tốt hơn các yêu cầu về hiệu suất, khả năng tích hợp và phạm vicủa đồ án.
 
 \subsubsection{Module cảm nhận, phát hiện pose và theo dõi ID0}
 
