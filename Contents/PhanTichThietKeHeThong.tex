@@ -1,6 +1,6 @@
 \section{Phân tích và thiết kế hệ thống}
 
-Chương này trình bày quá trình phân tích yêu cầu và thiết kế hệ thống robot trợ lý hỗ trợ chăm sóc người cao tuổi tại nhà. Từ mục tiêu giao tiếp, nhắc nhở, giám sát, cảnh báo té ngã và hỗ trợ can thiệp từ xa, các yêu cầu chức năng và yêu cầu chất lượng được xác định làm cơ sở xây dựng kiến trúc cùng các luồng xử lý của hệ thống. Trên cơ sở đó, kiến trúc tổng quan được xây dựng theo bốn thành phần chính gồm ứng dụng trên robot, ứng dụng của người chăm sóc, khối xử lý mô hình AI và phần thân robot. Chương cũng phân tích các phương án công nghệ, xác định giao thức truyền thông, phương thức kết nối và những cơ chế an toàn làm cơ sở cho quá trình hiện thực ở Chương 4.
+Chương này trình bày quá trình phân tích yêu cầu và thiết kế hệ thống robot trợ lý hỗ trợ chăm sóc người cao tuổi tại nhà. Từ mục tiêu giao tiếp, nhắc nhở, giám sát, cảnh báo té ngã và hỗ trợ can thiệp từ xa, các yêu cầu chức năng và yêu cầu chất lượng được xác định làm cơ sở xây dựng kiến trúc cùng các luồng xử lý. Kiến trúc vận hành gồm ứng dụng trên robot, ứng dụng của người chăm sóc, dịch vụ dùng chung và phần thân robot. Quy trình chuẩn bị mô hình AI được xem xét riêng để cung cấp mô hình cho ứng dụng trên robot. Chương cũng phân tích các phương án công nghệ, giao thức truyền thông và cơ chế an toàn làm cơ sở cho quá trình hiện thực ở Chương 4.
 
 \subsection{Phân tích yêu cầu hệ thống}
 
@@ -192,7 +192,7 @@ Chuẩn bị mô hình AI & FR19 & Thành phần phát triển AI thực hiện 
 
 Kết quả phân tích trên xác định rõ trách nhiệm của từng thành phần và mối quan hệ giữa chúng. Đây là cơ sở để xây dựng sơ đồ kiến trúc tổng quan, trong đó các thành phần được biểu diễn theo vị trí sử dụng và các luồng thông tin cần trao đổi.
 
-Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan hệ thống với ba miền triển khai chính là hệ thống tại nhà, dịch vụ dùng chung và hệ thống người chăm sóc. Trong miền tại nhà, thiết bị android như điện thoại, máy tính bảng gắn trên robot đảm nhiệm cảm nhận, tương tác và điều phối chuyển động; phần thân cơ điện chỉ chấp hành setpoint và duy trì bảo vệ mức thấp. Miền dùng chung cung cấp định danh, dữ liệu chăm sóc, điều phối sự kiện và hỗ trợ liên lạc. Miền người chăm sóc cung cấp giao diện cấu hình, nhận cảnh báo, quan sát và can thiệp.
+Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan theo ba khu vực: hệ thống tại nhà, dịch vụ dùng chung và ứng dụng của người chăm sóc. Tại nhà, điện thoại hoặc máy tính bảng Android gắn trên robot thu nhận hình ảnh, âm thanh, tương tác với người cao tuổi và điều phối chuyển động. Phần thân robot tiếp nhận vận tốc đặt, điều khiển hai động cơ và thực hiện các cơ chế dừng an toàn. Dịch vụ dùng chung hỗ trợ xác thực, lưu trữ, đồng bộ dữ liệu chăm sóc và thiết lập liên lạc. Ứng dụng của người chăm sóc cung cấp giao diện cấu hình, nhận cảnh báo, quan sát và điều khiển từ xa.
 
 \begin{figure}[H]
     \centering
@@ -203,10 +203,10 @@ Hình \ref{fig:high_level_architecture} biểu diễn kiến trúc tổng quan h
 
 \subsubsection{Các module và trách nhiệm}
 
-Mỗi vùng kiến trúc được tiếp tục phân thành các module có đầu vào, đầu ra và trách nhiệm duy nhất như Bảng \ref{tab:logical_modules}. Bảng này mô tả thiết kế chức năng; tên framework và lớp hiện thực cụ thể chỉ được chốt sau khi phân tích công nghệ.
+Các thành phần trong kiến trúc được chia thành những module có nhiệm vụ và dữ liệu trao đổi xác định. Bảng \ref{tab:logical_modules} tổng hợp đầu vào, chức năng xử lý và đầu ra của từng module, qua đó làm rõ cách các thành phần phối hợp trong quá trình vận hành.
 
 \begin{longtable}{|p{3.1cm}|p{3.7cm}|p{3.8cm}|p{3.0cm}|}
-\caption{Các module trong kiến trúc logic của hệ thống}\label{tab:logical_modules}\\
+\caption{Các module trong kiến trúc tổng quan của hệ thống}\label{tab:logical_modules}\\
 \hline
 \textbf{Module} & \textbf{Đầu vào} & \textbf{Xử lý/trách nhiệm} & \textbf{Đầu ra} \\
 \hline
@@ -215,39 +215,39 @@ Mỗi vùng kiến trúc được tiếp tục phân thành các module có đ�
 \textbf{Module} & \textbf{Đầu vào} & \textbf{Xử lý/trách nhiệm} & \textbf{Đầu ra} \\
 \hline
 \endhead
-Quản lý chăm sóc & Thao tác hồ sơ, lịch và cờ chức năng & Kiểm tra dữ liệu nhập, cập nhật cấu hình và truy vấn lịch sử & Hồ sơ, lịch, trạng thái giám sát \\
+Quản lý chăm sóc & Thao tác cập nhật hồ sơ, lịch và trạng thái chức năng & Kiểm tra dữ liệu nhập, cập nhật cấu hình và truy vấn lịch sử & Hồ sơ, lịch, trạng thái giám sát \\
 \hline
-Giám sát và can thiệp từ xa & Cảnh báo, video và thao tác joystick & Hiển thị tình trạng, nhận cuộc gọi và sinh lệnh điều khiển & Phản hồi cuộc gọi, vector điều khiển \\
+Giám sát và can thiệp từ xa & Cảnh báo, video và thao tác trên cần điều khiển ảo & Hiển thị tình trạng, nhận cuộc gọi và tạo lệnh điều khiển & Phản hồi cuộc gọi, vector điều khiển \\
 \hline
-Điều phối RobotApp & Sự kiện UI, lịch, cờ chức năng, kết quả AI & Quản lý vòng đời camera/BLE, phân quyền nguồn lệnh và điều hướng các trạng thái hỗ trợ & Sự kiện hội thoại, cuộc gọi hoặc lệnh chuyển động \\
+Điều phối RobotApp & Thao tác người dùng, lịch, trạng thái chức năng và kết quả AI & Quản lý camera, kết nối BLE, lựa chọn nguồn lệnh và phối hợp xử lý sự kiện & Yêu cầu hội thoại, cuộc gọi hoặc lệnh chuyển động \\
 \hline
-Cảm nhận và định danh mục tiêu & Frame camera & Phát hiện pose, ghép detection theo thời gian và duy trì người mục tiêu ID0 & Hộp bao, keypoint và track ID0 \\
+Cảm nhận và định danh mục tiêu & Khung hình camera & Ước lượng tư thế, liên kết kết quả phát hiện giữa các khung hình và duy trì mục tiêu ID0 & Hộp bao, điểm khớp và định danh mục tiêu \\
 \hline
-Theo dõi chuyển động & Track ID0 và cấu hình bám & Ước lượng vị trí/khoảng cách, áp dụng vùng chết và chính sách mất dấu & Vector tiến/lùi/quay hoặc STOP \\
+Theo dõi chuyển động & Vị trí mục tiêu ID0 và cấu hình bám theo & Ước lượng độ gần, điều chỉnh hướng và xử lý khi mất dấu & Vector tiến, lùi, quay hoặc lệnh dừng \\
 \hline
-Phát hiện và xác nhận té ngã & Chuỗi pose ID0 & Phân loại chuỗi, hậu kiểm theo luật, khóa sự cố và yêu cầu xác nhận & SAFE hoặc sự kiện cảnh báo \\
+Phát hiện và xác nhận té ngã & Chuỗi tư thế của mục tiêu ID0 & Phân loại chuỗi, kiểm tra bổ sung và yêu cầu người dùng xác nhận tình trạng & Kết quả xác nhận an toàn hoặc sự kiện cảnh báo \\
 \hline
-Hội thoại và lời nhắc & Giọng nói, hồ sơ, lịch và sự kiện té ngã & Chuyển giọng nói--văn bản, tạo phản hồi, phát giọng nói và ghi nhận xác nhận & Âm thanh, ý định và trạng thái phản hồi \\
+Hội thoại và lời nhắc & Giọng nói, hồ sơ, lịch và sự kiện té ngã & Chuyển tiếng nói thành văn bản, tạo câu trả lời, tổng hợp tiếng nói và ghi nhận phản hồi & Âm thanh, yêu cầu của người dùng và trạng thái phản hồi \\
 \hline
-Liên lạc thời gian thực & Yêu cầu gọi và tín hiệu thiết lập phiên & Thiết lập/kết thúc phiên, quản lý camera và truyền media hai chiều & Audio/video và trạng thái cuộc gọi \\
+Liên lạc thời gian thực & Yêu cầu gọi và thông tin thiết lập phiên & Thiết lập, kết thúc cuộc gọi, quản lý camera và truyền âm thanh, hình ảnh hai chiều & Âm thanh, hình ảnh và trạng thái cuộc gọi \\
 \hline
-Dữ liệu và điều phối dùng chung & Hồ sơ, lịch, cờ, lệnh, cảnh báo và dữ liệu thiết lập cuộc gọi & Xác thực, phân vùng dữ liệu và phân phối thay đổi giữa hai thiết bị & Bản cập nhật và sự kiện theo danh tính cặp thiết bị \\
+Dữ liệu và điều phối dùng chung & Hồ sơ, lịch, trạng thái chức năng, lệnh, cảnh báo và thông tin cuộc gọi & Xác thực, phân vùng dữ liệu và đồng bộ thay đổi giữa hai thiết bị & Dữ liệu cập nhật của từng cặp thiết bị \\
 \hline
-Cầu nối điều khiển & Vector điều khiển từ xa hoặc auto-follow & Chọn nguồn lệnh, kiểm tra miền/timestamp và ánh xạ vận tốc hai bánh & Setpoint trái/phải \\
+Cầu nối điều khiển & Vector điều khiển từ xa hoặc bám theo tự động & Chọn nguồn lệnh, kiểm tra giá trị và thời điểm tạo lệnh, tính vận tốc hai bánh & Vận tốc đặt của bánh trái và bánh phải \\
 \hline
-Chấp hành thân robot & Setpoint hai bánh và góc rotor & Điều khiển vận tốc kín, giới hạn lệnh và watchdog & PWM động cơ và trạng thái dừng \\
+Chấp hành thân robot & Vận tốc đặt của hai bánh và góc rotor & Điều khiển vận tốc vòng kín, giới hạn lệnh và dừng khi quá thời gian chờ & Tín hiệu PWM điều khiển động cơ và trạng thái dừng \\
 \hline
 Chuẩn bị mô hình ngoại tuyến & Mô hình đã huấn luyện và cấu hình chuyển đổi & Chuyển đổi định dạng, kiểm tra tensor và tạo mô hình cho thiết bị di động & Mô hình sẵn sàng triển khai \\
 \hline
 \end{longtable}
 
-Ranh giới quan trọng nhất nằm giữa \textit{kết quả nhận thức} và \textit{quyết định nghiệp vụ}. Mô hình AI chỉ trả pose hoặc xác suất FALL; module hậu kiểm mới quyết định hỏi xác nhận, còn module điều phối mới quyết định STOP, ghi cảnh báo hay gọi người chăm sóc. Tương tự, joystick và auto-follow chỉ tạo vector chuẩn hóa; module cầu nối điều khiển mới kiểm tra timestamp và chuyển thành setpoint motor. Cách tổ chức này tránh để một mô hình xác suất hoặc một màn hình giao diện tác động trực tiếp lên phần cứng.
+Kết quả nhận dạng của AI được chuyển đến các module xử lý để xác định phản ứng phù hợp của robot. Chẳng hạn, mô hình ước lượng tư thế cung cấp các điểm khớp, còn LSTM trả về xác suất té ngã; bộ hậu kiểm sử dụng các kết quả này để quyết định có cần hỏi xác nhận hay không. Module điều phối tiếp tục xử lý việc dừng robot, ghi cảnh báo và gọi người chăm sóc. Đối với chuyển động, cần điều khiển ảo và chức năng bám theo tạo vector điều khiển chuẩn hóa; module cầu nối kiểm tra tính hợp lệ của lệnh rồi chuyển thành vận tốc đặt cho hai động cơ. Cách phân chia này giúp tập trung các điều kiện kiểm tra trước khi robot thực hiện hành động.
 
 \subsection{Các luồng xử lý chính}
 
 \subsubsection{Các trường hợp sử dụng chính}
 
-Các trường hợp sử dụng được nhóm thành bốn miền: quản lý hồ sơ, lịch nhắc nhở và nhật ký; tương tác hội thoại và lời nhắc; giám sát, bám theo và phát hiện té ngã; liên lạc và điều khiển robot. Người chăm sóc chủ yếu thao tác thông qua ứng dụng quản lý, trong khi người cao tuổi tương tác trực tiếp với robot bằng giọng nói và tham gia cuộc gọi khi cần. Bảng \ref{tab:usecases} tóm tắt tác nhân và kết quả của các trường hợp sử dụng chính.
+Các trường hợp sử dụng được chia thành bốn nhóm: quản lý hồ sơ, lịch nhắc nhở và nhật ký; hội thoại và thực hiện lời nhắc; giám sát, bám theo và phát hiện té ngã; liên lạc và điều khiển robot. Người chăm sóc chủ yếu thao tác thông qua ứng dụng quản lý, trong khi người cao tuổi tương tác trực tiếp với robot bằng giọng nói và tham gia cuộc gọi khi cần. Bảng \ref{tab:usecases} tóm tắt tác nhân và kết quả của các trường hợp sử dụng chính.
 
 \begin{table}[htbp]
 \centering
@@ -284,9 +284,9 @@ UC10 & Xem nhật ký & Người chăm sóc & Danh sách lời nhắc, cảnh b�
 \clearpage
 \subsubsection{Luồng giám sát và xử lý té ngã}
 
-Hình \ref{fig:activity_fall_detection} mô tả luồng từ lúc người chăm sóc bật phát hiện té ngã. Mỗi frame hợp lệ đi qua YOLO pose, tracker và LSTM. Khi LSTM trả FALL trong ít nhất 5 frame liên tiếp, ứng viên được ``vũ trang'' nhưng chưa cảnh báo ngay. Frame NO FALL đầu tiên kết thúc chuỗi và kích hoạt hậu kiểm điểm mũi/vai: ba frame có điểm thân trên trong 70\% phía trên ảnh làm ứng viên bị loại; ba frame có điểm thân trên thấp hơn ngưỡng làm hệ thống hỏi xác nhận. Nếu mục tiêu hoặc điểm thân trên mất liên tục 12 frame, hệ thống cũng hỏi theo nguyên tắc thận trọng.
+Hình \ref{fig:activity_fall_detection} mô tả quá trình giám sát sau khi người chăm sóc bật chức năng phát hiện té ngã. Mỗi khung hình hợp lệ được xử lý qua mô hình YOLO-Pose, bộ theo dõi và LSTM. Khi có ít nhất năm kết quả FALL liên tiếp, hệ thống ghi nhận một chuỗi nghi té ngã nhưng chưa phát cảnh báo. Kết quả NO FALL đầu tiên kết thúc chuỗi và bắt đầu bước kiểm tra vị trí mũi, vai. Nếu các điểm thân trên nằm trong vùng 70\% phía trên ảnh ở ba khung hình kiểm tra liên tiếp, tình huống nghi té ngã được loại bỏ; nếu nằm dưới ngưỡng này trong ba khung hình liên tiếp, hệ thống chuyển sang hỏi xác nhận. Khi không còn quan sát được mục tiêu hoặc các điểm thân trên trong 12 khung hình liên tiếp, hệ thống cũng hỏi xác nhận tình trạng người dùng.
 
-Khi cần xác nhận, RobotApp khóa sự cố đang xử lý, dừng robot và chuyển quyền tương tác cho chatbot. Nếu người dùng trả lời rõ ràng rằng mình an toàn, sự cố được kết thúc tại robot và không tạo bản ghi cảnh báo. Ngược lại, phản hồi nguy hiểm, câu trả lời không rõ, lỗi phân loại hoặc không có phản hồi trong 10 s sẽ tạo bản ghi tại \path|fall_alerts| và khởi tạo cuộc gọi khẩn cấp. Bộ hậu kiểm chỉ trở về trạng thái giám sát sau 10 khung hình liên tiếp được phân loại NO FALL, nhờ đó một sự cố không tạo ra nhiều lượt xác nhận trùng lặp.
+Khi cần xác nhận, RobotApp đánh dấu sự kiện đang được xử lý, dừng chuyển động và chuyển sang hội thoại với người cao tuổi. Nếu người dùng trả lời rõ ràng rằng mình an toàn, sự kiện được kết thúc tại robot và không tạo bản ghi cảnh báo. Nếu câu trả lời cho thấy cần hỗ trợ, chưa rõ nghĩa, xảy ra lỗi phân loại hoặc không có phản hồi trong 10 s, ứng dụng tạo bản ghi tại \path|fall_alerts| và khởi tạo cuộc gọi khẩn cấp. Bộ hậu kiểm chỉ trở về trạng thái giám sát sau 10 kết quả NO FALL liên tiếp để hạn chế yêu cầu xác nhận trùng lặp.
 
 \begin{figure}[H]
     \centering
@@ -298,9 +298,9 @@ Khi cần xác nhận, RobotApp khóa sự cố đang xử lý, dừng robot và
 \clearpage
 \subsubsection{Luồng cuộc gọi khẩn cấp và điều khiển từ xa}
 
-Hình \ref{fig:sequence_emergency_response} trình bày trao đổi giữa người cao tuổi, RobotApp, pipeline AI, ESP32, Firebase và CaregiverApp. Pipeline AI chỉ tạo kết quả nhận thức; RobotApp mới điều phối STOP, hội thoại xác nhận, ghi dữ liệu và điều hướng sang màn hình gọi. Khi cần gọi, RobotApp ghi \texttt{status=calling}, \texttt{callerRole=robot}, \texttt{emergencyReason=fall} và offer SDP vào nhánh signaling của cặp thiết bị. CaregiverApp nhận thông báo, tạo answer và hai phía trao đổi ICE candidate.
+Hình \ref{fig:sequence_emergency_response} trình bày quá trình trao đổi giữa người cao tuổi, RobotApp, khối xử lý AI, ESP32, Firebase và CaregiverApp. Khối AI cung cấp kết quả phân tích; RobotApp điều phối việc dừng chuyển động, hỏi xác nhận, lưu cảnh báo và mở màn hình gọi. Khi cần liên lạc, RobotApp ghi \texttt{status=calling}, \texttt{callerRole=robot}, \texttt{emergencyReason=fall} cùng bản mô tả phiên SDP đề nghị vào nhánh báo hiệu của cặp thiết bị. CaregiverApp tiếp nhận yêu cầu gọi và tạo bản mô tả phiên trả lời; hai phía sau đó trao đổi các địa chỉ kết nối ứng viên ICE.
 
-Sau khi PeerConnection được thiết lập, audio/video truyền trực tiếp hoặc qua TURN. Nếu người chăm sóc mở joystick, lệnh đi theo chuỗi CaregiverApp $\rightarrow$ RTDB $\rightarrow$ RobotApp $\rightarrow$ BLE $\rightarrow$ ESP32. Việc điều khiển từ xa không bỏ qua các kiểm tra timestamp và watchdog.
+Sau khi kết nối WebRTC được thiết lập, âm thanh và hình ảnh được truyền trực tiếp giữa hai thiết bị hoặc chuyển tiếp qua máy chủ TURN. Khi người chăm sóc sử dụng cần điều khiển ảo, lệnh đi theo chuỗi CaregiverApp $\rightarrow$ RTDB $\rightarrow$ RobotApp $\rightarrow$ BLE $\rightarrow$ ESP32. Các lệnh từ xa vẫn phải qua bước kiểm tra thời điểm tạo lệnh và cơ chế dừng khi không còn cập nhật.
 
 \begin{sidewaysfigure}
     \centering
@@ -312,9 +312,9 @@ Sau khi PeerConnection được thiết lập, audio/video truyền trực tiế
 \clearpage
 \subsubsection{Luồng hội thoại và nhắc nhở}
 
-Trong hội thoại thông thường, STT tạo văn bản, \texttt{GroqChatService} bổ sung lịch sử gần nhất và hồ sơ vào prompt, sau đó đọc luồng delta từ Chat Completions. RobotApp tách câu hoàn chỉnh để đưa vào hàng đợi TTS, nhờ đó có thể bắt đầu nói trước khi toàn bộ phản hồi kết thúc. Sau khi TTS phát xong, máy trạng thái quay lại lắng nghe.
+Trong hội thoại thông thường, bộ nhận dạng tiếng nói chuyển lời nói thành văn bản. \texttt{GroqChatService} kết hợp câu hỏi với hồ sơ người dùng và lịch sử hội thoại gần nhất để gửi đến LLM, sau đó tiếp nhận từng phần nội dung trả lời. RobotApp ghép các phần này thành câu hoàn chỉnh và đưa vào hàng đợi tổng hợp tiếng nói, nhờ đó có thể bắt đầu trả lời trước khi nhận đủ toàn bộ nội dung. Khi phát xong câu trả lời, ứng dụng trở lại trạng thái lắng nghe.
 
-Đối với lịch nhắc nhở, CaregiverApp ghi cấu hình vào \path|Schedules/{uid}|. \texttt{ReminderService} trên RobotApp kiểm tra mỗi 30 s, so khớp thời điểm và chế độ lặp, tạo log ở trạng thái \texttt{delivered}, rồi phát sự kiện cho chatbot. LLM chỉ tạo câu dẫn thân thiện; tiêu đề và ghi chú lịch vẫn lấy từ dữ liệu đã cấu hình. Phản hồi và số lần nhắc lại được cập nhật trên cùng log để CaregiverApp hiển thị.
+Đối với lịch nhắc nhở, CaregiverApp lưu cấu hình tại \path|Schedules/{uid}|. \texttt{ReminderService} trên RobotApp kiểm tra lịch mỗi 30 s, đối chiếu thời điểm và chế độ lặp, tạo bản ghi ở trạng thái \texttt{delivered}, rồi gửi sự kiện đến chatbot để phát lời nhắc. LLM hỗ trợ tạo cách diễn đạt thân thiện, trong khi tiêu đề và ghi chú vẫn được lấy từ lịch đã thiết lập. Phản hồi của người dùng và số lần nhắc lại được cập nhật vào cùng bản ghi để người chăm sóc theo dõi.
 
 \subsection{Thiết kế và lựa chọn công nghệ cho các module}
 
@@ -330,17 +330,17 @@ Sau khi xác định các module và luồng phối hợp, những công nghệ 
 \textbf{Bài toán} & \textbf{Phương án xem xét} & \textbf{Ưu điểm và hạn chế chính} & \textbf{Lựa chọn cho đề tài} \\
 \hline
 \endhead
-Ứng dụng di động & Native Android; framework đa nền tảng; web app & Native truy cập trực tiếp camera, BLE, Speech API và service nhưng chỉ phục vụ Android; đa nền tảng giảm mã UI nhưng vẫn cần bridge native cho các tài nguyên trên & Kotlin, XML và ViewBinding cho cả hai ứng dụng để giảm lớp trung gian ở các chức năng thời gian thực \\
+Ứng dụng di động & Phát triển trực tiếp trên Android; nền tảng phát triển đa hệ điều hành; ứng dụng web & Phát triển trực tiếp trên Android thuận tiện khi tích hợp camera, BLE và dịch vụ nền; nền tảng đa hệ điều hành hỗ trợ dùng chung mã giao diện nhưng có thể cần lớp tích hợp riêng & Kotlin, XML và ViewBinding cho hai ứng dụng Android \\
 \hline
-Suy luận AI & Cloud inference; suy luận trên thiết bị & Cloud dễ nâng cấp model nhưng phụ thuộc mạng, tăng độ trễ và phải tải ảnh; on-device bảo vệ ảnh và vẫn hoạt động khi mạng gián đoạn nhưng bị giới hạn CPU/GPU, RAM và nhiệt & TFLite trên RobotApp, ưu tiên GPU/NNAPI và có CPU dự phòng \reportcite{ref:tflite} \\
+Suy luận AI & Suy luận trên máy chủ; suy luận tại thiết bị & Máy chủ thuận tiện nâng cấp mô hình nhưng cần truyền ảnh qua mạng; xử lý tại thiết bị giảm phụ thuộc mạng và hạn chế truyền ảnh ra ngoài, song chịu giới hạn tài nguyên & TFLite trên RobotApp, ưu tiên GPU/NNAPI và có CPU dự phòng \reportcite{ref:tflite} \\
 \hline
 Đồng bộ dữ liệu & REST tự xây dựng; MQTT; cơ sở dữ liệu thời gian thực & REST cho phép kiểm soát cao nhưng cần xây dựng máy chủ; MQTT phù hợp dữ liệu đo và điều khiển nhưng cần broker cùng cơ chế lưu trữ bổ sung; RTDB cung cấp listener và cây JSON nhưng đòi hỏi quản lý chặt cấu trúc dữ liệu và quy tắc truy cập & Firebase Authentication và Realtime Database cho mô hình một cặp thiết bị \reportcite{ref:firebase_rtdb} \\
 \hline
-Truyền media & Tải frame qua cơ sở dữ liệu; streaming server tập trung; WebRTC & Cơ sở dữ liệu không phù hợp media liên tục; server tập trung dễ quản lý nhưng tăng hạ tầng/băng thông; WebRTC có media thời gian thực và vượt NAT nhưng signaling/vòng đời phức tạp & WebRTC cho audio/video; RTDB chỉ làm signaling \reportcite{ref:webrtc} \\
+Truyền âm thanh và hình ảnh & Truyền qua cơ sở dữ liệu; máy chủ truyền phát tập trung; WebRTC & Cơ sở dữ liệu không phù hợp truyền hình liên tục; máy chủ tập trung cần thêm hạ tầng; WebRTC hỗ trợ liên lạc thời gian thực nhưng cần quản lý báo hiệu và phiên kết nối & WebRTC truyền âm thanh, hình ảnh; RTDB trao đổi thông tin thiết lập cuộc gọi \reportcite{ref:webrtc} \\
 \hline
 Liên kết điện thoại--thân robot & USB; BLE & USB có độ ổn định cao nhưng ràng buộc thiết bị bằng cáp; BLE phù hợp với các gói lệnh điều khiển có kích thước nhỏ, tiêu thụ ít năng lượng và hỗ trợ kết nối không dây trong phạm vi gần, song có băng thông hạn chế & BLE GATT vì dữ liệu điều khiển có kích thước nhỏ và không bao gồm hình ảnh \reportcite{ref:ble_primer} \\
 \hline
-Hội thoại & Mô hình cục bộ; API LLM; kịch bản cố định & Mô hình cục bộ riêng tư nhưng nặng trên thiết bị; API linh hoạt nhưng phụ thuộc mạng/chi phí; kịch bản ổn định nhưng hội thoại hạn chế & Android STT/TTS kết hợp API LLM, kèm từ khóa và câu mẫu cục bộ cho nhánh an toàn \\
+Hội thoại & Mô hình cục bộ; LLM qua API; kịch bản cố định & Mô hình cục bộ cần nhiều tài nguyên; LLM qua API hỗ trợ hội thoại linh hoạt nhưng phụ thuộc mạng và chi phí; kịch bản cố định dễ kiểm soát nhưng hạn chế nội dung & Android STT/TTS kết hợp LLM qua API, bổ sung từ khóa nhận biết phản hồi và câu mẫu dự phòng \\
 \hline
 \end{longtable}
 
@@ -348,79 +348,79 @@ Hội thoại & Mô hình cục bộ; API LLM; kịch bản cố định & Mô h
 
 CaregiverApp đảm nhiệm vai trò giao diện quản lý từ xa với bốn nhóm chức năng: hồ sơ và lịch nhắc nhở, cấu hình giám sát, cuộc gọi kèm cần điều khiển ảo, và tra cứu nhật ký. Ứng dụng tiếp nhận thao tác của người chăm sóc, đồng bộ cấu hình, gửi lệnh và xử lý yêu cầu cuộc gọi. Các tác vụ ước lượng tư thế, hội thoại chính và kết nối ESP32 không được đặt tại đây, nhờ đó thiết bị của người chăm sóc không phụ thuộc vào mô hình TFLite hoặc trình điều khiển BLE của robot.
 
-RobotApp là bộ điều phối đặt trên robot. Ứng dụng tiếp nhận khung hình, âm thanh, lịch nhắc nhở, cờ chức năng và lệnh từ xa, sau đó chuyển dữ liệu đến khối cảm nhận, hội thoại, cuộc gọi hoặc điều khiển tương ứng. Mô hình AI chỉ cung cấp kết quả nhận dạng và dự đoán; quyết định dừng, hỏi xác nhận hay mở cuộc gọi được thực hiện bởi máy trạng thái nghiệp vụ. Kết nối BLE được quản lý tại một đầu mối duy nhất để tránh nhiều GATT client cùng truy cập ESP32, trong khi CameraX và WebRTC luân phiên sử dụng camera theo trạng thái cuộc gọi.
+RobotApp điều phối các chức năng trên robot. Ứng dụng tiếp nhận khung hình, âm thanh, lịch nhắc nhở, trạng thái chức năng và lệnh từ xa, sau đó chuyển dữ liệu đến module tương ứng. Kết quả nhận dạng và dự đoán của AI được kết hợp với trạng thái xử lý hiện tại để quyết định dừng robot, hỏi xác nhận hoặc mở cuộc gọi. Kết nối BLE được quản lý tập trung để tránh nhiều thành phần đồng thời tạo kết nối GATT tới ESP32; CameraX và WebRTC luân phiên sử dụng camera theo trạng thái cuộc gọi.
 
-Trong phạm vi đề tài, hai ứng dụng được phát triển trực tiếp trên nền tảng Android bằng Kotlin và XML. Android cung cấp các giao diện lập trình cần thiết để khai thác camera, microphone, Bluetooth, nhận dạng và tổng hợp tiếng nói, đồng thời hỗ trợ duy trì những tác vụ cần hoạt động ở chế độ nền. Nhờ đó, các chức năng giám sát, hội thoại và kết nối với thân robot có thể được tích hợp trong cùng một môi trường phát triển. Phần giao diện, xử lý nghiệp vụ và các tác vụ nền được tổ chức thành những thành phần riêng theo chức năng, giúp hạn chế sự phụ thuộc giữa các khối và thuận tiện hơn cho quá trình kiểm thử, bảo trì. Hệ thống hiện chỉ hướng đến các thiết bị sử dụng Android tuy nhiên, lựa chọn này đáp ứng tốt hơn các yêu cầu về hiệu suất, khả năng tích hợp và phạm vicủa đồ án.
+Trong phạm vi đề tài, hai ứng dụng được phát triển trực tiếp trên nền tảng Android bằng Kotlin và XML. Android cung cấp các giao diện lập trình để sử dụng camera, microphone, Bluetooth, nhận dạng và tổng hợp tiếng nói, đồng thời hỗ trợ tổ chức các tác vụ nền. Những khả năng này phù hợp với yêu cầu tích hợp chức năng giám sát, hội thoại và kết nối thân robot. Phần giao diện, xử lý nghiệp vụ và tác vụ nền được phân chia theo chức năng để thuận tiện kiểm thử và bảo trì. Hệ thống hiện hướng đến các thiết bị Android được sử dụng trong đồ án.
 
-\subsubsection{Module cảm nhận, phát hiện pose và theo dõi ID0}
+\subsubsection{Module thu nhận hình ảnh, ước lượng tư thế và theo dõi mục tiêu}
 
-Để giám sát liên tục và phát hiện té ngã ngay trên điện thoại robot, module cảm nhận phải cung cấp đồng thời hộp bao người và các điểm khớp cơ thể, duy trì tốc độ đủ để hình thành chuỗi thời gian và không phụ thuộc vào việc tải ảnh lên máy chủ. Phương án kết hợp một bộ phát hiện hộp với một mô hình ước lượng tư thế riêng cho phép thay thế từng thành phần độc lập, nhưng cần hai lượt suy luận và thêm bước truyền vùng ảnh trung gian. Mô hình pose hợp nhất tạo hộp bao và keypoint trong cùng một lượt suy luận, nhờ đó giảm số tầng xử lý.
+Để giám sát và phát hiện té ngã trên điện thoại gắn trên robot, module thị giác cần cung cấp đồng thời hộp bao người và các điểm khớp cơ thể với tốc độ phù hợp cho việc phân tích chuyển động theo thời gian. Việc kết hợp một bộ phát hiện người với một mô hình ước lượng tư thế riêng cho phép thay thế từng thành phần độc lập, nhưng cần hai lượt suy luận và bước chuyển vùng ảnh giữa hai mô hình. Mô hình tích hợp phát hiện người và ước lượng tư thế tạo cả hai loại kết quả trong cùng một lượt suy luận, giúp đơn giản hóa chuỗi xử lý.
 
-Các phương án MobileNet SSD và EfficientDet chuẩn phù hợp làm detector nhẹ nhưng không trực tiếp cung cấp 17 keypoint; hệ thống sẽ cần thêm tầng ước lượng tư thế. Họ YOLO-Pose đáp ứng đồng thời hai loại đầu ra và hỗ trợ xuất sang TFLite/LiteRT \reportcite{ref:yolo_pose_docs}. Dựa trên quy trình ở Mục \ref{sec:yolo_pose_inference_pipeline}, cấu trúc đầu vào--đầu ra ở Mục \ref{sec:yolo_pose_output_representation} và so sánh quy mô tại Mục \ref{sec:yolo26_pose_scales}, đề tài chọn YOLO26n-Pose. Mức nano được ưu tiên thay cho s, m, l và x vì có số tham số và chi phí tính toán thấp nhất trong họ, phù hợp suy luận liên tục khi điện thoại còn phải chạy CameraX, tracking, LSTM, giao diện, Firebase và BLE. Đánh đổi là pose mAP thấp hơn các mức lớn; quyết định cuối cùng vì thế phải được kiểm chứng bằng độ trễ và chất lượng chuỗi keypoint trên thiết bị đích, thay vì chỉ dựa vào benchmark máy trạm.
+Các mô hình MobileNet SSD và EfficientDet tiêu chuẩn phục vụ phát hiện đối tượng nhưng không trực tiếp cung cấp 17 điểm khớp, nên cần thêm mô hình ước lượng tư thế. YOLO-Pose cung cấp đồng thời hộp bao và điểm khớp, đồng thời hỗ trợ xuất sang TFLite/LiteRT \reportcite{ref:yolo_pose_docs}. Từ quy trình ở Mục \ref{sec:yolo_pose_inference_pipeline}, cấu trúc đầu vào, đầu ra ở Mục \ref{sec:yolo_pose_output_representation} và so sánh quy mô ở Mục \ref{sec:yolo26_pose_scales}, đề tài lựa chọn YOLO26n-Pose. Biến thể nano có số tham số và chi phí tính toán thấp nhất trong các mức n, s, m, l và x, phù hợp với điện thoại còn phải thực hiện theo dõi, hội thoại, đồng bộ dữ liệu và điều khiển. Tuy nhiên, chỉ số mAP ước lượng tư thế thấp hơn các biến thể lớn, nên lựa chọn này cần được đánh giá thêm về độ trễ và chất lượng điểm khớp trên thiết bị sử dụng.
 
-Module nhận khung hình từ CameraX hoặc bản sao khung hình WebRTC. Ảnh được đưa về kích thước $320\times320$ trước khi suy luận bằng YOLO-Pose; kết quả được lọc với ngưỡng tin cậy 0,20, ngưỡng NMS IoU 0,45 và ngưỡng hiển thị keypoint 0,30. Đầu ra gồm hộp bao người và 17 keypoint, được dùng chung cho theo dõi mục tiêu, ước lượng khoảng cách và LSTM. Tốc độ xử lý mục tiêu được giới hạn ở 25 FPS; nếu lượt suy luận trước chưa hoàn tất, khung hình mới sẽ bị bỏ qua để tránh tích lũy độ trễ.
+Module nhận khung hình từ CameraX hoặc bản sao hình ảnh của WebRTC. Ảnh được đổi về kích thước $320\times320$ trước khi suy luận bằng YOLO-Pose. Kết quả được lọc với ngưỡng tin cậy 0,20, ngưỡng IoU của bước NMS là 0,45 và ngưỡng hiển thị điểm khớp là 0,30. Hộp bao người và 17 điểm khớp được dùng chung cho theo dõi mục tiêu, ước lượng độ gần và phân tích bằng LSTM. Tần suất xử lý được đặt giới hạn trên ở 25 FPS; nếu lượt suy luận trước chưa hoàn tất, khung hình mới được bỏ qua để hạn chế tích lũy độ trễ.
 
 Việc gửi khung hình lên dịch vụ đám mây cho phép sử dụng phần cứng mạnh hơn, nhưng làm tăng độ trễ, băng thông và rủi ro đối với dữ liệu hình ảnh. Suy luận trực tiếp trên điện thoại chịu giới hạn về tài nguyên nhưng đáp ứng tốt hơn NFR02, NFR06 và vẫn hoạt động khi Internet gián đoạn. Vì vậy, TFLite được chọn làm môi trường suy luận trên thiết bị; hệ thống ưu tiên GPU, chuyển sang NNAPI khi cần và sử dụng CPU bốn luồng làm phương án cuối \reportcite{ref:tflite}.
 
-Đối với tracking, SORT có ưu điểm gọn và thời gian thực nhưng phụ thuộc chất lượng detection; ByteTrack tận dụng cả detection điểm thấp tốt hơn trong che khuất nhưng tăng số phép ghép \reportcite{ref:sort}\reportcite{ref:bytetrack}. Một mạng Re-ID sâu có thể phân biệt ngoại hình tốt hơn nhưng làm tăng kích thước model và thời gian suy luận. Đề tài chọn cấu trúc SORT/Kalman/Hungarian, bổ sung khoảng cách pose và histogram H--S chỉ khi cần Re-ID. Chi phí ghép được thiết kế:
+Đối với theo dõi người, SORT có cấu trúc gọn và tốc độ xử lý cao nhưng phụ thuộc vào chất lượng phát hiện. ByteTrack tận dụng thêm các kết quả có độ tin cậy thấp để duy trì đối tượng khi bị che khuất, đồng thời cần thêm bước liên kết kết quả \reportcite{ref:sort}\reportcite{ref:bytetrack}. Mạng tái định danh dựa trên học sâu có thể phân biệt ngoại hình tốt hơn, nhưng làm tăng dung lượng mô hình và thời gian suy luận. Đề tài sử dụng cấu trúc SORT với bộ lọc Kalman và thuật toán Hungarian, bổ sung khoảng cách giữa các điểm khớp và biểu đồ phân bố màu H--S khi cần nhận lại mục tiêu. Hàm chi phí liên kết được xác định như sau:
 
 \begin{equation}
 C=0,30(1-\operatorname{IoU})+0,30\hat d_c+0,30\hat d_p+0,10p_a,
 \end{equation}
 
-trong đó $\hat d_c$ là khoảng cách tâm chuẩn hóa, $\hat d_p$ là khoảng cách giữa các neo vai/hông và $p_a$ phạt biến thiên diện tích. Ứng viên ban đầu được chấm theo:
+trong đó $\hat d_c$ là khoảng cách tâm đã chuẩn hóa, $\hat d_p$ là khoảng cách giữa các điểm mốc tại vai và hông, còn $p_a$ là thành phần chi phí phản ánh sự thay đổi diện tích hộp bao. Khi lựa chọn người mục tiêu ban đầu, mỗi đối tượng được đánh giá theo điểm số:
 
 \begin{equation}
 Q=0,60q_{area}+0,15q_{det}+0,15q_{vis}+0,10q_{center}-p_{edge}.
 \end{equation}
 
-Ứng viên tốt nhất được khóa thành ID0 cho cả auto-follow và phát hiện té ngã. ID0 được giữ tối đa 45 frame không khớp, còn track nhiễu giữ 10 frame. Khi mất tạm thời, hệ thống chỉ tìm lại trong 2 s; ứng viên phải nằm trong bán kính 35\% đường chéo ảnh, thuộc vùng trung tâm và ổn định ba frame. Trong một sự cố té ngã chưa giải quyết, module không tự chọn người khác làm mục tiêu.
+Trong biểu thức trên, $q_{area}$ phản ánh diện tích hộp bao, $q_{det}$ là độ tin cậy phát hiện, $q_{vis}$ phản ánh tỷ lệ điểm khớp quan sát được, $q_{center}$ biểu diễn mức độ gần tâm ảnh và $p_{edge}$ là thành phần giảm điểm khi người bị cắt ở biên ảnh. Đối tượng có điểm số cao nhất được gán định danh ID0 để dùng chung cho bám theo và phát hiện té ngã. Bộ theo dõi duy trì ID0 tối đa 45 khung hình không ghép được với kết quả phát hiện; các định danh khác được giữ tối đa 10 khung hình. Cơ chế tìm lại mục tiêu hoạt động trong khoảng 2 s, với điều kiện đối tượng nằm cách vị trí cuối không quá 35\% đường chéo ảnh, thuộc vùng trung tâm và được quan sát ổn định trong ba khung hình. Khi đang xử lý một sự kiện nghi té ngã, hệ thống không tự chuyển sang người khác.
 
 \subsubsection{Module tự bám theo và điều khiển chuyển động}
 
-Module auto-follow nhận hộp bao/keypoint của ID0 và trả vector tiến--lùi--quay chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá, sau đó được làm mượt bằng trung bình trượt lũy thừa (Exponential Moving Average -- EMA). Giá trị này được phân thành ba dải xa, an toàn và quá gần; ngưỡng đi vào và rời khỏi mỗi dải được đặt khác nhau để hạn chế việc robot đổi trạng thái liên tục khi khoảng cách dao động gần biên. Sai lệch tâm ngang tạo thành phần quay với vùng chết 0,07, hệ số 2,2 và biên 0,50; vector được cập nhật khoảng mỗi 120 ms.
+Module bám theo tự động nhận hộp bao và các điểm khớp của mục tiêu ID0, sau đó tạo vector điều khiển tịnh tiến và quay đã chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá chân, rồi làm mượt bằng trung bình trượt lũy thừa (Exponential Moving Average -- EMA). Giá trị này được chia thành ba vùng: quá xa, phù hợp và quá gần. Ngưỡng đi vào và rời khỏi mỗi vùng được đặt khác nhau để hạn chế việc robot đổi trạng thái liên tục khi giá trị dao động gần biên. Sai lệch ngang giữa tâm mục tiêu và tâm ảnh tạo thành phần quay, với vùng chết 0,07, hệ số 2,2 và giới hạn độ lớn 0,50. Vector điều khiển được cập nhật khoảng mỗi 120 ms.
 
 Bộ điều khiển chỉ dựa vào tâm hộp bao có chi phí tính toán thấp, nhưng có thể đánh giá sai khoảng cách khi phần chân bị cắt khỏi ảnh. Cảm biến chiều sâu cung cấp khoảng cách trực tiếp hơn nhưng làm tăng độ phức tạp phần cứng và nằm ngoài phạm vi đề tài. Do đó, hệ thống kết hợp hộp bao với các keypoint và áp dụng chính sách chuyển động thận trọng: khi vùng bao quá lớn hoặc phần chân không còn trong khung hình, robot ưu tiên lùi để quan sát đầy đủ hơn. Sau khi xuất hiện kết quả FALL, robot không tiến về phía người mà chỉ dừng, lùi chậm hoặc quay tại chỗ; nếu mất ID0 trong trạng thái này, robot dừng ngay.
 
-Nguồn lệnh joystick và auto-follow dùng chung cấu trúc dữ liệu $x,y,ts$ nhưng loại trừ lẫn nhau. Việc hợp nhất tại một module cầu nối giúp mọi nguồn lệnh cùng chịu kiểm tra timestamp, clamp và watchdog, thay vì mỗi tính năng tự ghi BLE theo quy ước riêng.
+Lệnh từ cần điều khiển ảo và chức năng bám theo tự động sử dụng chung cấu trúc $x,y,ts$, nhưng chỉ một nguồn được quyền điều khiển tại một thời điểm. Module cầu nối tập trung việc kiểm tra thời điểm tạo lệnh, giới hạn giá trị và dừng khi quá thời gian chờ, giúp áp dụng cùng một quy trình kiểm tra cho cả hai nguồn.
 
 \subsubsection{Module phát hiện, hậu kiểm và xác nhận té ngã}
 
-Có ba lựa chọn chính cho quyết định té ngã từ pose: ngưỡng hình học trên từng frame, mạng phân loại ảnh/clip đầu cuối và mô hình chuỗi trên đặc trưng keypoint. Ngưỡng hình học nhẹ, dễ giải thích nhưng nhạy với góc nhìn; mô hình clip có thể học đặc trưng mạnh nhưng tốn tài nguyên và cần tập dữ liệu lớn; chuỗi keypoint giảm kích thước đầu vào và mô tả chuyển động nhưng phụ thuộc chất lượng pose. Đề tài chọn YOLO pose kết hợp LSTM, sau đó dùng hậu kiểm theo luật và hội thoại để hạn chế cảnh báo giả.
+Bài toán phát hiện té ngã có thể được tiếp cận bằng ngưỡng hình học trên từng khung hình, mô hình phân loại trực tiếp từ ảnh hoặc đoạn video, hoặc mô hình phân tích chuỗi điểm khớp. Ngưỡng hình học có chi phí tính toán thấp và dễ giải thích nhưng nhạy với góc nhìn. Mô hình học trực tiếp từ video có thể khai thác cả hình ảnh và chuyển động, song cần nhiều tài nguyên và dữ liệu huấn luyện. Chuỗi điểm khớp có kích thước đầu vào nhỏ hơn và thể hiện được diễn biến tư thế, nhưng phụ thuộc vào chất lượng ước lượng các điểm này. Đề tài lựa chọn YOLO-Pose kết hợp LSTM, sau đó kiểm tra bổ sung theo quy tắc và hỏi xác nhận bằng giọng nói để hạn chế cảnh báo nhầm.
 
-Mỗi frame của ID0 được chuyển thành 69 đặc trưng:
+Mỗi khung hình của mục tiêu ID0 được chuyển thành vector 69 đặc trưng:
 
 \begin{equation}
 \mathbf f_t=[x_i,y_i,\Delta x_i,\Delta y_i]_{i=1}^{17}\oplus r_t,
 \end{equation}
 
-trong đó tọa độ keypoint được chuẩn hóa theo tâm hông và kích thước pose, $\Delta x_i,\Delta y_i$ là thay đổi so với frame trước và $r_t$ là tỷ lệ rộng/cao. Cửa sổ 15 frame tạo tensor $[1,15,69]$; LSTM trả $[p_{normal},p_{fall}]$ và chọn FALL khi $p_{fall}>p_{normal}$. LSTM phù hợp vì có thể biểu diễn quan hệ thời gian mà một pose đơn lẻ không cung cấp \reportcite{ref:lstm}.
+trong đó tọa độ điểm khớp được chuẩn hóa theo tâm hông và kích thước vùng tư thế, $\Delta x_i,\Delta y_i$ là độ dịch chuyển so với khung hình trước, còn $r_t$ là tỷ lệ rộng/cao. Cửa sổ 15 khung hình tạo tensor $[1,15,69]$; LSTM trả về $[p_{normal},p_{fall}]$ và kết quả được gán nhãn FALL khi $p_{fall}>p_{normal}$. LSTM khai thác quan hệ theo thời gian của chuỗi tư thế để bổ sung thông tin chuyển động cho việc phân loại \reportcite{ref:lstm}.
 
-Bộ hậu kiểm dùng các trạng thái \texttt{MONITORING}, \texttt{FALL\_SEQUENCE}, \texttt{VERIFYING}, \texttt{PROMPTED}, \texttt{DISMISSED} và \texttt{CONFIRMED}. Năm kết quả FALL liên tiếp mới tạo ứng viên. Sau NO FALL đầu tiên, ba khung hình có điểm mũi hoặc vai ở $y/H\leq0,70$ sẽ loại ứng viên; ba khung hình có các điểm này ở $y/H>0,70$, hoặc 12 khung hình liên tiếp không còn quan sát được mục tiêu hay phần thân trên, sẽ dẫn đến bước hỏi xác nhận. Nhánh mơ hồ, lỗi hoặc hết 10 s chờ phản hồi được xem là tình huống nguy hiểm. Sau khi sự cố được kết luận, bộ hậu kiểm chỉ trở về trạng thái giám sát khi đã ghi nhận 10 kết quả NO FALL liên tiếp, qua đó hạn chế kích hoạt lặp lại trên cùng một diễn biến. Thiết kế nhiều tầng làm tăng một khoảng trễ nhỏ nhưng giúp tránh chuyển trực tiếp một dự đoán đơn lẻ thành cảnh báo.
+Bộ hậu kiểm quản lý quá trình xử lý qua các trạng thái \texttt{MONITORING}, \texttt{FALL\_SEQUENCE}, \texttt{VERIFYING}, \texttt{PROMPTED}, \texttt{DISMISSED} và \texttt{CONFIRMED}, tương ứng với giám sát, ghi nhận chuỗi nghi té ngã, kiểm tra bổ sung, hỏi xác nhận, loại bỏ sự kiện và xác nhận nguy hiểm. Năm kết quả FALL liên tiếp hình thành một chuỗi nghi té ngã. Sau kết quả NO FALL đầu tiên, ba khung hình liên tiếp có điểm mũi hoặc vai ở $y/H\leq0,70$ sẽ loại bỏ sự kiện; ba khung hình liên tiếp có các điểm này ở $y/H>0,70$, hoặc 12 khung hình liên tiếp không quan sát được mục tiêu hay phần thân trên, sẽ dẫn đến bước hỏi xác nhận. Nếu câu trả lời chưa rõ nghĩa, xảy ra lỗi phân loại hoặc hết 10 s chờ phản hồi, hệ thống xử lý theo trường hợp cần hỗ trợ. Sau khi sự kiện được kết luận, bộ hậu kiểm chỉ trở về trạng thái giám sát khi ghi nhận 10 kết quả NO FALL liên tiếp, nhằm hạn chế yêu cầu xác nhận trùng lặp. Các bước kiểm tra bổ sung tạo thêm độ trễ, đổi lại giúp hệ thống xem xét diễn biến qua nhiều khung hình trước khi phát cảnh báo.
 
 \subsubsection{Module hội thoại và lời nhắc}
 
-Một chatbot hoàn toàn offline bảo vệ dữ liệu và không phụ thuộc mạng, nhưng mô hình đủ khả năng hội thoại khó chạy đồng thời với pipeline thị giác trên điện thoại mục tiêu. Một hệ thống kịch bản cố định nhẹ và dự đoán được nhưng không đáp ứng trò chuyện hằng ngày. Vì vậy, đề tài chọn kiến trúc lai: Android SpeechRecognizer tạo văn bản, API LLM sinh phản hồi và Android TextToSpeech phát âm thanh \reportcite{ref:android_speech}\reportcite{ref:groq_api}\reportcite{ref:android_tts}. Từ khóa cục bộ xử lý trước các phản hồi an toàn/nguy hiểm; lời nhắc có câu mẫu dự phòng khi API thất bại.
+Mô hình hội thoại chạy hoàn toàn tại thiết bị hạn chế phụ thuộc mạng và việc gửi dữ liệu ra ngoài, nhưng cần chia sẻ tài nguyên với chức năng thị giác. Phương án dùng kịch bản cố định có chi phí xử lý thấp và dễ kiểm soát nội dung, song khó đáp ứng hội thoại hằng ngày với nhiều chủ đề. Vì vậy, đề tài kết hợp Android SpeechRecognizer để chuyển tiếng nói thành văn bản, LLM qua API để tạo câu trả lời và Android TextToSpeech để tổng hợp tiếng nói \reportcite{ref:android_speech}\reportcite{ref:groq_api}\reportcite{ref:android_tts}. Những phản hồi thể hiện rõ tình trạng an toàn hoặc nguy hiểm được nhận biết trước bằng từ khóa tại thiết bị; chức năng nhắc nhở sử dụng câu mẫu dự phòng khi không nhận được phản hồi từ API.
 
-Máy trạng thái gồm nghỉ, lắng nghe, suy nghĩ, đang nói, xác nhận lời nhắc, xác nhận té ngã và đang gọi. Hồ sơ người dùng được đưa vào system prompt, còn lịch sử hội thoại giới hạn 20 thông điệp để kiểm soát token. Phản hồi streaming được ghép theo câu và đưa tuần tự vào TTS, giảm thời gian chờ cảm nhận; các tác vụ ngắn như phân loại phản hồi hoặc nhận biết ý định gọi dùng request không streaming để tránh làm nhiễu lịch sử. Module lời nhắc kiểm tra lịch mỗi 30 s, tạo log trước khi phát sự kiện và luôn giữ nội dung lịch gốc, không để LLM tự thay đổi thuốc hay thời điểm.
+Hoạt động hội thoại được tổ chức theo các trạng thái nghỉ, lắng nghe, xử lý câu hỏi, phát câu trả lời, xác nhận lời nhắc, xác nhận té ngã và đang gọi. Hồ sơ người dùng được bổ sung vào phần chỉ dẫn cho LLM; lịch sử hội thoại giới hạn ở 20 thông điệp để kiểm soát độ dài ngữ cảnh. Phản hồi được tiếp nhận từng phần, ghép thành câu rồi đưa vào TTS, giúp rút ngắn thời gian từ khi đặt câu hỏi đến khi robot bắt đầu trả lời. Các tác vụ ngắn, như phân loại phản hồi hoặc nhận biết yêu cầu gọi, sử dụng yêu cầu riêng nhận kết quả đầy đủ trong một lần và không thêm vào lịch sử trò chuyện. Module nhắc nhở kiểm tra lịch mỗi 30 s, tạo bản ghi trước khi phát sự kiện và giữ nguyên nội dung lịch đã thiết lập.
 
 \subsubsection{Module dữ liệu dùng chung và liên lạc thời gian thực}
 
-Đối với dữ liệu trạng thái nhỏ, Firebase RTDB được chọn thay cho backend REST tự xây dựng hoặc MQTT broker. Listener giúp hai ứng dụng nhận cờ/lệnh/sự kiện gần thời gian thực và cùng dùng Firebase Authentication; hạn chế là cây JSON dễ ghép chặt schema, truy vấn không linh hoạt như cơ sở dữ liệu tài liệu và mô hình cùng UID chưa biểu diễn vai trò riêng. Vì vậy, đường dẫn được tập trung, phân vùng theo UID và mọi lệnh điều khiển mang timestamp \reportcite{ref:firebase_rtdb}\reportcite{ref:firebase_security}.
+Firebase Realtime Database được lựa chọn để đồng bộ các dữ liệu có kích thước nhỏ như trạng thái chức năng, lệnh điều khiển và sự kiện. Các bộ lắng nghe thông báo thay đổi đến hai ứng dụng gần thời gian thực, kết hợp với Firebase Authentication để xác định tài khoản truy cập. Giải pháp này giảm khối lượng xây dựng máy chủ riêng so với REST hoặc việc bổ sung cơ chế lưu trữ cho MQTT. Tuy nhiên, hai ứng dụng cần thống nhất cấu trúc cây JSON và đường dẫn; việc thay đổi cấu trúc dữ liệu phải được cập nhật đồng bộ. Các đường dẫn vì vậy được quản lý tập trung và phân vùng theo UID; lệnh điều khiển kèm thời điểm tạo để kiểm tra hiệu lực. Hai thiết bị dùng chung tài khoản nên hệ thống hiện chưa phân quyền riêng cho robot và người chăm sóc \reportcite{ref:firebase_rtdb}\reportcite{ref:firebase_security}.
 
-RTDB không được dùng để truyền frame. Audio/video đi qua WebRTC; RTDB chỉ mang trạng thái, offer, answer và hai nhánh ICE candidate. WebRTC có ưu điểm tối ưu cho media tương tác, P2P khi có thể và hỗ trợ TURN khi NAT cản trở; nhược điểm là vòng đời PeerConnection, signaling, timeout và chuyển quyền camera phức tạp \reportcite{ref:webrtc}\reportcite{ref:ice}. Cuộc gọi hết 30 s chưa được chấp nhận sẽ hủy. Ngoài cuộc gọi, CameraX cấp Preview/ImageAnalysis; trong cuộc gọi, CameraX unbind, WebRTC mở camera duy nhất và local VideoTrack gửi một bản sao frame cho pipeline AI.
+Âm thanh và hình ảnh được truyền bằng WebRTC, còn RTDB lưu trạng thái và thông tin thiết lập cuộc gọi, gồm bản mô tả phiên đề nghị, bản trả lời và hai nhánh địa chỉ ứng viên ICE. WebRTC hỗ trợ kết nối trực tiếp khi điều kiện mạng cho phép và chuyển tiếp qua TURN khi cần. Quá trình tích hợp phải quản lý đồng thời kết nối, báo hiệu, thời gian chờ và quyền sử dụng camera \reportcite{ref:webrtc}\reportcite{ref:ice}. Yêu cầu gọi được hủy nếu không được chấp nhận sau 30 s. Ngoài cuộc gọi, CameraX cung cấp hình ảnh xem trước và khung hình phân tích. Trong cuộc gọi, CameraX được ngắt liên kết; WebRTC sử dụng camera và gửi bản sao khung hình cục bộ đến khối AI.
 
 \subsubsection{Module cầu nối BLE và chấp hành thân robot}
 
-Payload điều khiển chỉ gồm hai setpoint, vì vậy BLE GATT phù hợp hơn Wi-Fi về cấu hình và năng lượng, đồng thời tránh dây USB giữa điện thoại và thân robot. Đổi lại, BLE không bảo đảm một lệnh sẽ được nhận khi dùng ghi không phản hồi; do đó tính an toàn không dựa vào một gói STOP duy nhất mà dựa thêm vào tuổi lệnh và watchdog \reportcite{ref:ble_primer}.
+Dữ liệu gửi đến thân robot chỉ gồm vận tốc đặt của hai bánh, có kích thước nhỏ và không chứa hình ảnh. BLE GATT đáp ứng nhu cầu trao đổi này trong phạm vi gần, đồng thời cho phép kết nối không dây giữa điện thoại và ESP32. Khi sử dụng thao tác ghi không phản hồi, phía gửi không nhận xác nhận ở mức GATT cho từng lệnh. Vì vậy, hệ thống kết hợp kiểm tra thời hạn lệnh và cơ chế tự dừng khi không nhận cập nhật, bên cạnh việc chủ động gửi lệnh dừng \reportcite{ref:ble_primer}.
 
-Module cầu nối là nơi duy nhất kiểm tra timestamp, giới hạn giá trị, ánh xạ vector và ghi chuỗi \texttt{L...R...} sang BLE. ESP32 làm GATT server, áp dụng deadzone/giới hạn rồi điều khiển hai BLDC. Hai encoder AS5600 dùng hai bus I2C; hai driver nhận 3PWM. Mỗi động cơ có 7 cặp cực, nguồn 17,5 V, giới hạn điện áp 10 V và vận tốc 40 rad/s. Bộ điều khiển velocity dùng $P=0,1$, $I=1,0$, $D=0$ cùng lọc $T_f=0,01$ s. SimpleFOC được chọn để hiện thực FOC vòng kín thay vì tự xây toàn bộ thuật toán điều khiển, giảm thời gian tích hợp nhưng vẫn đòi hỏi hiệu chỉnh tham số theo cơ khí thực tế \reportcite{ref:foc}\reportcite{ref:simplefoc}.
+Module cầu nối kiểm tra thời điểm tạo lệnh, giới hạn giá trị và chuyển vector điều khiển thành chuỗi \texttt{L...R...} để gửi qua BLE. ESP32 đóng vai trò máy chủ GATT, xử lý vùng không đáp ứng, giới hạn vận tốc đặt và điều khiển hai động cơ BLDC. Hai cảm biến góc AS5600 kết nối qua hai bus I2C riêng; mỗi mạch công suất nhận ba tín hiệu PWM. Các thông số thiết kế gồm 7 cặp cực cho mỗi động cơ, điện áp nguồn 17,5 V, giới hạn điện áp điều khiển 10 V và vận tốc 40 rad/s. Bộ điều khiển vận tốc sử dụng $P=0,1$, $I=1,0$, $D=0$ và bộ lọc có hằng số thời gian $T_f=0,01$ s. Thư viện SimpleFOC cung cấp các hàm khởi tạo và cập nhật điều khiển FOC vòng kín, giúp thuận tiện tích hợp phần cứng; các tham số vẫn cần được hiệu chỉnh theo đặc điểm cơ khí của robot \reportcite{ref:foc}\reportcite{ref:simplefoc}.
 
 \subsubsection{Module chuẩn bị và triển khai mô hình AI}
 
-Mô hình huấn luyện không được nạp trực tiếp vào Android. Pipeline ngoại tuyến chuyển YOLO pose từ PyTorch sang ONNX tĩnh $320\times320$, qua onnx2tf/SavedModel rồi tạo TFLite; LSTM được chuyển từ Keras H5 sang TFLite có \texttt{SELECT\_TF\_OPS}. Biến thể YOLO raw không NMS phục vụ delegate GPU, còn biến thể E2E có NMS làm dự phòng. Khi nạp, ứng dụng đọc kích thước tensor để hỗ trợ đầu ra raw $[1,56,2100]$ và E2E $[1,300,57]$.
+Trước khi tích hợp vào Android, mô hình YOLO-Pose được chuyển từ PyTorch sang ONNX với đầu vào cố định $320\times320$, sau đó qua \texttt{onnx2tf}/SavedModel để tạo tệp TFLite. Mô hình LSTM được chuyển từ Keras H5 sang TFLite với tập toán tử \texttt{SELECT\_TF\_OPS}. Biến thể YOLO có đầu ra thô, không tích hợp NMS, được ưu tiên cho suy luận bằng GPU; biến thể đầu cuối (E2E) có bước lựa chọn dự đoán được dùng làm phương án dự phòng. Khi nạp mô hình, ứng dụng đọc kích thước tensor để xử lý hai dạng đầu ra \texttt{[1,56,2100]} và \texttt{[1,300,57]}.
 
-ONNX được dùng làm định dạng trung gian để kiểm tra đồ thị tính toán giữa framework huấn luyện và TensorFlow; TFLite là định dạng triển khai cuối vì phù hợp với Android và hỗ trợ các bộ tăng tốc phần cứng. Quy trình chuyển đổi nhiều bước tạo sự linh hoạt nhưng có thể làm thay đổi toán tử hoặc quy ước đầu ra, vì vậy kích thước tensor và tính tương đương suy luận phải được kiểm tra trước khi đóng gói. Quy trình của đề tài đã có các mô hình cùng mã chuyển đổi và kiểm tra suy luận; tuy nhiên, cấu hình tái huấn luyện chưa được chuẩn hóa đầy đủ. Để tăng khả năng tái lập, cần bổ sung cấu hình dữ liệu, seed, checkpoint và tệp kê khai kèm mã băm cho từng phiên bản mô hình.
+ONNX đóng vai trò định dạng trung gian giữa môi trường huấn luyện và TensorFlow; TFLite là định dạng triển khai trên Android và hỗ trợ sử dụng các bộ tăng tốc phần cứng. Quá trình chuyển đổi có thể làm thay đổi toán tử hoặc quy ước đầu ra, nên thiết kế bao gồm bước kiểm tra kích thước tensor và so sánh kết quả suy luận trước khi đóng gói. Việc lưu cấu hình dữ liệu, tham số huấn luyện, phiên bản mô hình và mã băm của tệp cũng cần được thực hiện thống nhất để có thể lặp lại quy trình khi thay đổi mô hình.
 
 \subsection{Thiết kế dữ liệu, giao thức truyền thông và phương thức kết nối}
 
@@ -458,7 +458,7 @@ Firebase RTDB lưu dữ liệu theo cấu trúc cây JSON và chuyển thay đ�
 \hline
 \end{longtable}
 
-Security Rules mặc định đặt \texttt{.read=false} và \texttt{.write=false}; mỗi nhánh chỉ cho phép khi \texttt{auth != null} và \texttt{auth.uid === \$uid}. Hai nhánh lịch sử được tạo index theo timestamp. Rules này loại bỏ truy cập chéo UID ở mức cơ bản \reportcite{ref:firebase_security}, nhưng chưa có vai trò caregiver/robot riêng vì hai thiết bị đang dùng cùng tài khoản.
+Quy tắc bảo mật mặc định đặt \texttt{.read=false} và \texttt{.write=false}; mỗi nhánh chỉ cho phép truy cập khi \texttt{auth != null} và \texttt{auth.uid === \$uid}. Hai nhánh lịch sử được lập chỉ mục theo thời điểm để hỗ trợ truy vấn. Các quy tắc này giới hạn người dùng vào vùng dữ liệu thuộc UID tương ứng \reportcite{ref:firebase_security}. Tuy nhiên, robot và người chăm sóc chưa có quyền truy cập riêng vì hai thiết bị đang sử dụng cùng tài khoản.
 
 \subsubsection{Cấu trúc dữ liệu điều khiển trên RTDB}
 
@@ -476,7 +476,7 @@ Trong CaregiverApp, độ lệch joystick được chuẩn hóa theo bán kính 
 x=\frac{\Delta y}{r}, \qquad y=-\frac{\Delta x}{r}.
 \end{equation}
 
-Do trục $y$ của màn hình tăng xuống dưới, kéo lên tạo $x<0$. RobotApp chỉ nhận lệnh khi $x,y$ hữu hạn, timestamp tồn tại, tuổi lệnh không quá 2.000 ms và độ lệch về tương lai không quá 5.000 ms. Sau khi chặn $x,y$ vào $[-1,1]$, ánh xạ motor là:
+Do tọa độ $y$ trên màn hình tăng theo chiều từ trên xuống, thao tác kéo lên tạo $x<0$. RobotApp tiếp nhận lệnh khi $x,y$ là các giá trị hữu hạn, có thời điểm tạo lệnh, tuổi lệnh không quá 2.000 ms và thời điểm này không vượt quá thời gian hiện tại hơn 5.000 ms. Sau khi giới hạn $x,y$ trong $[-1,1]$, vận tốc đặt của hai động cơ được tính như sau:
 
 \begin{align}
 t &= \operatorname{clip}(x,-1,1),\\
@@ -485,7 +485,7 @@ v_L &= (s+t)20,\\
 v_R &= (s-t)20.
 \end{align}
 
-Nếu $|x|>0,3$ và $|y|<0,3$, thành phần quay được đưa về 0 để giảm rung khi đi thẳng. Hai motor lắp đối xứng nên dấu của setpoint là quy ước theo trục motor đã hiệu chỉnh, không thể suy ra hướng xe chỉ bằng việc hai số cùng hay trái dấu.
+Nếu $|x|>0,3$ và $|y|<0,3$, thành phần quay được đưa về 0 để giảm dao động khi đi thẳng. Do hai động cơ được lắp đối xứng, dấu của vận tốc đặt tuân theo chiều trục động cơ đã hiệu chỉnh. Vì vậy, hướng chuyển động của robot phải được xác định theo quy ước lắp đặt, không chỉ dựa vào việc hai giá trị vận tốc cùng dấu hay trái dấu.
 
 \begin{table}[htbp]
 \centering
@@ -510,23 +510,23 @@ $0$ & $0$ & $(0,0)$ & Dừng \\
 
 \subsubsection{Giao tiếp BLE và điều khiển động cơ trên ESP32}
 
-RobotApp là GATT client, ESP32 là GATT server tên \texttt{OhmniRobot}. Service UUID là \texttt{4FAFC201-1FB5-459E-8FCC-C5C9C331914B}; characteristic ghi là \texttt{BEB5483E-36E1-4688-B7F5-EA07361B26A8}. Payload ASCII có dạng \texttt{L<float>R<float>\textbackslash n}, định dạng số theo \texttt{Locale.US} và ghi bằng \path|WRITE_NO_RESPONSE|. Cách tổ chức service/characteristic tuân theo mô hình GATT \reportcite{ref:ble_primer}.
+RobotApp đóng vai trò máy khách GATT, còn ESP32 là máy chủ GATT có tên \texttt{OhmniRobot}. Mã định danh dịch vụ là \texttt{4FAFC201-\allowbreak 1FB5-\allowbreak 459E-\allowbreak 8FCC-\allowbreak C5C9C331914B}; đặc tính nhận lệnh có UUID \texttt{BEB5483E-\allowbreak 36E1-\allowbreak 4688-\allowbreak B7F5-\allowbreak EA07361B26A8}. Gói lệnh là chuỗi ASCII dạng \texttt{L<float>R<float>\textbackslash n}, định dạng số theo \texttt{Locale.US} và được gửi bằng thao tác ghi không phản hồi \path|WRITE_NO_RESPONSE|. Cách tổ chức dịch vụ và đặc tính tuân theo mô hình GATT \reportcite{ref:ble_primer}.
 
-Tại firmware, giá trị có độ lớn dưới 0,5 được đưa về 0; giá trị khác 0 nhưng nhỏ hơn 3 được nâng lên $\pm3$; giá trị cuối bị chặn trong $[-40,40]$. Trong mỗi vòng lặp, hai hàm \texttt{loopFOC()} được gọi, watchdog được kiểm tra, rồi \texttt{move()} nhận setpoint. Callback mất BLE đặt hai target về 0. Parser hiện chỉ kiểm tra vị trí ký tự L/R và dùng \texttt{toFloat}; do đó kiểm tra NaN, vô hạn và chuỗi thừa ở firmware là điểm cần tăng cường dù Android đã lọc đầu vào.
+Firmware đưa giá trị có độ lớn dưới 0,5 về 0, nâng độ lớn của giá trị khác 0 nhưng nhỏ hơn 3 lên 3, rồi giới hạn kết quả trong $[-40,40]$. Trong mỗi vòng lặp, chương trình gọi \texttt{loopFOC()} cho hai động cơ, kiểm tra thời gian nhận lệnh và truyền vận tốc đặt vào \texttt{move()}. Khi kết nối BLE bị ngắt, hàm xử lý sự kiện đặt vận tốc của cả hai động cơ về 0. Bộ phân tích lệnh hiện xác định vị trí ký tự L/R rồi chuyển chuỗi thành số bằng \texttt{toFloat}; việc kiểm tra toàn bộ chuỗi và loại giá trị không hợp lệ tại ESP32 vẫn cần được bổ sung để hoàn thiện cơ chế tiếp nhận lệnh.
 
 \subsubsection{Cơ chế dừng an toàn nhiều tầng}
 
-Chuỗi điều khiển có bốn hàng rào bổ sung nhau:
+Hệ thống kết hợp bốn cơ chế dừng theo vị trí xử lý trong chuỗi điều khiển:
 
 \begin{enumerate}
-    \item UI phát STOP khi thả joystick, ẩn điều khiển, tắt auto-follow hoặc kết thúc cuộc gọi.
+    \item Ứng dụng gửi lệnh dừng khi người dùng thả cần điều khiển, ẩn phần điều khiển, tắt bám theo tự động hoặc kết thúc cuộc gọi.
     \item RobotApp loại bản cập nhật RTDB quá 2 s, sai kiểu hoặc chứa giá trị không hữu hạn.
-    \item Watchdog \texttt{RobotControlManager} phát \texttt{L0R0} sau 500 ms không nhận cập nhật lệnh.
-    \item Firmware đặt hai target về 0 sau 800 ms không nhận payload hoặc ngay khi BLE disconnect.
+    \item Bộ giám sát thời gian nhận lệnh trong \texttt{RobotControlManager} gửi \texttt{L0R0} sau 500 ms không nhận cập nhật.
+    \item Firmware đưa vận tốc đặt của hai động cơ về 0 sau 800 ms không nhận lệnh hoặc ngay khi kết nối BLE bị ngắt.
 \end{enumerate}
 
-Thời gian watchdog trên Android được đặt ngắn hơn firmware để ứng dụng ưu tiên gửi lệnh dừng có chủ đích. Watchdog trên ESP32 là lớp bảo vệ cuối cùng khi ứng dụng bị treo hoặc kết nối bị ngắt trước khi lệnh STOP được gửi đi.
+Cơ chế giám sát thời gian nhận lệnh, thường gọi là watchdog, được đặt ở cả ứng dụng và ESP32. Ngưỡng trên Android ngắn hơn ngưỡng ở firmware để ứng dụng chủ động gửi lệnh dừng trước. ESP32 tiếp tục kiểm tra độc lập và đưa vận tốc về 0 nếu ứng dụng bị treo hoặc kết nối bị ngắt trước khi lệnh dừng được truyền đến.
 
 \subsection{Kết luận chương}
 
-Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng của hệ thống, từ đó phân chia các nhóm chức năng cho RobotApp, CaregiverApp, dịch vụ dùng chung, quy trình chuẩn bị mô hình AI và phần thân robot. Trên kiến trúc tổng quan đó, các module và luồng phối hợp được phân tích trước khi lựa chọn nền tảng di động, cơ chế suy luận AI tại thiết bị, giải pháp đồng bộ dữ liệu, truyền thông đa phương tiện, hội thoại và kết nối với phần cứng robot. Thiết kế đồng thời làm rõ ranh giới giữa kết quả nhận thức của AI, quyết định điều phối của ứng dụng và quá trình chấp hành chuyển động, cùng các giao thức truyền thông, phương thức kết nối và cơ chế dừng an toàn. Đây là cơ sở để trình bày quá trình hiện thực ở Chương 4 và tổ chức đánh giá hệ thống ở Chương 5.
+Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng làm cơ sở phân chia nhiệm vụ cho RobotApp, CaregiverApp, dịch vụ dùng chung và phần thân robot. Trên kiến trúc tổng quan đó, các luồng giám sát, hội thoại, nhắc nhở, liên lạc và điều khiển được phân tích để lựa chọn công nghệ phù hợp. Thiết kế cũng xác định cách chuẩn bị mô hình AI, tổ chức dữ liệu, truyền nhận lệnh và phối hợp các cơ chế dừng an toàn. Những nội dung này là cơ sở để hiện thực hệ thống ở Chương 4 và đánh giá kết quả ở Chương 5.

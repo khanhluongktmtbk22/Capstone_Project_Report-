@@ -2,68 +2,61 @@
 
 \subsection{Tổng kết}
 
-Đồ án đã nghiên cứu và xây dựng một nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc, giám sát người cao tuổi tại nhà. Khác với một ứng dụng AI đơn lẻ, hệ thống bao phủ toàn chuỗi từ cảm nhận bằng camera, theo dõi chủ thể, nhận biết tình huống nghi té ngã, tương tác xác nhận, lưu cảnh báo, gọi người chăm sóc đến điều khiển phần thân robot. Bốn khối sản phẩm gồm RobotApp, CaregiverApp, mô hình/quy trình chuyển đổi AI và firmware ESP32 được liên kết thông qua các giao thức truyền thông và phương thức kết nối sử dụng Firebase, WebRTC và BLE.
+Đồ án đã nghiên cứu và xây dựng nguyên mẫu robot trợ lý ảo hỗ trợ chăm sóc, giám sát người cao tuổi tại nhà. Hệ thống kết hợp hội thoại bằng giọng nói, nhắc nhở theo lịch, theo dõi người, phát hiện tình huống nghi té ngã và liên lạc với người chăm sóc. Điện thoại Android gắn trên robot đảm nhiệm thu nhận hình ảnh, âm thanh và xử lý các chức năng hỗ trợ; phần thân robot thực hiện chuyển động theo lệnh từ điện thoại. Cách tổ chức này kế thừa ý tưởng sử dụng điện thoại thông minh làm bộ xử lý của nền tảng OpenBot và được phát triển theo nhu cầu của đề tài.
 
-RobotApp tận dụng smartphone/tablet như bộ não robot theo định hướng OpenBot: camera, microphone, loa, mạng và năng lực suy luận được dùng chung cho nhiều nhiệm vụ. Ứng dụng tích hợp CameraX, TFLite, OpenCV, Firebase, WebRTC, BLE, nhận dạng giọng nói, TTS và Groq. CaregiverApp cung cấp hồ sơ, lịch nhắc nhở, cờ theo dõi/té ngã, nhật ký, cuộc gọi và joystick. Firmware ESP32 dùng NimBLE và SimpleFOC để điều khiển kín hai BLDC theo phản hồi AS5600.
+Hai ứng dụng RobotApp và CaregiverApp tạo thành các phương tiện tương tác dành cho người cao tuổi và người chăm sóc. RobotApp thực hiện hội thoại, phát lời nhắc và xử lý hình ảnh tại robot. CaregiverApp cho phép quản lý thông tin, cấu hình chức năng giám sát, xem nhật ký, tham gia cuộc gọi và điều khiển robot từ xa. Dữ liệu chăm sóc, thông tin cuộc gọi và lệnh chuyển động được trao đổi qua các kênh phù hợp với từng chức năng.
 
-Pipeline thị giác kết hợp mô hình pose với tracking-by-detection, Kalman, Hungarian và Re-ID nhẹ. Người cần chăm sóc được bảo vệ dưới ID0; chỉ ID0 đi vào LSTM. Model xử lý cửa sổ 15 khung hình với 69 đặc trưng và trả nhãn nhị phân. Bộ xác minh yêu cầu năm nhãn FALL liên tiếp, sau đó kiểm tra vị trí mũi/vai trong ba khung hình khi chuỗi kết thúc hoặc chờ tối đa 12 khung hình nếu mất quan sát. Trong sự cố, robot dừng ngay rồi chỉ được lùi/quay để lấy trọn khung người nằm, không tiến gần. Khi cần xác nhận, chatbot hỏi bằng giọng nói và mặc định theo nhánh nguy hiểm nếu người dùng không phản hồi hoặc dịch vụ phân loại lỗi.
-
-Hệ thống giải quyết hai xung đột kỹ thuật đáng chú ý. Thứ nhất, CameraX sở hữu camera khi bình thường, WebRTC sở hữu camera trong cuộc gọi và chia sẻ local frame cho AI. Thứ hai, tracking fragment là chủ sở hữu duy nhất của RobotControlManager/BLE; mọi nguồn joystick và auto-follow hội tụ tại cùng lớp kiểm tra. Các quyết định này tăng tính ổn định hơn so với việc mở camera hoặc GATT client riêng cho từng fragment.
-
-Chuỗi an toàn chuyển động gồm timestamp và miền lệnh trên RTDB, bộ lọc lệnh cũ/không hữu hạn tại RobotApp, watchdog 500 ms ở Android, giới hạn tốc độ, callback ngắt BLE và watchdog 800 ms ở firmware. Các kênh lệnh, cờ AI, signaling và lịch sử đã được đưa dưới \path|pair_sessions/{uid}| với rules từ chối mặc định và kiểm tra UID. Đây là các đóng góp thiết kế có thể kiểm tra độc lập với độ chính xác AI. Hai ứng dụng đã được nhóm dự án build thành công và có APK debug; các artifact model H5/PT/ONNX/TFLite cùng script chuyển đổi cho thấy luồng triển khai AI trên Android đã được thực hiện.
+Đối với giám sát té ngã, hệ thống kết hợp ước lượng tư thế, duy trì định danh người mục tiêu và phân tích chuỗi chuyển động bằng LSTM. Kết quả phân loại được kiểm tra bổ sung trước khi robot hỏi xác nhận tình trạng. Khi người dùng cần hỗ trợ hoặc chưa thể xác nhận an toàn, ứng dụng lưu cảnh báo và thực hiện cuộc gọi đến người chăm sóc. Các cơ chế kiểm tra lệnh và dừng khi mất cập nhật được tổ chức ở cả ứng dụng lẫn phần thân robot.
 
 \subsection{Kết quả đạt được}
 
+Những kết quả chính của đồ án gồm:
 \begin{itemize}
-    \item Xây dựng kiến trúc nhiều tầng phù hợp robot chăm sóc tại nhà với phân công rõ giữa caregiver, cloud, robot Android và vi điều khiển.
-    \item Xây dựng RobotApp có theo dõi người, phát hiện/hậu kiểm té ngã, hội thoại, nhắc nhở, video call và BLE.
-    \item Xây dựng CaregiverApp có quản lý tài khoản/hồ sơ/lịch, bật tắt AI, xem lịch sử, nhận cuộc gọi và điều khiển joystick.
-    \item Xây dựng firmware ESP32 điều khiển hai động cơ BLDC bằng SimpleFOC, giao tiếp BLE GATT và dừng an toàn.
-    \item Tạo pipeline chuyển đổi LSTM Keras và pose PyTorch qua ONNX/SavedModel sang TFLite, gồm biến thể 320$\times$320, GPU và FP16.
-    \item Thiết kế khóa mục tiêu ID0, khôi phục theo chi phí trong cửa sổ 2 s, chính sách tốc độ tracking và chế độ tạo khung an toàn khi người nằm.
-    \item Cách ly các kênh thời gian thực theo \path|pair_sessions/{uid}| và triển khai RTDB Rules kiểm tra người dùng đã xác thực.
-    \item Đặc tả đầy đủ path dữ liệu, trạng thái WebRTC, format BLE, mapping motor và timeout.
-    \item Xây dựng khung kiểm thử truy vết từ yêu cầu tới module, unit test và kịch bản đầu cuối.
+    \item \textbf{Xây dựng hệ thống hỗ trợ chăm sóc có sự phối hợp giữa robot và người chăm sóc.} Hai ứng dụng cung cấp các chức năng quản lý hồ sơ, nhắc nhở, hội thoại, theo dõi sự kiện và liên lạc từ xa trong cùng một hệ thống.
+    \item \textbf{Tích hợp thị giác máy tính với chức năng bám theo và phát hiện té ngã.} Kết quả ước lượng tư thế được sử dụng đồng thời để duy trì người mục tiêu, phân tích chuyển động và điều chỉnh vị trí robot. Bước hậu kiểm và xác nhận bằng giọng nói bổ sung thông tin trước khi phát cảnh báo.
+    \item \textbf{Hiện thực khả năng di chuyển và điều khiển từ xa.} Firmware điều khiển độc lập hai động cơ, tiếp nhận lệnh từ RobotApp và đưa vận tốc đặt về 0 khi kết nối hoặc luồng lệnh bị gián đoạn. Việc kiểm tra lệnh được kết hợp giữa ứng dụng và vi điều khiển.
+    \item \textbf{Triển khai mô hình AI trên thiết bị Android.} Quy trình chuẩn bị và chuyển đổi đã tạo các mô hình TFLite để tích hợp vào RobotApp. Dữ liệu đầu vào, đầu ra và các phép chuyển đổi tọa độ được tổ chức thống nhất giữa những bước xử lý.
+    \item \textbf{Xây dựng các nhóm kiểm thử và bước đầu đánh giá hiệu năng.} Các kiểm thử ở mức logic bao phủ đường dẫn dữ liệu, ánh xạ lệnh động cơ, chính sách bám theo, hình học tư thế và hậu kiểm té ngã. Chương 5 trình bày các chỉ số ban đầu của mô hình LSTM, một cấu hình đo tốc độ suy luận và các kịch bản kiểm thử chức năng đầu cuối.
 \end{itemize}
+
+Kết quả hiện tại thể hiện khả năng tích hợp các thành phần của nguyên mẫu. Các số liệu đánh giá ban đầu hỗ trợ xem xét tính khả thi của hướng triển khai, nhưng chưa đại diện cho chất lượng phát hiện té ngã và hiệu năng của toàn bộ hệ thống trong mọi điều kiện sử dụng.
 
 \subsection{Hạn chế}
 
-Nguyên mẫu chưa phải sản phẩm y tế và chưa trải qua đánh giá lâm sàng. Báo cáo chưa có log huấn luyện/validation đầy đủ để công bố metric AI độc lập, cũng chưa có benchmark chuẩn hóa trên nhiều thiết bị Android và nhiều môi trường nhà. Dữ liệu té ngã dựng lại có thể khác đáng kể với sự cố thật của người cao tuổi. Camera RGB có điểm mù, nhạy ánh sáng/che khuất và tạo rủi ro riêng tư.
+Phạm vi đánh giá còn giới hạn về dữ liệu, thiết bị và bối cảnh thử nghiệm. Các số liệu đã trình bày chưa đi kèm đầy đủ lịch sử huấn luyện, thông tin chia tập dữ liệu, cấu hình thiết bị và kết quả đo thô để tái lập toàn bộ thí nghiệm. Cấu hình đo tốc độ của biến thể FP16 cũng chưa đại diện cho mọi mô hình được đóng gói trong RobotApp. Vì vậy, cần tiếp tục đánh giá trên đúng phiên bản ứng dụng và thiết bị sử dụng, đặc biệt khi nhiều chức năng hoạt động đồng thời.
 
-Kiến trúc hiện phụ thuộc Firebase, Groq và STUN/TURN. Khi mất Internet, AI/BLE cục bộ có thể tiếp tục hoặc dừng an toàn, nhưng hội thoại cloud, đồng bộ caregiver và cuộc gọi suy giảm. RTDB đã cách ly dữ liệu giữa các UID, song RobotApp và CaregiverApp trong một cặp phải đăng nhập cùng tài khoản; chưa có mô hình thành viên, vai trò hoặc nhiều robot trên một gia đình. Rules cũng mới kiểm soát quyền theo nhánh, chưa validate kiểu/miền từng trường lệnh. Quản lý secret, TURN credential và auth gate vẫn cần được harden.
+Chất lượng giám sát phụ thuộc vào góc nhìn camera, điều kiện chiếu sáng và mức độ che khuất. Dữ liệu té ngã dàn dựng có thể khác với tình huống xảy ra trong sinh hoạt của người cao tuổi. Đặc trưng màu dùng để nhận lại mục tiêu có thể nhầm lẫn khi nhiều người mặc trang phục tương tự; các ngưỡng theo dõi và hậu kiểm cũng cần được hiệu chỉnh theo vị trí camera và tốc độ xử lý. Nguyên mẫu hiện phục vụ hỗ trợ giám sát, chưa được đánh giá lâm sàng và không thay thế thiết bị chẩn đoán y khoa.
 
-Re-ID histogram chỉ là đặc trưng ngoại hình nhẹ. Khi nhiều người mặc giống nhau, ID0 có thể mất hoặc ghép sai. Điểm chọn ban đầu, chi phí phục hồi và các ngưỡng hậu kiểm 5/3/12 khung hình được thiết lập theo kinh nghiệm, cần calibration theo FPS và vị trí camera. Firmware parser còn dựa vào \texttt{String.toFloat}; cơ cấu robot cần nút dừng vật lý, bảo vệ dòng/điện áp và kiểm thử cơ khí. APK RobotApp debug lớn và cần tối ưu đóng gói.
+Hội thoại qua LLM, đồng bộ dữ liệu từ xa và thiết lập cuộc gọi phụ thuộc vào kết nối Internet. Khi mạng gián đoạn, xử lý hình ảnh và kết nối điều khiển cục bộ không phụ thuộc trực tiếp vào các dịch vụ này, nhưng việc chuyển cảnh báo và liên lạc với người chăm sóc có thể bị gián đoạn. Hai ứng dụng trong một cặp hiện sử dụng cùng tài khoản, nên chưa có cơ chế phân quyền riêng cho robot và người chăm sóc hoặc quản lý nhiều robot trong một gia đình. Cơ chế quản lý khóa truy cập, thông tin xác thực và kiểm tra dữ liệu trên máy chủ cũng cần được hoàn thiện.
+
+Phần thân robot mới đáp ứng các chuyển động cơ bản và cơ chế dừng khi mất lệnh. Việc bổ sung cảm biến tránh va chạm, nút dừng vật lý, giám sát nguồn điện và kiểm tra chặt chẽ chuỗi lệnh nhận vào vẫn cần được xem xét. Dung lượng ứng dụng, mức sử dụng bộ nhớ, nhiệt độ và năng lượng khi vận hành kéo dài cũng chưa được tối ưu đầy đủ.
 
 \subsection{Hướng phát triển}
 
-\subsubsection{Đánh giá AI có thể tái lập}
+\subsubsection{Hoàn thiện dữ liệu và phương pháp đánh giá}
 
-Ưu tiên đầu tiên là hoàn thiện dữ liệu và pipeline thí nghiệm. Cần lưu script huấn luyện, file cấu hình, seed, split theo chủ thể/video, lịch sử loss/metric, confusion matrix và checksum model. Xây tập test trong nhà độc lập, gồm hành vi gần giống té ngã, che khuất và nhiều người. Báo cáo precision, recall, F1 ở cấp sự cố cùng confidence interval; thực hiện ablation pose, LSTM và hậu kiểm.
+Hướng ưu tiên là chuẩn hóa quy trình thí nghiệm để có thể lặp lại và so sánh giữa các phiên bản. Dữ liệu cần được phân chia theo video và người tham gia, đồng thời lưu cấu hình huấn luyện, phiên bản mô hình và kết quả đo. Tập kiểm tra nên mở rộng các tình huống sinh hoạt dễ nhầm với té ngã, nhiều góc camera và điều kiện che khuất. Việc đánh giá cần bao gồm tỷ lệ phát hiện đúng, cảnh báo nhầm và thời gian phản ứng ở cấp sự kiện. Các thí nghiệm lần lượt loại bỏ từng thành phần, chẳng hạn bộ hậu kiểm hoặc thông tin tư thế, sẽ giúp xác định đóng góp của chúng đối với kết quả chung.
 
-\subsubsection{Tăng độ bền theo dõi và phát hiện}
+\subsubsection{Nâng cao độ ổn định của theo dõi và phát hiện té ngã}
 
-Có thể thay histogram bằng embedding Re-ID nhẹ đã lượng tử hóa, kết hợp quần áo, khuôn mặt khi có sự đồng ý và quỹ đạo. Cần mô hình hóa thời gian không đều khi drop-frame, bổ sung quality score của pose và hiệu chỉnh ngưỡng theo camera. Sensor fusion với IMU trên robot, radar hoặc thiết bị đeo tùy chọn có thể giảm điểm mù, nhưng phải cân nhắc chi phí và trải nghiệm.
+Chức năng theo dõi có thể được cải thiện bằng đặc trưng ngoại hình phù hợp với tài nguyên của điện thoại, kết hợp vị trí và diễn biến chuyển động để nhận lại người mục tiêu. Việc sử dụng độ tin cậy của các điểm khớp và khoảng thời gian thực giữa các khung hình cũng cần được nghiên cứu, nhất là khi tốc độ xử lý thay đổi. Ngoài camera, có thể khảo sát thêm cảm biến khoảng cách hoặc thiết bị đeo để bổ sung thông tin trong những tình huống quan sát bị hạn chế. Mỗi phương án cần được đánh giá về hiệu quả, chi phí tính toán và mức độ thuận tiện đối với người cao tuổi.
 
-\subsubsection{An toàn và điều khiển robot}
+\subsubsection{Hoàn thiện khả năng di chuyển và an toàn vận hành}
 
-Firmware nên dùng parser hữu hạn xác nhận toàn chuỗi, sequence number và CRC/checksum, từ chối NaN/vô hạn, giới hạn gia tốc và ramp setpoint. Bổ sung bumper, cảm biến khoảng cách, đo dòng, giám sát pin, emergency stop vật lý và state machine safety độc lập. Lệnh từ caregiver và auto-follow nên đi qua arbiter có ưu tiên: E-stop $>$ manual $>$ auto-follow $>$ idle.
+Phần điều khiển cần được mở rộng theo hướng kiểm tra đầy đủ dữ liệu nhận vào, giới hạn tốc độ thay đổi vận tốc và quy định rõ mức ưu tiên giữa dừng khẩn cấp, điều khiển từ xa và bám theo tự động. Cảm biến khoảng cách, cơ cấu phát hiện va chạm, giám sát pin và nút dừng vật lý là những thành phần có thể bổ sung để hỗ trợ vận hành trong nhà. Các thay đổi cần được đánh giá qua thử nghiệm cơ khí, thời gian dừng và phản ứng khi kết nối bị gián đoạn.
 
-\subsubsection{Backend và bảo mật nhiều người dùng}
+\subsubsection{Mở rộng quản lý người dùng và khả năng duy trì liên lạc}
 
-Schema cần chuyển sang \texttt{families/familyId/robots/robotId}, tách session call theo callId và dùng rules kiểm tra membership/role. Lệnh điều khiển nên có sequence, issuedAt, expiresAt, sender UID và robotId. API key LLM phải đặt sau backend/proxy; TURN dùng credential ngắn hạn; log nhạy cảm có thời hạn lưu và cơ chế xóa. Thực hiện threat modeling, kiểm thử rules bằng Firebase Emulator và rà soát theo OWASP MASVS.
+Cấu trúc quản lý có thể mở rộng để mỗi người chăm sóc sử dụng tài khoản riêng và được cấp quyền truy cập vào robot phù hợp. Thông tin cuộc gọi, lịch sử và lệnh điều khiển cần gắn với từng phiên hoặc thiết bị để tránh nhầm lẫn khi số lượng người dùng tăng. Bên cạnh đó, cơ chế xác thực dịch vụ và bảo vệ dữ liệu cần được hoàn thiện.
 
-\subsubsection{Khả năng hoạt động khi mất mạng}
+Để giảm ảnh hưởng của mất mạng, có thể lưu tạm cảnh báo tại thiết bị và đồng bộ lại khi kết nối được khôi phục, kèm cơ chế tránh tạo bản ghi trùng. Các câu hỏi xác nhận mẫu và phản hồi bằng giọng nói tại thiết bị cũng cần được chuẩn bị cho trường hợp dịch vụ trực tuyến không khả dụng. Khả năng sử dụng cuộc gọi hoặc tin nhắn qua mạng di động làm kênh dự phòng có thể được khảo sát trên thiết bị hỗ trợ.
 
-Các chức năng an toàn cốt lõi nên hoạt động cục bộ: phát hiện té ngã, câu hỏi xác nhận mẫu, TTS offline và lưu hàng đợi cảnh báo. Khi mạng trở lại, event được đồng bộ với idempotency key. Có thể bổ sung SMS/call GSM trên thiết bị hỗ trợ như kênh dự phòng, nhưng phải kiểm soát quyền và chi phí.
+\subsubsection{Cải thiện trải nghiệm và tối ưu tài nguyên}
 
-\subsubsection{Cải thiện trải nghiệm người cao tuổi}
+Giao diện và tương tác giọng nói cần được đánh giá với người dùng mục tiêu, tập trung vào kích thước chữ, độ tương phản, tốc độ đọc, cách xưng hô, phương ngữ và thời gian chờ phản hồi. Robot cần thông báo rõ trạng thái sử dụng camera, microphone và cho phép người dùng chủ động bật hoặc tắt các chức năng.
 
-Giao diện cần được đánh giá với người dùng mục tiêu: cỡ chữ, tương phản, tốc độ nói, phương ngữ, câu hỏi ngắn, thời gian chờ và cách sửa nhận dạng sai. Robot phải giải thích rõ khi camera/micro hoạt động và cho phép tắt. Thiết kế không nên khuyến khích thay thế hoàn toàn tương tác con người; mục tiêu là hỗ trợ người chăm sóc và tăng cơ hội liên lạc.
-
-\subsubsection{Tối ưu triển khai}
-
-Đo CPU/GPU/NNAPI trên thiết bị mục tiêu để chọn delegate thay vì mặc định một biến thể. Tối ưu model bằng FP16/INT8 sau calibration, giảm copy bitmap, dùng buffer tái sử dụng và kiểm soát nhiệt. Bản release dùng R8, ABI split/App Bundle và loại dependency không dùng. CI nên build cả hai app, chạy unit test, kiểm tra schema contract và tạo manifest artifact.
+Về hiệu năng, cần so sánh các phương án suy luận trên CPU và bộ tăng tốc ở đúng thiết bị sử dụng, đồng thời theo dõi bộ nhớ, nhiệt độ và mức tiêu thụ năng lượng khi chạy lâu. Việc giảm kích thước mô hình, tái sử dụng bộ đệm ảnh và loại bỏ thư viện không cần thiết có thể giúp giảm tải cho điện thoại. Mỗi thay đổi tối ưu cần được kiểm tra lại về chất lượng nhận dạng và độ ổn định của ứng dụng.
 
 \subsection{Kết luận cuối cùng}
 
-Đồ án cho thấy một smartphone Android có thể trở thành trung tâm của robot chăm sóc chi phí hợp lý, kết hợp AI biên với dịch vụ thời gian thực và phần thân điều khiển kín. Giá trị của hệ thống không chỉ nằm ở từng mô hình, mà ở cách nhiều thành phần phối hợp, chuyển quyền tài nguyên và trở về trạng thái an toàn khi thông tin thiếu hoặc kết nối gián đoạn. Những hạn chế đã nêu xác định rõ ranh giới của nguyên mẫu và tạo lộ trình cụ thể để phát triển thành một hệ thống đáng tin cậy, bảo mật và có thể đánh giá trong môi trường thực tế.
+Đồ án tạo cơ sở để tiếp tục nghiên cứu việc kết hợp tương tác giọng nói, giám sát bằng thị giác và robot di động trong hỗ trợ chăm sóc tại nhà. Giá trị của nguyên mẫu nằm ở khả năng phối hợp các chức năng này để người cao tuổi nhận được hỗ trợ hằng ngày và người chăm sóc có thêm phương tiện theo dõi, liên lạc từ xa. Những kết quả và giới hạn đã xác định giúp định hướng các bước thử nghiệm, cải tiến tiếp theo, hướng đến giải pháp phù hợp hơn với nhu cầu sử dụng của người cao tuổi.
