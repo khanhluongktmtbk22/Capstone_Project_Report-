@@ -45,7 +45,7 @@ Các thư viện RobotApp gồm CameraX, TensorFlow Lite CPU/GPU/Support/Select 
 
 \subsubsection{Khởi động, điều hướng và vòng đời dịch vụ}
 
-\texttt{LoginActivity} là launcher của RobotApp. Sau xác thực, \texttt{MainActivity} quản lý các fragment hồ sơ, theo dõi, chatbot và cuộc gọi. Activity cũng lắng nghe \texttt{webrtc\_signal} để chuyển giao diện khi có lời mời gọi. Các foreground service gồm \texttt{ReminderService} và \texttt{TrackingService}. AndroidManifest khai báo camera, microphone, Internet, notification, foreground service và quyền BLE tương thích nhiều phiên bản Android.
+\texttt{LoginActivity} là launcher của RobotApp. Sau xác thực, \texttt{MainActivity} quản lý các fragment hồ sơ, theo dõi, chatbot và cuộc gọi. Activity cũng lắng nghe \texttt{webrtc\_signal} để chuyển giao diện khi có lời mời gọi. \texttt{ReminderService} thực hiện việc theo dõi lịch nhắc nhở, còn \texttt{TrackingService} duy trì thông báo foreground và làm kênh chuyển sự kiện té ngã giữa khối theo dõi với chatbot. Việc thu nhận camera và suy luận AI hiện vẫn được thực hiện trong \texttt{tracking\_fragment}, chưa chuyển vào service. AndroidManifest khai báo camera, microphone, Internet, notification, foreground service và quyền BLE tương thích nhiều phiên bản Android.
 
 Quyền Bluetooth được khai báo theo từng nhóm phiên bản hệ điều hành. Android 11 trở xuống sử dụng \texttt{BLUETOOTH}, \path|BLUETOOTH_ADMIN| và quyền vị trí để quét thiết bị; từ Android 12, ứng dụng sử dụng \path|BLUETOOTH_SCAN| và \path|BLUETOOTH_CONNECT| theo hướng dẫn của Android \reportcite{ref:android_permissions}. Camera được khai báo \texttt{required=false} để không ngăn cài đặt chỉ vì thiết bị thiếu cờ tính năng tương ứng, nhưng các chức năng thị giác chỉ hoạt động khi có camera.
 
@@ -154,13 +154,15 @@ Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlg
 
 Hàm chi phí sử dụng 30\% sai khác IoU, 30\% khoảng cách tâm, 30\% khoảng cách pose và 10\% thay đổi diện tích. Tracker được cấu hình với ngưỡng IoU cơ sở 0,25; track mới cần hai hit để xác nhận. Track ID0 được bảo vệ và giữ tối đa 45 frame không khớp, còn track nhiễu giữ 10 frame.
 
-Khối tái định danh trích histogram HSV từ vùng thân người, là khu vực ít chịu ảnh hưởng của hậu cảnh và thay đổi góc mặt. Histogram không được cập nhật khi thiếu keypoint tin cậy vì vùng cắt sai có thể khiến hệ thống ghi nhận đặc trưng của người khác. Khi một phát hiện mới phù hợp với hồ sơ cũ, \texttt{restoreWithId} khôi phục định danh ban đầu. Đây là giải pháp Re-ID nhẹ, không sử dụng embedding sâu như Deep SORT \reportcite{ref:deepsort}; ưu điểm là chi phí tính toán thấp, nhưng kết quả có thể bị ảnh hưởng khi nhiều người mặc trang phục giống nhau hoặc điều kiện chiếu sáng thay đổi.
+Khối tái định danh trích histogram trong không gian màu Hue--Saturation--Value (HSV) từ vùng thân người, là khu vực ít chịu ảnh hưởng của hậu cảnh và thay đổi góc mặt. Histogram không được cập nhật khi thiếu keypoint tin cậy vì vùng cắt sai có thể khiến hệ thống ghi nhận đặc trưng của người khác. Khi một phát hiện mới phù hợp với hồ sơ cũ, \texttt{restoreWithId} khôi phục định danh ban đầu. Đây là giải pháp Re-ID nhẹ, không sử dụng embedding sâu như Deep SORT \reportcite{ref:deepsort}; ưu điểm là chi phí tính toán thấp, nhưng kết quả có thể bị ảnh hưởng khi nhiều người mặc trang phục giống nhau hoặc điều kiện chiếu sáng thay đổi.
 
 \subsubsection{Khóa mục tiêu ID0 và sinh lệnh auto-follow}
 
 Đối tượng được chăm sóc được chuẩn hóa thành \texttt{PRIMARY\_TRACK\_ID=0}. Ứng viên đầu tiên được xếp hạng theo diện tích vùng bao, confidence, tỷ lệ keypoint nhìn thấy, độ gần tâm ảnh và mức cắt biên. Sau đó ID0 được dùng cho cả pipeline LSTM và điều khiển. Khi mất mục tiêu, logic chỉ tìm lại trong 2 s; ứng viên phải cách vị trí cuối không quá 35\% đường chéo ảnh, thuộc vùng trung tâm và ổn định ba frame. Trong khi sự cố té ngã còn hoạt động, robot không chọn một track khác thay ID0.
 
-Auto-follow so sánh tâm vùng bao với vùng mục tiêu. Nếu lệch ngang, hệ thống phát lệnh quay; nếu kích thước người cho thấy khoảng cách xa, phát lệnh tiến. Các mức quay hiện dùng kênh $y=\pm0,50$ theo hệ tọa độ camera. Cách đặt dấu khác trực giác joystick nhưng đã được tách rõ theo từng hệ tọa độ. Lệnh cuối vẫn đi qua \texttt{RobotControlManager}, nhờ đó cùng được kiểm tra và format.
+Auto-follow ước lượng độ gần của mục tiêu từ kích thước vùng bao và khoảng cách giữa các mốc vai, hông, gối, mắt cá chân. Giá trị sau khi làm mượt được phân thành ba vùng quá xa, phù hợp và quá gần; các ngưỡng đi vào và rời khỏi mỗi vùng được đặt khác nhau để tránh robot đổi liên tục giữa tiến, dừng và lùi khi giá trị dao động gần biên. Thành phần tịnh tiến không còn là một mức cố định mà được \texttt{TrackingMotionPolicy} điều chỉnh theo khoảng cách: tốc độ tiến tăng dần trong khoảng từ 0,60 đến 0,90; tốc độ lùi khi mục tiêu ở quá gần thay đổi từ 0,45 đến 0,60. Khi cần lùi để quan sát lại phần chân, hệ thống sử dụng mức 0,30. Nếu robot vừa quay vừa tiến hoặc chưa quan sát ổn định mắt cá chân, tốc độ tiến được giảm để hạn chế mất mục tiêu. Sai lệch ngang giữa tâm vùng bao và tâm ảnh tạo thành phần quay liên tục, có vùng chết và giới hạn biên để giảm dao động.
+
+Một nhánh hình học riêng phân loại tư thế phục vụ điều khiển, không thay đổi kết quả FALL/NO FALL của LSTM. Nhánh này kết hợp tỷ lệ vùng bao, hướng phân bố keypoint, quan hệ vai--hông và bằng chứng từ thân dưới; \texttt{PostureGeometry} bổ sung trường hợp người nằm dọc theo hướng nhìn của camera nên hình chiếu có thể trông gần giống tư thế đứng. Khi tư thế nằm đã ổn định hoặc một sự cố té ngã đang được xử lý, robot không tiếp tục tiến mà chỉ dừng, lùi chậm hoặc quay tại chỗ để đưa người vào vùng quan sát phù hợp. Mọi vector điều khiển cuối cùng vẫn được gửi qua \texttt{RobotControlManager} để kiểm tra và chuyển thành vận tốc hai bánh.
 
 \subsubsection{LSTM phát hiện té ngã}
 
@@ -170,7 +172,7 @@ Kết quả được gán nhãn FALL khi xác suất FALL lớn hơn xác suất
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence} gồm trạng thái quan sát mục tiêu, tỷ lệ $y$ của thân trên, số keypoint, tình trạng vùng bao và tỷ lệ hình dạng. Bộ hậu kiểm sử dụng trạng thái mục tiêu cùng vị trí mũi và vai: ba khung hình cho thấy thân trên vẫn ở vùng phía trên ảnh sẽ loại ứng viên, trong khi ba khung hình ở dưới ngưỡng hoặc 12 khung hình liên tiếp thiếu dữ liệu sẽ kích hoạt bước hỏi xác nhận.
+\texttt{FallVerificationEngine} nhận \texttt{FrameEvidence} gồm trạng thái quan sát mục tiêu, tỷ lệ $y$ của thân trên, số keypoint, tình trạng vùng bao và tỷ lệ hình dạng. Bộ hậu kiểm sử dụng trạng thái mục tiêu cùng vị trí mũi và vai: ba khung hình cho thấy thân trên vẫn ở vùng phía trên ảnh sẽ loại ứng viên, trong khi ba khung hình ở dưới ngưỡng hoặc 12 khung hình liên tiếp thiếu dữ liệu sẽ kích hoạt bước hỏi xác nhận. Khi sự cố đã được loại hoặc xác nhận, engine chờ 10 kết quả NO FALL liên tiếp rồi mới trở lại trạng thái giám sát, tránh tạo nhiều sự kiện cho cùng một lần té ngã.
 
 Engine trả một trong ba loại: chưa quyết định, \texttt{Rejected(reason)} hoặc \texttt{AskForConfirmation(reason, score, evidence)}. Tách quyết định khỏi UI giúp unit test từng nhánh mà không cần camera. \texttt{isIncidentActive} và \texttt{canAcquireNewTarget} ngăn một sự cố tạo nhiều yêu cầu đồng thời. \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} làm rõ vòng đời sự cố.
 
@@ -191,7 +193,7 @@ Bản ghi cảnh báo chứa timestamp, trạng thái, phản hồi và bằng c
 
 \path|chatbot_fragment| phối hợp ba lớp quản lý. \path|SpeechRecognizerManager| nhận dạng tiếng nói; \path|GroqChatService| xử lý hội thoại; còn \path|AndroidTtsService| tổng hợp tiếng nói. Giao diện chính tối giản thành trạng thái, icon lớn, tên robot và câu đang nghe/nói. Hồ sơ người dùng được đọc từ \texttt{Users/\{uid\}} để xây prompt về cách xưng hô, tên caregiver, tình trạng và sở thích.
 
-\texttt{GroqChatService} gọi điểm cuối \texttt{/openai/v1/chat/completions} qua OkHttp. Hội thoại dạng truyền luồng sử dụng mô hình \texttt{qwen/qwen3.6-27b}, trong khi các tác vụ phân loại ngắn sử dụng \texttt{openai/gpt-oss-20b}. Lịch sử được giới hạn ở 20 thông điệp để kiểm soát độ dài ngữ cảnh. Với phản hồi SSE có tiền tố \texttt{data:}, dịch vụ đọc nội dung tại \texttt{choices[0].delta.content}, phát từng phần qua Kotlin Flow và lưu câu trả lời hoàn chỉnh khi luồng kết thúc.
+\texttt{GroqChatService} gọi điểm cuối \texttt{/openai/v1/chat/completions} qua OkHttp. Hội thoại dạng truyền luồng sử dụng mô hình \texttt{qwen/qwen3.6-27b}, trong khi các tác vụ phân loại ngắn sử dụng \texttt{openai/gpt-oss-20b}. Lịch sử được giới hạn ở 20 thông điệp để kiểm soát độ dài ngữ cảnh. Với phản hồi theo cơ chế Server-Sent Events (SSE) có tiền tố \texttt{data:}, dịch vụ đọc nội dung tại \texttt{choices[0].delta.content}, phát từng phần qua Kotlin Flow và lưu câu trả lời hoàn chỉnh khi luồng kết thúc.
 
 Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào văn bản do LLM sinh ra. Hàm phân loại phản hồi té ngã kiểm tra trước tập từ khóa an toàn và nguy hiểm; API chỉ được gọi khi câu trả lời không rõ nghĩa, sau đó kết quả JSON được phân tích theo cấu trúc định trước. Hàm \texttt{detectCallIntent} áp dụng cách tương tự khi kết hợp từ khóa, tên hoặc quan hệ của người chăm sóc và mô hình phân loại dự phòng. Khóa API được truyền vào lớp dịch vụ và cần được cung cấp từ cấu hình bên ngoài kho mã hoặc thông qua máy chủ trung gian.
 
@@ -215,7 +217,7 @@ right = clamp((steering * 0.15 - translation) * 20, -20, 20)
 payload = "L%.2fR%.2f\n".format(Locale.US, left, right)
 \end{lstlisting}
 
-Manager quét theo tên \texttt{OhmniRobot} và custom UUID, timeout quét 10 s, reconnect sau 3 s. Sau discovery, characteristic được cấu hình \texttt{WRITE\_TYPE\_NO\_RESPONSE}. API ghi khác nhau theo phiên bản Android được xử lý tương thích. Watchdog 1.200 ms gọi STOP nếu luồng RTDB không cập nhật. \texttt{stop()} gỡ listener, callback, scan và GATT để tránh leak.
+Manager quét theo tên \texttt{OhmniRobot} và custom UUID, timeout quét 10 s, reconnect sau 3 s. Sau discovery, characteristic được cấu hình \texttt{WRITE\_TYPE\_NO\_RESPONSE}. API ghi khác nhau theo phiên bản Android được xử lý tương thích. Nếu luồng RTDB không có lệnh mới trong 500 ms, bộ định thời an toàn gửi lệnh dừng xuống ESP32. Hàm \texttt{stop()} cũng gửi lệnh dừng trước khi gỡ listener, callback, tiến trình quét và kết nối GATT.
 
 \subsection{Hiện thực CaregiverApp}
 
@@ -245,7 +247,7 @@ CaregiverApp không có BLE và không biết dấu vật lý của motor. Ranh 
 
 Các bộ lắng nghe Firebase cung cấp bản cập nhật gần thời gian thực, trong khi thao tác ghi có thể được phản ánh cục bộ trước khi đồng bộ với máy chủ \reportcite{ref:firebase_rtdb}. Vì vậy, mỗi lệnh điều khiển bắt buộc phải có timestamp; callback được gọi theo thời gian thực không có nghĩa dữ liệu nhận được luôn còn hiệu lực. Các lớp \texttt{UserProfile}, \texttt{ScheduleItem}, \texttt{FallAlertEntry}, \texttt{ReminderLogEntry} và \texttt{CallHistoryEntry} được dùng để ánh xạ dữ liệu JSON sang đối tượng trong ứng dụng.
 
-Hệ thống sử dụng kết hợp các nhánh theo UID và một số nhánh dữ liệu dùng chung. Cấu trúc này đáp ứng mô hình một robot--một người chăm sóc của đề tài nhưng chưa cách ly đầy đủ dữ liệu của nhiều gia đình. Khi mở rộng, quy tắc truy cập cần áp dụng nguyên tắc từ chối mặc định, phân quyền theo UID, gia đình và robot, đồng thời kiểm tra kiểu và miền giá trị của từng trường \reportcite{ref:firebase_security}. Mọi thay đổi cấu trúc dữ liệu cũng phải được cập nhật đồng thời ở hai ứng dụng để tránh tình trạng bộ lắng nghe truy cập sai đường dẫn.
+Hồ sơ, lịch và nhật ký lời nhắc được lưu dưới các nhánh cấp gốc nhưng đều tiếp tục phân vùng theo UID. Các kênh vận hành gồm cờ chức năng, lệnh điều khiển, signaling, cảnh báo té ngã và lịch sử cuộc gọi được tập trung dưới \texttt{pair\_sessions/\{uid\}}. Security Rules áp dụng nguyên tắc từ chối mặc định và chỉ cho phép tài khoản đã xác thực truy cập nhánh có UID tương ứng \reportcite{ref:firebase_security}. Cấu trúc này ngăn dữ liệu của các tài khoản khác nhau dùng chung kênh vận hành, nhưng hai thiết bị trong một cặp vẫn đăng nhập bằng cùng tài khoản nên chưa biểu diễn được vai trò robot và người chăm sóc như hai danh tính độc lập.
 
 \subsection{Huấn luyện và chuyển đổi mô hình AI}
 

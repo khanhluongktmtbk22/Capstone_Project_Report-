@@ -154,7 +154,7 @@ NFR11 & Khả năng kiểm thử & Các chức năng chính, trạng thái lỗi
 \hline
 \end{longtable}
 
-Các yêu cầu trên cho thấy hệ thống phải phối hợp đồng thời hoạt động cảm nhận tại robot, quản lý từ xa, xử lý dữ liệu và chấp hành chuyển động. Sự khác nhau về vị trí phát sinh dữ liệu, mức độ thời gian thực và sự phụ thuộc vào mạng là cơ sở để phân chia hệ thống thành các thành phần có trách nhiệm riêng. Từ đó, mục tiếp theo xây dựng kiến trúc tổng quan và làm rõ mối liên hệ giữa các thành phần này.
+Các yêu cầu trên cho thấy hệ thống phải phối hợp nhiều nhóm chức năng, từ quản lý chăm sóc, tương tác và giám sát tại nhà đến liên lạc từ xa và điều khiển chuyển động. Mỗi nhóm cần được giao cho một thành phần có trách nhiệm rõ ràng, đồng thời vẫn bảo đảm khả năng trao đổi dữ liệu trong các tình huống cần phối hợp. Trên cơ sở đó, mục tiếp theo phân rã hệ thống theo chức năng và xây dựng kiến trúc tổng quan thể hiện mối liên hệ giữa các thành phần.
 
 \subsection{Kiến trúc tổng quan hệ thống}
 
@@ -382,7 +382,7 @@ Q=0,60q_{area}+0,15q_{det}+0,15q_{vis}+0,10q_{center}-p_{edge}.
 
 \subsubsection{Module tự bám theo và điều khiển chuyển động}
 
-Module auto-follow nhận hộp bao/keypoint của ID0 và trả vector tiến--lùi--quay chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá, sau đó làm mượt bằng EMA và phân thành ba dải có hysteresis: xa, an toàn và quá gần. Sai lệch tâm ngang tạo thành phần quay với vùng chết 0,07, hệ số 2,2 và biên 0,50; vector được cập nhật khoảng mỗi 120 ms.
+Module auto-follow nhận hộp bao/keypoint của ID0 và trả vector tiến--lùi--quay chuẩn hóa. Độ gần được ước lượng từ diện tích hộp bao và các mốc vai, hông, gối, mắt cá, sau đó được làm mượt bằng trung bình trượt lũy thừa (Exponential Moving Average -- EMA). Giá trị này được phân thành ba dải xa, an toàn và quá gần; ngưỡng đi vào và rời khỏi mỗi dải được đặt khác nhau để hạn chế việc robot đổi trạng thái liên tục khi khoảng cách dao động gần biên. Sai lệch tâm ngang tạo thành phần quay với vùng chết 0,07, hệ số 2,2 và biên 0,50; vector được cập nhật khoảng mỗi 120 ms.
 
 Bộ điều khiển chỉ dựa vào tâm hộp bao có chi phí tính toán thấp, nhưng có thể đánh giá sai khoảng cách khi phần chân bị cắt khỏi ảnh. Cảm biến chiều sâu cung cấp khoảng cách trực tiếp hơn nhưng làm tăng độ phức tạp phần cứng và nằm ngoài phạm vi đề tài. Do đó, hệ thống kết hợp hộp bao với các keypoint và áp dụng chính sách chuyển động thận trọng: khi vùng bao quá lớn hoặc phần chân không còn trong khung hình, robot ưu tiên lùi để quan sát đầy đủ hơn. Sau khi xuất hiện kết quả FALL, robot không tiến về phía người mà chỉ dừng, lùi chậm hoặc quay tại chỗ; nếu mất ID0 trong trạng thái này, robot dừng ngay.
 
@@ -400,7 +400,7 @@ Mỗi frame của ID0 được chuyển thành 69 đặc trưng:
 
 trong đó tọa độ keypoint được chuẩn hóa theo tâm hông và kích thước pose, $\Delta x_i,\Delta y_i$ là thay đổi so với frame trước và $r_t$ là tỷ lệ rộng/cao. Cửa sổ 15 frame tạo tensor $[1,15,69]$; LSTM trả $[p_{normal},p_{fall}]$ và chọn FALL khi $p_{fall}>p_{normal}$. LSTM phù hợp vì có thể biểu diễn quan hệ thời gian mà một pose đơn lẻ không cung cấp \reportcite{ref:lstm}.
 
-Bộ hậu kiểm dùng các trạng thái \texttt{MONITORING}, \texttt{FALL\_SEQUENCE}, \texttt{VERIFYING}, \texttt{PROMPTED}, \texttt{DISMISSED} và \texttt{CONFIRMED}. Năm kết quả FALL liên tiếp mới tạo ứng viên. Sau NO FALL đầu tiên, ba frame có điểm mũi/vai ở $y/H\leq0,70$ loại ứng viên; ba frame ở $y/H>0,70$, hoặc mất mục tiêu/thân trên đủ 12 frame, dẫn đến hỏi xác nhận. Nhánh mơ hồ, lỗi hoặc hết 10 s mặc định là nguy hiểm. Thiết kế nhiều tầng tăng vài frame độ trễ nhưng đổi lại có dấu vết giải thích và không biến một xác suất đơn lẻ thành cảnh báo y tế.
+Bộ hậu kiểm dùng các trạng thái \texttt{MONITORING}, \texttt{FALL\_SEQUENCE}, \texttt{VERIFYING}, \texttt{PROMPTED}, \texttt{DISMISSED} và \texttt{CONFIRMED}. Năm kết quả FALL liên tiếp mới tạo ứng viên. Sau NO FALL đầu tiên, ba khung hình có điểm mũi hoặc vai ở $y/H\leq0,70$ sẽ loại ứng viên; ba khung hình có các điểm này ở $y/H>0,70$, hoặc 12 khung hình liên tiếp không còn quan sát được mục tiêu hay phần thân trên, sẽ dẫn đến bước hỏi xác nhận. Nhánh mơ hồ, lỗi hoặc hết 10 s chờ phản hồi được xem là tình huống nguy hiểm. Sau khi sự cố được kết luận, bộ hậu kiểm chỉ trở về trạng thái giám sát khi đã ghi nhận 10 kết quả NO FALL liên tiếp, qua đó hạn chế kích hoạt lặp lại trên cùng một diễn biến. Thiết kế nhiều tầng làm tăng một khoảng trễ nhỏ nhưng giúp tránh chuyển trực tiếp một dự đoán đơn lẻ thành cảnh báo.
 
 \subsubsection{Module hội thoại và lời nhắc}
 
@@ -609,4 +609,4 @@ AI biên giảm độ trễ và bề mặt lộ ảnh, nhưng phụ thuộc GPU/
 
 \subsection{Kết luận chương}
 
-Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng của hệ thống, từ đó xây dựng kiến trúc logic dựa trên vị trí dữ liệu, mức độ thời gian thực và sự phụ thuộc vào mạng. Các module và luồng phối hợp được phân tích trước khi lựa chọn nền tảng di động, cơ chế suy luận AI tại biên, giải pháp đồng bộ dữ liệu, truyền thông đa phương tiện, hội thoại và kết nối với phần thân robot. Thiết kế đồng thời làm rõ ranh giới giữa kết quả nhận thức của AI, quyết định nghiệp vụ và quá trình chấp hành cơ điện, cùng các giao thức truyền thông, phương thức kết nối và cơ chế dừng an toàn. Đây là cơ sở để xây dựng kiến trúc hiện thực ở Chương 4 và tổ chức đánh giá hệ thống ở Chương 5.
+Chương đã xác định phạm vi, yêu cầu chức năng và yêu cầu chất lượng của hệ thống, từ đó phân chia các nhóm chức năng cho RobotApp, CaregiverApp, dịch vụ dùng chung, quy trình chuẩn bị mô hình AI và phần thân robot. Trên kiến trúc tổng quan đó, các module và luồng phối hợp được phân tích trước khi lựa chọn nền tảng di động, cơ chế suy luận AI tại thiết bị, giải pháp đồng bộ dữ liệu, truyền thông đa phương tiện, hội thoại và kết nối với phần cứng robot. Thiết kế đồng thời làm rõ ranh giới giữa kết quả nhận thức của AI, quyết định điều phối của ứng dụng và quá trình chấp hành chuyển động, cùng các giao thức truyền thông, phương thức kết nối và cơ chế dừng an toàn. Đây là cơ sở để trình bày quá trình hiện thực ở Chương 4 và tổ chức đánh giá hệ thống ở Chương 5.

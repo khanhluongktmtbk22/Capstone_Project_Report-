@@ -1,5 +1,5 @@
 \babel@toc {vietnamese}{}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Minh họa hộp giới hạn của đối tượng trong ảnh.}}{30}{figure.caption.26}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Minh họa hộp giới hạn của đối tượng trong ảnh.}}{31}{figure.caption.26}%
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Cấu trúc khái quát của một detector YOLO gồm backbone, neck và head.}}{36}{figure.caption.28}%
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}}{41}{figure.caption.31}%
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{43}{figure.caption.32}%
@@ -8,4 +8,4 @@
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{73}{figure.caption.43}%
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{90}{figure.caption.45}%
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{97}{figure.caption.54}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{102}{figure.caption.55}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Minh họa kiến trúc mạng LSTM phân tích chuỗi thời gian của các đặc trưng (Nguồn: Tham khảo)}}{103}{figure.caption.55}%
