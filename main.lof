@@ -4,7 +4,12 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Cấu trúc chi tiết của một tế bào LSTM (LSTM cell) với hệ thống các cổng kiểm soát thông tin.}}{41}{figure.caption.32}%
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Một số khung hình minh họa trong môi trường của dataset LE2I.}}{43}{figure.caption.33}%
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Kiến trúc tổng quan của hệ thống robot hỗ trợ chăm sóc người cao tuổi}}{66}{figure.caption.41}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ hoạt động của quy trình phát hiện, hậu kiểm và xử lý té ngã}}{71}{figure.caption.43}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ tuần tự của quá trình phát hiện té ngã và thiết lập cuộc gọi khẩn cấp}}{73}{figure.caption.44}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{89}{figure.caption.46}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu tham khảo}}{97}{figure.caption.55}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Biểu đồ hoạt động của luồng giám sát và xử lý tình huống nghi té ngã}}{71}{figure.caption.43}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Biểu đồ tuần tự của quá trình xác nhận và hỗ trợ khi có tình huống nghi té ngã}}{73}{figure.caption.44}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Biểu đồ hoạt động của luồng hội thoại và nhắc nhở}}{74}{figure.caption.45}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Minh họa các đại lượng trong hàm liên kết và hàm lựa chọn người mục tiêu}}{80}{figure.caption.46}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Luồng lựa chọn và thực thi lệnh điều khiển chuyển động}}{82}{figure.caption.47}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Sơ đồ trạng thái của quá trình hậu kiểm và xác nhận té ngã}}{84}{figure.caption.48}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{92}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Ánh xạ từ module thiết kế đến các thành phần hiện thực}}{93}{figure.caption.51}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}}{110}{figure.caption.62}%

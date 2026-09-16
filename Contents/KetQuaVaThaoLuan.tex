@@ -313,7 +313,7 @@ Kết quả ở Bảng \ref{tab:lstm_benchmark} cho thấy hệ thống đạt F
 
 \subsubsection{Benchmark Tốc độ suy luận (Inference Speed / FPS)}
 
-Để đáp ứng yêu cầu cảnh báo kịp thời, chuỗi xử lý từ khung hình, YOLO-Pose đến LSTM cần duy trì tốc độ tối thiểu khoảng 10--15 FPS trên thiết bị Android. Bảng \ref{tab:speed_benchmark} ghi lại kết quả đo của biến thể FP16 trong giai đoạn chuyển đổi mô hình. Phiên bản RobotApp hiện tại đóng gói \texttt{yolo26n-pose\_320\_gpu.tflite} làm mô hình ưu tiên và \texttt{yolo26n-pose\_320.tflite} làm phương án dự phòng; vì vậy số liệu này được dùng làm mốc tham khảo và cần được đo lại với đúng mô hình, bộ tăng tốc và thiết bị sử dụng khi nghiệm thu.
+Để đáp ứng yêu cầu cảnh báo kịp thời, chuỗi xử lý từ khung hình, YOLO-Pose đến LSTM cần duy trì tốc độ tối thiểu khoảng 10--15 FPS trên thiết bị Android. Nguồn CameraX và WebRTC của RobotApp được cấu hình ở mức mục tiêu 25 FPS; chuỗi suy luận không bổ sung bộ giới hạn thời gian riêng mà xử lý theo các khung hình được nguồn camera cung cấp. Vì vậy, 25 FPS là tốc độ thu nhận mục tiêu, còn tốc độ AI thực tế vẫn phụ thuộc vào thời gian tiền xử lý, suy luận và hậu xử lý trên thiết bị. Bảng \ref{tab:speed_benchmark} ghi lại kết quả đo của biến thể FP16 trong giai đoạn chuyển đổi mô hình. Phiên bản RobotApp hiện tại đóng gói \texttt{yolo26n-pose\_320\_gpu.tflite} làm mô hình ưu tiên và \texttt{yolo26n-pose\_320.tflite} làm phương án dự phòng; vì vậy số liệu này được dùng làm mốc tham khảo và cần được đo lại với đúng mô hình, bộ tăng tốc và thiết bị sử dụng khi nghiệm thu.
 
 \begin{table}[htbp]
 \centering

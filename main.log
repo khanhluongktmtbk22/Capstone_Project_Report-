@@ -1,9 +1,10 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  13 SEP 2026 04:36
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  16 SEP 2026 17:44
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**./main.tex
-(main.tex
+**"e:/LearnAndroidApp/System architecture diagram by Figma/Báo Cáo/main.tex"
+(e:/LearnAndroidApp/System architecture diagram by Figma/Báo Cáo/main.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
 (C:\Users\Acer\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -1635,24 +1636,28 @@ Underfull \hbox (badness 1776) in paragraph at lines 95--95
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Universal Asynchronous Receiver–
  []
 
-ignored error: Infinite glue shrinkage found in box being split [14
+Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
+ box being split [14
 
 
 ]
-ignored error: Infinite glue shrinkage found in box being split [15]
-ignored error: Infinite glue shrinkage found in box being split [16])
-(Intro/DanhMucThuatNgu.tex [17]
+Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
+ box being split [15]
+Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
+ box being split [16]) (Intro/DanhMucThuatNgu.tex [17]
 Underfull \hbox (badness 10000) in paragraph at lines 132--133
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Preprocessing/Post-
  []
 
-ignored error: Infinite glue shrinkage found in box being split [18
+Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
+box being split [18
 
 
 ]
-ignored error: Infinite glue shrinkage found in box being split [19]
-ignored error: Infinite glue shrinkage found in box being split [20]) [21]
-(Contents/GioiThieu.tex
+Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
+box being split [19]
+Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
+box being split [20]) [21] (Contents/GioiThieu.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 Package babel Info: 'vietnamese' activates 'vietnamese' shorthands.
@@ -1678,7 +1683,8 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [6]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [7]
+
+[7]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [8]
@@ -2319,7 +2325,8 @@ Underfull \hbox (badness 1184) in paragraph at lines 31--32
 \TU/TimesNewRoman(0)/m/n/13 giới hạn và hướng cải
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:33: ignored error: Infinite glue shrinkage 
+found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [58
@@ -2367,15 +2374,18 @@ Underfull \hbox (badness 1122) in paragraph at lines 113--113
 []|\TU/TimesNewRoman(0)/m/n/13 Chuyển đổi và triển
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [60]
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [61]
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [62]
@@ -2403,7 +2413,8 @@ Underfull \hbox (badness 1968) in paragraph at lines 153--153
 []|\TU/TimesNewRoman(0)/m/n/13 Khả năng kiểm
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:155: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [63]
@@ -2666,7 +2677,8 @@ Underfull \hbox (badness 10000) in paragraph at lines 233--233
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 [66]
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:235: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [67]
@@ -2683,15 +2695,15 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [70]
-File: Images/Activity_Fall_Detection.pdf Graphic file (type pdf)
-<use Images/Activity_Fall_Detection.pdf>
+File: Images/Activity_Fall_Detection_Design.png Graphic file (type bmp)
+<Images/Activity_Fall_Detection_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [71
 
 ]
-File: Images/Sequence_Emergency_Response.pdf Graphic file (type pdf)
-<use Images/Sequence_Emergency_Response.pdf>
+File: Images/Sequence_Emergency_Response_Design.png Graphic file (type bmp)
+<Images/Sequence_Emergency_Response_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [72
@@ -2700,340 +2712,334 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [73]
-Underfull \hbox (badness 2503) in paragraph at lines 320--320
+File: Images/Activity_Dialogue_Reminder_Design.png Graphic file (type bmp)
+<Images/Activity_Dialogue_Reminder_Design.png>
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [74
+
+]
+Underfull \hbox (badness 2503) in paragraph at lines 329--329
 []|\TU/TimesNewRoman(0)/b/n/13 Phương án xem
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 320--320
+Underfull \hbox (badness 1102) in paragraph at lines 329--329
 []|\TU/TimesNewRoman(0)/b/n/13 Ưu điểm và hạn
  []
 
 
-Underfull \hbox (badness 2503) in paragraph at lines 324--324
+Underfull \hbox (badness 2503) in paragraph at lines 333--333
 []|\TU/TimesNewRoman(0)/b/n/13 Phương án xem
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 324--324
+Underfull \hbox (badness 1102) in paragraph at lines 333--333
 []|\TU/TimesNewRoman(0)/b/n/13 Ưu điểm và hạn
  []
 
 
-Underfull \hbox (badness 7925) in paragraph at lines 327--327
+Underfull \hbox (badness 7925) in paragraph at lines 336--336
 []|\TU/TimesNewRoman(0)/m/n/13 Ứng dụng di
  []
 
 
-Underfull \hbox (badness 2547) in paragraph at lines 327--327
+Underfull \hbox (badness 2547) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 tiện khi tích hợp
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--327
+Underfull \hbox (badness 10000) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 camera, BLE và
  []
 
 
-Underfull \hbox (badness 2020) in paragraph at lines 327--327
+Underfull \hbox (badness 2020) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 dịch vụ nền; nền
  []
 
 
-Underfull \hbox (badness 7451) in paragraph at lines 327--327
+Underfull \hbox (badness 7451) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 tảng đa hệ điều
  []
 
 
-Underfull \hbox (badness 1067) in paragraph at lines 327--327
+Underfull \hbox (badness 1067) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 hành hỗ trợ dùng
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--327
+Underfull \hbox (badness 10000) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 chung mã giao
  []
 
 
-Underfull \hbox (badness 3168) in paragraph at lines 327--327
+Underfull \hbox (badness 3168) in paragraph at lines 336--336
 \TU/TimesNewRoman(0)/m/n/13 cần lớp tích hợp
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--328
+Underfull \hbox (badness 10000) in paragraph at lines 336--337
 []|\TU/TimesNewRoman(0)/m/n/13 Kotlin, XML và
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 327--328
+Underfull \hbox (badness 10000) in paragraph at lines 336--337
 \TU/TimesNewRoman(0)/m/n/13 ViewBinding cho
  []
 
 
-Underfull \hbox (badness 3679) in paragraph at lines 327--328
+Underfull \hbox (badness 3679) in paragraph at lines 336--337
 \TU/TimesNewRoman(0)/m/n/13 hai ứng dụng An-
  []
 
 
-Underfull \hbox (badness 1199) in paragraph at lines 329--329
+Underfull \hbox (badness 1199) in paragraph at lines 338--338
 \TU/TimesNewRoman(0)/m/n/13 chủ; suy luận tại
  []
 
 
-Underfull \hbox (badness 1975) in paragraph at lines 329--329
+Underfull \hbox (badness 1975) in paragraph at lines 338--338
 \TU/TimesNewRoman(0)/m/n/13 nhưng cần truyền
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 329--330
-[]|\TU/TimesNewRoman(0)/m/n/13 TFLite trên Rob-
+Underfull \hbox (badness 6110) in paragraph at lines 338--339
+[]|\TU/TimesNewRoman(0)/m/n/13 TFLite trên Robo-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 329--330
-\TU/TimesNewRoman(0)/m/n/13 otApp, ưu tiên
- []
-
-
-Underfull \hbox (badness 1348) in paragraph at lines 329--330
-\TU/TimesNewRoman(0)/m/n/13 GPU/NNAPI và có
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 []|\TU/TimesNewRoman(0)/m/n/13 Đồng bộ dữ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 []|\TU/TimesNewRoman(0)/m/n/13 REST tự xây
  []
 
 
-Underfull \hbox (badness 1331) in paragraph at lines 331--331
+Underfull \hbox (badness 1331) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 dựng; MQTT; cơ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 sở dữ liệu thời
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 []|\TU/TimesNewRoman(0)/m/n/13 REST cho phép
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 kiểm soát cao
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 nhưng cần xây
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 dựng máy chủ;
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 MQTT phù hợp
  []
 
 
-Underfull \hbox (badness 6559) in paragraph at lines 331--331
+Underfull \hbox (badness 6559) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 khiển nhưng cần
  []
 
 
-Underfull \hbox (badness 3884) in paragraph at lines 331--331
+Underfull \hbox (badness 3884) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 lưu trữ bổ sung;
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 RTDB cung cấp
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--331
+Underfull \hbox (badness 10000) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 listener và cây
  []
 
 
-Underfull \hbox (badness 5504) in paragraph at lines 331--331
+Underfull \hbox (badness 5504) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 JSON nhưng đòi
  []
 
 
-Underfull \hbox (badness 3657) in paragraph at lines 331--331
+Underfull \hbox (badness 3657) in paragraph at lines 340--340
 \TU/TimesNewRoman(0)/m/n/13 hỏi quản lý chặt
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--332
+Underfull \hbox (badness 10000) in paragraph at lines 340--341
 []|\TU/TimesNewRoman(0)/m/n/13 Firebase Authenti-
  []
 
 
-Underfull \hbox (badness 3525) in paragraph at lines 331--332
+Underfull \hbox (badness 3525) in paragraph at lines 340--341
 \TU/TimesNewRoman(0)/m/n/13 cation và Realtime
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 331--332
+Underfull \hbox (badness 10000) in paragraph at lines 340--341
 \TU/TimesNewRoman(0)/m/n/13 Database cho mô
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 []|\TU/TimesNewRoman(0)/m/n/13 Truyền âm
  []
 
 
-Underfull \hbox (badness 2050) in paragraph at lines 333--333
+Underfull \hbox (badness 2050) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 thanh và hình
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 truyền phát tập
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 []|\TU/TimesNewRoman(0)/m/n/13 Cơ sở dữ liệu
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 không phù hợp
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 truyền hình liên
  []
 
 
-Underfull \hbox (badness 2027) in paragraph at lines 333--333
+Underfull \hbox (badness 2027) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 tục; máy chủ tập
  []
 
 
-Underfull \hbox (badness 6658) in paragraph at lines 333--333
+Underfull \hbox (badness 6658) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 trợ liên lạc thời
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--333
+Underfull \hbox (badness 10000) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 gian thực nhưng
  []
 
 
-Underfull \hbox (badness 4726) in paragraph at lines 333--333
+Underfull \hbox (badness 4726) in paragraph at lines 342--342
 \TU/TimesNewRoman(0)/m/n/13 cần quản lý báo
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 333--334
+Underfull \hbox (badness 10000) in paragraph at lines 342--343
 []|\TU/TimesNewRoman(0)/m/n/13 WebRTC truyền
  []
 
 
-Underfull \hbox (badness 3954) in paragraph at lines 335--335
+Underfull \hbox (badness 3954) in paragraph at lines 344--344
 []|\TU/TimesNewRoman(0)/m/n/13 Liên kết điện
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 335--335
+Underfull \hbox (badness 10000) in paragraph at lines 344--344
 \TU/TimesNewRoman(0)/m/n/13 thoại–thân
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 335--335
+Underfull \hbox (badness 10000) in paragraph at lines 344--344
 \TU/TimesNewRoman(0)/m/n/13 cao nhưng ràng
  []
 
 
-Underfull \hbox (badness 3895) in paragraph at lines 335--335
+Underfull \hbox (badness 3895) in paragraph at lines 344--344
 \TU/TimesNewRoman(0)/m/n/13 với các gói lệnh
  []
 
 
-Underfull \hbox (badness 4193) in paragraph at lines 335--336
+Underfull \hbox (badness 4193) in paragraph at lines 344--345
 []|\TU/TimesNewRoman(0)/m/n/13 BLE GATT vì dữ
  []
 
 
-Underfull \hbox (badness 3108) in paragraph at lines 335--336
+Underfull \hbox (badness 3108) in paragraph at lines 344--345
 \TU/TimesNewRoman(0)/m/n/13 liệu điều khiển có
  []
 
 
-Underfull \hbox (badness 2582) in paragraph at lines 335--336
+Underfull \hbox (badness 2582) in paragraph at lines 344--345
 \TU/TimesNewRoman(0)/m/n/13 kích thước nhỏ và
  []
 
 
-Underfull \hbox (badness 1199) in paragraph at lines 337--337
+Underfull \hbox (badness 1199) in paragraph at lines 346--346
 []|\TU/TimesNewRoman(0)/m/n/13 Mô hình cục bộ;
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--337
+Underfull \hbox (badness 10000) in paragraph at lines 346--346
 \TU/TimesNewRoman(0)/m/n/13 LLM qua API;
  []
 
 
-Underfull \hbox (badness 2359) in paragraph at lines 337--337
+Underfull \hbox (badness 2359) in paragraph at lines 346--346
 \TU/TimesNewRoman(0)/m/n/13 nhiều tài nguyên;
  []
 
 
-Underfull \hbox (badness 1558) in paragraph at lines 337--337
+Underfull \hbox (badness 1558) in paragraph at lines 346--346
 \TU/TimesNewRoman(0)/m/n/13 trợ hội thoại linh
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--337
+Underfull \hbox (badness 10000) in paragraph at lines 346--346
 \TU/TimesNewRoman(0)/m/n/13 hoạt nhưng phụ
  []
 
 
-Underfull \hbox (badness 3646) in paragraph at lines 337--337
+Underfull \hbox (badness 3646) in paragraph at lines 346--346
 \TU/TimesNewRoman(0)/m/n/13 phí; kịch bản cố
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--338
+Underfull \hbox (badness 10000) in paragraph at lines 346--347
 []|\TU/TimesNewRoman(0)/m/n/13 Android STT/TTS
  []
 
 
-Underfull \hbox (badness 3803) in paragraph at lines 337--338
+Underfull \hbox (badness 3803) in paragraph at lines 346--347
 \TU/TimesNewRoman(0)/m/n/13 kết hợp LLM qua
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 337--338
+Underfull \hbox (badness 10000) in paragraph at lines 346--347
 \TU/TimesNewRoman(0)/m/n/13 API, bổ sung từ
  []
 
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-[74
-
-]
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:348: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [75]
-ignored error: Infinite glue shrinkage found in box being split
+Contents/PhanTichThietKeHeThong.tex:348: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [76]
@@ -3042,334 +3048,358 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [77]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
-[78]
+ [78]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [79]
+File: Images/Tracking_Association_Target_Score_Design.png Graphic file (type bm
+p)
+<Images/Tracking_Association_Target_Score_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [80]
-Underfull \hbox (badness 2080) in paragraph at lines 393--394
-[]\TU/TimesNewRoman(0)/m/n/13 Bộ hậu kiểm quản lý quá trình xử lý qua các trạng
- thái \TU/Consolas(0)/m/n/13 MONITORING\TU/TimesNewRoman(0)/m/n/13 ,
- []
-
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[81]
+ [81]
+File: Images/Control_Command_Routing_Design.png Graphic file (type bmp)
+<Images/Control_Command_Routing_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [82]
-Underfull \hbox (badness 10000) in paragraph at lines 435--435
+File: Images/Fall_Verification_State_Design.png Graphic file (type bmp)
+<Images/Fall_Verification_State_Design.png>
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [83]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [84]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [85]
+Underfull \hbox (badness 10000) in paragraph at lines 491--491
 \TU/TimesNewRoman(0)/m/n/13 pronoun, caregiver,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 435--435
+Underfull \hbox (badness 10000) in paragraph at lines 491--491
 \TU/TimesNewRoman(0)/m/n/13 medicalConditions,
  []
 
 
-Underfull \hbox (badness 1281) in paragraph at lines 435--436
+Underfull \hbox (badness 1281) in paragraph at lines 491--492
 []|\TU/TimesNewRoman(0)/m/n/13 Hồ sơ và ngữ cảnh hội
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 437--437
+Underfull \hbox (badness 10000) in paragraph at lines 493--493
 []|$[][][][][][][][][] [] [][][][][] []
  []
 
 
-Underfull \hbox (badness 1448) in paragraph at lines 437--437
+Underfull \hbox (badness 1448) in paragraph at lines 493--493
 []|\TU/TimesNewRoman(0)/m/n/13 title, note, dateMillis,
  []
 
 
-Underfull \hbox (badness 3861) in paragraph at lines 437--437
+Underfull \hbox (badness 3861) in paragraph at lines 493--493
 \TU/TimesNewRoman(0)/m/n/13 hour, minute, repeat-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 439--439
+Underfull \hbox (badness 10000) in paragraph at lines 495--495
 []|$[][][][][][][][] [] [][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 439--439
+Underfull \hbox (badness 10000) in paragraph at lines 495--495
 []|\TU/TimesNewRoman(0)/m/n/13 scheduleId, triggere-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 439--439
+Underfull \hbox (badness 10000) in paragraph at lines 495--495
 \TU/TimesNewRoman(0)/m/n/13 sponse, retryCount,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 441--441
+Underfull \hbox (badness 10000) in paragraph at lines 497--497
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 441--441
+Underfull \hbox (badness 10000) in paragraph at lines 497--497
 [][][][][] [] [][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 443--443
+Underfull \hbox (badness 10000) in paragraph at lines 499--499
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 443--443
+Underfull \hbox (badness 10000) in paragraph at lines 499--499
 [][][][][] [] [][] [] [][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 445--445
+Underfull \hbox (badness 10000) in paragraph at lines 501--501
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 445--445
+Underfull \hbox (badness 10000) in paragraph at lines 501--501
 [][][][][] [] [][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 6316) in paragraph at lines 501--502
+[]|\TU/TimesNewRoman(0)/m/n/13 Lệnh joystick từ Care-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 [][][][][] [] [][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 []|\TU/TimesNewRoman(0)/m/n/13 status, callerRole,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 \TU/TimesNewRoman(0)/m/n/13 emergencyRea-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 \TU/TimesNewRoman(0)/m/n/13 son, offer, answer,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 447--447
+Underfull \hbox (badness 10000) in paragraph at lines 503--503
 \TU/TimesNewRoman(0)/m/n/13 robotCandidates,
  []
 
 
-Underfull \hbox (badness 5460) in paragraph at lines 447--448
+Underfull \hbox (badness 5460) in paragraph at lines 503--504
 []|\TU/TimesNewRoman(0)/m/n/13 Signaling và trạng thái
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--449
+Underfull \hbox (badness 10000) in paragraph at lines 505--505
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--449
+Underfull \hbox (badness 10000) in paragraph at lines 505--505
 [][][][][] [] [][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--449
+Underfull \hbox (badness 10000) in paragraph at lines 505--505
 []|\TU/TimesNewRoman(0)/m/n/13 timestamp, trackId,
  []
 
 
-Underfull \hbox (badness 2409) in paragraph at lines 449--449
+Underfull \hbox (badness 2409) in paragraph at lines 505--505
 \TU/TimesNewRoman(0)/m/n/13 probFall, verification-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--449
+Underfull \hbox (badness 10000) in paragraph at lines 505--505
 \TU/TimesNewRoman(0)/m/n/13 Reason, confirma-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--449
+Underfull \hbox (badness 10000) in paragraph at lines 505--505
 \TU/TimesNewRoman(0)/m/n/13 tionStatus, severity,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 449--450
+Underfull \hbox (badness 10000) in paragraph at lines 505--506
 []|\TU/TimesNewRoman(0)/m/n/13 Cảnh báo nguy
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 451--451
+Underfull \hbox (badness 10000) in paragraph at lines 507--507
 []|$[][][][] [] [][][][][][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 451--451
+Underfull \hbox (badness 10000) in paragraph at lines 507--507
 [][][][][] [] [][][][] []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 451--451
+Underfull \hbox (badness 10000) in paragraph at lines 507--507
 []|\TU/TimesNewRoman(0)/m/n/13 timestamp, initiator,
  []
 
+Contents/PhanTichThietKeHeThong.tex:509: ignored error: Infinite glue shrinkage
+ found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[83]
-ignored error: Infinite glue shrinkage found in box being split
+ [86]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [84]
+ [87]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
-nput line 459.
+nput line 515.
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [85]
-Underfull \hbox (badness 1097) in paragraph at lines 507--508
+ [88]
+Underfull \hbox (badness 1097) in paragraph at lines 573--574
 []\TU/TimesNewRoman(0)/m/n/13 RobotApp đóng vai trò máy khách GATT, còn ESP32 l
 à máy chủ GATT
  []
 
 
-Underfull \hbox (badness 2213) in paragraph at lines 507--508
+Underfull \hbox (badness 2213) in paragraph at lines 573--574
 \TU/TimesNewRoman(0)/m/n/13 có tên \TU/Consolas(0)/m/n/13 OhmniRobot\TU/TimesNe
 wRoman(0)/m/n/13 . Mã định danh dịch vụ là \TU/Consolas(0)/m/n/13 4FAFC201-1FB5
 -459E-8FCC-
  []
 
 
-Underfull \hbox (badness 4634) in paragraph at lines 507--508
+Underfull \hbox (badness 4634) in paragraph at lines 573--574
 \TU/Consolas(0)/m/n/13 C5C9C331914B\TU/TimesNewRoman(0)/m/n/13 ; đặc tính nhận 
 lệnh có UUID \TU/Consolas(0)/m/n/13 BEB5483E-36E1-4688-B7F5-
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[86])
+[89])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [87] (Contents/HienThucHeThong.tex
+ [90] (Contents/HienThucHeThong.tex
 File: Images/System_Implementation_Architecture_Overview_Style_Figma.png Graphi
 c file (type bmp)
 <Images/System_Implementation_Architecture_Overview_Style_Figma.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [88
+ [91
 
 
 ]
-Underfull \hbox (badness 2035) in paragraph at lines 20--21
+File: Images/Design_Implementation_Mapping.png Graphic file (type bmp)
+<Images/Design_Implementation_Mapping.png>
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [92]
+Underfull \hbox (badness 2035) in paragraph at lines 29--30
 []\TU/TimesNewRoman(0)/m/n/13 Hệ thống gồm bốn thành phần được phát triển độc l
 ập nhưng sử dụng
  []
 
 
-Underfull \hbox (badness 2073) in paragraph at lines 20--21
+Underfull \hbox (badness 2073) in paragraph at lines 29--30
 \TU/TimesNewRoman(0)/m/n/13 cấu trúc dữ liệu và quy ước trao đổi thống nhất. Ro
 botApp và CaregiverApp
  []
 
 
-Underfull \hbox (badness 4060) in paragraph at lines 20--21
+Underfull \hbox (badness 4060) in paragraph at lines 29--30
 \TU/TimesNewRoman(0)/m/n/13 được xây dựng bằng Kotlin, giao diện XML và ViewBin
 ding. RobotApp sử
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 20--21
+Underfull \hbox (badness 10000) in paragraph at lines 29--30
 \TU/TimesNewRoman(0)/m/n/13 dụng package \TU/Consolas(0)/m/n/13 com.example.dat
 n_v1\TU/TimesNewRoman(0)/m/n/13 , còn CaregiverApp sử dụng package
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Android/Kotlin, CameraX,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
 \TU/TimesNewRoman(0)/m/n/11.86258 TFLite, OpenCV, Firebase,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Android/Kotlin, Firebase
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Python, Keras/TensorFlow,
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 39--39
+Underfull \hbox (badness 2818) in paragraph at lines 48--48
 \TU/TimesNewRoman(0)/m/n/11.86258 Ultralytics, ONNX, onnx2tf,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 39--39
+Underfull \hbox (badness 10000) in paragraph at lines 48--48
 []|\TU/TimesNewRoman(0)/m/n/11.86258 ESP32, NimBLE, Simple-
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[89]
+[93]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [90]
-Underfull \hbox (badness 10000) in paragraph at lines 81--81
+ [94]
+Underfull \hbox (badness 10000) in paragraph at lines 90--90
 []|\TU/TimesNewRoman(0)/b/n/10.83347 Kích
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 81--81
+Underfull \hbox (badness 10000) in paragraph at lines 90--90
 []|\TU/TimesNewRoman(0)/m/n/10.83347 11.838.836
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[91]
+[95]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [92]
-Underfull \hbox (badness 10000) in paragraph at lines 131--131
+ [96]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [97]
+Underfull \hbox (badness 10000) in paragraph at lines 152--152
 []|$\OT1/cmr/m/n/12 [0\OML/cmm/m/it/12 ; W[]\OT1/cmr/m/n/12 ] \OMS/cmsy/m/n/12 
 ^^B
  []
 
 
-Underfull \hbox (badness 4181) in paragraph at lines 131--131
+Underfull \hbox (badness 4181) in paragraph at lines 152--152
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Khung hình gốc nhận từ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--131
+Underfull \hbox (badness 10000) in paragraph at lines 152--152
 []|$\OT1/cmr/m/n/12 [0\OML/cmm/m/it/12 ; \OT1/cmr/m/n/12 320] \OMS/cmsy/m/n/12 
 ^^B
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--131
+Underfull \hbox (badness 10000) in paragraph at lines 152--152
 []|$\OT1/cmr/m/n/12 [0\OML/cmm/m/it/12 ; W[]\OT1/cmr/m/n/12 ] \OMS/cmsy/m/n/12 
 ^^B
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 131--131
+Underfull \hbox (badness 10000) in paragraph at lines 152--152
 []|\TU/Consolas(0)/m/n/11.86258 BoundingBoxOverlay
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[93]
-Underfull \hbox (badness 3199) in paragraph at lines 153--154
+[98]
+Underfull \hbox (badness 3199) in paragraph at lines 174--175
 []\TU/TimesNewRoman(0)/m/n/13 Các lớp \TU/Consolas(0)/m/n/13 SortTracker\TU/Tim
 esNewRoman(0)/m/n/13 , \TU/Consolas(0)/m/n/13 KalmanBoxTracker\TU/TimesNewRoman
 (0)/m/n/13 , \TU/Consolas(0)/m/n/13 HungarianAlgorithm \TU/TimesNewRoman(0)/m/n
@@ -3378,79 +3408,30 @@ esNewRoman(0)/m/n/13 , \TU/Consolas(0)/m/n/13 KalmanBoxTracker\TU/TimesNewRoman
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[94]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [95]
-File: Images/1.jpeg Graphic file (type bmp)
-<Images/1.jpeg>
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [96]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [97]
-Underfull \hbox (badness 1371) in paragraph at lines 196--197
-[]\TU/Consolas(0)/m/n/13 GroqChatService \TU/TimesNewRoman(0)/m/n/13 gọi điểm c
-uối \TU/Consolas(0)/m/n/13 /openai/v1/chat/completions \TU/TimesNewRoman(0)/m/n
-/13 qua
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 202--203
-[]\TU/Consolas(0)/m/n/13 ReminderService \TU/TimesNewRoman(0)/m/n/13 lắng nghe 
-lịch tại \TU/Consolas(0)/m/n/13 Schedules/{uid} \TU/TimesNewRoman(0)/m/n/13 và 
-hồ
- []
-
-
-Underfull \hbox (badness 6016) in paragraph at lines 202--203
-\TU/TimesNewRoman(0)/m/n/13 sơ tại \TU/Consolas(0)/m/n/13 Users/{uid}\TU/TimesN
-ewRoman(0)/m/n/13 . Khi đến thời điểm nhắc, dịch vụ tạo bản ghi dưới
- []
-
-
-Underfull \hbox (badness 2564) in paragraph at lines 202--203
-\TU/Consolas(0)/m/n/13 reminder_logs/{uid} \TU/TimesNewRoman(0)/m/n/13 và gửi s
-ự kiện đến chatbot để phát lời nhắc. Người
+[99]
+Underfull \hbox (badness 3557) in paragraph at lines 212--213
+[]\TU/TimesNewRoman(0)/m/n/13 Người mục tiêu được gán định danh \TU/Consolas(0)
+/m/n/13 PRIMARY_TRACK_ID=0\TU/TimesNewRoman(0)/m/n/13 . Hàm lựa
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[98]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [99]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [100]
+[100]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [101]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [102]
-Underfull \hbox (badness 7133) in paragraph at lines 294--296
-\TU/TimesNewRoman(0)/m/n/13 Chương trình $[][][][][][][] [] [][] [] [][][][][][
-] [] [][]$ nạp \TU/Consolas(0)/m/n/13 best_model_lstm.h5 \TU/TimesNewRoman(0)/m
-/n/13 và kiểm
+Underfull \hbox (badness 10000) in paragraph at lines 285--286
+[]\TU/TimesNewRoman(0)/m/n/13 Sau khi làm mượt vector bám theo, \TU/Consolas(0)
+/m/n/13 sendTrackingVector() \TU/TimesNewRoman(0)/m/n/13 gọi
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 294--296
-\TU/TimesNewRoman(0)/m/n/13 tra \TU/Consolas(0)/m/n/13 input_shape \TU/TimesNew
-Roman(0)/m/n/13 trước khi chuyển đổi bằng $[][][][][][][][][][][][][][][] [] []
-[][][] []
- []
-
-
-Overfull \hbox (1.86842pt too wide) in paragraph at lines 317--317
-[]|\TU/TimesNewRoman(0)/m/n/11.86258 best_model_lstm_v2.tflite| 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 317--317
-[]|\TU/TimesNewRoman(0)/m/n/11.86258 yolo26n-
+Underfull \hbox (badness 2165) in paragraph at lines 285--286
+\TU/TimesNewRoman(0)/m/n/13 bằng \TU/Consolas(0)/m/n/13 submitAutoFollowCommand
+()\TU/TimesNewRoman(0)/m/n/13 . Đường truyền này nằm hoàn toàn trong
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -3458,13 +3439,89 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
 [103]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [104])
+ [104]
+Underfull \hbox (badness 1371) in paragraph at lines 309--310
+[]\TU/Consolas(0)/m/n/13 GroqChatService \TU/TimesNewRoman(0)/m/n/13 gọi điểm c
+uối \TU/Consolas(0)/m/n/13 /openai/v1/chat/completions \TU/TimesNewRoman(0)/m/n
+/13 qua
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 315--316
+[]\TU/Consolas(0)/m/n/13 ReminderService \TU/TimesNewRoman(0)/m/n/13 lắng nghe 
+lịch tại \TU/Consolas(0)/m/n/13 Schedules/{uid} \TU/TimesNewRoman(0)/m/n/13 và 
+hồ
+ []
+
+
+Underfull \hbox (badness 6016) in paragraph at lines 315--316
+\TU/TimesNewRoman(0)/m/n/13 sơ tại \TU/Consolas(0)/m/n/13 Users/{uid}\TU/TimesN
+ewRoman(0)/m/n/13 . Khi đến thời điểm nhắc, dịch vụ tạo bản ghi dưới
+ []
+
+
+Underfull \hbox (badness 2564) in paragraph at lines 315--316
+\TU/Consolas(0)/m/n/13 reminder_logs/{uid} \TU/TimesNewRoman(0)/m/n/13 và gửi s
+ự kiện đến chatbot để phát lời nhắc. Người
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [105] (Contents/KetQuaVaThaoLuan.tex
+[105]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [106
+ [106]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [107]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [108]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [109]
+File: Images/1.jpeg Graphic file (type bmp)
+<Images/1.jpeg>
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [110]
+Underfull \hbox (badness 7133) in paragraph at lines 437--439
+\TU/TimesNewRoman(0)/m/n/13 Chương trình $[][][][][][][] [] [][] [] [][][][][][
+] [] [][]$ nạp \TU/Consolas(0)/m/n/13 best_model_lstm.h5 \TU/TimesNewRoman(0)/m
+/n/13 và kiểm
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 437--439
+\TU/TimesNewRoman(0)/m/n/13 tra \TU/Consolas(0)/m/n/13 input_shape \TU/TimesNew
+Roman(0)/m/n/13 trước khi chuyển đổi bằng $[][][][][][][][][][][][][][][] [] []
+[][][] []
+ []
+
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+[111]
+Overfull \hbox (1.86842pt too wide) in paragraph at lines 460--460
+[]|\TU/TimesNewRoman(0)/m/n/11.86258 best_model_lstm_v2.tflite| 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 460--460
+[]|\TU/TimesNewRoman(0)/m/n/11.86258 yolo26n-
+ []
+
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+[112]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [113])
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [114] (Contents/KetQuaVaThaoLuan.tex
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [115
 
 
 ]
@@ -3527,13 +3584,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 80--80
 []|\TU/TimesNewRoman(0)/m/n/13 Chatbot Caregiver-
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Contents/KetQuaVaThaoLuan.tex:82: ignored error: Infinite glue shrinkage found 
+in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [107]
+ [116]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [108]
+ [117]
 Underfull \hbox (badness 1762) in paragraph at lines 126--126
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Tương thích rộng,
  []
@@ -3560,7 +3618,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 126--126
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[109]
+[118]
 Underfull \hbox (badness 10000) in paragraph at lines 184--184
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Hình thành ứng
  []
@@ -3582,10 +3640,10 @@ Underfull \hbox (badness 1270) in paragraph at lines 184--184
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[110]
+[119]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [111]
+ [120]
 Underfull \hbox (badness 10000) in paragraph at lines 225--225
 []|\TU/TimesNewRoman(0)/m/n/13 Đăng nhập dùng
  []
@@ -3710,17 +3768,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 259--260
 []|\TU/TimesNewRoman(0)/m/n/13 Notification/full-
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Contents/KetQuaVaThaoLuan.tex:261: ignored error: Infinite glue shrinkage found
+ in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [112]
+ [121]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [113]
+ [122]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
-[114]
+ [123]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [124]
 Underfull \hbox (badness 2469) in paragraph at lines 335--335
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Thời gian xử lý mỗi
  []
@@ -3737,10 +3798,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 335--335
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[115]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [116]
+[125]
 Underfull \hbox (badness 10000) in paragraph at lines 385--385
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Đạt nguyên
  []
@@ -3775,31 +3833,30 @@ Underfull \hbox (badness 10000) in paragraph at lines 385--385
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Ngoài phạm
  []
 
-)
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [117]
+[126])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [118] (Contents/KetLuan.tex
+ [127] (Contents/KetLuan.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [119
+ [128
 
 
 ]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [120]
+ [129]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [121])
+ [130])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [122]
+ [131]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [123]
+ [132]
 (Outro/TaiLieuThamKhao.tex
 Underfull \hbox (badness 1394) in paragraph at lines 6--7
 []\TU/TimesNewRoman(0)/m/n/13 UNFPA Viet Nam, “Applying foresight to curate a c
@@ -3839,7 +3896,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--10
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[124
+[133
 
 
 
@@ -3851,7 +3908,7 @@ hod based on modified
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[125]
+[134]
 Underfull \hbox (badness 1281) in paragraph at lines 33--34
 []\TU/TimesNewRoman(0)/m/n/13 N. Wojke, A. Bewley, and D. Paulus, “Simple onlin
 e and realtime tracking
@@ -3859,7 +3916,7 @@ e and realtime tracking
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[126]
+[135]
 Underfull \hbox (badness 10000) in paragraph at lines 36--37
 []\TU/TimesNewRoman(0)/m/n/13 Google, “SpeechRecognizer,” Android Developers, [
 Online]. Available:
@@ -3929,7 +3986,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--45
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[127]
+[136]
 Underfull \hbox (badness 1708) in paragraph at lines 51--52
 []\TU/TimesNewRoman(0)/m/n/13 OpenBot Foundation, “OpenBot firmware,” GitHub do
 cumentation. [Online].
@@ -3937,7 +3994,7 @@ cumentation. [Online].
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[128]
+[137]
 Underfull \hbox (badness 10000) in paragraph at lines 62--63
 []\TU/TimesNewRoman(0)/m/n/13 A. G. Howard et al., “MobileNets: Efficient convo
 lutional neural net-
@@ -3969,7 +4026,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 66--67
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[129]
+[138]
 Underfull \hbox (badness 10000) in paragraph at lines 67--68
 \TU/TimesNewRoman(0)/m/n/13 Real-time end-to-end object detection,” \TU/TimesNe
 wRoman(0)/m/it/13 arXiv:2405.14458\TU/TimesNewRoman(0)/m/n/13 , 2024, doi:
@@ -4002,7 +4059,7 @@ ne]. Available: [][]$[][][][][] []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[130]
+[139]
 Underfull \hbox (badness 10000) in paragraph at lines 80--81
 [][][] [] [][][][][][][][][] [] [][][] [] [][][][][][][][][][][][][][] [] [][][
 ][][] [] [][][][][][][][][][][][][][][][][][][][]$[][]\TU/TimesNewRoman(0)/m/n/
@@ -4036,14 +4093,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 86--87
 )
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [131] (Outro/PhuLuc.tex
+ [140] (Outro/PhuLuc.tex
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 4.
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[132
+[141
 
 
 
@@ -4058,24 +4115,26 @@ Underfull \hbox (badness 2846) in paragraph at lines 76--77
 \TU/TimesNewRoman(0)/m/n/13 chatbot phát TTS; nghe phản hồi; cập nhật con-
  []
 
-ignored error: Infinite glue shrinkage found in box being split
+Outro/PhuLuc.tex:104: ignored error: Infinite glue shrinkage found in box being
+ split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [133]
-ignored error: Infinite glue shrinkage found in box being split
+ [142]
+Outro/PhuLuc.tex:144: ignored error: Infinite glue shrinkage found in box being
+ split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [134]
+ [143]
 Underfull \hbox (badness 10000) in paragraph at lines 150--151
 []|\TU/TimesNewRoman(0)/m/n/13 Người cao tuổi/RobotApp; người chăm
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[135]
+[144]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [136]
+ [145]
 Underfull \hbox (badness 10000) in paragraph at lines 317--317
 []|\TU/TimesNewRoman(0)/m/n/13 TrackingService/
  []
@@ -4092,11 +4151,12 @@ Underfull \hbox (badness 3590) in paragraph at lines 329--330
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[137]
-ignored error: Infinite glue shrinkage found in box being split
+[146]
+Outro/PhuLuc.tex:333: ignored error: Infinite glue shrinkage found in box being
+ split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [138]
+ [147]
 Underfull \hbox (badness 10000) in paragraph at lines 353--353
 []|\TU/TimesNewRoman(0)/m/n/13 Schedule/
  []
@@ -4113,7 +4173,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 357--357
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[139]
+[148]
 Underfull \hbox (badness 1112) in paragraph at lines 421--422
 []\TU/TimesNewRoman(0)/m/n/13 Trong Arduino IDE, chọn ESP32 Dev Module; cài Sim
 pleFOC phiên bản
@@ -4127,7 +4187,7 @@ Underfull \hbox (badness 1325) in paragraph at lines 421--422
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[140]
+[149]
 Underfull \hbox (badness 10000) in paragraph at lines 434--434
 []|\TU/TimesNewRoman(0)/m/n/13 Commit/model
  []
@@ -4179,13 +4239,13 @@ Underfull \hbox (badness 2165) in paragraph at lines 505--505
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[141]
+[150]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [142])
+ [151])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [143]
+ [152]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (main.aux)
@@ -4199,15 +4259,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: FCBA642526EB17F21C87DA9A6974F846;52813.
+(rerunfilecheck)             Checksum: 78BD7F16E9B79483E73390DA22EF2A4F;52813.
  ) 
 Here is how much of TeX's memory you used:
- 33158 strings out of 402987
- 660666 string characters out of 5448731
- 1292811 words of memory out of 5000000
- 61204 multiletter control sequences out of 15000+600000
- 639017 words of font info for 150 fonts, out of 8000000 for 9000
+ 33240 strings out of 402987
+ 664372 string characters out of 5448731
+ 1294198 words of memory out of 5000000
+ 61279 multiletter control sequences out of 15000+600000
+ 639025 words of font info for 151 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 109i,15n,132p,1138b,1908s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,16n,132p,1390b,1908s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (165 pages).
+Output written on main.pdf (174 pages).

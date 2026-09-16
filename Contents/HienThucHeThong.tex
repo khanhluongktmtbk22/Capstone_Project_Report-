@@ -1,6 +1,6 @@
 \section{Hiện thực hệ thống}
 
-Trên cơ sở kiến trúc và các quyết định thiết kế ở Chương 3, chương này trình bày quá trình hiện thực hệ thống bằng những thành phần phần mềm và phần cứng cụ thể. Nội dung lần lượt mô tả kiến trúc triển khai, RobotApp, CaregiverApp, quy trình chuẩn bị mô hình AI, firmware của phần thân robot và cách các thành phần phối hợp với nhau trong quá trình vận hành.
+Trên cơ sở kiến trúc và các đặc tả ở Chương 3, chương này trình bày quá trình chuyển các module thiết kế thành những thành phần phần mềm và phần cứng cụ thể. Nội dung tập trung vào cấu trúc lớp, dịch vụ, mô hình, cấu hình vận hành và firmware, đồng thời làm rõ cách các thành phần phối hợp trong hệ thống. Kết quả kiểm thử và mức độ đáp ứng yêu cầu được trình bày riêng ở Chương 5.
 
 \subsection{Kiến trúc hiện thực và ánh xạ công nghệ}
 
@@ -13,6 +13,15 @@ Firebase RTDB lưu dữ liệu dưới dạng cây JSON và đồng bộ trạng
     \includegraphics[width=\textwidth]{System_Implementation_Architecture_Overview_Style_Figma.png}
     \caption{Kiến trúc hiện thực của hệ thống}
     \label{fig:implementation_architecture}
+\end{figure}
+
+Để làm rõ mối liên hệ giữa hai chương, Hình \ref{fig:design_implementation_mapping} đối chiếu các module được xác định ở giai đoạn thiết kế với những thành phần hiện thực chính. Mỗi module có thể được triển khai bởi nhiều lớp hoặc dịch vụ, nhưng vẫn giữ nguyên trách nhiệm, dữ liệu vào--ra và ranh giới giao tiếp đã mô tả ở Chương 3. Các mục tiếp theo lần lượt trình bày cấu trúc và cách phối hợp của từng nhóm thành phần này.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{Design_Implementation_Mapping.png}
+    \caption{Ánh xạ từ module thiết kế đến các thành phần hiện thực}
+    \label{fig:design_implementation_mapping}
 \end{figure}
 
 \subsection{Môi trường phát triển và tổ chức các thành phần}
@@ -51,9 +60,9 @@ Quyền Bluetooth được khai báo theo từng nhóm phiên bản hệ điều
 
 \subsubsection{TrackingFragment và quản lý camera}
 
-\texttt{tracking\_fragment.kt} điều phối CameraX, mô hình ước lượng tư thế, bộ theo dõi, LSTM, bộ hậu kiểm và chức năng bám người. CameraX cung cấp \texttt{Preview} để hiển thị hình ảnh xem trước và \texttt{ImageAnalysis} để phân tích khung hình. Bộ phân tích chuyển dữ liệu từ \texttt{ImageProxy} sang ảnh bitmap và tensor, sau đó giải phóng khung hình đã xử lý. Hai chức năng camera được liên kết với vòng đời của fragment theo cơ chế CameraX \reportcite{ref:android_camera}.
+\texttt{tracking\_fragment.kt} điều phối CameraX, mô hình ước lượng tư thế, bộ theo dõi, LSTM, bộ hậu kiểm và chức năng bám người. CameraX cung cấp \texttt{Preview} để hiển thị hình ảnh xem trước và \texttt{ImageAnalysis} để phân tích khung hình. Dải tốc độ khung hình của hai use case được yêu cầu ở mức $[25,25]$ FPS thông qua Camera2Interop nhằm duy trì nhịp lấy mẫu thống nhất cho chuỗi tư thế. Bộ phân tích chuyển dữ liệu từ \texttt{ImageProxy} sang ảnh bitmap và tensor, sau đó giải phóng khung hình đã xử lý. Hai chức năng camera được liên kết với vòng đời của fragment theo cơ chế CameraX \reportcite{ref:android_camera}. Khả năng duy trì đúng tốc độ yêu cầu phụ thuộc vào dải FPS mà camera của thiết bị hỗ trợ.
 
-Khi không có cuộc gọi, CameraX được gắn với vòng đời của fragment. Trước khi WebRTC khởi động, CameraX được tháo liên kết để tránh hai thành phần cùng mở camera. \texttt{video\_call\_fragment} tiếp quản camera và gửi một bản sao \texttt{VideoFrame} cục bộ về khối theo dõi. Khung hình được chuyển từ I420 sang RGB, giảm kích thước và xử lý trên một executor riêng; nếu lượt suy luận trước chưa kết thúc, khung hình mới bị bỏ qua thay vì tiếp tục xếp hàng. Khi cuộc gọi kết thúc, bộ thu hình của WebRTC được dừng và giải phóng trước khi CameraX được liên kết trở lại.
+Khi không có cuộc gọi, CameraX được gắn với vòng đời của fragment. Trước khi WebRTC khởi động, CameraX được tháo liên kết để tránh hai thành phần cùng mở camera. \texttt{video\_call\_fragment} tiếp quản camera ở cấu hình $640\times480$, 25 FPS và gửi một bản sao \texttt{VideoFrame} cục bộ về khối theo dõi. Khung hình được chuyển từ I420 sang RGB, giảm kích thước và xử lý trên một executor riêng; nếu lượt suy luận trước chưa kết thúc, khung hình mới bị bỏ qua thay vì tiếp tục xếp hàng. Khi cuộc gọi kết thúc, bộ thu hình của WebRTC được dừng và giải phóng trước khi CameraX được liên kết trở lại.
 
 Bên cạnh việc quản lý nguồn hình ảnh, \texttt{tracking\_fragment} duy trì một đối tượng \texttt{RobotControlManager} để điều khiển kết nối với ESP32. Chức năng gọi video sử dụng chung bộ quản lý này, giúp tập trung việc kiểm tra lệnh và xử lý dừng robot.
 
@@ -61,7 +70,7 @@ Bên cạnh việc quản lý nguồn hình ảnh, \texttt{tracking\_fragment} d
 
 Các quy ước về bounding box, keypoint và hậu xử lý ở Mục \ref{sec:yolo_pose_output_representation} và Mục \ref{sec:yolo_pose_inference_pipeline} được hiện thực trong \texttt{tracking\_fragment.kt}. Chuỗi xử lý bao gồm lựa chọn mô hình, khởi tạo bộ suy luận, tiền xử lý khung hình, giải mã tensor và chuyển kết quả đến SORT, LSTM cùng lớp hiển thị.
 
-\paragraph{Mô hình triển khai và lựa chọn bộ tăng tốc.}
+\paragraph{Mô hình triển khai và cơ chế khởi tạo bộ tăng tốc.}
 RobotApp đóng gói hai biến thể mô hình trong thư mục \texttt{assets}. Biến thể đầu ra thô có kích thước tensor tĩnh được ưu tiên để khai thác GPU; biến thể đầu cuối được sử dụng khi mô hình thứ nhất không thể khởi tạo. Bảng \ref{tab:yolo_runtime_artifacts} trình bày quy ước đầu ra mà bộ giải mã hỗ trợ.
 
 \begin{table}[htbp]
@@ -81,16 +90,24 @@ RobotApp đóng gói hai biến thể mô hình trong thư mục \texttt{assets}
 \end{tabularx}
 \end{table}
 
-Sau khi chọn tệp, \texttt{setupAIModel()} lần lượt thử bộ tăng tốc GPU, NNAPI và cuối cùng là CPU với bốn luồng. Nếu GPU không khởi tạo được, tài nguyên của bộ tăng tốc này được giải phóng trước khi chuyển sang NNAPI. Thay vì cố định kích thước theo tên tệp, chương trình đọc \texttt{getInputTensor(0).shape()} và \texttt{getOutputTensor(0).shape()}, sau đó cập nhật kích thước đầu vào và cấp phát bộ đệm đầu ra theo hình dạng tensor thực tế. Nhờ vậy, cùng một chuỗi xử lý có thể tiếp nhận các mô hình được xuất theo những quy ước khác nhau. TFLite được lựa chọn vì phù hợp với việc triển khai mô hình trên thiết bị di động và thiết bị biên \reportcite{ref:tflite}.
+Sau khi chọn tệp, \texttt{setupAIModel()} lần lượt thử bộ tăng tốc GPU, NNAPI và cuối cùng là CPU với bốn luồng. Nếu GPU không khởi tạo được, tài nguyên của bộ tăng tốc này được giải phóng trước khi chuyển sang NNAPI. Thay vì cố định kích thước theo tên tệp, chương trình đọc \texttt{getInputTensor(0).shape()} và \texttt{getOutputTensor(0).shape()}, sau đó cập nhật kích thước đầu vào và cấp phát bộ đệm đầu ra theo hình dạng tensor thực tế. Nhờ vậy, cùng một chuỗi xử lý có thể tiếp nhận các mô hình được xuất theo những quy ước khác nhau.
 
 \paragraph{Tiền xử lý khung hình.}
-CameraX sử dụng \texttt{STRATEGY\_KEEP\_ONLY\_LATEST} để ưu tiên khung hình mới nhất. Bộ điều phối suy luận bỏ qua khung hình khi chưa đủ khoảng thời gian cấu hình hoặc lượt xử lý trước chưa hoàn tất, nhờ đó hạn chế tích lũy ảnh cũ trong hàng đợi. Trong cuộc gọi, bản sao \texttt{VideoFrame} của WebRTC được đưa đến cùng bộ thực thi tác vụ và hàm suy luận, cho phép hai nguồn hình ảnh sử dụng chung quy trình xử lý.
+CameraX sử dụng \texttt{STRATEGY\_KEEP\_ONLY\_LATEST} để ưu tiên khung hình mới nhất khi tốc độ xử lý thấp hơn tốc độ thu nhận. Không có bộ định thời giới hạn riêng cho YOLO; mỗi khung hình được bộ phân tích cung cấp sẽ đi thẳng vào chuỗi suy luận. Nhờ đó, nhịp xử lý bám theo nguồn camera mà không phát sinh thêm độ trễ do chờ giữa hai lần suy luận. Trong cuộc gọi, bản sao \texttt{VideoFrame} của WebRTC được đưa đến cùng bộ thực thi tác vụ và hàm suy luận, cho phép hai nguồn hình ảnh sử dụng chung quy trình xử lý.
 
-Ảnh bitmap được nạp vào \texttt{TensorImage} kiểu \texttt{float32}, đổi trực tiếp về kích thước $320\times320$ bằng \texttt{ResizeOp.ResizeMethod.BILINEAR}, rồi chuẩn hóa giá trị RGB từ $[0,255]$ về $[0,1]$ bằng \texttt{NormalizeOp(0f,255f)}. Ứng dụng không thêm phần đệm ảnh theo phương pháp letterbox. Với khung hình camera $W_c\times H_c$ và $S=320$, ánh xạ từ tọa độ ảnh camera sang ảnh đầu vào mô hình là
+Khung hình nguồn có kích thước $W_c\times H_c$ được đưa về ảnh vuông $S\times S$, với $S=320$, bằng phương pháp letterbox. Hệ số thu phóng được chọn thống nhất cho cả hai trục:
 \begin{equation}
-x_i=x_c\frac{S}{W_c},\qquad y_i=y_c\frac{S}{H_c},
+s_l=\min\!\left(\frac{S}{W_c},\frac{S}{H_c}\right).
 \end{equation}
-còn phép đổi ngược là $x_c=x_iW_c/S$, $y_c=y_iH_c/S$. Hai hệ số theo hai trục được giữ riêng vì khung hình nguồn không nhất thiết là ảnh vuông.
+Kích thước nội dung sau thu phóng là $W_r=s_lW_c$, $H_r=s_lH_c$. Phần còn thiếu được đệm đều ở hai phía, với
+\begin{equation}
+p_x=\frac{S-W_r}{2},\qquad p_y=\frac{S-H_r}{2}.
+\end{equation}
+Vùng đệm sử dụng giá trị RGB $(114,114,114)$, tương đồng với quy trình tiền xử lý của YOLO. Một điểm $(x_c,y_c)$ trên ảnh nguồn được ánh xạ sang đầu vào mô hình theo
+\begin{equation}
+x_i=s_lx_c+p_x,\qquad y_i=s_ly_c+p_y.
+\end{equation}
+Ảnh sau letterbox được nạp vào \texttt{TensorImage} kiểu \texttt{float32}; giá trị RGB tiếp tục được chuẩn hóa từ $[0,255]$ về $[0,1]$ bằng \texttt{NormalizeOp(0f,255f)}. Cách xử lý này tránh làm thay đổi tỷ lệ cơ thể khi khung hình nguồn không vuông, đặc biệt quan trọng đối với vị trí keypoint và tỷ lệ hình dạng dùng trong nhận biết tư thế.
 
 \paragraph{Nhận dạng và giải mã cấu trúc tensor.}
 Đầu ra thô chứa dự đoán tại ba mức bước lấy mẫu (stride) 8, 16 và 32. Với ảnh $320\times320$, tổng số vị trí dự đoán là
@@ -99,11 +116,15 @@ N=\left(\frac{320}{8}\right)^2+
   \left(\frac{320}{16}\right)^2+
   \left(\frac{320}{32}\right)^2=2100.
 \end{equation}
-Vì mô hình chỉ nhận diện lớp người, mỗi vị trí dự đoán gồm 4 giá trị hộp, 1 độ tin cậy và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Mô hình đầu ra thô trả tensor \texttt{[1,56,2100]}; hàm \texttt{getOutputVal()} xử lý sự khác biệt giữa cách sắp xếp này và dạng \texttt{[1,2100,56]}, nhờ đó bộ giải mã luôn truy cập theo cặp chỉ số dự đoán--kênh. Bốn kênh đầu biểu diễn $(c_x,c_y,w_b,h_b)$, kênh 4 là độ tin cậy, còn 51 giá trị từ kênh 5 tạo thành 17 bộ ba $(x_j,y_j,p_j)$.
+Vì mô hình chỉ nhận diện lớp người, mỗi vị trí dự đoán gồm 4 giá trị hộp, 1 độ tin cậy và $17\times3$ giá trị keypoint, tổng cộng 56 kênh. Mô hình YOLO-Pose dùng cho suy luận GPU trả về tensor thô có kích thước \([1,56,2100]\), trong đó 56 là số thành phần của mỗi dự đoán và 2100 là số vị trí dự đoán ứng viên. Bốn kênh đầu biểu diễn $(c_x,c_y,w_b,h_b)$, kênh 4 là độ tin cậy, còn 51 giá trị từ kênh 5 tạo thành 17 bộ ba $(x_j,y_j,p_j)$.
 
 Đầu ra đầu cuối (E2E) được nhận biết khi hai chiều còn lại sau chiều kích thước lô có giá trị $300$ và $57$. Mỗi hàng gồm bốn trường đầu biểu diễn $(x_{\min},y_{\min},x_{\max},y_{\max})$, trường 4 là độ tin cậy, trường 5 là nhãn lớp và các trường từ 6 chứa dữ liệu của 17 điểm khớp. Hai dạng đầu ra cần được giải mã riêng: đọc đầu ra thô theo quy ước E2E sẽ làm tọa độ tâm và kích thước bounding box bị hiểu thành tọa độ hai góc, đồng thời làm lệch vị trí các kênh điểm khớp.
 
-Hai mô hình có thể trả tọa độ chuẩn hóa hoặc tọa độ pixel trong không gian đầu vào. Hàm \texttt{detectCoordSystem()} khảo sát kênh tọa độ ở lần suy luận đầu tiên: nếu giá trị dương lớn nhất không vượt quá 2, tọa độ được xem là đã chuẩn hóa; ngược lại, kết quả được xem là tọa độ pixel của ảnh mô hình. Trường hợp thứ nhất được nhân trực tiếp với $W_c,H_c$, còn trường hợp thứ hai được nhân với $W_c/320,H_c/320$. Quy tắc nhận biết này đáp ứng hai mô hình được sử dụng trong đề tài; khi bổ sung quy trình xuất mô hình mới, hệ tọa độ nên được khai báo rõ bằng siêu dữ liệu để tránh suy đoán.
+Hai mô hình có thể trả tọa độ chuẩn hóa hoặc tọa độ pixel trong không gian đầu vào. Hàm \texttt{detectCoordSystem()} khảo sát kênh tọa độ ở lần suy luận đầu tiên: nếu giá trị dương lớn nhất không vượt quá 2, tọa độ được xem là đã chuẩn hóa và được nhân với kích thước đầu vào; ngược lại, kết quả được xem là tọa độ pixel của ảnh mô hình. Tọa độ $(x_i,y_i)$ sau đó được đưa về ảnh nguồn bằng phép biến đổi ngược
+\begin{equation}
+x_c=\frac{x_i-p_x}{s_l},\qquad y_c=\frac{y_i-p_y}{s_l},
+\end{equation}
+rồi giới hạn trong miền $[0,W_c]\times[0,H_c]$. Quy tắc nhận biết này đáp ứng hai mô hình được sử dụng trong đề tài; khi bổ sung quy trình xuất mô hình mới, hệ tọa độ nên được khai báo rõ bằng siêu dữ liệu để tránh suy đoán.
 
 Đầu ra thô được đổi từ dạng $cxcywh$ sang $xyxy$, sau đó loại các dự đoán có độ tin cậy dưới $0{,}20$. Hàm \texttt{nms()} sắp xếp kết quả theo điểm tin cậy và loại hộp có IoU lớn hơn $0{,}45$. Kết quả E2E cũng đi qua hàm này như một lớp lọc bổ sung, mặc dù mô hình đầu cuối đã thực hiện bước lựa chọn dự đoán. Mỗi keypoint được giữ kèm độ tin cậy và chỉ được đánh dấu \texttt{visible} khi $p_j>0{,}30$.
 
@@ -122,7 +143,7 @@ Quy trình xử lý sử dụng bốn hệ tọa độ như trình bày trong B�
 \hline
 Ảnh camera $\mathcal{C}$ & $[0,W_c]\times[0,H_c]$ pixel & Khung hình gốc nhận từ CameraX hoặc WebRTC & SORT, LSTM và điều khiển bám người \\
 \hline
-Ảnh mô hình $\mathcal{I}$ & $[0,320]\times[0,320]$ pixel & Ảnh vuông sau \texttt{ResizeOp} & Suy luận và đầu ra dạng pixel \\
+Ảnh mô hình $\mathcal{I}$ & $[0,320]\times[0,320]$ pixel & Ảnh vuông sau khi thu phóng và thêm vùng đệm & Suy luận và đầu ra dạng pixel \\
 \hline
 Chuẩn hóa $\mathcal{N}$ & $[0,1]\times[0,1]$ & Biểu diễn không phụ thuộc độ phân giải & Đầu ra chuẩn hóa và các tỉ lệ hình học \\
 \hline
@@ -150,23 +171,122 @@ Sau khi giải mã, mỗi đối tượng gồm bounding box \texttt{bbox}, đ�
 
 \subsubsection{SORT, Kalman, Hungarian và Re-ID}
 
-Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực phương pháp theo dõi dựa trên kết quả phát hiện. Mỗi đối tượng gồm \texttt{bbox}, \texttt{score}, \texttt{classId} và các keypoint. Bộ lọc Kalman dự báo vùng bao ở khung hình kế tiếp, còn thuật toán Hungarian tìm phương án ghép có tổng chi phí nhỏ nhất. Phương pháp này kế thừa cấu trúc gọn của SORT \reportcite{ref:sort}, đồng thời bổ sung tín hiệu tư thế và đặc trưng ngoại hình để phù hợp hơn với bài toán trên điện thoại.
+Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực phương pháp theo dõi dựa trên kết quả phát hiện. Mỗi đối tượng gồm \texttt{bbox}, \texttt{score}, \texttt{classId} và các keypoint. Bộ lọc Kalman dự báo vùng bao ở khung hình kế tiếp, còn thuật toán Hungarian tìm phương án ghép có tổng chi phí nhỏ nhất. Cách cài đặt giữ lại cấu trúc của SORT \reportcite{ref:sort}, đồng thời bổ sung tín hiệu tư thế và đặc trưng ngoại hình vào quá trình duy trì định danh.
 
-Hàm chi phí ghép đối tượng gồm bốn thành phần: 30\% sai khác IoU, 30\% khoảng cách tâm, 30\% khoảng cách giữa các điểm khớp và 10\% thay đổi diện tích bounding box. Ngưỡng IoU cơ sở của bộ theo dõi là 0,25; đối tượng mới cần hai lần ghép thành công để được xác nhận. Khi không tìm thấy kết quả phát hiện phù hợp, định danh ID0 được duy trì tối đa 45 khung hình, còn các định danh khác được giữ tối đa 10 khung hình.
+\texttt{SortTracker} hiện thực hàm chi phí tại Công thức \ref{eq:tracking_association_cost}. Ngưỡng IoU cơ sở của bộ theo dõi là 0,15; đối tượng mới cần hai lần ghép thành công để được xác nhận. Khi không tìm thấy kết quả phát hiện phù hợp, định danh ID0 được duy trì tối đa 45 khung hình, còn các định danh khác được giữ tối đa 10 khung hình.
 
-Khối tái định danh trích xuất biểu đồ phân bố màu (histogram) trong không gian Hue--Saturation--Value (HSV) từ vùng thân người, nhằm giảm ảnh hưởng của hậu cảnh và thay đổi góc mặt. Đặc trưng màu không được cập nhật khi thiếu điểm khớp tin cậy, vì vùng cắt không chính xác có thể chứa hình ảnh của người khác. Khi một kết quả phát hiện phù hợp với đặc trưng đã lưu, \texttt{restoreWithId} khôi phục định danh ban đầu. Giải pháp này có chi phí tính toán thấp hơn việc bổ sung mạng trích xuất đặc trưng ngoại hình như Deep SORT \reportcite{ref:deepsort}, nhưng dễ bị ảnh hưởng khi nhiều người mặc trang phục giống nhau hoặc ánh sáng thay đổi.
+Trong phần hiện thực, ký hiệu $B_{t-1}$ là hộp của detection gần nhất đã ghép với track, $B_t^{-}$ là hộp do Kalman dự báo và $D_t$ là detection đang xét. Hàm $\mathbf{c}(B)$, $A(B)$ và $\ell(B)=\sqrt{w_B^2+h_B^2}$ lần lượt trả về tâm, diện tích và đường chéo của hộp. Đặt $\operatorname{clip}(z)=\min(1,\max(0,z))$, hệ số kích thước tham chiếu và khoảng cách tâm được tính bởi
+
+\begin{align}
+L_{\mathrm{ref}}&=\max\!\left(\ell(B_{t-1}),\ell(B_t^{-}),\ell(D_t),1\right),
+\label{eq:tracking_reference_diagonal}\\
+\delta_c&=\frac{\left\lVert\mathbf{c}(B_t^{-})-\mathbf{c}(D_t)\right\rVert_2}{L_{\mathrm{ref}}},
+&\hat d_c&=\operatorname{clip}\!\left(\frac{\delta_c}{0{,}90}\right).
+\label{eq:tracking_center_distance}
+\end{align}
+
+Điểm neo tư thế $\mathbf{s}(\mathcal K)$ là trung bình tọa độ của các keypoint vai trái, vai phải, hông trái và hông phải đang quan sát được; điểm neo chỉ hợp lệ khi có ít nhất hai trong bốn điểm. Thành phần khoảng cách tư thế là
+
+\begin{equation}
+\delta_p=\frac{\left\lVert\mathbf{s}(\mathcal K_{t-1})-\mathbf{s}(\mathcal K_t)\right\rVert_2}{L_{\mathrm{ref}}},
+\qquad
+\hat d_p=\operatorname{clip}\!\left(\frac{\delta_p}{0{,}75}\right).
+\label{eq:tracking_pose_distance}
+\end{equation}
+
+Nếu không đủ điểm vai--hông, mã nguồn dùng $\delta_p=\delta_c$. Mức thay đổi diện tích được tính đối xứng theo hai hướng phóng to và thu nhỏ:
+
+\begin{equation}
+r_A=\max\!\left(\frac{A(B_{t-1})}{A(D_t)},\frac{A(D_t)}{A(B_{t-1})}\right),
+\qquad
+p_a=\operatorname{clip}\!\left(\frac{\ln r_A}{\ln 8}\right).
+\label{eq:tracking_area_penalty}
+\end{equation}
+
+Diện tích hộp được chặn dưới ở $1$ pixel vuông để tránh chia cho không. Sau khi lập ma trận chi phí, kết quả Hungarian chỉ được chấp nhận khi thỏa thêm điều kiện về IoU, khoảng cách tâm hoặc khoảng cách tư thế, tỷ lệ diện tích và chi phí cực đại. ID0 dùng các ngưỡng nới rộng hơn track thông thường nhưng vẫn có thể ở trạng thái không ghép nếu không có detection hợp lệ.
+
+Khối tái định danh trích xuất biểu đồ phân bố màu (histogram) trong không gian Hue--Saturation--Value (HSV) từ vùng thân người. Đặc trưng màu không được cập nhật khi thiếu điểm khớp tin cậy, vì vùng cắt không chính xác có thể chứa nhiều hậu cảnh hoặc hình ảnh của người khác. Khi một kết quả phát hiện phù hợp với đặc trưng đã lưu, \texttt{restoreWithId} khôi phục định danh ban đầu. Cơ chế hiện tại không sử dụng thêm mạng học sâu cho tái định danh, do đó kết quả nhận lại mục tiêu phụ thuộc vào mức độ khác biệt màu sắc trang phục và điều kiện chiếu sáng.
 
 \subsubsection{Duy trì mục tiêu ID0 và tạo lệnh bám theo}
 
-Người mục tiêu được gán định danh \texttt{PRIMARY\_TRACK\_ID=0}. Việc lựa chọn ban đầu dựa trên diện tích bounding box, độ tin cậy phát hiện, tỷ lệ điểm khớp quan sát được, khoảng cách đến tâm ảnh và mức độ bị cắt ở biên. Định danh ID0 được dùng chung cho phân tích té ngã và điều khiển bám theo. Khi mất dấu, hệ thống tìm lại mục tiêu trong khoảng 2 s; đối tượng được xét phải cách vị trí cuối không quá 35\% đường chéo ảnh, nằm trong vùng trung tâm và được quan sát ổn định qua ba khung hình. Trong quá trình xử lý sự kiện nghi té ngã, hệ thống không tự chuyển sang một người khác.
+Người mục tiêu được gán định danh \texttt{PRIMARY\_TRACK\_ID=0}. Hàm lựa chọn ban đầu hiện thực Công thức \ref{eq:primary_target_score}. Với khung hình $W\times H$, hộp ứng viên $B=(x_{\min},y_{\min},x_{\max},y_{\max})$, tâm hộp $(c_x,c_y)$, độ tin cậy $s_{det}$ và $N_{vis}$ keypoint quan sát được, các thành phần được tính như sau:
 
-Chức năng bám theo ước lượng độ gần từ kích thước bounding box và khoảng cách giữa các mốc vai, hông, gối, mắt cá chân. Giá trị sau khi làm mượt được chia thành ba vùng quá xa, phù hợp và quá gần. Ngưỡng đi vào và rời khỏi mỗi vùng khác nhau để tránh chuyển liên tục giữa tiến, dừng và lùi khi giá trị dao động gần biên. \texttt{TrackingMotionPolicy} điều chỉnh thành phần tịnh tiến theo độ gần: mức tiến tăng từ 0,60 đến 0,90, mức lùi khi mục tiêu quá gần thay đổi từ 0,45 đến 0,60, còn mức lùi để quan sát lại phần chân là 0,30. Đây là các độ lớn của lệnh điều khiển chuẩn hóa, không phải vận tốc đo bằng m/s. Khi robot vừa quay vừa tiến hoặc chưa quan sát ổn định mắt cá chân, mức tiến được giảm để hạn chế mất dấu. Sai lệch ngang giữa tâm bounding box và tâm ảnh tạo thành phần quay liên tục, có vùng chết và giới hạn biên để giảm dao động.
+\begin{align}
+q_{area}&=\operatorname{clip}\!\left(\frac{A(B)}{0{,}45WH}\right),
+&q_{det}&=s_{det},
+\label{eq:target_area_detection_quality}\\
+q_{vis}&=\frac{N_{vis}}{17},
+&q_{center}&=\operatorname{clip}\!\left(
+1-\frac{\sqrt{(c_x/W-0{,}5)^2+(c_y/H-0{,}5)^2}}{0{,}707}\right).
+\label{eq:target_visibility_centrality}
+\end{align}
 
-Một nhánh hình học riêng phân loại tư thế phục vụ điều khiển, không thay đổi kết quả FALL/NO FALL của LSTM. Nhánh này kết hợp tỷ lệ vùng bao, hướng phân bố keypoint, quan hệ vai--hông và bằng chứng từ thân dưới; \texttt{PostureGeometry} bổ sung trường hợp người nằm dọc theo hướng nhìn của camera nên hình chiếu có thể trông gần giống tư thế đứng. Khi tư thế nằm đã ổn định hoặc một sự cố té ngã đang được xử lý, robot không tiếp tục tiến mà chỉ dừng, lùi chậm hoặc quay tại chỗ để đưa người vào vùng quan sát phù hợp. Mọi vector điều khiển cuối cùng vẫn được gửi qua \texttt{RobotControlManager} để kiểm tra và chuyển thành vận tốc hai bánh.
+Giá trị $q_{area}$ bão hòa khi hộp chiếm $45\%$ diện tích ảnh; $q_{center}$ bằng $1$ tại tâm và giảm về gần $0$ ở góc ảnh. Mức phạt biên trong mã nguồn là
+
+\begin{equation}
+p_{edge}=\begin{cases}
+0{,}10, & x_{\min}\leq0{,}01W\ \text{hoặc }y_{\min}\leq0{,}01H\\
+         & \quad\text{hoặc }x_{\max}\geq0{,}99W\ \text{hoặc }y_{\max}\geq0{,}99H,\\
+0,       & \text{các trường hợp còn lại.}
+\end{cases}
+\label{eq:target_edge_penalty}
+\end{equation}
+
+Định danh ID0 được dùng chung cho phân tích té ngã và điều khiển bám theo. Khi mất dấu, hệ thống tìm lại mục tiêu trong khoảng 2 s; đối tượng được xét phải cách vị trí cuối không quá 35\% đường chéo ảnh, nằm trong vùng trung tâm và được quan sát ổn định qua ba khung hình. Trong quá trình xử lý sự kiện nghi té ngã, hệ thống không tự chuyển sang một người khác.
+
+\paragraph{Tạo vector điều khiển bám theo.}
+Chức năng bám theo ước lượng độ gần từ bounding box và các mốc vai, hông, gối, mắt cá chân. Gọi $w_b,h_b$ là kích thước bounding box, $W,H$ là kích thước ảnh camera. Thành phần dựa trên vùng bao được tính bởi
+
+\begin{equation}
+d_b=\operatorname{clip}_{[0;\,1{,}5]}\!\left(\max\!\left(\frac{w_b}{W},\frac{h_b}{H}\right)\right).
+\end{equation}
+
+$d_b$ là chỉ số độ gần ước lượng từ tỷ lệ vùng ảnh mà người mục tiêu chiếm giữ và không có đơn vị. Hai tỷ số $w_b/W$ và $h_b/H$ lần lượt cho biết bounding box chiếm bao nhiêu phần chiều rộng và chiều cao của ảnh. Giá trị lớn hơn được lựa chọn để chỉ số vẫn phản ánh được kích thước biểu kiến của người khi tư thế thay đổi: chiều cao thường chiếm ưu thế khi người đứng, trong khi chiều rộng có thể chiếm ưu thế khi người nằm. Khi người tiến gần camera, bounding box thường lớn hơn nên $d_b$ tăng; khi người đi xa, $d_b$ giảm. Phép $\operatorname{clip}_{[0;\,1{,}5]}$ giới hạn các giá trị bất thường do bounding box vượt ra ngoài biên ảnh hoặc kết quả phát hiện chưa ổn định. Vì không sử dụng thông số hiệu chuẩn camera hay cảm biến chiều sâu, $d_b$ chỉ biểu diễn độ gần tương đối, không phải khoảng cách từ robot đến người theo đơn vị mét.
+
+Khi các keypoint cần thiết có độ tin cậy từ 0,45 trở lên, hệ thống tính thêm khoảng cách Euclid đã chuẩn hóa giữa hai mốc đại diện. Tùy phần cơ thể quan sát được, khoảng cách vai--mắt cá chân, vai--gối, hông--mắt cá chân hoặc vai--hông lần lượt được nhân với hệ số 1,33; 1,80; 2,20 hoặc 3,30 để đưa về gần cùng miền giá trị. Gọi kết quả này là $d_p$; nếu chưa đủ keypoint tin cậy thì $d_p=0$. Độ gần tức thời và độ gần sau làm mượt được xác định bởi
+
+\begin{equation}
+d_{\mathrm{raw}}=\operatorname{clip}_{[0;\,1{,}5]}\!\left(\max(d_b,d_p)\right),\qquad
+d_t=0{,}55d_{t-1}+0{,}45d_{\mathrm{raw}}.
+\label{eq:tracking_distance_metric}
+\end{equation}
+
+Việc chọn giá trị lớn hơn giữa hai nguồn đo giúp robot phản ứng thận trọng khi một nhóm keypoint bị che khuất hoặc nhận dạng chưa ổn định. Hệ thống chuyển từ vùng phù hợp sang quá xa khi $d_t<0{,}56$ và chỉ trở lại khi $d_t\geq0{,}64$. Tương tự, vùng quá gần được kích hoạt khi $d_t\geq0{,}80$ và kết thúc khi $d_t\leq0{,}72$. Khoảng chênh giữa ngưỡng đi vào và rời khỏi mỗi vùng tạo độ trễ, nhờ đó robot không liên tục đảo giữa tiến, dừng và lùi khi giá trị dao động gần biên.
+
+Với quy ước giá trị âm là tiến và giá trị dương là lùi, thành phần tịnh tiến ban đầu được tạo bởi
+
+\begin{equation}
+x_{\mathrm{raw}}=
+\begin{cases}
+-\lambda\!\left[0{,}60+0{,}30\operatorname{clip}_{[0;\,1]}\!\left(\dfrac{0{,}64-d_t}{0{,}34}\right)\right], & \text{quá xa},\\[2mm]
+0, & \text{phù hợp},\\[1mm]
+0{,}45+0{,}15\operatorname{clip}_{[0;\,1]}\!\left(\dfrac{d_t-0{,}72}{0{,}24}\right), & \text{quá gần}.
+\end{cases}
+\label{eq:tracking_translation}
+\end{equation}
+
+Hệ số $\lambda$ bằng 0,70 khi chưa quan sát ổn định mắt cá chân, bằng 0,85 khi robot vừa tiến vừa chỉnh hướng và bằng 1 trong trường hợp còn lại. Nếu phần chân có khả năng nằm ngoài ảnh, lệnh lùi $x=0{,}30$ được ưu tiên để mở rộng vùng quan sát. Khi bounding box chạm vùng biên hoặc chiếm quá 82\% kích thước ảnh, hệ thống cũng ưu tiên lùi thay vì tiếp tục tiến.
+
+Thành phần quay được xây dựng từ sai lệch ngang giữa tâm bounding box và tâm ảnh. Với $c_x$ là tọa độ tâm mục tiêu, sai lệch chuẩn hóa $e_x=c_x/W-0{,}5$ và lệnh quay được tính bởi
+
+\begin{equation}
+y_{\mathrm{raw}}=
+\begin{cases}
+0, & |e_x|\leq0{,}07,\\
+\operatorname{clip}_{[-0{,}50;\,0{,}50]}(2{,}2e_x), & |e_x|>0{,}07.
+\end{cases}
+\label{eq:tracking_steering}
+\end{equation}
+
+Vùng chết quanh tâm ảnh loại bỏ các hiệu chỉnh nhỏ không cần thiết, còn giới hạn $\pm0{,}50$ tránh robot quay quá mạnh. Khi chuyển động cùng một chiều, $x$ và $y$ tiếp tục được làm mượt theo $x_t=0{,}40x_{t-1}+0{,}60x_{\mathrm{raw}}$ và $y_t=0{,}65y_{t-1}+0{,}35y_{\mathrm{raw}}$. Lệnh dừng, lệnh đổi chiều và yêu cầu lùi khẩn cấp được áp dụng ngay để không tạo quãng trôi do bộ lọc. Nếu robot đang tịnh tiến mạnh nhưng thành phần quay sau lọc nhỏ hơn ngưỡng có hiệu lực, độ lớn của $y$ được nâng lên 0,30 nhưng vẫn giữ nguyên dấu. Vector cuối cùng được chuyển đến bộ điều khiển với khoảng cách tối thiểu 120 ms giữa hai lần gửi.
+
+Một nhánh hình học riêng phân loại tư thế phục vụ điều khiển, không thay đổi kết quả FALL/NO FALL của LSTM. Nhánh này kết hợp tỷ lệ vùng bao, hướng phân bố keypoint, quan hệ vai--hông và bằng chứng từ thân dưới; \texttt{PostureGeometry} bổ sung trường hợp người nằm dọc theo hướng nhìn của camera nên hình chiếu có thể trông gần giống tư thế đứng. Khi tư thế nằm đã ổn định hoặc một sự cố té ngã đang được xử lý, robot không tiếp tục tiến. Các hành động lùi chậm, quay trái, quay phải và dừng lần lượt được biểu diễn bởi $(x,y)=(0{,}22;0)$, $(0;-0{,}42)$, $(0;0{,}42)$ và $(0;0)$ để đưa người vào vùng quan sát phù hợp.
+
+Sau khi làm mượt vector bám theo, \texttt{sendTrackingVector()} gọi \texttt{sendFollowCommand(x,y)} và chuyển lệnh trực tiếp đến \texttt{RobotControlManager} bằng \texttt{submitAutoFollowCommand()}. Đường truyền này nằm hoàn toàn trong RobotApp, không ghi vector bám theo lên Firebase. Bộ định tuyến lệnh chỉ chấp nhận nguồn cục bộ khi chế độ bám theo đang bật; ở chế độ điều khiển từ xa, nguồn cục bộ bị khóa và bộ lắng nghe \texttt{robot\_control} mới được kích hoạt. Sau bước lựa chọn nguồn, \texttt{RobotControlManager} áp dụng chung phép giới hạn, ánh xạ vận tốc hai bánh và truyền lệnh đến ESP32 qua BLE.
 
 \subsubsection{LSTM phát hiện té ngã}
 
-\texttt{LstmFallDetector} nạp mô hình \texttt{best\_model\_lstm\_v2.tflite} có dung lượng khoảng 63,9 KB và sử dụng hai luồng CPU. Dữ liệu của mỗi đối tượng được lưu trong \texttt{FallDetectionQueue}; khi tích lũy đủ 15 khung hình, hàng đợi tạo tensor đầu vào $1\times15\times69$ kiểu số thực. Tensor đầu ra $1\times2$ biểu diễn xác suất của hai lớp hoạt động bình thường và té ngã. So với tệp Keras gốc khoảng 193,8 KB, tệp TFLite có dung lượng nhỏ hơn khi đóng gói vào ứng dụng.
+\texttt{LstmFallDetector} nạp mô hình \texttt{best\_model\_lstm\_v2.tflite} có dung lượng khoảng 63,9 KB và sử dụng hai luồng CPU. Dữ liệu của mỗi đối tượng được lưu trong \texttt{FallDetectionQueue}; khi tích lũy đủ 15 khung hình, hàng đợi tạo tensor đầu vào $1\times15\times69$ kiểu số thực. Thành phần dịch chuyển được tính từ chênh lệch tọa độ chuẩn hóa giữa hai khung hình liên tiếp; riêng khung hình đầu tiên của một định danh mới có $\Delta x_i=\Delta y_i=0$ vì chưa có quan sát trước đó. Với nhịp thu nhận mục tiêu 25 FPS, một cửa sổ đầu vào biểu diễn khoảng 0,6 s chuyển động. Tensor đầu ra $1\times2$ biểu diễn xác suất của hai lớp hoạt động bình thường và té ngã. So với tệp Keras gốc khoảng 193,8 KB, tệp TFLite có dung lượng nhỏ hơn khi đóng gói vào ứng dụng.
 
 Kết quả được gán nhãn FALL khi xác suất FALL lớn hơn xác suất NO FALL, sau đó chuyển đến \texttt{FallVerificationEngine} để kiểm tra bổ sung. Chỉ khi có năm kết quả FALL liên tiếp, hệ thống mới ghi nhận một chuỗi nghi té ngã. Khi bộ theo dõi khôi phục thành công ID0, hàng đợi đặc trưng vẫn được gắn với người mục tiêu. Khả năng phân tích quan hệ thời gian của LSTM \reportcite{ref:lstm} được kết hợp với bước hậu kiểm trước khi tạo cảnh báo.
 
@@ -175,13 +295,6 @@ Kết quả được gán nhãn FALL khi xác suất FALL lớn hơn xác suất
 \texttt{FallVerificationEngine} tiếp nhận \texttt{FrameEvidence}, gồm trạng thái quan sát mục tiêu, vị trí tương đối của thân trên, số điểm khớp, mức độ bounding box nằm trọn trong ảnh và tỷ lệ hình dạng. Sau khi chuỗi FALL kết thúc, bộ hậu kiểm xem xét vị trí mũi, vai ở các khung hình tiếp theo. Ba khung hình liên tiếp có các điểm thân trên trong vùng 70\% phía trên ảnh sẽ loại bỏ tình huống nghi té ngã; ba khung hình liên tiếp có các điểm này nằm dưới ngưỡng, hoặc 12 khung hình liên tiếp thiếu dữ liệu quan sát, sẽ dẫn đến bước hỏi xác nhận. Khi sự kiện đã được loại bỏ hoặc xác nhận, bộ hậu kiểm chờ 10 kết quả NO FALL liên tiếp trước khi trở lại trạng thái giám sát.
 
 Bộ hậu kiểm trả về một trong ba kết quả: chưa đủ dữ liệu để kết luận, loại bỏ tình huống nghi té ngã qua \texttt{Rejected(reason)}, hoặc yêu cầu hỏi xác nhận qua \texttt{AskForConfirmation(reason, score, evidence)}. Việc tách phần xử lý khỏi giao diện cho phép kiểm thử riêng từng trường hợp bằng chuỗi dữ liệu đầu vào mà không cần camera. Trạng thái \texttt{isIncidentActive} cho biết sự kiện đang được xử lý, còn \texttt{canAcquireNewTarget} quy định khi nào được phép chọn mục tiêu mới. Các hàm \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} cập nhật kết quả xác nhận hoặc đặt lại bộ xử lý.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.88\textwidth]{1.jpeg}
-    \caption{Ví dụ khung hình té ngã trong dữ liệu tham khảo}
-    \label{fig:fall_sample}
-\end{figure}
 
 \subsubsection{Luồng xác nhận và cảnh báo}
 
@@ -195,7 +308,7 @@ Bản ghi cảnh báo lưu thời điểm, trạng thái xử lý, phản hồi 
 
 \texttt{GroqChatService} gọi điểm cuối \texttt{/openai/v1/chat/completions} qua OkHttp. Hội thoại dạng truyền luồng sử dụng mô hình \texttt{qwen/qwen3.6-27b}, trong khi các tác vụ phân loại ngắn sử dụng \texttt{openai/gpt-oss-20b}. Lịch sử được giới hạn ở 20 thông điệp để kiểm soát độ dài ngữ cảnh. Với phản hồi theo cơ chế Server-Sent Events (SSE) có tiền tố \texttt{data:}, dịch vụ đọc nội dung tại \texttt{choices[0].delta.content}, phát từng phần qua Kotlin Flow và lưu câu trả lời hoàn chỉnh khi luồng kết thúc.
 
-Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào văn bản do LLM sinh ra. Hàm phân loại phản hồi té ngã kiểm tra trước tập từ khóa an toàn và nguy hiểm; API chỉ được gọi khi câu trả lời không rõ nghĩa, sau đó kết quả JSON được phân tích theo cấu trúc định trước. Hàm \texttt{detectCallIntent} áp dụng cách tương tự khi kết hợp từ khóa, tên hoặc quan hệ của người chăm sóc và mô hình phân loại dự phòng. Khóa API được truyền vào lớp dịch vụ và cần được cung cấp từ cấu hình bên ngoài kho mã hoặc thông qua máy chủ trung gian.
+Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào văn bản do LLM sinh ra. Hàm phân loại phản hồi té ngã kiểm tra trước tập từ khóa an toàn và nguy hiểm; API chỉ được gọi khi câu trả lời không rõ nghĩa, sau đó kết quả JSON được phân tích theo cấu trúc định trước. Hàm \texttt{detectCallIntent} áp dụng cách tương tự khi kết hợp từ khóa, tên hoặc quan hệ của người chăm sóc và mô hình phân loại dự phòng.
 
 \subsubsection{Nhắc nhở theo lịch}
 
@@ -209,21 +322,42 @@ WebRTC đảm nhiệm mã hóa và truyền âm thanh, hình ảnh; Firebase tra
 
 \subsubsection{RobotControlManager và BLE}
 
-\texttt{RobotControlManager} lắng nghe nhánh \texttt{robot\_control}. Hàm ánh xạ lệnh được tách riêng để kiểm thử bằng bốn điểm chuẩn. Mỗi giá trị đầu vào được kiểm tra tính hữu hạn, giới hạn biên, độ tuổi và độ lệch thời gian về tương lai. Chuỗi lệnh được định dạng với \texttt{Locale.US} để dấu phân cách thập phân luôn là dấu chấm:
+\texttt{RobotControlManager} quản lý hai chế độ điều khiển loại trừ nhau. Khi bám theo tự động được bật, bộ quản lý nhận vector cục bộ từ chuỗi suy luận và không lắng nghe lệnh joystick trên RTDB. Khi bám theo bị tắt, \texttt{ValueEventListener} tại nhánh \texttt{robot\_control} được kích hoạt; trong \texttt{onDataChange()}, ba trường \texttt{x}, \texttt{y} và \texttt{ts} lần lượt được đọc thành thành phần tịnh tiến, thành phần quay và thời điểm tạo lệnh. Ứng dụng kiểm tra $x,y$ có hữu hạn hay không, kiểm tra độ tuổi và độ lệch thời gian của $ts$, sau đó giới hạn hai thành phần trong $[-1,1]$. Lệnh từ xa không hợp lệ không được thực thi; thay vào đó, bộ quản lý gửi lệnh dừng đến ESP32.
+
+\paragraph{Ánh xạ vector điều khiển sang vận tốc hai bánh.}
+Vector $(x,y)$ chưa phải vận tốc động cơ. Thành phần $x$ biểu diễn mức tịnh tiến tương đối, còn $y$ biểu diễn mức quay tương đối; cả hai được giới hạn trong $[-1;1]$. Trước khi trộn hai thành phần, bộ điều khiển loại bỏ lệnh quay có độ lớn nhỏ hơn 0,30 khi robot đang tiến hoặc lùi với $|x|>0{,}30$. Bước này tạo vùng chết cho chuyển động quay, giúp robot đi thẳng ổn định hơn trước các dao động nhỏ của joystick hoặc sai lệch tâm ảnh. Thành phần quay còn lại được nhân với hệ số 0,15 để chuyển hướng diễn ra chậm hơn chuyển động tịnh tiến.
 
 \begin{lstlisting}[caption={Định dạng lệnh BLE ở mức logic}]
-left  = clamp((steering * 0.15 + translation) * 20, -20, 20)
-right = clamp((steering * 0.15 - translation) * 20, -20, 20)
+translation = clamp(x, -1, 1)
+steering = clamp(y, -1, 1)
+
+if abs(steering) < 0.30 and abs(translation) > 0.30:
+    steering = 0
+
+steering = 0.15 * steering
+left  = clamp((steering + translation) * 20, -20, 20)
+right = clamp((steering - translation) * 20, -20, 20)
 payload = "L%.2fR%.2f\n".format(Locale.US, left, right)
 \end{lstlisting}
 
-\texttt{RobotControlManager} tìm thiết bị theo tên \texttt{OhmniRobot} và UUID đã quy định. Thời gian quét tối đa là 10 s; khi cần khôi phục kết nối, ứng dụng thử kết nối lại sau 3 s. Sau khi tìm được dịch vụ và đặc tính nhận lệnh, ứng dụng sử dụng kiểu ghi \texttt{WRITE\_TYPE\_NO\_RESPONSE}, với cách gọi API phù hợp từng phiên bản Android. Nếu không có lệnh mới từ RTDB trong 500 ms, bộ giám sát thời gian nhận lệnh gửi lệnh dừng xuống ESP32. Hàm \texttt{stop()} cũng gửi lệnh dừng trước khi hủy các bộ lắng nghe, hàm xử lý sự kiện, tác vụ quét và kết nối GATT.
+Hai biểu thức trộn có dấu khác nhau trước thành phần tịnh tiến vì hai động cơ được lắp đối xứng. Khi $x<0$ và $y=0$, vận tốc đặt của bánh trái mang dấu âm, còn bánh phải mang dấu dương; xét theo chiều lắp trục, cả hai bánh vẫn làm robot tiến. Khi $x=0$, thành phần quay tạo hai giá trị đặt cùng dấu, khiến hai bánh quay theo hai hướng chuyển động vật lý ngược nhau và robot quay tại chỗ. Hằng số 20 chuyển lệnh chuẩn hóa sang vận tốc góc đặt cực đại $20\,\mathrm{rad/s}$; phép \texttt{clamp} cuối cùng bảo đảm từng bánh không vượt quá giới hạn này.
+
+Ví dụ, với lệnh $x=-0{,}60$ và $y=0{,}50$, thành phần quay sau hiệu chỉnh là $s=0{,}15\times0{,}50=0{,}075$. Vận tốc đặt nhận được là
+
+\begin{equation}
+v_L=(0{,}075-0{,}60)\times20=-10{,}50\,\mathrm{rad/s},\qquad
+v_R=(0{,}075+0{,}60)\times20=13{,}50\,\mathrm{rad/s}.
+\end{equation}
+
+RobotApp định dạng hai giá trị này thành chuỗi \texttt{L-10.50R13.50\textbackslash n} trước khi ghi vào đặc tính BLE. Như vậy, ESP32 không nhận trực tiếp $x$, $y$ hoặc $ts$, mà chỉ nhận vận tốc góc đặt của động cơ trái và phải. Firmware tách hai trường bắt đầu bằng ký tự \texttt{L} và \texttt{R}, sau đó cập nhật giá trị đặt cho hai bộ điều khiển động cơ tương ứng.
+
+\texttt{RobotControlManager} tìm thiết bị theo tên \texttt{OhmniRobot} và UUID đã quy định. Thời gian quét tối đa là 10 s; khi cần khôi phục kết nối, ứng dụng thử kết nối lại sau 3 s. Sau khi tìm được dịch vụ và đặc tính nhận lệnh, ứng dụng sử dụng kiểu ghi \texttt{WRITE\_TYPE\_NO\_RESPONSE}, với cách gọi API phù hợp từng phiên bản Android. Nếu nguồn đang được chọn không cung cấp lệnh mới trong 500 ms, bộ giám sát thời gian nhận lệnh gửi lệnh dừng xuống ESP32. Hàm \texttt{stop()} cũng gửi lệnh dừng trước khi hủy các bộ lắng nghe, hàm xử lý sự kiện, tác vụ quét và kết nối GATT.
 
 \subsection{Hiện thực CaregiverApp}
 
 \subsubsection{Khởi động, xác thực và hồ sơ}
 
-CaregiverApp sử dụng \texttt{LoginActivity} và \texttt{SignUpActivity} cho quá trình xác thực, \texttt{MainActivity} làm màn hình khởi động chính, còn \texttt{ProfileFragment} phục vụ quản lý hồ sơ. Firebase Authentication cung cấp UID; hồ sơ được lưu tại \texttt{Users/\{uid\}} để RobotApp cùng truy cập. \texttt{MainActivity} đồng thời khởi động \texttt{IncomingCallService} nhằm tiếp nhận cuộc gọi khi ứng dụng chạy nền. Do Activity này được khai báo là launcher, bước kiểm tra phiên xác thực ngay khi khởi động cần được hoàn thiện trước khi triển khai cho người dùng thực tế.
+CaregiverApp sử dụng \texttt{LoginActivity} và \texttt{SignUpActivity} cho quá trình xác thực, \texttt{MainActivity} làm màn hình khởi động chính, còn \texttt{ProfileFragment} phục vụ quản lý hồ sơ. Firebase Authentication cung cấp UID; hồ sơ được lưu tại \texttt{Users/\{uid\}} để RobotApp cùng truy cập. \texttt{MainActivity} đồng thời khởi động \texttt{IncomingCallService} nhằm tiếp nhận cuộc gọi khi ứng dụng chạy nền.
 
 \subsubsection{Bật/tắt chức năng theo dõi}
 
@@ -239,13 +373,15 @@ Danh sách lịch tại \path|Schedules/uid| được đọc bởi \texttt{Sched
 
 \subsubsection{Gọi video và điều khiển robot từ xa}
 
-\texttt{video\_call\_fragment} xử lý cả vai trò gọi đi và nhận cuộc gọi, hiển thị hình ảnh cục bộ, từ xa và trao đổi thông tin thiết lập phiên. Trong màn hình gọi, cần điều khiển ảo tính $x=\Delta y/r$, $y=-\Delta x/r$, giới hạn giá trị trong $[-1,1]$ và giới hạn tần suất gửi lệnh khoảng 20 Hz. Khi người dùng bắt đầu điều khiển, ứng dụng tắt bám theo tự động để tránh hai nguồn lệnh cùng hoạt động. Các sự kiện \texttt{ACTION\_UP}, \texttt{ACTION\_CANCEL}, kết thúc cuộc gọi và rời màn hình đều gửi lệnh dừng.
+\texttt{video\_call\_fragment} xử lý cả vai trò gọi đi và nhận cuộc gọi, hiển thị hình ảnh cục bộ, từ xa và trao đổi thông tin thiết lập phiên. Hàm \texttt{setupVirtualJoystick()} xác định tâm và bán kính di chuyển của cần điều khiển. Với mỗi sự kiện \texttt{ACTION\_DOWN} hoặc \texttt{ACTION\_MOVE}, độ lệch cảm ứng được giới hạn trong vùng tròn rồi ánh xạ theo $x=\Delta y/r$, $y=-\Delta x/r$. Hàm \texttt{sendControlIfThrottled()} giới hạn tần suất gửi khoảng 20 Hz; \texttt{sendControlCommand()} ghi đồng thời $x$, $y$ và thời điểm \texttt{System.currentTimeMillis()} vào \texttt{robot\_control}.
+
+Khi người dùng bắt đầu điều khiển, ứng dụng tắt bám theo tự động để tránh hai nguồn lệnh cùng hoạt động. Các sự kiện \texttt{ACTION\_UP}, \texttt{ACTION\_CANCEL}, kết thúc cuộc gọi và rời màn hình đều gọi luồng gửi lệnh dừng với $x=0,y=0$ và một $ts$ mới. Việc cập nhật lại $ts$ giúp RobotApp phân biệt lệnh dừng vừa tạo với dữ liệu cũ còn lưu trên RTDB.
 
 CaregiverApp gửi lệnh điều khiển chuẩn hóa qua Internet. RobotApp tiếp nhận, kiểm tra và chuyển lệnh thành vận tốc của hai động cơ theo quy ước lắp đặt, rồi truyền đến ESP32 qua BLE. Nhờ đó, người chăm sóc có thể điều khiển từ xa khi hai ứng dụng có kết nối Internet, còn việc giao tiếp với phần thân được thực hiện tại robot.
 
 \subsection{Hiện thực dữ liệu dùng chung}
 
-Các bộ lắng nghe Firebase cung cấp bản cập nhật gần thời gian thực, trong khi thao tác ghi có thể được phản ánh cục bộ trước khi đồng bộ với máy chủ \reportcite{ref:firebase_rtdb}. Vì vậy, mỗi lệnh điều khiển bắt buộc phải có timestamp; callback được gọi theo thời gian thực không có nghĩa dữ liệu nhận được luôn còn hiệu lực. Các lớp \texttt{UserProfile}, \texttt{ScheduleItem}, \texttt{FallAlertEntry}, \texttt{ReminderLogEntry} và \texttt{CallHistoryEntry} được dùng để ánh xạ dữ liệu JSON sang đối tượng trong ứng dụng.
+Các bộ lắng nghe Firebase cung cấp bản cập nhật gần thời gian thực, trong khi thao tác ghi có thể được phản ánh cục bộ trước khi đồng bộ với máy chủ \reportcite{ref:firebase_rtdb}. Vì vậy, mỗi lệnh joystick truyền qua RTDB phải có timestamp; callback được gọi theo thời gian thực không có nghĩa dữ liệu nhận được luôn còn hiệu lực. Các lớp \texttt{UserProfile}, \texttt{ScheduleItem}, \texttt{FallAlertEntry}, \texttt{ReminderLogEntry} và \texttt{CallHistoryEntry} được dùng để ánh xạ dữ liệu JSON sang đối tượng trong ứng dụng.
 
 Hồ sơ, lịch và nhật ký lời nhắc được lưu dưới các nhánh cấp gốc nhưng đều tiếp tục phân vùng theo UID. Các kênh vận hành gồm cờ chức năng, lệnh điều khiển, signaling, cảnh báo té ngã và lịch sử cuộc gọi được tập trung dưới \texttt{pair\_sessions/\{uid\}}. Security Rules áp dụng nguyên tắc từ chối mặc định và chỉ cho phép tài khoản đã xác thực truy cập nhánh có UID tương ứng \reportcite{ref:firebase_security}. Cấu trúc này ngăn dữ liệu của các tài khoản khác nhau dùng chung kênh vận hành, nhưng hai thiết bị trong một cặp vẫn đăng nhập bằng cùng tài khoản nên chưa biểu diễn được vai trò robot và người chăm sóc như hai danh tính độc lập.
 
@@ -262,12 +398,19 @@ Dữ liệu LE2I được cung cấp dưới dạng các video liên tục gồm
     \item \textbf{Xử lý mất cân bằng lớp}: Số mẫu hoạt động bình thường thường lớn hơn số mẫu té ngã. Trọng số lớp và phương pháp lấy mẫu tăng cường được sử dụng để giảm xu hướng mô hình nghiêng về lớp NO FALL.
 \end{itemize}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.88\textwidth]{1.jpeg}
+    \caption{Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}
+    \label{fig:fall_sample}
+\end{figure}
+
 \subsubsection{Trích xuất đặc trưng}
 
 Mô hình LSTM không nhận trực tiếp ảnh RGB mà học từ chuỗi đặc trưng tư thế do YOLO-Pose cung cấp. Mỗi khung hình của người mục tiêu được biểu diễn bởi 69 giá trị theo đúng quy ước sử dụng trong RobotApp:
 \begin{enumerate}
     \item \textbf{Tọa độ chuẩn hóa}: Tọa độ $(x_i,y_i)$ của 17 keypoint được chuẩn hóa theo tâm hông và kích thước của vùng tư thế, giúp giảm ảnh hưởng của vị trí và khoảng cách giữa người với camera.
-    \item \textbf{Đặc trưng chuyển động}: Với mỗi keypoint, hai thành phần $(\Delta x_i,\Delta y_i)$ biểu diễn độ dịch chuyển so với khung hình trước. Mỗi điểm vì vậy đóng góp bốn giá trị $(x_i,y_i,\Delta x_i,\Delta y_i)$.
+    \item \textbf{Đặc trưng chuyển động}: Với mỗi keypoint, hai thành phần $(\Delta x_i,\Delta y_i)$ biểu diễn độ dịch chuyển so với khung hình trước. Ở khung hình đầu tiên của mỗi chuỗi, hai giá trị này được đặt bằng 0. Mỗi điểm vì vậy đóng góp bốn giá trị $(x_i,y_i,\Delta x_i,\Delta y_i)$.
     \item \textbf{Tỷ lệ hình dạng và cửa sổ thời gian}: Tỷ lệ rộng/cao của bounding box được ghép với 68 giá trị keypoint để tạo vector 69 chiều. Mười lăm khung hình liên tiếp hình thành tensor đầu vào có kích thước $[1,15,69]$ cho LSTM.
 \end{enumerate}
 
@@ -331,13 +474,15 @@ Hai đối tượng \texttt{BLDCMotor} được cấu hình với 7 cặp cực 
 
 \subsubsection{Tiếp nhận lệnh qua BLE GATT}
 
-NimBLE khởi tạo thiết bị có tên \texttt{OhmniRobot}, thiết lập công suất phát và đưa UUID dịch vụ vào dữ liệu phản hồi quét để hỗ trợ tìm kiếm. Đặc tính nhận lệnh sử dụng thuộc tính ghi không phản hồi \texttt{WRITE\_NR}. Khi kết nối được thiết lập, hàm xử lý sự kiện cập nhật trạng thái và tiếp tục phát quảng bá; khi ngắt kết nối, vận tốc đặt của hai bánh được đưa về 0. Khi nhận dữ liệu ghi, chương trình lấy chuỗi \texttt{std::string}, loại khoảng trắng ở đầu và cuối, rồi chuyển sang bộ phân tích lệnh.
+NimBLE khởi tạo thiết bị có tên \texttt{OhmniRobot}, thiết lập công suất phát và đưa UUID dịch vụ vào dữ liệu phản hồi quét để hỗ trợ tìm kiếm. Đặc tính nhận lệnh sử dụng thuộc tính ghi không phản hồi \texttt{WRITE\_NR}. \texttt{ServerCallbacks::onConnect()} đánh dấu liên kết đã được thiết lập; \texttt{ServerCallbacks::onDisconnect()} đưa \texttt{target\_left} và \texttt{target\_right} về 0 để dừng robot khi mất kết nối.
 
-Bộ phân tích tìm vị trí hai ký tự L và R, tách chuỗi con rồi chuyển sang số bằng \texttt{toFloat}. Khi dữ liệu hợp lệ, vận tốc đặt và \texttt{lastCmdTime} được cập nhật. RobotApp đã chuẩn hóa định dạng lệnh trước khi gửi; tuy nhiên, firmware vẫn cần kiểm tra toàn bộ chuỗi và dùng \texttt{isfinite} để loại giá trị không hợp lệ ngay tại tầng chấp hành.
+Khi đặc tính được ghi, \texttt{CharCallbacks::onWrite()} lấy payload dưới dạng \texttt{std::string}, chuyển thành \texttt{String}, loại khoảng trắng rồi gọi \texttt{parseCommand()}. Hàm này tìm ký tự \texttt{L} và \texttt{R}, tách hai chuỗi số và chuyển chúng bằng \texttt{toFloat}. Kết quả được lưu vào \texttt{target\_left}, \texttt{target\_right}; đồng thời \texttt{lastCmdTime} được cập nhật bằng \texttt{millis()} để phục vụ watchdog. Hai giá trị target có đơn vị rad/s vì hai đối tượng động cơ được cấu hình ở chế độ \texttt{MotionControlType::velocity}. Phiên bản hiện thực hiện tại kiểm tra cấu trúc L--R nhưng chưa kiểm tra chặt toàn bộ chuỗi và tính hữu hạn sau chuyển đổi; đây là điểm cần bổ sung tại tầng firmware để không chỉ phụ thuộc vào bước kiểm tra của RobotApp.
 
 \subsubsection{Xử lý vùng không đáp ứng và dừng khi mất lệnh}
 
-Hàm \texttt{applyDeadzone} đưa $|v|<0,5$ về 0, nâng độ lớn của lệnh khác 0 nhưng nhỏ hơn 3 lên 3, rồi giới hạn kết quả trong $[-40,40]$. Cơ chế watchdog theo dõi thời gian kể từ lần nhận lệnh gần nhất khi BLE đang kết nối. Nếu thời gian này vượt 800 ms và vận tốc đặt khác 0, firmware ghi nhật ký và đưa vận tốc đặt của cả hai bánh về 0. Do \texttt{motor.move()} được gọi sau bước kiểm tra, lệnh dừng được áp dụng ngay trong chu kỳ điều khiển hiện tại.
+Trong \texttt{loop()}, \texttt{motor.loopFOC()} và \texttt{motor1.loopFOC()} được gọi liên tục để đọc phản hồi góc từ hai AS5600 và cập nhật vòng điều khiển FOC. Sau bước kiểm tra watchdog, \texttt{applyDeadzone()} đưa $|v|<0,5$ về 0, nâng độ lớn của lệnh khác 0 nhưng nhỏ hơn 3 lên 3, rồi giới hạn kết quả trong $[-40,40]$. Giá trị sau xử lý được truyền lần lượt vào \texttt{motor.move(left\_cmd)} và \texttt{motor1.move(right\_cmd)}. Do chế độ điều khiển là vận tốc, \texttt{move()} đưa giá trị đặt vào bộ điều khiển vận tốc; PID kết hợp phản hồi encoder tạo điện áp điều khiển, còn hai đối tượng \texttt{BLDCDriver3PWM} phát tín hiệu PWM đến mạch công suất của động cơ trái và phải.
+
+Cơ chế watchdog theo dõi thời gian kể từ lần nhận lệnh gần nhất khi BLE đang kết nối. Nếu thời gian này vượt 800 ms và vận tốc đặt khác 0, firmware ghi nhật ký và đưa vận tốc đặt của cả hai bánh về 0. Do \texttt{move()} được gọi sau bước kiểm tra, lệnh dừng được áp dụng ngay trong chu kỳ điều khiển hiện tại.
 
 \begin{lstlisting}[caption={Giả mã xử lý lệnh và điều khiển động cơ trên ESP32}]
 loopFOC(left); loopFOC(right)
@@ -350,4 +495,4 @@ move(leftCommand); move(rightCommand)
 
 \subsection{Kết luận chương}
 
-Chương đã trình bày quá trình hiện thực kiến trúc hệ thống thành hai ứng dụng Android, các mô hình AI và firmware ESP32. RobotApp đảm nhiệm cảm nhận, hội thoại, điều phối và kết nối với thân robot; CaregiverApp cung cấp các chức năng quản lý, giám sát và can thiệp từ xa. Firebase, WebRTC và BLE tạo thành ba kênh giao tiếp tương ứng cho dữ liệu dùng chung, truyền thông đa phương tiện và điều khiển phần cứng. Bên cạnh đó, quy trình chuyển đổi mô hình và các cơ chế dừng nhiều tầng giúp hệ thống phù hợp hơn với điều kiện vận hành trên thiết bị di động. Chương 5 tiến hành kiểm thử, đánh giá kết quả và phân tích những giới hạn của hệ thống.
+Chương đã trình bày cách các module thiết kế được chuyển thành hai ứng dụng Android, các mô hình AI và firmware ESP32. RobotApp hiện thực các chức năng cảm nhận, hội thoại, điều phối và kết nối với thân robot; CaregiverApp hiện thực các chức năng quản lý, giám sát và can thiệp từ xa. Firebase, WebRTC và BLE lần lượt đảm nhiệm đồng bộ dữ liệu, truyền âm thanh--hình ảnh và chuyển lệnh đến phần thân robot. Quy trình chuẩn bị mô hình cùng chương trình firmware hoàn thiện chuỗi xử lý từ dữ liệu camera đến quyết định và chuyển động của robot. Chương 5 trình bày phương pháp kiểm thử, kết quả đánh giá và các giới hạn được ghi nhận.
