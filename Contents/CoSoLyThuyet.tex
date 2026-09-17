@@ -465,7 +465,7 @@ Các giá trị FPS hoặc mAP công bố trong những bài báo khác nhau kh�
 
 Detector xử lý từng khung hình độc lập nên chưa bảo đảm cùng một người giữ nguyên định danh theo thời gian. Tracking-by-detection bổ sung bước dự báo trạng thái và liên kết detection để tạo tracklet. SORT sử dụng bộ lọc Kalman cho dự báo chuyển động, IoU cho độ tương đồng và thuật toán Hungarian cho bài toán gán tối ưu \reportcite{ref:sort}. Deep SORT bổ sung embedding ngoại hình nhằm giảm đổi ID khi che khuất \reportcite{ref:deepsort}; ByteTrack khai thác cả detection có confidence thấp trong bước liên kết thứ hai để phục hồi đối tượng khó quan sát \reportcite{ref:bytetrack}.
 
-Với trạng thái $x_t$, ma trận chuyển trạng thái $F$, điều khiển $u_t$ và quan sát $z_t$, hai pha cơ bản của bộ lọc Kalman là
+Với trạng thái $x_t$, ma trận chuyển trạng thái $F$, điều khiển $u_t$ và quan sát $z_t$, hai pha dự báo--hiệu chỉnh của bộ lọc Kalman rời rạc được biểu diễn như sau \reportcite{ref:kalman}\reportcite{ref:welch_bishop_kalman}:
 \begin{align}
 \hat{x}_{t|t-1}&=F\hat{x}_{t-1|t-1}+Bu_t,\\
 P_{t|t-1}&=FP_{t-1|t-1}F^T+Q,\\

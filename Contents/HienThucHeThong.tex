@@ -171,9 +171,106 @@ Sau khi giải mã, mỗi đối tượng gồm bounding box \texttt{bbox}, đ�
 
 \subsubsection{SORT, Kalman, Hungarian và Re-ID}
 
-Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực phương pháp theo dõi dựa trên kết quả phát hiện. Mỗi đối tượng gồm \texttt{bbox}, \texttt{score}, \texttt{classId} và các keypoint. Bộ lọc Kalman dự báo vùng bao ở khung hình kế tiếp, còn thuật toán Hungarian tìm phương án ghép có tổng chi phí nhỏ nhất. Cách cài đặt giữ lại cấu trúc của SORT \reportcite{ref:sort}, đồng thời bổ sung tín hiệu tư thế và đặc trưng ngoại hình vào quá trình duy trì định danh.
+Các lớp \texttt{SortTracker}, \texttt{KalmanBoxTracker}, \texttt{HungarianAlgorithm} và \texttt{ReIdModule} hiện thực phương pháp theo dõi dựa trên kết quả phát hiện. Mỗi đối tượng đầu vào gồm bounding box, độ tin cậy và các keypoint. Quá trình xử lý một khung hình được thực hiện theo thứ tự: dự báo trạng thái các track đang có, lập ma trận chi phí giữa track và detection, giải bài toán gán ghép, cập nhật các cặp hợp lệ, sau đó xử lý những track và detection chưa được ghép. Cách tổ chức này giữ lại chu trình chính của SORT \reportcite{ref:sort}, đồng thời bổ sung tín hiệu tư thế và đặc trưng màu để phù hợp hơn với sự thay đổi hình dạng cơ thể.
 
-\texttt{SortTracker} hiện thực hàm chi phí tại Công thức \ref{eq:tracking_association_cost}. Ngưỡng IoU cơ sở của bộ theo dõi là 0,15; đối tượng mới cần hai lần ghép thành công để được xác nhận. Khi không tìm thấy kết quả phát hiện phù hợp, định danh ID0 được duy trì tối đa 45 khung hình, còn các định danh khác được giữ tối đa 10 khung hình.
+Mỗi track sử dụng một bộ lọc Kalman độc lập. Các bước dự báo và hiệu chỉnh được xây dựng theo dạng chuẩn của bộ lọc Kalman rời rạc tuyến tính \reportcite{ref:kalman}\reportcite{ref:welch_bishop_kalman}, với vector trạng thái
+
+\begin{equation}
+\mathbf{x}=\begin{bmatrix}c_x&c_y&s&r&v_x&v_y&v_s\end{bmatrix}^{T},
+\label{eq:kalman_tracking_state}
+\end{equation}
+
+trong đó $(c_x,c_y)$ là tâm bounding box, $s$ là diện tích, $r$ là tỷ lệ chiều rộng trên chiều cao, còn $v_x$, $v_y$ và $v_s$ biểu diễn mức thay đổi của tâm và diện tích giữa hai khung hình liên tiếp. Các đại lượng vận tốc ở đây được tính theo mỗi khung hình, không phải theo giây. Khi một track vừa được tạo, bốn thành phần đầu được lấy từ bounding box ban đầu và ba thành phần vận tốc được đặt bằng 0.
+
+Phần hiện thực sử dụng mô hình vận tốc không đổi với một bước thời gian tương ứng một khung hình. Ma trận chuyển trạng thái $\mathbf{F}$ có dạng
+
+\[
+\mathbf{F}=
+\begin{bmatrix}
+1&0&0&0&1&0&0\\
+0&1&0&0&0&1&0\\
+0&0&1&0&0&0&1\\
+0&0&0&1&0&0&0\\
+0&0&0&0&1&0&0\\
+0&0&0&0&0&1&0\\
+0&0&0&0&0&0&1
+\end{bmatrix}.
+\]
+
+Phép nhân $\mathbf{F}\mathbf{x}_{t-1}$ tương đương với việc tính
+
+\[
+\begin{aligned}
+c_{x,t}^{-}&=c_{x,t-1}+v_{x,t-1},&
+c_{y,t}^{-}&=c_{y,t-1}+v_{y,t-1},\\
+s_t^{-}&=s_{t-1}+v_{s,t-1},&
+r_t^{-}&=r_{t-1}.
+\end{aligned}
+\]
+
+Các thành phần vận tốc được giữ nguyên trong bước dự báo. Như vậy, bounding box ở khung hình mới được ước lượng bằng cách tiếp tục xu hướng dịch chuyển và thay đổi diện tích đã quan sát ở những khung hình trước. Đồng thời, độ bất định của dự báo được cập nhật theo
+
+\begin{align}
+\mathbf{x}_{t}^{-}&=\mathbf{F}\mathbf{x}_{t-1},
+&\mathbf{P}_{t}^{-}&=\mathbf{F}\mathbf{P}_{t-1}\mathbf{F}^{T}+\mathbf{Q}.
+\label{eq:kalman_tracking_predict}
+\end{align}
+
+Trong đó, $\mathbf{P}_{t}^{-}$ biểu diễn độ bất định của trạng thái dự báo. Thành phần $\mathbf{F}\mathbf{P}_{t-1}\mathbf{F}^{T}$ truyền độ bất định từ khung hình trước sang khung hình hiện tại, còn $\mathbf{Q}$ bổ sung phần sai số do mô hình vận tốc không đổi không thể mô tả hoàn toàn chuyển động thực tế.
+
+Với bounding box do YOLO phát hiện có chiều rộng $w$, chiều cao $h$ và hai góc $(x_{\min},y_{\min})$, $(x_{\max},y_{\max})$, vector phép đo được tạo bởi
+
+\[
+\mathbf{z}_{t}=
+\begin{bmatrix}
+(x_{\min}+x_{\max})/2 &
+(y_{\min}+y_{\max})/2 &
+wh & w/h
+\end{bmatrix}^{T}.
+\]
+
+Ma trận quan sát
+
+\[
+\mathbf{H}=\begin{bmatrix}\mathbf{I}_{4}&\mathbf{0}_{4\times3}\end{bmatrix}
+\]
+
+chỉ lấy bốn thành phần $(c_x,c_y,s,r)$ từ trạng thái dự báo để so sánh với phép đo. Do đó, sai lệch $\mathbf{e}_t=\mathbf{z}_t-\mathbf{H}\mathbf{x}_t^{-}$ cho biết độ lệch về tâm, diện tích và tỷ lệ hình dạng giữa bounding box dự báo với bounding box vừa được YOLO phát hiện. Sai lệch này được dùng để hiệu chỉnh trạng thái:
+
+\begin{align}
+\mathbf{K}_{t}&=\mathbf{P}_{t}^{-}\mathbf{H}^{T}
+\left(\mathbf{H}\mathbf{P}_{t}^{-}\mathbf{H}^{T}+\mathbf{R}\right)^{-1},\\
+\mathbf{x}_{t}&=\mathbf{x}_{t}^{-}+\mathbf{K}_{t}
+\left(\mathbf{z}_{t}-\mathbf{H}\mathbf{x}_{t}^{-}\right),\\
+\mathbf{P}_{t}&=\left(\mathbf{I}-\mathbf{K}_{t}\mathbf{H}\right)\mathbf{P}_{t}^{-}.
+\label{eq:kalman_tracking_update}
+\end{align}
+
+Ma trận $\mathbf{K}_t$ là hệ số Kalman, quyết định mức độ điều chỉnh trạng thái dự báo theo phép đo mới. Khi độ bất định dự báo $\mathbf{P}_t^{-}$ lớn so với nhiễu phép đo $\mathbf{R}$, hệ số này tăng và kết quả bám sát detection của YOLO hơn. Ngược lại, khi phép đo được xem là nhiễu, mức hiệu chỉnh giảm để bounding box thay đổi ổn định hơn. Dòng cuối cập nhật lại $\mathbf{P}_t$ sau khi đã tiếp nhận phép đo.
+
+Các ma trận hiệp phương sai được khởi tạo trong chương trình như sau:
+
+\[
+\begin{aligned}
+\mathbf{P}_0&=\operatorname{diag}(10,10,10,10,1000,1000,1000),\\
+\mathbf{Q}&=\operatorname{diag}(100,100,1,0{,}01,0{,}1,0{,}1,0{,}1),\\
+\mathbf{R}&=\operatorname{diag}(10,10,100,10).
+\end{aligned}
+\]
+
+Độ bất định ban đầu của ba thành phần vận tốc được đặt lớn vì chưa có thông tin chuyển động khi track mới hình thành. Nhiễu mô hình tại hai tọa độ tâm được chọn lớn hơn để bộ lọc có thể thích ứng nhanh với chuyển động của người và camera; ngược lại, nhiễu phép đo diện tích được đặt cao hơn tọa độ tâm vì kích thước bounding box thường dao động theo kết quả ước lượng tư thế. Các giá trị này là tham số cấu hình của bộ lọc trong nguyên mẫu. Bước dự báo giúp duy trì ước lượng vị trí khi detection tạm thời bị thiếu, còn bước hiệu chỉnh đưa trạng thái trở lại gần bounding box quan sát được. Khi tỷ lệ hình dạng thay đổi đột ngột giữa tư thế đứng và nằm, phần diện tích và tỷ lệ hộp được cập nhật nhanh theo phép đo mới để tránh tiếp tục duy trì hình dạng cũ.
+
+Sau khi dự báo tất cả track, \texttt{SortTracker} tính chi phí $C_{ij}$ giữa track thứ $i$ và detection thứ $j$ theo Công thức \ref{eq:tracking_association_cost}. Thuật toán Hungarian giải bài toán
+
+\begin{equation}
+\mathcal{A}^{*}=\arg\min_{\mathcal{A}}
+\sum_{(i,j)\in\mathcal{A}} C_{ij},
+\label{eq:hungarian_tracking_assignment}
+\end{equation}
+
+với ràng buộc mỗi track và mỗi detection chỉ xuất hiện tối đa một lần trong tập ghép $\mathcal{A}$. Vì vậy, Hungarian không tự quyết định một cặp có đủ tin cậy hay không mà chỉ tìm phương án phân công có tổng chi phí thấp nhất. Mỗi cặp trả về còn phải vượt qua bước kiểm tra về IoU, khoảng cách tâm, khoảng cách tư thế, thay đổi diện tích và giới hạn chi phí. Cặp hợp lệ được dùng để cập nhật Kalman; các phần tử còn lại được chuyển sang nhánh xử lý mất dấu hoặc tạo track mới.
+
+Ngưỡng IoU cơ sở của bộ theo dõi là 0,15; đối tượng mới cần hai lần ghép thành công để được xác nhận. Khi không tìm thấy detection phù hợp, định danh ID0 được duy trì tối đa 45 khung hình, còn các định danh khác được giữ tối đa 10 khung hình.
 
 Trong phần hiện thực, ký hiệu $B_{t-1}$ là hộp của detection gần nhất đã ghép với track, $B_t^{-}$ là hộp do Kalman dự báo và $D_t$ là detection đang xét. Hàm $\mathbf{c}(B)$, $A(B)$ và $\ell(B)=\sqrt{w_B^2+h_B^2}$ lần lượt trả về tâm, diện tích và đường chéo của hộp. Đặt $\operatorname{clip}(z)=\min(1,\max(0,z))$, hệ số kích thước tham chiếu và khoảng cách tâm được tính bởi
 
@@ -205,7 +302,11 @@ p_a=\operatorname{clip}\!\left(\frac{\ln r_A}{\ln 8}\right).
 
 Diện tích hộp được chặn dưới ở $1$ pixel vuông để tránh chia cho không. Sau khi lập ma trận chi phí, kết quả Hungarian chỉ được chấp nhận khi thỏa thêm điều kiện về IoU, khoảng cách tâm hoặc khoảng cách tư thế, tỷ lệ diện tích và chi phí cực đại. ID0 dùng các ngưỡng nới rộng hơn track thông thường nhưng vẫn có thể ở trạng thái không ghép nếu không có detection hợp lệ.
 
-Khối tái định danh trích xuất biểu đồ phân bố màu (histogram) trong không gian Hue--Saturation--Value (HSV) từ vùng thân người. Đặc trưng màu không được cập nhật khi thiếu điểm khớp tin cậy, vì vùng cắt không chính xác có thể chứa nhiều hậu cảnh hoặc hình ảnh của người khác. Khi một kết quả phát hiện phù hợp với đặc trưng đã lưu, \texttt{restoreWithId} khôi phục định danh ban đầu. Cơ chế hiện tại không sử dụng thêm mạng học sâu cho tái định danh, do đó kết quả nhận lại mục tiêu phụ thuộc vào mức độ khác biệt màu sắc trang phục và điều kiện chiếu sáng.
+Khối xử lý màu lấy phần trung tâm của bounding box bằng cách loại bỏ 18\% chiều rộng ở mỗi biên trái--phải và 12\% chiều cao ở mỗi biên trên--dưới. Việc thu hẹp vùng ảnh giúp giảm ảnh hưởng của nền và các phần cơ thể thường thay đổi mạnh khi người chuyển tư thế. Vùng ảnh còn lại được chuyển từ RGB sang HSV, sau đó xây dựng histogram hai chiều gồm 50 khoảng cho kênh sắc độ $H$ và 60 khoảng cho kênh độ bão hòa $S$. Kênh độ sáng $V$ không tham gia histogram nhằm giảm ảnh hưởng trực tiếp của thay đổi độ sáng. Histogram được chuẩn hóa về miền $[0,1]$ và hai đặc trưng được so sánh bằng hệ số tương quan; giá trị càng gần 1 cho thấy phân bố màu càng tương đồng.
+
+Đối với track đang được ghép bình thường, histogram đại diện được cập nhật sau mỗi 10 khung hình và chỉ khi quan sát được ít nhất 8 keypoint. Điều kiện này hạn chế việc thay thế đặc trưng đã lưu bằng một vùng cắt thiếu tin cậy. Khi mục tiêu chính có nhiều detection cùng thỏa điều kiện hình học, chi phí hình học chiếm trọng số 0,82 và sai khác màu chiếm trọng số 0,18 trong bước lựa chọn ứng viên. Vì vậy, màu sắc chỉ hỗ trợ phân giải trường hợp nhập nhằng, không thay thế thông tin chuyển động và hình học trong quá trình gán ghép.
+
+Nếu ID0 không được ghép trong hơn 45 khung hình, histogram gần nhất của mục tiêu được đưa vào gallery và được giữ tối đa 150 khung hình tiếp theo. Với mỗi detection chưa được ghép, hệ thống trích xuất một histogram truy vấn và so sánh với các đặc trưng trong gallery. Khi hệ số tương quan đạt ít nhất 0,65, \texttt{restoreWithId()} khởi tạo một bộ lọc Kalman từ bounding box hiện tại và gán lại định danh cũ. Hàm này chỉ khôi phục ID, không phục hồi trạng thái chuyển động trước khi mục tiêu mất dấu. Nếu không có kết quả phù hợp, detection được dùng để tạo một track mới. Do không sử dụng mạng học sâu cho tái định danh, cơ chế này có chi phí tính toán thấp nhưng vẫn phụ thuộc vào màu sắc trang phục, điều kiện chiếu sáng và mức độ giống nhau giữa những người xuất hiện trong ảnh.
 
 \subsubsection{Duy trì mục tiêu ID0 và tạo lệnh bám theo}
 

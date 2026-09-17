@@ -18,25 +18,25 @@
 \contentsline {table}{\numberline {3.6}{\ignorespaces Vai trò của các khối trong kiến trúc tổng quan}}{67}{table.3.6}%
 \contentsline {table}{\numberline {3.7}{\ignorespaces Tóm tắt các use case chính}}{70}{table.caption.42}%
 \contentsline {table}{\numberline {3.8}{\ignorespaces So sánh các lựa chọn công nghệ xuyên suốt hệ thống}}{75}{table.3.8}%
-\contentsline {table}{\numberline {3.9}{\ignorespaces Cấu trúc dữ liệu của Firebase Realtime Database}}{86}{table.3.9}%
-\contentsline {table}{\numberline {3.10}{\ignorespaces Các điểm chuẩn ánh xạ lệnh điều khiển}}{89}{table.caption.49}%
-\contentsline {table}{\numberline {4.1}{\ignorespaces Các thành phần hiện thực của hệ thống}}{94}{table.caption.52}%
-\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{95}{table.caption.54}%
-\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}}{98}{table.caption.58}%
-\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{112}{table.caption.63}%
-\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{115}{table.caption.64}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{116}{table.5.2}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{117}{table.caption.65}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{118}{table.caption.66}%
-\contentsline {table}{\numberline {5.5}{\ignorespaces Các trường hợp kiểm thử ánh xạ điều khiển}}{118}{table.caption.67}%
-\contentsline {table}{\numberline {5.6}{\ignorespaces Các trường hợp kiểm thử hậu kiểm té ngã}}{119}{table.caption.68}%
-\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{121}{table.5.7}%
-\contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{124}{table.caption.69}%
-\contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{125}{table.caption.70}%
-\contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{127}{table.caption.71}%
-\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{147}{table.caption.75}%
-\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{147}{table.6.12}%
-\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{148}{table.6.13}%
-\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{151}{table.caption.76}%
-\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{151}{table.caption.77}%
-\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{151}{table.caption.78}%
+\contentsline {table}{\numberline {3.9}{\ignorespaces Cấu trúc dữ liệu của Firebase Realtime Database}}{87}{table.3.9}%
+\contentsline {table}{\numberline {3.10}{\ignorespaces Các điểm chuẩn ánh xạ lệnh điều khiển}}{90}{table.caption.49}%
+\contentsline {table}{\numberline {4.1}{\ignorespaces Các thành phần hiện thực của hệ thống}}{95}{table.caption.52}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{96}{table.caption.54}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}}{99}{table.caption.58}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{116}{table.caption.63}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{119}{table.caption.64}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{120}{table.5.2}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{121}{table.caption.65}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{122}{table.caption.66}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Các trường hợp kiểm thử ánh xạ điều khiển}}{122}{table.caption.67}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Các trường hợp kiểm thử hậu kiểm té ngã}}{123}{table.caption.68}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{125}{table.5.7}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{128}{table.caption.69}%
+\contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{129}{table.caption.70}%
+\contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{131}{table.caption.71}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{151}{table.caption.75}%
+\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{151}{table.6.12}%
+\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{152}{table.6.13}%
+\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{155}{table.caption.76}%
+\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{155}{table.caption.77}%
+\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{155}{table.caption.78}%
