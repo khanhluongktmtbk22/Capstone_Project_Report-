@@ -1,10 +1,9 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  17 SEP 2026 17:38
+This is XeTeX, Version 3.141592653-2.6-0.999997 (MiKTeX 25.12) (preloaded format=xelatex 2026.8.31)  18 SEP 2026 17:03
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**"e:/LearnAndroidApp/System architecture diagram by Figma/Báo Cáo/main.tex"
-(e:/LearnAndroidApp/System architecture diagram by Figma/Báo Cáo/main.tex
+**./main.tex
+(main.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2025-12-24>
 (C:\Users\Acer\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
@@ -1636,28 +1635,24 @@ Underfull \hbox (badness 1776) in paragraph at lines 95--95
 []|\TU/TimesNewRoman(0)/m/n/11.86258 Universal Asynchronous Receiver–
  []
 
-Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
- box being split [14
+ignored error: Infinite glue shrinkage found in box being split [14
 
 
 ]
-Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
- box being split [15]
-Intro/DanhMucTuVietTat.tex:105: ignored error: Infinite glue shrinkage found in
- box being split [16]) (Intro/DanhMucThuatNgu.tex [17]
+ignored error: Infinite glue shrinkage found in box being split [15]
+ignored error: Infinite glue shrinkage found in box being split [16])
+(Intro/DanhMucThuatNgu.tex [17]
 Underfull \hbox (badness 10000) in paragraph at lines 132--133
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Preprocessing/Post-
  []
 
-Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
-box being split [18
+ignored error: Infinite glue shrinkage found in box being split [18
 
 
 ]
-Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
-box being split [19]
-Intro/DanhMucThuatNgu.tex:162: ignored error: Infinite glue shrinkage found in 
-box being split [20]) [21] (Contents/GioiThieu.tex
+ignored error: Infinite glue shrinkage found in box being split [19]
+ignored error: Infinite glue shrinkage found in box being split [20]) [21]
+(Contents/GioiThieu.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 Package babel Info: 'vietnamese' activates 'vietnamese' shorthands.
@@ -1683,8 +1678,7 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [6]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
-[7]
+ [7]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [8]
@@ -2325,8 +2319,7 @@ Underfull \hbox (badness 1184) in paragraph at lines 31--32
 \TU/TimesNewRoman(0)/m/n/13 giới hạn và hướng cải
  []
 
-Contents/PhanTichThietKeHeThong.tex:33: ignored error: Infinite glue shrinkage 
-found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [58
@@ -2374,18 +2367,15 @@ Underfull \hbox (badness 1122) in paragraph at lines 113--113
 []|\TU/TimesNewRoman(0)/m/n/13 Chuyển đổi và triển
  []
 
-Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [60]
-Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [61]
-Contents/PhanTichThietKeHeThong.tex:117: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [62]
@@ -2413,8 +2403,7 @@ Underfull \hbox (badness 1968) in paragraph at lines 153--153
 []|\TU/TimesNewRoman(0)/m/n/13 Khả năng kiểm
  []
 
-Contents/PhanTichThietKeHeThong.tex:155: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [63]
@@ -2677,8 +2666,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 233--233
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 [66]
-Contents/PhanTichThietKeHeThong.tex:235: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [67]
@@ -3033,13 +3021,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 346--347
 \TU/TimesNewRoman(0)/m/n/13 API, bổ sung từ
  []
 
-Contents/PhanTichThietKeHeThong.tex:348: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [75]
-Contents/PhanTichThietKeHeThong.tex:348: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [76]
@@ -3048,7 +3034,8 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [77]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [78]
+
+[78]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [79]
@@ -3079,8 +3066,7 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [85]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
-[86]
+ [86]
 Underfull \hbox (badness 10000) in paragraph at lines 495--495
 \TU/TimesNewRoman(0)/m/n/13 pronoun, caregiver,
  []
@@ -3245,8 +3231,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 511--511
 []|\TU/TimesNewRoman(0)/m/n/13 timestamp, initiator,
  []
 
-Contents/PhanTichThietKeHeThong.tex:513: ignored error: Infinite glue shrinkage
- found in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [87]
@@ -3255,6 +3240,10 @@ nput line 519.
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [88]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+[89]
 Underfull \hbox (badness 1097) in paragraph at lines 577--578
 []\TU/TimesNewRoman(0)/m/n/13 RobotApp đóng vai trò máy khách GATT, còn ESP32 l
 à máy chủ GATT
@@ -3275,10 +3264,7 @@ lệnh có UUID \TU/Consolas(0)/m/n/13 BEB5483E-36E1-4688-B7F5-
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[89]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [90])
+[90])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [91] (Contents/HienThucHeThong.tex
@@ -3498,28 +3484,29 @@ File: Images/1.jpeg Graphic file (type bmp)
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [114]
-Underfull \hbox (badness 7133) in paragraph at lines 538--540
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [115]
+Underfull \hbox (badness 7133) in paragraph at lines 540--542
 \TU/TimesNewRoman(0)/m/n/13 Chương trình $[][][][][][][] [] [][] [] [][][][][][
 ] [] [][]$ nạp \TU/Consolas(0)/m/n/13 best_model_lstm.h5 \TU/TimesNewRoman(0)/m
 /n/13 và kiểm
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 538--540
+Underfull \hbox (badness 10000) in paragraph at lines 540--542
 \TU/TimesNewRoman(0)/m/n/13 tra \TU/Consolas(0)/m/n/13 input_shape \TU/TimesNew
 Roman(0)/m/n/13 trước khi chuyển đổi bằng $[][][][][][][][][][][][][][][] [] []
 [][][] []
  []
 
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-[115]
-Overfull \hbox (1.86842pt too wide) in paragraph at lines 561--561
+
+Overfull \hbox (1.86842pt too wide) in paragraph at lines 563--563
 []|\TU/TimesNewRoman(0)/m/n/11.86258 best_model_lstm_v2.tflite| 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 561--561
+Underfull \hbox (badness 10000) in paragraph at lines 563--563
 []|\TU/TimesNewRoman(0)/m/n/11.86258 yolo26n-
  []
 
@@ -3597,8 +3584,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 80--80
 []|\TU/TimesNewRoman(0)/m/n/13 Chatbot Caregiver-
  []
 
-Contents/KetQuaVaThaoLuan.tex:82: ignored error: Infinite glue shrinkage found 
-in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [120]
@@ -3781,11 +3767,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 259--260
 []|\TU/TimesNewRoman(0)/m/n/13 Notification/full-
  []
 
-Contents/KetQuaVaThaoLuan.tex:261: ignored error: Infinite glue shrinkage found
- in box being split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [125]
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [126]
@@ -3794,7 +3780,8 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
  [127]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [128]
+
+[128]
 Underfull \hbox (badness 2469) in paragraph at lines 335--335
 []|\TU/TimesNewRoman(0)/b/n/11.86258 Thời gian xử lý mỗi
  []
@@ -3851,25 +3838,28 @@ File: Images/bk_name_vi.png Graphic file (type bmp)
 [130])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [131] (Contents/KetLuan.tex
+ [131]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [132
+ [132] (Contents/KetLuan.tex
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [133
 
 
 ]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [133]
+ [134]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [134])
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [135]
+ [135])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [136]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [137]
 (Outro/TaiLieuThamKhao.tex
 Underfull \hbox (badness 1394) in paragraph at lines 6--7
 []\TU/TimesNewRoman(0)/m/n/13 UNFPA Viet Nam, “Applying foresight to curate a c
@@ -3909,7 +3899,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 9--10
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[137
+[138
 
 
 
@@ -3921,33 +3911,21 @@ hod based on modified
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[138]
-Underfull \hbox (badness 6493) in paragraph at lines 32--33
-[]\TU/TimesNewRoman(0)/m/n/13 G. Welch and G. Bishop, “An introduction to the K
-alman filter,” De-
- []
-
-
-Underfull \hbox (badness 7344) in paragraph at lines 32--33
-\TU/TimesNewRoman(0)/m/n/13 partment of Computer Science, University of North C
-arolina at Chapel
+[139]
+Underfull \hbox (badness 1226) in paragraph at lines 32--33
+\TU/TimesNewRoman(0)/m/it/13 Proc. ACM SIGGRAPH\TU/TimesNewRoman(0)/m/n/13 , Lo
+s Angeles, CA, USA, 2001. [Online]. Available:
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 32--33
-\TU/TimesNewRoman(0)/m/n/13 Hill, Tech. Rep. TR 95-041, Jul. 2006. [Online]. Av
-ailable: [][]$[][][][][] []
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 32--33
-[] [] [][][] [] [][][][] [] [][][][][][][] [] [][][] [] [][][][][][] [] [][][][
-][][][] [] [][][][][][][][] [] [][][][][] [] [][][][][] []
+[][]$[][][][][] [] [] [] [][][] [] [][][][][][] [] [][][] [] [][][][][][][][] [
+] [][][][][][][] [] [][][][][][][][][][] [] [][][][][][] []
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[139]
+[140]
 Underfull \hbox (badness 1281) in paragraph at lines 34--35
 []\TU/TimesNewRoman(0)/m/n/13 N. Wojke, A. Bewley, and D. Paulus, “Simple onlin
 e and realtime tracking
@@ -4017,7 +3995,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 43--44
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[140]
+[141]
 Underfull \hbox (badness 10000) in paragraph at lines 45--46
 []\TU/TimesNewRoman(0)/m/n/13 Google, “Gemini Developer API pricing,” [Online].
  Available: [][]$[][][][][] []
@@ -4031,7 +4009,7 @@ cumentation. [Online].
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[141]
+[142]
 Underfull \hbox (badness 10000) in paragraph at lines 63--64
 []\TU/TimesNewRoman(0)/m/n/13 A. G. Howard et al., “MobileNets: Efficient convo
 lutional neural net-
@@ -4051,7 +4029,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 65--66
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[142]
+[143]
 Underfull \hbox (badness 10000) in paragraph at lines 67--68
 []\TU/TimesNewRoman(0)/m/n/13 Ultralytics, “YOLO architecture explained,” [Onli
 ne]. Available: [][]$[][][][][] []
@@ -4096,7 +4074,7 @@ ne]. Available: [][]$[][][][][] []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[143]
+[144]
 Underfull \hbox (badness 10000) in paragraph at lines 81--82
 [][][] [] [][][][][][][][][] [] [][][] [] [][][][][][][][][][][][][][] [] [][][
 ][][] [] [][][][][][][][][][][][][][][][][][][][]$[][]\TU/TimesNewRoman(0)/m/n/
@@ -4130,14 +4108,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 87--88
 )
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [144] (Outro/PhuLuc.tex
+ [145] (Outro/PhuLuc.tex
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 4.
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[145
+[146
 
 
 
@@ -4152,26 +4130,24 @@ Underfull \hbox (badness 2846) in paragraph at lines 76--77
 \TU/TimesNewRoman(0)/m/n/13 chatbot phát TTS; nghe phản hồi; cập nhật con-
  []
 
-Outro/PhuLuc.tex:104: ignored error: Infinite glue shrinkage found in box being
- split
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
- [146]
-Outro/PhuLuc.tex:144: ignored error: Infinite glue shrinkage found in box being
- split
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
  [147]
+ignored error: Infinite glue shrinkage found in box being split
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+ [148]
 Underfull \hbox (badness 10000) in paragraph at lines 150--151
 []|\TU/TimesNewRoman(0)/m/n/13 Người cao tuổi/RobotApp; người chăm
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[148]
+[149]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [149]
+ [150]
 Underfull \hbox (badness 10000) in paragraph at lines 317--317
 []|\TU/TimesNewRoman(0)/m/n/13 TrackingService/
  []
@@ -4188,12 +4164,11 @@ Underfull \hbox (badness 3590) in paragraph at lines 329--330
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[150]
-Outro/PhuLuc.tex:333: ignored error: Infinite glue shrinkage found in box being
- split
+[151]
+ignored error: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [151]
+ [152]
 Underfull \hbox (badness 10000) in paragraph at lines 353--353
 []|\TU/TimesNewRoman(0)/m/n/13 Schedule/
  []
@@ -4210,7 +4185,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 357--357
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[152]
+[153]
 Underfull \hbox (badness 1112) in paragraph at lines 421--422
 []\TU/TimesNewRoman(0)/m/n/13 Trong Arduino IDE, chọn ESP32 Dev Module; cài Sim
 pleFOC phiên bản
@@ -4224,7 +4199,7 @@ Underfull \hbox (badness 1325) in paragraph at lines 421--422
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[153]
+[154]
 Underfull \hbox (badness 10000) in paragraph at lines 434--434
 []|\TU/TimesNewRoman(0)/m/n/13 Commit/model
  []
@@ -4276,13 +4251,13 @@ Underfull \hbox (badness 2165) in paragraph at lines 505--505
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-[154]
+[155]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [155])
+ [156])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
- [156]
+ [157]
 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (main.aux)
@@ -4299,12 +4274,12 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 78BD7F16E9B79483E73390DA22EF2A4F;52813.
  ) 
 Here is how much of TeX's memory you used:
- 33249 strings out of 402987
- 664632 string characters out of 5448731
- 1294481 words of memory out of 5000000
+ 33248 strings out of 402987
+ 664442 string characters out of 5448731
+ 1293481 words of memory out of 5000000
  61288 multiletter control sequences out of 15000+600000
  639025 words of font info for 151 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 109i,16n,132p,1202b,1908s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 109i,16n,132p,1164b,1908s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.pdf (178 pages).
+Output written on main.pdf (179 pages).

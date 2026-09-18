@@ -204,7 +204,7 @@ Tên thiết bị, UUID của service và characteristic trong \texttt{RobotCont
 
 \subsubsection{Chuỗi timeout}
 
-Ba mốc thời gian tạo thành các lớp bảo vệ kế tiếp: RobotApp gửi lệnh dừng sau 500 ms không nhận cập nhật từ RTDB, firmware đưa vận tốc đặt về 0 sau 800 ms không nhận payload BLE, còn lệnh RTDB có tuổi lớn hơn 2.000 ms bị loại khi ứng dụng nhận lại dữ liệu. Với joystick cập nhật khoảng 20 Hz, chu kỳ lệnh danh định là 50 ms, nhỏ hơn đáng kể so với hai mốc dừng. RobotApp vì vậy chủ động dừng trước, trong khi firmware đóng vai trò bảo vệ cuối cùng nếu ứng dụng không thể gửi lệnh dừng hoặc liên kết BLE bị gián đoạn.
+Ba mốc thời gian tạo thành các lớp bảo vệ kế tiếp: RobotApp gửi lệnh dừng sau 500 ms không nhận cập nhật từ RTDB, firmware đưa vận tốc đặt về 0 sau 800 ms không nhận payload BLE, còn lệnh RTDB có tuổi lớn hơn 2.000 ms trên mốc thời gian đã đồng bộ bị loại khi ứng dụng nhận dữ liệu. Với joystick cập nhật khoảng 20 Hz, chu kỳ lệnh danh định là 50 ms, nhỏ hơn đáng kể so với hai mốc dừng. RobotApp vì vậy chủ động dừng trước, trong khi firmware đóng vai trò bảo vệ cuối cùng nếu ứng dụng không thể gửi lệnh dừng hoặc liên kết BLE bị gián đoạn.
 
 \subsubsection{Quyền sở hữu tài nguyên}
 
@@ -252,7 +252,7 @@ E14 & Mất Internet & Ngắt mạng khi joystick đang kéo & Không nhận l�
 \hline
 E15 & Mất BLE & Tắt Bluetooth/ngắt nguồn tablet & Callback/watchdog firmware dừng \\
 \hline
-E16 & Lệnh cũ & Ghi timestamp cũ hơn 2 s & RobotApp bỏ lệnh và dừng \\
+E16 & Lệnh cũ/sai mốc thời gian & Ghi timestamp đã quy đổi cũ hơn 2 s hoặc tạm thời chưa có thông tin đồng bộ thời gian & RobotApp bỏ lệnh và dừng \\
 \hline
 E17 & Input lỗi & NaN/vượt miền/thiếu timestamp & Không chuyển động \\
 \hline
@@ -276,7 +276,7 @@ Nhiệt và pin ảnh hưởng mạnh sau vài phút. Do đó benchmark cần wa
 
 \subsubsection{Độ trễ điều khiển}
 
-Caregiver gắn sequence number và $t_c$ vào lệnh; RobotApp log $t_r$ khi listener nhận và $t_b$ khi ghi BLE; ESP32 log micros/millis khi callback nhận. Nếu đồng hồ thiết bị chưa đồng bộ, đo từng chặng hoặc quay video tốc độ cao; không trừ trực tiếp timestamp khác clock. Độ trễ cần báo cáo cùng packet loss và khoảng cách BLE.
+CaregiverApp gắn thời điểm tạo $t_c$ đã quy đổi theo mốc thời gian Firebase vào lệnh; RobotApp ghi nhận $t_r$ khi bộ lắng nghe nhận dữ liệu và $t_b$ khi gửi qua BLE; ESP32 ghi thời điểm callback tiếp nhận lệnh. Hai ứng dụng phải lưu cả độ lệch thời gian do Firebase cung cấp tại thời điểm đo để có thể đối chiếu. Độ trễ đầu cuối cần được báo cáo cùng tỷ lệ mất lệnh, loại kết nối Internet và khoảng cách BLE; phép đo bằng video tốc độ cao có thể được dùng để kiểm chứng độc lập.
 
 \subsubsection{WebRTC}
 

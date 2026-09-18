@@ -146,20 +146,20 @@
 \contentsline {subsubsection}{\numberline {4.3.12}RobotControlManager và BLE}{110}{subsubsection.4.3.12}%
 \contentsline {paragraph}{Ánh xạ vector điều khiển sang vận tốc hai bánh.}{110}{paragraph*.61}%
 \contentsline {subsection}{\numberline {4.4}Hiện thực CaregiverApp}{111}{subsection.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{111}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{112}{subsubsection.4.4.1}%
 \contentsline {subsubsection}{\numberline {4.4.2}Bật/tắt chức năng theo dõi}{112}{subsubsection.4.4.2}%
 \contentsline {subsubsection}{\numberline {4.4.3}Lịch và nhật ký}{112}{subsubsection.4.4.3}%
 \contentsline {subsubsection}{\numberline {4.4.4}Tiếp nhận cuộc gọi khi ứng dụng chạy nền}{112}{subsubsection.4.4.4}%
 \contentsline {subsubsection}{\numberline {4.4.5}Gọi video và điều khiển robot từ xa}{112}{subsubsection.4.4.5}%
 \contentsline {subsection}{\numberline {4.5}Hiện thực dữ liệu dùng chung}{113}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{113}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{114}{subsection.4.6}%
 \contentsline {subsubsection}{\numberline {4.6.1}Xử lý dữ liệu}{114}{subsubsection.4.6.1}%
 \contentsline {subsubsection}{\numberline {4.6.2}Trích xuất đặc trưng}{114}{subsubsection.4.6.2}%
 \contentsline {subsubsection}{\numberline {4.6.3}Huấn luyện mô hình}{115}{subsubsection.4.6.3}%
-\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{115}{subsubsection.4.6.4}%
+\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{116}{subsubsection.4.6.4}%
 \contentsline {subsubsection}{\numberline {4.6.5}Quy trình kiểm tra tương đương sau chuyển đổi}{116}{subsubsection.4.6.5}%
-\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{116}{subsection.4.7}%
-\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{116}{subsubsection.4.7.1}%
+\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{117}{subsection.4.7}%
+\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{117}{subsubsection.4.7.1}%
 \contentsline {subsubsection}{\numberline {4.7.2}Tiếp nhận lệnh qua BLE GATT}{117}{subsubsection.4.7.2}%
 \contentsline {subsubsection}{\numberline {4.7.3}Xử lý vùng không đáp ứng và dừng khi mất lệnh}{117}{subsubsection.4.7.3}%
 \contentsline {subsection}{\numberline {4.8}Kết luận chương}{118}{subsection.4.8}%
@@ -183,35 +183,35 @@
 \contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{127}{subsection.5.7}%
 \contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{127}{subsubsection.5.7.1}%
 \contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{127}{subsubsection.5.7.2}%
-\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{127}{subsubsection.5.7.3}%
-\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{127}{subsubsection.5.7.4}%
+\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{128}{subsubsection.5.7.3}%
+\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{128}{subsubsection.5.7.4}%
 \contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{128}{subsection.5.8}%
 \contentsline {subsubsection}{\numberline {5.8.1}Benchmark Độ chính xác (Accuracy \& Metrics)}{128}{subsubsection.5.8.1}%
-\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{128}{subsubsection.5.8.2}%
+\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{129}{subsubsection.5.8.2}%
 \contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{129}{subsection.5.9}%
 \contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{129}{subsubsection.5.9.1}%
 \contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{130}{subsubsection.5.9.2}%
 \contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{130}{subsubsection.5.9.3}%
-\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{130}{subsection.5.10}%
-\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{130}{subsection.5.11}%
+\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{131}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{131}{subsection.5.11}%
 \contentsline {subsection}{\numberline {5.12}Kết luận chương}{131}{subsection.5.12}%
-\contentsline {section}{\numberline {6}Kết luận}{132}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng kết}{132}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{132}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Hạn chế}{133}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{134}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{134}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{134}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{134}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{135}{subsubsection.6.4.4}%
-\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{135}{subsubsection.6.4.5}%
-\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{135}{subsection.6.5}%
-\contentsline {section}{Tài liệu tham khảo}{137}{section*.72}%
-\contentsline {section}{Phụ lục}{145}{section*.73}%
-\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{145}{section*.74}%
-\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{149}{table.6.10}%
-\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{150}{table.caption.75}%
-\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{152}{table.6.13}%
-\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{153}{lstnumber.7.21}%
-\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{154}{lstnumber.8.7}%
-\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{154}{table.caption.78}%
+\contentsline {section}{\numberline {6}Kết luận}{133}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng kết}{133}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{133}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Hạn chế}{134}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{135}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{135}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{135}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{135}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{136}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{136}{subsubsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{136}{subsection.6.5}%
+\contentsline {section}{Tài liệu tham khảo}{138}{section*.72}%
+\contentsline {section}{Phụ lục}{146}{section*.73}%
+\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{146}{section*.74}%
+\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{150}{table.6.10}%
+\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{151}{table.caption.75}%
+\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{153}{table.6.13}%
+\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{154}{lstnumber.7.21}%
+\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{155}{lstnumber.8.7}%
+\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{155}{table.caption.78}%

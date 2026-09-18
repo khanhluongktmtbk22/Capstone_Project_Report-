@@ -133,7 +133,7 @@ Hai kênh chính giữa smartphone và MCU là:
     \item \textbf{BLE}: được hỗ trợ trên các biến thể ESP32; ưu điểm là không dây và dễ bố trí điện thoại, nhưng cần discovery, quản lý kết nối, quyền Android và cơ chế tự dừng khi mất liên lạc.
 \end{itemize}
 
-Heartbeat là bài học thiết kế quan trọng. Điều khiển chuyển động không nên giả định kết nối luôn tồn tại; nếu không nhận gói mới trong thời gian giới hạn, lớp gần động cơ phải đặt lệnh về 0. Đồ án áp dụng cùng nguyên tắc fail-safe bằng watchdog 500 ms tại RobotApp và 800 ms tại firmware, cùng kiểm tra tuổi lệnh Firebase tối đa 2 s.
+Heartbeat là bài học thiết kế quan trọng. Điều khiển chuyển động không nên giả định kết nối luôn tồn tại; nếu không nhận gói mới trong thời gian giới hạn, lớp gần động cơ phải đặt lệnh về 0. Đồ án áp dụng cùng nguyên tắc fail-safe bằng cơ chế giám sát thời gian 500 ms tại RobotApp và 800 ms tại firmware. Đối với lệnh điều khiển qua Firebase, thời điểm tạo lệnh và thời điểm kiểm tra được quy đổi về cùng mốc thời gian của dịch vụ trước khi giới hạn tuổi lệnh ở mức 2 s.
 
 \subsubsection{Thu thập dữ liệu, huấn luyện và triển khai mô hình}
 

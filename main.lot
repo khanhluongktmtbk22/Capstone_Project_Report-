@@ -34,9 +34,9 @@
 \contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{128}{table.caption.69}%
 \contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{129}{table.caption.70}%
 \contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{131}{table.caption.71}%
-\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{151}{table.caption.75}%
-\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{151}{table.6.12}%
-\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{152}{table.6.13}%
-\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{155}{table.caption.76}%
-\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{155}{table.caption.77}%
-\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{155}{table.caption.78}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{152}{table.caption.75}%
+\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{152}{table.6.12}%
+\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{153}{table.6.13}%
+\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{156}{table.caption.76}%
+\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{156}{table.caption.77}%
+\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{156}{table.caption.78}%
