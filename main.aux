@@ -250,232 +250,299 @@
 \newlabel{tab:source_blocks}{{4.1}{95}{Các thành phần hiện thực của hệ thống}{table.caption.52}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Hiện thực RobotApp}{95}{subsection.4.3}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.1}Khởi động, điều hướng và vòng đời dịch vụ}{95}{subsubsection.4.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}TrackingFragment và quản lý camera}{95}{subsubsection.4.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Nạp và suy luận mô hình YOLO26n-Pose}{96}{subsubsection.4.3.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Mô hình triển khai và cơ chế khởi tạo bộ tăng tốc.}{96}{paragraph*.53}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{96}{table.caption.54}\protected@file@percent }
-\newlabel{tab:yolo_runtime_artifacts}{{4.2}{96}{Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}{table.caption.54}{}}
-\@writefile{toc}{\contentsline {paragraph}{Tiền xử lý khung hình.}{97}{paragraph*.55}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Nhận dạng và giải mã cấu trúc tensor.}{98}{paragraph*.56}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị kết quả.}{99}{paragraph*.57}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}}{99}{table.caption.58}\protected@file@percent }
-\newlabel{tab:yolo_coordinate_systems}{{4.3}{99}{Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}{table.caption.58}{}}
-\@writefile{toc}{\contentsline {paragraph}{Chuyển kết quả đến các module tiếp theo.}{99}{paragraph*.59}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}SORT, Kalman, Hungarian và Re-ID}{100}{subsubsection.4.3.4}\protected@file@percent }
-\newlabel{eq:kalman_tracking_state}{{4.8}{100}{SORT, Kalman, Hungarian và Re-ID}{equation.4.8}{}}
-\newlabel{eq:kalman_tracking_predict}{{4.9}{101}{SORT, Kalman, Hungarian và Re-ID}{equation.4.9}{}}
-\newlabel{eq:kalman_tracking_update}{{4.12}{101}{SORT, Kalman, Hungarian và Re-ID}{equation.4.12}{}}
-\newlabel{eq:hungarian_tracking_assignment}{{4.13}{102}{SORT, Kalman, Hungarian và Re-ID}{equation.4.13}{}}
-\newlabel{eq:tracking_reference_diagonal}{{4.14}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.14}{}}
-\newlabel{eq:tracking_center_distance}{{4.15}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.15}{}}
-\newlabel{eq:tracking_pose_distance}{{4.16}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.16}{}}
-\newlabel{eq:tracking_area_penalty}{{4.17}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.17}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.5}Duy trì mục tiêu ID0 và tạo lệnh bám theo}{104}{subsubsection.4.3.5}\protected@file@percent }
-\newlabel{eq:target_area_detection_quality}{{4.18}{104}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.18}{}}
-\newlabel{eq:target_visibility_centrality}{{4.19}{104}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.19}{}}
-\newlabel{eq:target_edge_penalty}{{4.20}{105}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.20}{}}
-\@writefile{toc}{\contentsline {paragraph}{Tạo vector điều khiển bám theo.}{105}{paragraph*.60}\protected@file@percent }
-\newlabel{eq:tracking_distance_metric}{{4.22}{106}{Tạo vector điều khiển bám theo}{equation.4.22}{}}
-\newlabel{eq:tracking_translation}{{4.23}{106}{Tạo vector điều khiển bám theo}{equation.4.23}{}}
-\newlabel{eq:tracking_steering}{{4.24}{106}{Tạo vector điều khiển bám theo}{equation.4.24}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.6}LSTM phát hiện té ngã}{107}{subsubsection.4.3.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.7}Hậu kiểm té ngã}{108}{subsubsection.4.3.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.8}Luồng xác nhận và cảnh báo}{108}{subsubsection.4.3.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.9}Chatbot giọng nói}{109}{subsubsection.4.3.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.10}Nhắc nhở theo lịch}{109}{subsubsection.4.3.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.11}WebRTC trong RobotApp}{109}{subsubsection.4.3.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.12}RobotControlManager và BLE}{110}{subsubsection.4.3.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {paragraph}{Ánh xạ vector điều khiển sang vận tốc hai bánh.}{110}{paragraph*.61}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Định dạng lệnh BLE ở mức logic}}{110}{lstlisting.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Hiện thực CaregiverApp}{111}{subsection.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{112}{subsubsection.4.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Bật/tắt chức năng theo dõi}{112}{subsubsection.4.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Lịch và nhật ký}{112}{subsubsection.4.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Tiếp nhận cuộc gọi khi ứng dụng chạy nền}{112}{subsubsection.4.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.5}Gọi video và điều khiển robot từ xa}{112}{subsubsection.4.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Hiện thực dữ liệu dùng chung}{113}{subsection.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{114}{subsection.4.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Xử lý dữ liệu}{114}{subsubsection.4.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Trích xuất đặc trưng}{114}{subsubsection.4.6.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}}{115}{figure.caption.62}\protected@file@percent }
-\newlabel{fig:fall_sample}{{4.3}{115}{Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}{figure.caption.62}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.3}Huấn luyện mô hình}{115}{subsubsection.4.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{116}{subsubsection.4.6.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{116}{table.caption.63}\protected@file@percent }
-\newlabel{tab:model_artifacts}{{4.4}{116}{Các mô hình chính sau khi huấn luyện và chuyển đổi}{table.caption.63}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.5}Quy trình kiểm tra tương đương sau chuyển đổi}{116}{subsubsection.4.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{117}{subsection.4.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{117}{subsubsection.4.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.2}Tiếp nhận lệnh qua BLE GATT}{117}{subsubsection.4.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.3}Xử lý vùng không đáp ứng và dừng khi mất lệnh}{117}{subsubsection.4.7.3}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Giả mã xử lý lệnh và điều khiển động cơ trên ESP32}}{118}{lstlisting.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Kết luận chương}{118}{subsection.4.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Kết quả và thảo luận}{119}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{119}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{119}{subsection.5.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{119}{table.caption.64}\protected@file@percent }
-\newlabel{tab:evaluation_config}{{5.1}{119}{Cấu hình phần mềm được đánh giá}{table.caption.64}{}}
+\newlabel{fig:robotapp_home}{{4.3a}{96}{Màn hình chính với thanh điều hướng bốn chức năng}{figure.caption.53}{}}
+\newlabel{sub@fig:robotapp_home}{{a}{96}{Màn hình chính với thanh điều hướng bốn chức năng}{figure.caption.53}{}}
+\newlabel{fig:robotapp_profile}{{4.3b}{96}{Fragment hồ sơ hiển thị thông tin tài khoản dùng chung}{figure.caption.53}{}}
+\newlabel{sub@fig:robotapp_profile}{{b}{96}{Fragment hồ sơ hiển thị thông tin tài khoản dùng chung}{figure.caption.53}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.3}{\ignorespaces Giao diện khởi động và điều hướng của RobotApp}}{96}{figure.caption.53}\protected@file@percent }
+\newlabel{fig:robotapp_navigation}{{4.3}{96}{Giao diện khởi động và điều hướng của RobotApp}{figure.caption.53}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.2}TrackingFragment và quản lý camera}{97}{subsubsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.3}Nạp và suy luận mô hình YOLO26n-Pose}{97}{subsubsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Mô hình triển khai và cơ chế khởi tạo bộ tăng tốc.}{97}{paragraph*.54}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}}{98}{table.caption.55}\protected@file@percent }
+\newlabel{tab:yolo_runtime_artifacts}{{4.2}{98}{Hai mô hình YOLO26n-Pose được đóng gói trong RobotApp}{table.caption.55}{}}
+\@writefile{toc}{\contentsline {paragraph}{Tiền xử lý khung hình.}{98}{paragraph*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Nhận dạng và giải mã cấu trúc tensor.}{99}{paragraph*.57}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị kết quả.}{100}{paragraph*.58}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.3}{\ignorespaces Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}}{100}{table.caption.59}\protected@file@percent }
+\newlabel{tab:yolo_coordinate_systems}{{4.3}{100}{Các hệ tọa độ trong quy trình xử lý YOLO26n-Pose của RobotApp}{table.caption.59}{}}
+\@writefile{toc}{\contentsline {paragraph}{Chuyển kết quả đến các module tiếp theo.}{101}{paragraph*.60}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.4}SORT, Kalman, Hungarian và Re-ID}{101}{subsubsection.4.3.4}\protected@file@percent }
+\newlabel{eq:kalman_tracking_state}{{4.8}{101}{SORT, Kalman, Hungarian và Re-ID}{equation.4.8}{}}
+\newlabel{eq:kalman_tracking_predict}{{4.9}{102}{SORT, Kalman, Hungarian và Re-ID}{equation.4.9}{}}
+\newlabel{eq:kalman_tracking_update}{{4.12}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.12}{}}
+\newlabel{eq:hungarian_tracking_assignment}{{4.13}{103}{SORT, Kalman, Hungarian và Re-ID}{equation.4.13}{}}
+\newlabel{eq:tracking_reference_diagonal}{{4.14}{104}{SORT, Kalman, Hungarian và Re-ID}{equation.4.14}{}}
+\newlabel{eq:tracking_center_distance}{{4.15}{104}{SORT, Kalman, Hungarian và Re-ID}{equation.4.15}{}}
+\newlabel{eq:tracking_pose_distance}{{4.16}{104}{SORT, Kalman, Hungarian và Re-ID}{equation.4.16}{}}
+\newlabel{eq:tracking_area_penalty}{{4.17}{104}{SORT, Kalman, Hungarian và Re-ID}{equation.4.17}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.5}Duy trì mục tiêu ID0 và tạo lệnh bám theo}{105}{subsubsection.4.3.5}\protected@file@percent }
+\newlabel{eq:target_area_detection_quality}{{4.18}{106}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.18}{}}
+\newlabel{eq:target_visibility_centrality}{{4.19}{106}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.19}{}}
+\newlabel{eq:target_edge_penalty}{{4.20}{106}{Duy trì mục tiêu ID0 và tạo lệnh bám theo}{equation.4.20}{}}
+\@writefile{toc}{\contentsline {paragraph}{Tạo vector điều khiển bám theo.}{106}{paragraph*.61}\protected@file@percent }
+\newlabel{eq:tracking_distance_metric}{{4.22}{107}{Tạo vector điều khiển bám theo}{equation.4.22}{}}
+\newlabel{eq:tracking_translation}{{4.23}{107}{Tạo vector điều khiển bám theo}{equation.4.23}{}}
+\newlabel{eq:tracking_steering}{{4.24}{108}{Tạo vector điều khiển bám theo}{equation.4.24}{}}
+\newlabel{fig:robotapp_tracking_front}{{4.4a}{109}{Mục tiêu ID0 đứng đối diện robot}{figure.caption.62}{}}
+\newlabel{sub@fig:robotapp_tracking_front}{{a}{109}{Mục tiêu ID0 đứng đối diện robot}{figure.caption.62}{}}
+\newlabel{fig:robotapp_tracking_walk}{{4.4b}{109}{Mục tiêu ID0 được giữ nguyên khi di chuyển ra xa}{figure.caption.62}{}}
+\newlabel{sub@fig:robotapp_tracking_walk}{{b}{109}{Mục tiêu ID0 được giữ nguyên khi di chuyển ra xa}{figure.caption.62}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.4}{\ignorespaces Lớp phủ theo dõi và duy trì mục tiêu ID0 trên RobotApp}}{109}{figure.caption.62}\protected@file@percent }
+\newlabel{fig:robotapp_tracking_target}{{4.4}{109}{Lớp phủ theo dõi và duy trì mục tiêu ID0 trên RobotApp}{figure.caption.62}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.6}LSTM phát hiện té ngã}{110}{subsubsection.4.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.7}Hậu kiểm té ngã}{110}{subsubsection.4.3.7}\protected@file@percent }
+\newlabel{fig:robotapp_lstm_front}{{4.5a}{111}{Tư thế đứng đối diện: NO FALL}{figure.caption.63}{}}
+\newlabel{sub@fig:robotapp_lstm_front}{{a}{111}{Tư thế đứng đối diện: NO FALL}{figure.caption.63}{}}
+\newlabel{fig:robotapp_lstm_back}{{4.5b}{111}{Tư thế quay lưng: NO FALL}{figure.caption.63}{}}
+\newlabel{sub@fig:robotapp_lstm_back}{{b}{111}{Tư thế quay lưng: NO FALL}{figure.caption.63}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.5}{\ignorespaces Hiển thị kết quả suy luận LSTM trên lớp phủ theo dõi}}{111}{figure.caption.63}\protected@file@percent }
+\newlabel{fig:robotapp_lstm_overlay}{{4.5}{111}{Hiển thị kết quả suy luận LSTM trên lớp phủ theo dõi}{figure.caption.63}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.8}Luồng xác nhận và cảnh báo}{112}{subsubsection.4.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.9}Chatbot giọng nói}{112}{subsubsection.4.3.9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.6}{\ignorespaces Màn hình chatbot của RobotApp ở trạng thái chờ đánh thức}}{113}{figure.caption.64}\protected@file@percent }
+\newlabel{fig:robotapp_chatbot}{{4.6}{113}{Màn hình chatbot của RobotApp ở trạng thái chờ đánh thức}{figure.caption.64}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.10}Nhắc nhở theo lịch}{113}{subsubsection.4.3.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.11}WebRTC trong RobotApp}{114}{subsubsection.4.3.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.3.12}RobotControlManager và BLE}{114}{subsubsection.4.3.12}\protected@file@percent }
+\newlabel{fig:robotapp_call_idle}{{4.7a}{115}{Màn hình khởi tạo cuộc gọi đến người chăm sóc}{figure.caption.65}{}}
+\newlabel{sub@fig:robotapp_call_idle}{{a}{115}{Màn hình khởi tạo cuộc gọi đến người chăm sóc}{figure.caption.65}{}}
+\newlabel{fig:robotapp_call_active}{{4.7b}{115}{Phiên gọi đang kết nối với luồng cục bộ và từ xa}{figure.caption.65}{}}
+\newlabel{sub@fig:robotapp_call_active}{{b}{115}{Phiên gọi đang kết nối với luồng cục bộ và từ xa}{figure.caption.65}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.7}{\ignorespaces Chức năng gọi video trên RobotApp}}{115}{figure.caption.65}\protected@file@percent }
+\newlabel{fig:robotapp_videocall}{{4.7}{115}{Chức năng gọi video trên RobotApp}{figure.caption.65}{}}
+\@writefile{toc}{\contentsline {paragraph}{Ánh xạ vector điều khiển sang vận tốc hai bánh.}{116}{paragraph*.66}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}{\ignorespaces Định dạng lệnh BLE ở mức logic}}{116}{lstlisting.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Hiện thực CaregiverApp}{117}{subsection.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{117}{subsubsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.2}Bật/tắt chức năng theo dõi}{117}{subsubsection.4.4.2}\protected@file@percent }
+\newlabel{fig:caregiver_profile_top}{{4.8a}{118}{Nhóm giao tiếp và liên hệ khẩn cấp}{figure.caption.67}{}}
+\newlabel{sub@fig:caregiver_profile_top}{{a}{118}{Nhóm giao tiếp và liên hệ khẩn cấp}{figure.caption.67}{}}
+\newlabel{fig:caregiver_profile_bottom}{{4.8b}{118}{Nhóm y tế, thói quen và thao tác tài khoản}{figure.caption.67}{}}
+\newlabel{sub@fig:caregiver_profile_bottom}{{b}{118}{Nhóm y tế, thói quen và thao tác tài khoản}{figure.caption.67}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.8}{\ignorespaces Màn hình quản lý hồ sơ trên CaregiverApp}}{118}{figure.caption.67}\protected@file@percent }
+\newlabel{fig:caregiver_profile}{{4.8}{118}{Màn hình quản lý hồ sơ trên CaregiverApp}{figure.caption.67}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.9}{\ignorespaces Màn hình bật, tắt bám theo tự động và phát hiện té ngã}}{119}{figure.caption.68}\protected@file@percent }
+\newlabel{fig:caregiver_tracking}{{4.9}{119}{Màn hình bật, tắt bám theo tự động và phát hiện té ngã}{figure.caption.68}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.3}Lịch và nhật ký}{119}{subsubsection.4.4.3}\protected@file@percent }
+\newlabel{fig:caregiver_schedule_list}{{4.10a}{120}{Danh sách lịch nhắc đã tạo}{figure.caption.69}{}}
+\newlabel{sub@fig:caregiver_schedule_list}{{a}{120}{Danh sách lịch nhắc đã tạo}{figure.caption.69}{}}
+\newlabel{fig:caregiver_schedule_date}{{4.10b}{120}{Chọn ngày nhắc}{figure.caption.69}{}}
+\newlabel{sub@fig:caregiver_schedule_date}{{b}{120}{Chọn ngày nhắc}{figure.caption.69}{}}
+\newlabel{fig:caregiver_schedule_time}{{4.10c}{120}{Chọn giờ, chu kỳ lặp và nội dung nhắc}{figure.caption.69}{}}
+\newlabel{sub@fig:caregiver_schedule_time}{{c}{120}{Chọn giờ, chu kỳ lặp và nội dung nhắc}{figure.caption.69}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.10}{\ignorespaces Quản lý lịch nhắc nhở trên CaregiverApp}}{120}{figure.caption.69}\protected@file@percent }
+\newlabel{fig:caregiver_schedule}{{4.10}{120}{Quản lý lịch nhắc nhở trên CaregiverApp}{figure.caption.69}{}}
+\newlabel{fig:caregiver_log_calls}{{4.11a}{121}{Lịch sử cuộc gọi}{figure.caption.70}{}}
+\newlabel{sub@fig:caregiver_log_calls}{{a}{121}{Lịch sử cuộc gọi}{figure.caption.70}{}}
+\newlabel{fig:caregiver_log_reminders}{{4.11b}{121}{Nhật ký lời nhắc}{figure.caption.70}{}}
+\newlabel{sub@fig:caregiver_log_reminders}{{b}{121}{Nhật ký lời nhắc}{figure.caption.70}{}}
+\newlabel{fig:caregiver_log_alerts}{{4.11c}{121}{Cảnh báo té ngã}{figure.caption.70}{}}
+\newlabel{sub@fig:caregiver_log_alerts}{{c}{121}{Cảnh báo té ngã}{figure.caption.70}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.11}{\ignorespaces Ba nhóm nhật ký hoạt động trên CaregiverApp}}{121}{figure.caption.70}\protected@file@percent }
+\newlabel{fig:caregiver_logs}{{4.11}{121}{Ba nhóm nhật ký hoạt động trên CaregiverApp}{figure.caption.70}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.4}Tiếp nhận cuộc gọi khi ứng dụng chạy nền}{122}{subsubsection.4.4.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.12}{\ignorespaces Thông báo cuộc gọi đến từ robot khi ứng dụng chạy nền}}{122}{figure.caption.71}\protected@file@percent }
+\newlabel{fig:caregiver_incoming_call}{{4.12}{122}{Thông báo cuộc gọi đến từ robot khi ứng dụng chạy nền}{figure.caption.71}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.4.5}Gọi video và điều khiển robot từ xa}{123}{subsubsection.4.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Hiện thực dữ liệu dùng chung}{123}{subsection.4.5}\protected@file@percent }
+\newlabel{fig:caregiver_call_dialing}{{4.13a}{124}{Khởi tạo cuộc gọi đến robot}{figure.caption.72}{}}
+\newlabel{sub@fig:caregiver_call_dialing}{{a}{124}{Khởi tạo cuộc gọi đến robot}{figure.caption.72}{}}
+\newlabel{fig:caregiver_call_controls}{{4.13b}{124}{Thanh chức năng trong cuộc gọi}{figure.caption.72}{}}
+\newlabel{sub@fig:caregiver_call_controls}{{b}{124}{Thanh chức năng trong cuộc gọi}{figure.caption.72}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.13}{\ignorespaces Chức năng gọi video trên CaregiverApp}}{124}{figure.caption.72}\protected@file@percent }
+\newlabel{fig:caregiver_videocall}{{4.13}{124}{Chức năng gọi video trên CaregiverApp}{figure.caption.72}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.14}{\ignorespaces Cần điều khiển ảo dùng để điều khiển robot từ xa trong cuộc gọi}}{124}{figure.caption.73}\protected@file@percent }
+\newlabel{fig:caregiver_joystick}{{4.14}{124}{Cần điều khiển ảo dùng để điều khiển robot từ xa trong cuộc gọi}{figure.caption.73}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{125}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.1}Xử lý dữ liệu}{125}{subsubsection.4.6.1}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4.15}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}}{126}{figure.caption.74}\protected@file@percent }
+\newlabel{fig:fall_sample}{{4.15}{126}{Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}{figure.caption.74}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.2}Trích xuất đặc trưng}{126}{subsubsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.3}Huấn luyện mô hình}{127}{subsubsection.4.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{127}{subsubsection.4.6.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4.4}{\ignorespaces Các mô hình chính sau khi huấn luyện và chuyển đổi}}{128}{table.caption.75}\protected@file@percent }
+\newlabel{tab:model_artifacts}{{4.4}{128}{Các mô hình chính sau khi huấn luyện và chuyển đổi}{table.caption.75}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.6.5}Quy trình kiểm tra tương đương sau chuyển đổi}{128}{subsubsection.4.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{129}{subsection.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{129}{subsubsection.4.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.2}Tiếp nhận lệnh qua BLE GATT}{129}{subsubsection.4.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.7.3}Xử lý vùng không đáp ứng và dừng khi mất lệnh}{130}{subsubsection.4.7.3}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}{\ignorespaces Giả mã xử lý lệnh và điều khiển động cơ trên ESP32}}{130}{lstlisting.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8}Kết luận chương}{130}{subsection.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Kết quả và thảo luận}{131}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{131}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{131}{subsection.5.2}\protected@file@percent }
+\newlabel{subsec:eval_criteria}{{5.2}{131}{Cấu hình và tiêu chí đánh giá}{subsection.5.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Cấu hình phần mềm được đánh giá}}{131}{table.caption.76}\protected@file@percent }
+\newlabel{tab:evaluation_config}{{5.1}{131}{Cấu hình phần mềm được đánh giá}{table.caption.76}{}}
 \gdef \LT@ix {\LT@entry 
     {1}{126.61101pt}\LT@entry 
     {1}{77.84142pt}\LT@entry 
     {1}{203.03337pt}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{120}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{120}{subsubsection.5.3.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{120}{table.5.2}\protected@file@percent }
-\newlabel{tab:implementation_results}{{5.2}{120}{Kết quả hiện thực theo thành phần}{table.5.2}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{121}{subsubsection.5.3.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{121}{table.caption.65}\protected@file@percent }
-\newlabel{tab:apk_results}{{5.3}{121}{Artifact đóng gói hiện có}{table.caption.65}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{121}{subsubsection.5.3.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{122}{table.caption.66}\protected@file@percent }
-\newlabel{tab:model_variant_discussion}{{5.4}{122}{Đánh giá định tính các biến thể mô hình}{table.caption.66}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{122}{subsection.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ lệnh và chính sách bám người}{122}{subsubsection.5.4.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Các trường hợp kiểm thử ánh xạ điều khiển}}{122}{table.caption.67}\protected@file@percent }
-\newlabel{tab:control_unit_tests}{{5.5}{122}{Các trường hợp kiểm thử ánh xạ điều khiển}{table.caption.67}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã và hình học tư thế}{123}{subsubsection.5.4.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Các trường hợp kiểm thử hậu kiểm té ngã}}{123}{table.caption.68}\protected@file@percent }
-\newlabel{tab:fall_unit_tests}{{5.6}{123}{Các trường hợp kiểm thử hậu kiểm té ngã}{table.caption.68}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.3}Phân vùng đường dẫn Firebase}{124}{subsubsection.5.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Đánh giá tính nhất quán khi tích hợp bằng kiểm tra tĩnh}{124}{subsection.5.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{124}{subsubsection.5.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{124}{subsubsection.5.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{132}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{132}{subsubsection.5.3.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.2}{\ignorespaces Kết quả hiện thực theo thành phần}}{132}{table.5.2}\protected@file@percent }
+\newlabel{tab:implementation_results}{{5.2}{132}{Kết quả hiện thực theo thành phần}{table.5.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{133}{subsubsection.5.3.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.3}{\ignorespaces Artifact đóng gói hiện có}}{133}{table.caption.77}\protected@file@percent }
+\newlabel{tab:apk_results}{{5.3}{133}{Artifact đóng gói hiện có}{table.caption.77}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{134}{subsubsection.5.3.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.4}{\ignorespaces Đánh giá định tính các biến thể mô hình}}{134}{table.caption.78}\protected@file@percent }
+\newlabel{tab:model_variant_discussion}{{5.4}{134}{Đánh giá định tính các biến thể mô hình}{table.caption.78}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{134}{subsection.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ lệnh và chính sách bám người}{134}{subsubsection.5.4.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.5}{\ignorespaces Các trường hợp kiểm thử ánh xạ điều khiển}}{135}{table.caption.79}\protected@file@percent }
+\newlabel{tab:control_unit_tests}{{5.5}{135}{Các trường hợp kiểm thử ánh xạ điều khiển}{table.caption.79}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã và hình học tư thế}{135}{subsubsection.5.4.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.6}{\ignorespaces Các trường hợp kiểm thử hậu kiểm té ngã}}{135}{table.caption.80}\protected@file@percent }
+\newlabel{tab:fall_unit_tests}{{5.6}{135}{Các trường hợp kiểm thử hậu kiểm té ngã}{table.caption.80}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.4.3}Phân vùng đường dẫn Firebase}{136}{subsubsection.5.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.5}Đánh giá tính nhất quán khi tích hợp bằng kiểm tra tĩnh}{136}{subsection.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{136}{subsubsection.5.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{136}{subsubsection.5.5.2}\protected@file@percent }
 \gdef \LT@x {\LT@entry 
     {1}{52.63367pt}\LT@entry 
     {1}{126.21101pt}\LT@entry 
     {1}{137.59193pt}\LT@entry 
     {1}{111.98463pt}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{125}{subsubsection.5.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{125}{subsubsection.5.5.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{125}{subsection.5.6}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{125}{table.5.7}\protected@file@percent }
-\newlabel{tab:e2e_tests}{{5.7}{125}{Danh mục kiểm thử đầu cuối}{table.5.7}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{127}{subsection.5.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{127}{subsubsection.5.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{127}{subsubsection.5.7.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{128}{subsubsection.5.7.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{128}{subsubsection.5.7.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{128}{subsection.5.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.1}Benchmark Độ chính xác (Accuracy \& Metrics)}{128}{subsubsection.5.8.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}}{128}{table.caption.69}\protected@file@percent }
-\newlabel{tab:lstm_benchmark}{{5.8}{128}{Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}{table.caption.69}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{129}{subsubsection.5.8.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{129}{table.caption.70}\protected@file@percent }
-\newlabel{tab:speed_benchmark}{{5.9}{129}{Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}{table.caption.70}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{129}{subsection.5.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{129}{subsubsection.5.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{130}{subsubsection.5.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{130}{subsubsection.5.9.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{131}{subsection.5.10}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {5.10}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{131}{table.caption.71}\protected@file@percent }
-\newlabel{tab:objective_results}{{5.10}{131}{Đối chiếu mục tiêu và kết quả}{table.caption.71}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{131}{subsection.5.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.12}Kết luận chương}{131}{subsection.5.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Kết luận}{133}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Tổng kết}{133}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{133}{subsection.6.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Hạn chế}{134}{subsection.6.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{135}{subsection.6.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{135}{subsubsection.6.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{135}{subsubsection.6.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{135}{subsubsection.6.4.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{136}{subsubsection.6.4.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{136}{subsubsection.6.4.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{136}{subsection.6.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{Tài liệu tham khảo}{138}{section*.72}\protected@file@percent }
-\newlabel{ref:who_ageing}{{1}{138}{}{Item.15}{}}
-\newlabel{ref:gso_unfpa_ageing}{{2}{138}{}{Item.16}{}}
-\newlabel{ref:unfpa_care_economy}{{3}{138}{}{Item.17}{}}
-\newlabel{ref:who_falls}{{4}{138}{}{Item.18}{}}
-\newlabel{ref:med_adherence}{{5}{138}{}{Item.19}{}}
-\newlabel{ref:who_mental_health}{{6}{138}{}{Item.20}{}}
-\newlabel{ref:openbot}{{7}{138}{}{Item.21}{}}
-\newlabel{ref:newaz_fall_review}{{8}{138}{}{Item.22}{}}
-\newlabel{ref:fall_review}{{9}{138}{}{Item.23}{}}
-\newlabel{ref:falldetection}{{10}{139}{}{Item.24}{}}
-\newlabel{ref:hfdmia_pose}{{11}{139}{}{Item.25}{}}
-\newlabel{ref:yosap_lstm}{{12}{139}{}{Item.26}{}}
-\newlabel{ref:fallnet}{{13}{139}{}{Item.27}{}}
-\newlabel{ref:bourke_threshold}{{14}{139}{}{Item.28}{}}
-\newlabel{ref:abbate_smartphone}{{15}{139}{}{Item.29}{}}
-\newlabel{ref:sisfall}{{16}{139}{}{Item.30}{}}
-\newlabel{ref:ecg_fall_transfer}{{17}{139}{}{Item.31}{}}
-\newlabel{ref:acoustic_fade}{{18}{139}{}{Item.32}{}}
-\newlabel{ref:kinect_fall}{{19}{139}{}{Item.33}{}}
-\newlabel{ref:stereo_fall}{{20}{140}{}{Item.34}{}}
-\newlabel{ref:mmfall}{{21}{140}{}{Item.35}{}}
-\newlabel{ref:kwolek_fusion}{{22}{140}{}{Item.36}{}}
-\newlabel{ref:opticalflow_fall}{{23}{140}{}{Item.37}{}}
-\newlabel{ref:pose_synthetic}{{24}{140}{}{Item.38}{}}
-\newlabel{ref:lstm}{{25}{140}{}{Item.39}{}}
-\newlabel{ref:caucafall}{{26}{140}{}{Item.40}{}}
-\newlabel{ref:sort}{{27}{140}{}{Item.41}{}}
-\newlabel{ref:kalman}{{28}{140}{}{Item.42}{}}
-\newlabel{ref:welch_bishop_kalman}{{29}{140}{}{Item.43}{}}
-\newlabel{ref:hungarian}{{30}{141}{}{Item.44}{}}
-\newlabel{ref:deepsort}{{31}{141}{}{Item.45}{}}
-\newlabel{ref:bytetrack}{{32}{141}{}{Item.46}{}}
-\newlabel{ref:xiaozhi}{{33}{141}{}{Item.47}{}}
-\newlabel{ref:android_speech}{{34}{141}{}{Item.48}{}}
-\newlabel{ref:android_tts}{{35}{141}{}{Item.49}{}}
-\newlabel{ref:vosk_android}{{36}{141}{}{Item.50}{}}
-\newlabel{ref:sherpa_onnx}{{37}{141}{}{Item.51}{}}
-\newlabel{ref:azure_speech_sdk}{{38}{141}{}{Item.52}{}}
-\newlabel{ref:azure_speech_languages}{{39}{141}{}{Item.53}{}}
-\newlabel{ref:groq_api}{{40}{142}{}{Item.54}{}}
-\newlabel{ref:groq_limits}{{41}{142}{}{Item.55}{}}
-\newlabel{ref:gemini_pricing}{{42}{142}{}{Item.56}{}}
-\newlabel{ref:ai_edge_gallery}{{43}{142}{}{Item.57}{}}
-\newlabel{ref:mlc_android}{{44}{142}{}{Item.58}{}}
-\newlabel{ref:healthcare_chatbot_review}{{45}{142}{}{Item.59}{}}
-\newlabel{ref:socialrobot}{{46}{142}{}{Item.60}{}}
-\newlabel{ref:openbot_repo}{{47}{142}{}{Item.61}{}}
-\newlabel{ref:openbot_web}{{48}{142}{}{Item.62}{}}
-\newlabel{ref:openbot_firmware}{{49}{142}{}{Item.63}{}}
-\newlabel{ref:openbot_controller}{{50}{142}{}{Item.64}{}}
-\newlabel{ref:openbot_robot_app}{{51}{142}{}{Item.65}{}}
-\newlabel{ref:cnn}{{52}{142}{}{Item.66}{}}
-\newlabel{ref:odsurvey}{{53}{143}{}{Item.67}{}}
-\newlabel{ref:rcnn}{{54}{143}{}{Item.68}{}}
-\newlabel{ref:faster_rcnn}{{55}{143}{}{Item.69}{}}
-\newlabel{ref:ssd}{{56}{143}{}{Item.70}{}}
-\newlabel{ref:yolo}{{57}{143}{}{Item.71}{}}
-\newlabel{ref:pascal_voc}{{58}{143}{}{Item.72}{}}
-\newlabel{ref:coco}{{59}{143}{}{Item.73}{}}
-\newlabel{ref:mobilenet}{{60}{143}{}{Item.74}{}}
-\newlabel{ref:efficientdet}{{61}{143}{}{Item.75}{}}
-\newlabel{ref:yolov3}{{62}{143}{}{Item.76}{}}
-\newlabel{ref:yolov5}{{63}{144}{}{Item.77}{}}
-\newlabel{ref:yolo_arch_docs}{{64}{144}{}{Item.78}{}}
-\newlabel{ref:yolov10}{{65}{144}{}{Item.79}{}}
-\newlabel{ref:yolov11}{{66}{144}{}{Item.80}{}}
-\newlabel{ref:yolo26}{{67}{144}{}{Item.81}{}}
-\newlabel{ref:yolo26_pose_config}{{68}{144}{}{Item.82}{}}
-\newlabel{ref:rnn}{{69}{144}{}{Item.83}{}}
-\newlabel{ref:le2i}{{70}{144}{}{Item.84}{}}
-\newlabel{ref:tflite}{{71}{144}{}{Item.85}{}}
-\newlabel{ref:firebase_auth}{{72}{144}{}{Item.86}{}}
-\newlabel{ref:firebase_rtdb}{{73}{144}{}{Item.87}{}}
-\newlabel{ref:webrtc}{{74}{145}{}{Item.88}{}}
-\newlabel{ref:ice}{{75}{145}{}{Item.89}{}}
-\newlabel{ref:webrtc_security}{{76}{145}{}{Item.90}{}}
-\newlabel{ref:ble_primer}{{77}{145}{}{Item.91}{}}
-\newlabel{ref:ble_core}{{78}{145}{}{Item.92}{}}
-\newlabel{ref:iso25010}{{79}{145}{}{Item.93}{}}
-\newlabel{ref:yolo_pose_docs}{{80}{145}{}{Item.94}{}}
-\newlabel{ref:firebase_security}{{81}{145}{}{Item.95}{}}
-\newlabel{ref:foc}{{82}{145}{}{Item.96}{}}
-\newlabel{ref:simplefoc}{{83}{145}{}{Item.97}{}}
-\newlabel{ref:android_permissions}{{84}{145}{}{Item.98}{}}
-\newlabel{ref:android_camera}{{85}{145}{}{Item.99}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{137}{subsubsection.5.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{137}{subsubsection.5.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{137}{subsection.5.6}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{137}{table.5.7}\protected@file@percent }
+\newlabel{tab:e2e_tests}{{5.7}{137}{Danh mục kiểm thử đầu cuối}{table.5.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{139}{subsection.5.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{139}{subsubsection.5.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{139}{subsubsection.5.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{140}{subsubsection.5.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{140}{subsubsection.5.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{140}{subsection.5.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.1}Dữ liệu, quy ước gán nhãn và giao thức đánh giá}{140}{subsubsection.5.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Quy ước gán nhãn.}{140}{paragraph*.81}\protected@file@percent }
+\@writefile{toc}{\contentsline {paragraph}{Giao thức đánh giá.}{141}{paragraph*.82}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.2}Độ chính xác của mô hình}{141}{subsubsection.5.8.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.8}{\ignorespaces Độ chính xác của LSTM trên tập kiểm thử, chia tập theo video, trung bình ba lần chạy}}{141}{table.caption.83}\protected@file@percent }
+\newlabel{tab:lstm_benchmark}{{5.8}{141}{Độ chính xác của LSTM trên tập kiểm thử, chia tập theo video, trung bình ba lần chạy}{table.caption.83}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.3}Kết quả đóng gói mô hình}{142}{subsubsection.5.8.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.9}{\ignorespaces Kết quả đo trên tệp TFLite được đóng gói}}{142}{table.caption.84}\protected@file@percent }
+\newlabel{tab:lstm_v3_export}{{5.9}{142}{Kết quả đo trên tệp TFLite được đóng gói}{table.caption.84}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.8.4}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{143}{subsubsection.5.8.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.10}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{143}{table.caption.85}\protected@file@percent }
+\newlabel{tab:speed_benchmark}{{5.10}{143}{Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}{table.caption.85}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{144}{subsection.5.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{144}{subsubsection.5.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{144}{subsubsection.5.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{145}{subsubsection.5.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{145}{subsection.5.10}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5.11}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{145}{table.caption.86}\protected@file@percent }
+\newlabel{tab:objective_results}{{5.11}{145}{Đối chiếu mục tiêu và kết quả}{table.caption.86}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{145}{subsection.5.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.12}Kết luận chương}{146}{subsection.5.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Kết luận}{147}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Tổng kết}{147}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{147}{subsection.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3}Hạn chế}{148}{subsection.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{149}{subsection.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{149}{subsubsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{149}{subsubsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{149}{subsubsection.6.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{150}{subsubsection.6.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{150}{subsubsection.6.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{150}{subsection.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Tài liệu tham khảo}{152}{section*.87}\protected@file@percent }
+\newlabel{ref:who_ageing}{{1}{152}{}{Item.15}{}}
+\newlabel{ref:gso_unfpa_ageing}{{2}{152}{}{Item.16}{}}
+\newlabel{ref:unfpa_care_economy}{{3}{152}{}{Item.17}{}}
+\newlabel{ref:who_falls}{{4}{152}{}{Item.18}{}}
+\newlabel{ref:med_adherence}{{5}{152}{}{Item.19}{}}
+\newlabel{ref:who_mental_health}{{6}{152}{}{Item.20}{}}
+\newlabel{ref:openbot}{{7}{152}{}{Item.21}{}}
+\newlabel{ref:newaz_fall_review}{{8}{152}{}{Item.22}{}}
+\newlabel{ref:fall_review}{{9}{152}{}{Item.23}{}}
+\newlabel{ref:falldetection}{{10}{153}{}{Item.24}{}}
+\newlabel{ref:hfdmia_pose}{{11}{153}{}{Item.25}{}}
+\newlabel{ref:yosap_lstm}{{12}{153}{}{Item.26}{}}
+\newlabel{ref:fallnet}{{13}{153}{}{Item.27}{}}
+\newlabel{ref:bourke_threshold}{{14}{153}{}{Item.28}{}}
+\newlabel{ref:abbate_smartphone}{{15}{153}{}{Item.29}{}}
+\newlabel{ref:sisfall}{{16}{153}{}{Item.30}{}}
+\newlabel{ref:ecg_fall_transfer}{{17}{153}{}{Item.31}{}}
+\newlabel{ref:acoustic_fade}{{18}{153}{}{Item.32}{}}
+\newlabel{ref:kinect_fall}{{19}{153}{}{Item.33}{}}
+\newlabel{ref:stereo_fall}{{20}{154}{}{Item.34}{}}
+\newlabel{ref:mmfall}{{21}{154}{}{Item.35}{}}
+\newlabel{ref:kwolek_fusion}{{22}{154}{}{Item.36}{}}
+\newlabel{ref:opticalflow_fall}{{23}{154}{}{Item.37}{}}
+\newlabel{ref:pose_synthetic}{{24}{154}{}{Item.38}{}}
+\newlabel{ref:lstm}{{25}{154}{}{Item.39}{}}
+\newlabel{ref:caucafall}{{26}{154}{}{Item.40}{}}
+\newlabel{ref:sort}{{27}{154}{}{Item.41}{}}
+\newlabel{ref:kalman}{{28}{154}{}{Item.42}{}}
+\newlabel{ref:welch_bishop_kalman}{{29}{154}{}{Item.43}{}}
+\newlabel{ref:hungarian}{{30}{155}{}{Item.44}{}}
+\newlabel{ref:deepsort}{{31}{155}{}{Item.45}{}}
+\newlabel{ref:bytetrack}{{32}{155}{}{Item.46}{}}
+\newlabel{ref:xiaozhi}{{33}{155}{}{Item.47}{}}
+\newlabel{ref:android_speech}{{34}{155}{}{Item.48}{}}
+\newlabel{ref:android_tts}{{35}{155}{}{Item.49}{}}
+\newlabel{ref:vosk_android}{{36}{155}{}{Item.50}{}}
+\newlabel{ref:sherpa_onnx}{{37}{155}{}{Item.51}{}}
+\newlabel{ref:azure_speech_sdk}{{38}{155}{}{Item.52}{}}
+\newlabel{ref:azure_speech_languages}{{39}{155}{}{Item.53}{}}
+\newlabel{ref:groq_api}{{40}{156}{}{Item.54}{}}
+\newlabel{ref:groq_limits}{{41}{156}{}{Item.55}{}}
+\newlabel{ref:gemini_pricing}{{42}{156}{}{Item.56}{}}
+\newlabel{ref:ai_edge_gallery}{{43}{156}{}{Item.57}{}}
+\newlabel{ref:mlc_android}{{44}{156}{}{Item.58}{}}
+\newlabel{ref:healthcare_chatbot_review}{{45}{156}{}{Item.59}{}}
+\newlabel{ref:socialrobot}{{46}{156}{}{Item.60}{}}
+\newlabel{ref:openbot_repo}{{47}{156}{}{Item.61}{}}
+\newlabel{ref:openbot_web}{{48}{156}{}{Item.62}{}}
+\newlabel{ref:openbot_firmware}{{49}{156}{}{Item.63}{}}
+\newlabel{ref:openbot_controller}{{50}{156}{}{Item.64}{}}
+\newlabel{ref:openbot_robot_app}{{51}{156}{}{Item.65}{}}
+\newlabel{ref:cnn}{{52}{156}{}{Item.66}{}}
+\newlabel{ref:odsurvey}{{53}{157}{}{Item.67}{}}
+\newlabel{ref:rcnn}{{54}{157}{}{Item.68}{}}
+\newlabel{ref:faster_rcnn}{{55}{157}{}{Item.69}{}}
+\newlabel{ref:ssd}{{56}{157}{}{Item.70}{}}
+\newlabel{ref:yolo}{{57}{157}{}{Item.71}{}}
+\newlabel{ref:pascal_voc}{{58}{157}{}{Item.72}{}}
+\newlabel{ref:coco}{{59}{157}{}{Item.73}{}}
+\newlabel{ref:mobilenet}{{60}{157}{}{Item.74}{}}
+\newlabel{ref:efficientdet}{{61}{157}{}{Item.75}{}}
+\newlabel{ref:yolov3}{{62}{157}{}{Item.76}{}}
+\newlabel{ref:yolov5}{{63}{158}{}{Item.77}{}}
+\newlabel{ref:yolo_arch_docs}{{64}{158}{}{Item.78}{}}
+\newlabel{ref:yolov10}{{65}{158}{}{Item.79}{}}
+\newlabel{ref:yolov11}{{66}{158}{}{Item.80}{}}
+\newlabel{ref:yolo26}{{67}{158}{}{Item.81}{}}
+\newlabel{ref:yolo26_pose_config}{{68}{158}{}{Item.82}{}}
+\newlabel{ref:rnn}{{69}{158}{}{Item.83}{}}
+\newlabel{ref:le2i}{{70}{158}{}{Item.84}{}}
+\newlabel{ref:tflite}{{71}{158}{}{Item.85}{}}
+\newlabel{ref:firebase_auth}{{72}{158}{}{Item.86}{}}
+\newlabel{ref:firebase_rtdb}{{73}{158}{}{Item.87}{}}
+\newlabel{ref:webrtc}{{74}{159}{}{Item.88}{}}
+\newlabel{ref:ice}{{75}{159}{}{Item.89}{}}
+\newlabel{ref:webrtc_security}{{76}{159}{}{Item.90}{}}
+\newlabel{ref:ble_primer}{{77}{159}{}{Item.91}{}}
+\newlabel{ref:ble_core}{{78}{159}{}{Item.92}{}}
+\newlabel{ref:iso25010}{{79}{159}{}{Item.93}{}}
+\newlabel{ref:yolo_pose_docs}{{80}{159}{}{Item.94}{}}
+\newlabel{ref:firebase_security}{{81}{159}{}{Item.95}{}}
+\newlabel{ref:foc}{{82}{159}{}{Item.96}{}}
+\newlabel{ref:simplefoc}{{83}{159}{}{Item.97}{}}
+\newlabel{ref:android_permissions}{{84}{159}{}{Item.98}{}}
+\newlabel{ref:android_camera}{{85}{159}{}{Item.99}{}}
 \gdef \LT@xi {\LT@entry 
     {1}{106.69417pt}\LT@entry 
     {1}{299.773pt}}
 \gdef \LT@xii {\LT@entry 
     {1}{106.69417pt}\LT@entry 
     {1}{299.773pt}}
-\@writefile{toc}{\contentsline {section}{Phụ lục}{146}{section*.73}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{146}{section*.74}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{Phụ lục}{160}{section*.88}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{160}{section*.89}\protected@file@percent }
 \gdef \LT@xiii {\LT@entry 
     {1}{106.69417pt}\LT@entry 
     {1}{299.773pt}}
@@ -500,33 +567,33 @@
 \gdef \LT@xx {\LT@entry 
     {1}{106.69417pt}\LT@entry 
     {1}{299.773pt}}
-\@writefile{toc}{\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{150}{table.6.10}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Ví dụ lệnh điều khiển hợp lệ}}{150}{lstlisting.4}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces Cấu trúc signaling khái quát}}{150}{lstlisting.5}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}{\ignorespaces Các trường cảnh báo té ngã}}{151}{lstlisting.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{151}{table.caption.75}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{164}{table.6.10}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}{\ignorespaces Ví dụ lệnh điều khiển hợp lệ}}{164}{lstlisting.4}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}{\ignorespaces Cấu trúc signaling khái quát}}{164}{lstlisting.5}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}{\ignorespaces Các trường cảnh báo té ngã}}{165}{lstlisting.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{165}{table.caption.90}\protected@file@percent }
 \gdef \LT@xxi {\LT@entry 
     {1}{137.99193pt}\LT@entry 
     {1}{265.62933pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{152}{table.caption.75}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{152}{table.6.12}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{166}{table.caption.90}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{166}{table.6.12}\protected@file@percent }
 \gdef \LT@xxii {\LT@entry 
     {1}{137.99193pt}\LT@entry 
     {1}{265.62933pt}}
-\@writefile{lot}{\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{153}{table.6.13}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{153}{table.6.13}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}{\ignorespaces Mẫu manifest model có thể tái lập}}{153}{lstlisting.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{154}{lstnumber.7.21}\protected@file@percent }
-\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}{\ignorespaces Build và unit test Android trên Windows}}{154}{lstlisting.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{167}{table.6.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{167}{table.6.13}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {7}{\ignorespaces Mẫu manifest model có thể tái lập}}{167}{lstlisting.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{168}{lstnumber.7.21}\protected@file@percent }
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {8}{\ignorespaces Build và unit test Android trên Windows}}{168}{lstlisting.8}\protected@file@percent }
 \gdef \LT@xxiii {\LT@entry 
     {1}{103.84871pt}\LT@entry 
     {1}{302.61801pt}}
-\@writefile{toc}{\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{155}{lstnumber.8.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{155}{table.caption.78}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{156}{table.caption.76}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{156}{table.caption.77}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{156}{table.caption.78}\protected@file@percent }
-\newlabel{LastPage}{{6.5}{157}{}{page.157}{}}
-\gdef\lastpage@lastpage{157}
-\gdef\lastpage@lastpageHy{157}
-\gdef \@abspage@last{179}
+\@writefile{toc}{\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{169}{lstnumber.8.7}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{170}{table.caption.91}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{170}{table.caption.92}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{170}{table.caption.93}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{171}{table.caption.93}\protected@file@percent }
+\newlabel{LastPage}{{6.5}{171}{}{page.171}{}}
+\gdef\lastpage@lastpage{171}
+\gdef\lastpage@lastpageHy{171}
+\gdef \@abspage@last{193}

@@ -7,6 +7,7 @@
 Chương này phân biệt ba loại bằng chứng. \textit{Bằng chứng tĩnh} được rút từ mã nguồn, cấu hình và artifact. \textit{Bằng chứng tự động} đến từ unit test/build có thể chạy lặp. \textit{Bằng chứng tích hợp} đến từ thử nghiệm hai điện thoại, Internet, BLE và robot thật. Chỉ các kết quả có artifact hoặc được nhóm dự án xác nhận mới được ghi ``đạt''; hạng mục thiếu log định lượng được ghi rõ để tránh tạo số liệu.
 
 \subsection{Cấu hình và tiêu chí đánh giá}
+\label{subsec:eval_criteria}
 
 \begin{table}[htbp]
 \centering
@@ -104,7 +105,7 @@ CaregiverApp debug APK & 51,03 MiB & Bản debug quản lý/WebRTC \\
 
 \subsubsection{Kết quả artifact mô hình}
 
-Chuỗi chuyển đổi đã tạo đủ artifact H5, PT, ONNX, SavedModel và TFLite. LSTM giảm từ khoảng 193,8 KB xuống 63,9 KB. Biến thể pose FP16 khoảng 6,28 MB, gần một nửa biến thể float32 tương ứng; biến thể app CPU/GPU lần lượt khoảng 12,03/11,84 MB. Đây là kết quả về kích thước tệp, không tự động chứng minh tốc độ hoặc độ chính xác.
+Chuỗi chuyển đổi đã tạo đủ artifact H5, PT, ONNX, SavedModel và TFLite. LSTM giảm từ khoảng 189,2 KB ở dạng Keras xuống 59,6 KB ở dạng TFLite không lượng tử hóa. Biến thể pose FP16 trong cây chuyển đổi có dung lượng 6,01 MB, khoảng một nửa biến thể float32 tương ứng là 11,87 MB; hai biến thể được đóng gói trong ứng dụng có dung lượng lần lượt khoảng 12,03 MB và 11,84 MB. Đây là kết quả về kích thước tệp, không tự động chứng minh tốc độ hoặc độ chính xác.
 
 \begin{table}[htbp]
 \centering
@@ -260,6 +261,8 @@ E18 & Cuộc gọi khẩn nền & Caregiver app ở nền, robot gọi fall & No
 \hline
 \end{longtable}
 
+Ảnh chụp màn hình của các kịch bản đã thực hiện được trình bày ở Chương 4. Kịch bản E01 và E02 tương ứng với Hình \ref{fig:robotapp_navigation}, Hình \ref{fig:caregiver_profile} và Hình \ref{fig:caregiver_schedule}; E04--E06 tương ứng với Hình \ref{fig:robotapp_tracking_target}; E07--E08 tương ứng với Hình \ref{fig:robotapp_lstm_overlay} và mục cảnh báo ở Hình \ref{fig:caregiver_logs}; E11--E13 tương ứng với Hình \ref{fig:robotapp_videocall}, Hình \ref{fig:caregiver_videocall} và Hình \ref{fig:caregiver_joystick}; E18 tương ứng với Hình \ref{fig:caregiver_incoming_call}. Các ảnh này là bằng chứng tích hợp ở mức giao diện, cho thấy kịch bản đã chạy được trên thiết bị thật, nhưng chưa thay thế được log định lượng về độ trễ và độ chính xác.
+
 Bảng là bộ kiểm thử hồi quy đề xuất. Các kịch bản phần cứng phải bắt đầu với bánh xe nhấc khỏi mặt đất, tốc độ thấp, vùng trống và nút ngắt nguồn sẵn sàng. Không cho người cao tuổi thật thực hiện té ngã; chỉ dùng diễn viên khỏe mạnh, đệm bảo vệ và giám sát.
 
 \subsection{Thiết kế phép đo hiệu năng}
@@ -290,26 +293,73 @@ Tập kiểm thử phải độc lập theo chủ thể/video, bao gồm đi, ng
 
 Mặc dù việc đánh giá tổng thể hệ thống đòi hỏi nhiều yếu tố thực tế, các chỉ số đánh giá (benchmark) độc lập của mô hình AI đóng vai trò cốt lõi để khẳng định tính khả thi của giải pháp. Phân hệ AI được đánh giá trên hai khía cạnh: Độ chính xác (Accuracy/Precision/Recall) và Tốc độ suy luận (Inference Speed) trên thiết bị di động biên.
 
-\subsubsection{Benchmark Độ chính xác (Accuracy \& Metrics)}
+\subsubsection{Dữ liệu, quy ước gán nhãn và giao thức đánh giá}
 
-Mô hình phân loại chuỗi LSTM được đánh giá trên tập dữ liệu kiểm thử độc lập (Test set) được tách ra từ LE2I. Quá trình kiểm thử thực hiện trên chuỗi 15 khung hình (frames) liên tiếp.
+Tập đặc trưng dùng cho LSTM được trích từ 190 video LE2I, tương ứng 75.911 khung hình. Sau khi tạo cửa sổ trượt 15 khung hình với bước trượt 1, tập dữ liệu có 73.251 mẫu.
+
+\paragraph{Quy ước gán nhãn.}
+Chú thích gốc của LE2I chỉ đánh dấu khoảng thời gian rơi, có độ dài trung vị 23 khung hình tương đương khoảng 0,9 s. Sau thời điểm \texttt{fall\_end}, mỗi video còn trung vị 76 khung hình trong đó người vẫn nằm trên sàn nhưng mang nhãn bình thường. Quy ước này không phù hợp với bài toán giám sát người cao tuổi, vì trạng thái cần phát hiện là ``có người đang nằm trên sàn'' chứ không riêng khoảnh khắc rơi. Một mô hình huấn luyện theo chú thích gốc bị phạt đúng vào lúc nó nhận ra người đã nằm xuống.
+
+Phân tích các cửa sổ bị phân loại sai của một mô hình huấn luyện theo chú thích gốc xác nhận nhận định trên. Trong 423 cửa sổ báo động giả, 83 cửa sổ (19,6\%) nằm sau \texttt{fall\_end} và 62 cửa sổ (14,7\%) nằm ngay trước \texttt{fall\_start}; tổng cộng khoảng một phần ba không phải lỗi suy luận mà là hệ quả của ranh giới chú thích. Phần còn lại gồm 240 cửa sổ (56,7\%) thuộc video không chứa pha ngã và 38 cửa sổ (9,0\%) ở vị trí khác.
+
+Vì vậy, hệ thống sử dụng quy ước gán nhãn theo trạng thái: mọi khung hình từ \texttt{fall\_start} đến hết video mang nhãn dương. Lớp dương biểu diễn trạng thái người nằm trên sàn, chiếm 11,55\% số cửa sổ thay vì 2,63\% như chú thích gốc. Mức mất cân bằng giảm đủ để không cần dùng trọng số lớp khi huấn luyện.
+
+\paragraph{Giao thức đánh giá.}
+Vì bước trượt bằng 1, hai cửa sổ liên tiếp dùng chung 14 trên 15 khung hình. Chia ngẫu nhiên ở mức cửa sổ sẽ đưa các cửa sổ gần như trùng nhau vào cả tập huấn luyện lẫn tập đánh giá và không tạo ra tập kiểm thử độc lập. Do đó 190 video được chia theo video thành 70\% huấn luyện, 15\% kiểm định và 15\% kiểm thử, một video chỉ thuộc đúng một tập. Ngưỡng quyết định được chọn trên tập kiểm định; tập kiểm thử chỉ dùng để báo cáo.
+
+Kết quả được trình bày ở hai mức. \textit{Mức cửa sổ} đo trực tiếp đầu ra của mô hình. \textit{Mức sự kiện} áp dụng quy tắc năm kết quả dương liên tiếp như mô tả ở Chương 4, quy mỗi video về một quyết định nhị phân và đối chiếu với việc video có chứa pha ngã hay không; đây mới là đơn vị đánh giá phản ánh hành vi mà người dùng cảm nhận.
+
+\subsubsection{Độ chính xác của mô hình}
+
+Bảng \ref{tab:lstm_benchmark} trình bày kết quả trên tập kiểm thử, trung bình ba lần chạy với ba cách chia tập khác nhau.
 
 \begin{table}[htbp]
 \centering
-\caption{Kết quả Benchmark độ chính xác của mô hình LSTM trên tập Test}
+\caption{Độ chính xác của LSTM trên tập kiểm thử, chia tập theo video, trung bình ba lần chạy}
 \label{tab:lstm_benchmark}
-\begin{tabular}{|l|c|c|c|c|}
+\small
+\begin{tabularx}{\textwidth}{|X|c|c|c|}
 \hline
-\textbf{Lớp (Class)} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Độ chính xác (Accuracy)} \\
+\textbf{Mức đánh giá} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
 \hline
-Bình thường (No-fall)& 96.5\% & 98.2\% & 97.3\% & \multirow{2}{*}{95.8\%} \\
-\cline{1-4}
-Té ngã (Fall) & 94.1\% & 91.5\% & 92.7\% & \\
+Cửa sổ, lớp nằm trên sàn & $0{,}615\pm0{,}162$ & $0{,}686\pm0{,}093$ & $0{,}627\pm0{,}058$ \\
 \hline
-\end{tabular}
+Sự kiện, mỗi video một quyết định & $0{,}539\pm0{,}130$ & $0{,}976\pm0{,}034$ & $0{,}683\pm0{,}106$ \\
+\hline
+\end{tabularx}
 \end{table}
 
-Kết quả ở Bảng \ref{tab:lstm_benchmark} cho thấy hệ thống đạt F1-Score rất cao đối với lớp Té ngã (92.7\%). Recall đạt 91.5\% cho thấy mô hình có khả năng bắt được phần lớn các sự cố ngã thực tế. Tuy nhiên, Precision (94.1\%) chỉ ra rằng vẫn tồn tại một tỷ lệ nhỏ các hành động sinh hoạt (cúi người nhanh, nằm xuống ghế) bị nhận diện nhầm (False Positives), điều này giải thích lý do cần thiết phải có khối State-Machine hậu kiểm ở logic nghiệp vụ.
+Recall ở mức sự kiện đạt 0,976: trên tổng cộng 34 video có chứa pha ngã của ba lần chạy, hệ thống phát hiện 33 video và bỏ sót 1. Đây là chỉ số quan trọng nhất đối với bài toán an toàn, vì một lần bỏ sót đồng nghĩa với việc người cao tuổi nằm trên sàn mà không ai được báo.
+
+Precision ở mức sự kiện chỉ đạt 0,539: khoảng một nửa số video sinh cảnh báo là báo động giả, cụ thể 28 video trên ba lần chạy. Giá trị này cho thấy riêng LSTM không đủ để phát cảnh báo trực tiếp. Đó là lý do khối hậu kiểm hình học và bước hỏi xác nhận bằng giọng nói ở Chương 4 là thành phần bắt buộc chứ không phải tùy chọn: chúng tồn tại để chặn đúng loại báo động giả mà Bảng \ref{tab:lstm_benchmark} đo được. Khác với LSTM chỉ thấy 0,6 s chuyển động của các điểm khớp đã chuẩn hóa, hai khối này quan sát vị trí thân trên trong khung ảnh và kéo dài qua nhiều giây.
+
+Cần nêu rõ ba giới hạn kèm các con số trên. Thứ nhất, mỗi lần chạy chỉ có khoảng 29 video kiểm thử, trong đó khoảng 14 video chứa pha ngã, nên khoảng tin cậy rất rộng; độ lệch chuẩn 0,106 của F1 ở mức sự kiện phản ánh điều này. Thứ hai, các chỉ số đo riêng khối LSTM trên keypoint trích sẵn, chưa bao gồm sai số của khối theo dõi và của bước hậu kiểm khi chạy trên thiết bị, nên là cận dưới cho phần AI chứ chưa phải hiệu năng đầu cuối. Thứ ba, các tình huống té ngã trong LE2I được dàn dựng bởi diễn viên khỏe mạnh và có thể khác đáng kể so với người cao tuổi trong sinh hoạt thực tế.
+
+\subsubsection{Kết quả đóng gói mô hình}
+
+Mô hình được huấn luyện lại trên 133 video, chọn ngưỡng trên 28 video kiểm định và đánh giá trên 29 video kiểm thử chưa từng xuất hiện. Ngưỡng chọn được là 0,985. Bảng \ref{tab:lstm_v3_export} trình bày kết quả đo trực tiếp trên từng tệp TFLite, chạy đủ 11.743 cửa sổ của tập kiểm thử qua interpreter thay vì đo trên mô hình Keras.
+
+\begin{table}[htbp]
+\centering
+\caption{Kết quả đo trên tệp TFLite được đóng gói}
+\label{tab:lstm_v3_export}
+\small
+\begin{tabularx}{\textwidth}{|p{3.9cm}|c|c|X|}
+\hline
+\textbf{Tệp} & \textbf{Dung lượng} & \textbf{P / R / F1} & \textbf{Sai lệch so với Keras} \\
+\hline
+\path|..._v3_ground_float.tflite| & 59,6 KB & 0,838 / 0,615 / 0,709 & tối đa $3{,}5\times10^{-6}$; trùng quyết định 100\% \\
+\hline
+\path|..._v3_ground.tflite| (lượng tử hóa) & 24,8 KB & 0,836 / 0,621 / 0,712 & tối đa 0,596; trùng quyết định 99,85\% \\
+\hline
+\end{tabularx}
+\end{table}
+
+Cả hai biến thể đạt kết quả giống nhau ở mức sự kiện: phát hiện 13/14 video có ngã và sinh 6 video báo động giả, tương ứng precision 0,684, recall 0,929 và F1 0,788. Giá trị này nằm ở phía lạc quan của khoảng $0{,}683\pm0{,}106$ trong Bảng \ref{tab:lstm_benchmark}, do chỉ ứng với một lần chia tập cụ thể.
+
+Biến thể float được chọn để đóng gói. Bản lượng tử hóa nhỏ hơn 35 KB nhưng có sai lệch xác suất tối đa 0,596 trên từng cửa sổ riêng lẻ, đủ để đảo quyết định ở khoảng 18 trên 11.743 cửa sổ khi so với ngưỡng 0,985; mức tiết kiệm dung lượng này không tương xứng với rủi ro đó trong một ứng dụng có kích thước như RobotApp.
+
+Ngưỡng 0,985 không chuyển giao được giữa các lần chia tập: ba lần chạy cho ba giá trị tối ưu lần lượt là 0,985, 0,360 và 0,120. Vì vậy đây chỉ là điểm khởi đầu và cần được hiệu chỉnh lại bằng dữ liệu thu tại chính môi trường lắp đặt, không phải hằng số cố định.
 
 \subsubsection{Benchmark Tốc độ suy luận (Inference Speed / FPS)}
 
@@ -326,7 +376,7 @@ Kết quả ở Bảng \ref{tab:lstm_benchmark} cho thấy hệ thống đạt F
 \hline
 Trích xuất khung hình & Android CameraX & $\sim 10$ ms \\
 \hline
-YOLO-Pose (FP16) & \texttt{yolo26n-pose\_320\_fp16.tflite} & $\sim 45$ ms \\
+YOLO-Pose (FP16) & \texttt{yolo26n-pose\_no\_nms\_float16.tflite} (đầu vào $480\times640$) & $\sim 45$ ms \\
 \hline
 LSTM (Sequence) & \texttt{best\_model\_lstm\_v2.tflite} & $\sim 5$ ms \\
 \hline
@@ -347,7 +397,9 @@ Việc chạy pose và LSTM tại RobotApp giảm nhu cầu gửi video liên t�
 
 \subsubsection{Hạn chế}
 
-Thứ nhất, báo cáo đã có các chỉ số ban đầu của LSTM và một cấu hình đo tốc độ, nhưng chưa lưu kèm đầy đủ tệp chia tập dữ liệu, log huấn luyện, cấu hình thiết bị và kết quả đo thô. Vì vậy, các số liệu này chưa đủ để đánh giá độc lập toàn bộ chuỗi YOLO-Pose--tracking--LSTM--hậu kiểm trên phiên bản ứng dụng hiện tại. Thứ hai, các tình huống té ngã trong dữ liệu được dàn dựng và có thể khác đáng kể so với người cao tuổi trong môi trường sinh hoạt thực tế. Thứ ba, camera RGB có điểm mù và đặt ra yêu cầu bảo vệ quyền riêng tư. Thứ tư, hội thoại, đồng bộ từ xa và thiết lập cuộc gọi phụ thuộc vào Groq, Firebase và hạ tầng STUN/TURN. Thứ năm, dữ liệu đã được phân vùng theo UID nhưng hai thiết bị trong một cặp vẫn dùng chung tài khoản, nên chưa có cơ chế phân quyền riêng cho robot và người chăm sóc. Thứ sáu, dung lượng APK debug của RobotApp còn lớn.
+Thứ nhất, các chỉ số của LSTM ở Bảng \ref{tab:lstm_benchmark} được đo với cách chia tập theo video, nhưng cấu hình đo tốc độ vẫn chưa lưu kèm log thiết bị và kết quả đo thô. Vì vậy, các số liệu hiện có chưa đủ để đánh giá độc lập toàn bộ chuỗi YOLO-Pose--tracking--LSTM--hậu kiểm trên phiên bản ứng dụng hiện tại. Thứ hai, precision ở mức sự kiện chỉ đạt 0,539, nghĩa là khối LSTM vẫn phụ thuộc hoàn toàn vào hậu kiểm và hỏi xác nhận để không phát cảnh báo nhầm ra ngoài. Thứ tư, camera RGB có điểm mù và đặt ra yêu cầu bảo vệ quyền riêng tư. Thứ năm, hội thoại, đồng bộ từ xa và thiết lập cuộc gọi phụ thuộc vào Groq, Firebase và hạ tầng STUN/TURN. Thứ sáu, dữ liệu đã được phân vùng theo UID nhưng hai thiết bị trong một cặp vẫn dùng chung tài khoản, nên chưa có cơ chế phân quyền riêng cho robot và người chăm sóc. Thứ bảy, dung lượng APK debug của RobotApp còn lớn.
+
+Một điểm cần lưu ý về dữ liệu huấn luyện: keypoint dùng để huấn luyện LSTM được trích bằng YOLOv8n-Pose ở giai đoạn chuẩn bị dữ liệu, trong khi RobotApp suy luận bằng YOLO26n-Pose. Hai mô hình có sai số định vị khớp khác nhau, nên phân bố đặc trưng khi chạy thực tế lệch so với phân bố lúc huấn luyện; trích xuất lại keypoint bằng đúng mô hình triển khai là bước cải thiện có chi phí thấp và nên được thực hiện trước khi nghiệm thu.
 
 Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Logic người có bbox lớn nhất chỉ là heuristic ban đầu. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm dùng ngưỡng thủ công, cần calibration theo góc camera/nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
 

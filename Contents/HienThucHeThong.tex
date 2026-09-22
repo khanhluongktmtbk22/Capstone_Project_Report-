@@ -58,6 +58,27 @@ RobotApp sử dụng CameraX, các gói TensorFlow Lite (CPU, GPU, Support và S
 
 Quyền Bluetooth được khai báo theo từng nhóm phiên bản hệ điều hành. Android 11 trở xuống sử dụng \texttt{BLUETOOTH}, \path|BLUETOOTH_ADMIN| và quyền vị trí để quét thiết bị; từ Android 12, ứng dụng sử dụng \path|BLUETOOTH_SCAN| và \path|BLUETOOTH_CONNECT| theo hướng dẫn của Android \reportcite{ref:android_permissions}. Camera được khai báo \texttt{required=false} để không ngăn cài đặt chỉ vì thiết bị thiếu cờ tính năng tương ứng, nhưng các chức năng thị giác chỉ hoạt động khi có camera.
 
+Hình \ref{fig:robotapp_navigation} thể hiện bố cục màn hình của RobotApp trên máy tính bảng. Thanh điều hướng bên trái cho phép chuyển giữa bốn fragment hồ sơ, theo dõi, chatbot và cuộc gọi; vùng nội dung bên phải hiển thị fragment đang được chọn. Hồ sơ tại \texttt{Users/\{uid\}} được hiển thị ở chế độ chỉ đọc vì việc chỉnh sửa thông tin được thực hiện từ CaregiverApp.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.72\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_home.jpg}
+        \caption{Màn hình chính với thanh điều hướng bốn chức năng}
+        \label{fig:robotapp_home}
+    \end{subfigure}
+    \\[6pt]
+    \begin{subfigure}[t]{0.72\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_profile.jpg}
+        \caption{Fragment hồ sơ hiển thị thông tin tài khoản dùng chung}
+        \label{fig:robotapp_profile}
+    \end{subfigure}
+    \caption{Giao diện khởi động và điều hướng của RobotApp}
+    \label{fig:robotapp_navigation}
+\end{figure}
+
 \subsubsection{TrackingFragment và quản lý camera}
 
 \texttt{tracking\_fragment.kt} điều phối CameraX, mô hình ước lượng tư thế, bộ theo dõi, LSTM, bộ hậu kiểm và chức năng bám người. CameraX cung cấp \texttt{Preview} để hiển thị hình ảnh xem trước và \texttt{ImageAnalysis} để phân tích khung hình. Dải tốc độ khung hình của hai use case được yêu cầu ở mức $[25,25]$ FPS thông qua Camera2Interop nhằm duy trì nhịp lấy mẫu thống nhất cho chuỗi tư thế. Bộ phân tích chuyển dữ liệu từ \texttt{ImageProxy} sang ảnh bitmap và tensor, sau đó giải phóng khung hình đã xử lý. Hai chức năng camera được liên kết với vòng đời của fragment theo cơ chế CameraX \reportcite{ref:android_camera}. Khả năng duy trì đúng tốc độ yêu cầu phụ thuộc vào dải FPS mà camera của thiết bị hỗ trợ.
@@ -385,11 +406,53 @@ Một nhánh hình học riêng phân loại tư thế phục vụ điều khi�
 
 Sau khi làm mượt vector bám theo, \texttt{sendTrackingVector()} gọi \texttt{sendFollowCommand(x,y)} và chuyển lệnh trực tiếp đến \texttt{RobotControlManager} bằng \texttt{submitAutoFollowCommand()}. Đường truyền này nằm hoàn toàn trong RobotApp, không ghi vector bám theo lên Firebase. Bộ định tuyến lệnh chỉ chấp nhận nguồn cục bộ khi chế độ bám theo đang bật; ở chế độ điều khiển từ xa, nguồn cục bộ bị khóa và bộ lắng nghe \texttt{robot\_control} mới được kích hoạt. Sau bước lựa chọn nguồn, \texttt{RobotControlManager} áp dụng chung phép giới hạn, ánh xạ vận tốc hai bánh và truyền lệnh đến ESP32 qua BLE.
 
+Hình \ref{fig:robotapp_tracking_target} minh họa lớp phủ của \path|tracking_fragment| khi chức năng bám theo đang hoạt động. Mục tiêu được gán định danh ID0 kèm bounding box, khung xương 17 điểm khớp và số lượng track đang tồn tại ở góc trái. Khi mục tiêu di chuyển ra xa, bounding box thu hẹp dần trong khi ID0 được giữ nguyên, cho thấy bước liên kết dữ liệu vẫn bám đúng đối tượng giữa các khung hình.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.80\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_tracking_front.jpg}
+        \caption{Mục tiêu ID0 đứng đối diện robot}
+        \label{fig:robotapp_tracking_front}
+    \end{subfigure}
+    \\[6pt]
+    \begin{subfigure}[t]{0.80\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_tracking_walk.jpg}
+        \caption{Mục tiêu ID0 được giữ nguyên khi di chuyển ra xa}
+        \label{fig:robotapp_tracking_walk}
+    \end{subfigure}
+    \caption{Lớp phủ theo dõi và duy trì mục tiêu ID0 trên RobotApp}
+    \label{fig:robotapp_tracking_target}
+\end{figure}
+
 \subsubsection{LSTM phát hiện té ngã}
 
-\texttt{LstmFallDetector} nạp mô hình \texttt{best\_model\_lstm\_v2.tflite} có dung lượng khoảng 63,9 KB và sử dụng hai luồng CPU. Dữ liệu của mỗi đối tượng được lưu trong \texttt{FallDetectionQueue}; khi tích lũy đủ 15 khung hình, hàng đợi tạo tensor đầu vào $1\times15\times69$ kiểu số thực. Thành phần dịch chuyển được tính từ chênh lệch tọa độ chuẩn hóa giữa hai khung hình liên tiếp; riêng khung hình đầu tiên của một định danh mới có $\Delta x_i=\Delta y_i=0$ vì chưa có quan sát trước đó. Với nhịp thu nhận mục tiêu 25 FPS, một cửa sổ đầu vào biểu diễn khoảng 0,6 s chuyển động. Tensor đầu ra $1\times2$ biểu diễn xác suất của hai lớp hoạt động bình thường và té ngã. So với tệp Keras gốc khoảng 193,8 KB, tệp TFLite có dung lượng nhỏ hơn khi đóng gói vào ứng dụng.
+\texttt{LstmFallDetector} nạp mô hình \path|fall_detection_lstm_v3_ground_float.tflite| có dung lượng khoảng 59,6 KB và sử dụng hai luồng CPU. Mô hình chỉ dùng toán tử TFLite dựng sẵn nên ứng dụng không cần liên kết gói \path|tensorflow-lite-select-tf-ops|. Dữ liệu của mỗi đối tượng được lưu trong \texttt{FallDetectionQueue}; khi tích lũy đủ 15 khung hình, hàng đợi tạo tensor đầu vào $1\times15\times69$ kiểu số thực. Thành phần dịch chuyển được tính từ chênh lệch tọa độ chuẩn hóa giữa hai khung hình liên tiếp; riêng khung hình đầu tiên của một định danh mới có $\Delta x_i=\Delta y_i=0$ vì chưa có quan sát trước đó. Với nhịp thu nhận mục tiêu 25 FPS, một cửa sổ đầu vào biểu diễn khoảng 0,6 s chuyển động. Tensor đầu ra $1\times2$ biểu diễn xác suất của hai lớp. Lớp dương được định nghĩa là trạng thái người đang nằm trên sàn, tính từ thời điểm bắt đầu ngã trở đi, chứ không riêng khoảnh khắc rơi; quy ước này và lý do lựa chọn được trình bày ở Mục \ref{subsec:eval_criteria}. So với tệp Keras gốc khoảng 189,2 KB, tệp TFLite có dung lượng nhỏ hơn khi đóng gói vào ứng dụng.
 
-Kết quả được gán nhãn FALL khi xác suất FALL lớn hơn xác suất NO FALL, sau đó chuyển đến \texttt{FallVerificationEngine} để kiểm tra bổ sung. Chỉ khi có năm kết quả FALL liên tiếp, hệ thống mới ghi nhận một chuỗi nghi té ngã. Khi bộ theo dõi khôi phục thành công ID0, hàng đợi đặc trưng vẫn được gắn với người mục tiêu. Khả năng phân tích quan hệ thời gian của LSTM \reportcite{ref:lstm} được kết hợp với bước hậu kiểm trước khi tạo cảnh báo.
+Kết quả được gán nhãn FALL khi xác suất của lớp dương vượt ngưỡng quyết định, mặc định 0,985, sau đó chuyển đến \texttt{FallVerificationEngine} để kiểm tra bổ sung. Ngưỡng được tách thành tham số cấu hình vì giá trị tối ưu phụ thuộc vào môi trường lắp đặt, như phân tích ở Chương 5. Chỉ khi có năm kết quả FALL liên tiếp, hệ thống mới ghi nhận một chuỗi nghi té ngã. Khi bộ theo dõi khôi phục thành công ID0, hàng đợi đặc trưng vẫn được gắn với người mục tiêu. Khả năng phân tích quan hệ thời gian của LSTM \reportcite{ref:lstm} được kết hợp với bước hậu kiểm trước khi tạo cảnh báo.
+
+Kết quả của mô hình được hiển thị trực tiếp trên lớp phủ như Hình \ref{fig:robotapp_lstm_overlay}. Góc trái hiển thị nhãn dự đoán cùng xác suất lớp FALL, còn nhãn cạnh bounding box hiển thị trạng thái của riêng mục tiêu ID0. Trong hai tình huống đứng đối diện và quay lưng, mô hình đều cho nhãn NO FALL, cho thấy đặc trưng chuẩn hóa theo bounding box ít phụ thuộc vào hướng của người so với camera.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.80\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_tracking_front2.jpg}
+        \caption{Tư thế đứng đối diện: NO FALL}
+        \label{fig:robotapp_lstm_front}
+    \end{subfigure}
+    \\[6pt]
+    \begin{subfigure}[t]{0.80\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_tracking_back.jpg}
+        \caption{Tư thế quay lưng: NO FALL}
+        \label{fig:robotapp_lstm_back}
+    \end{subfigure}
+    \caption{Hiển thị kết quả suy luận LSTM trên lớp phủ theo dõi}
+    \label{fig:robotapp_lstm_overlay}
+\end{figure}
 
 \subsubsection{Hậu kiểm té ngã}
 
@@ -411,6 +474,15 @@ Bản ghi cảnh báo lưu thời điểm, trạng thái xử lý, phản hồi 
 
 Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào văn bản do LLM sinh ra. Hàm phân loại phản hồi té ngã kiểm tra trước tập từ khóa an toàn và nguy hiểm; API chỉ được gọi khi câu trả lời không rõ nghĩa, sau đó kết quả JSON được phân tích theo cấu trúc định trước. Hàm \texttt{detectCallIntent} áp dụng cách tương tự khi kết hợp từ khóa, tên hoặc quan hệ của người chăm sóc và mô hình phân loại dự phòng.
 
+Hình \ref{fig:robotapp_chatbot} là trạng thái chờ của chatbot. Robot hiển thị tên được đặt trong hồ sơ và gợi ý cách đánh thức bằng cách gọi tên; khi nhận dạng được tiếng nói, vùng trạng thái phía trên chuyển sang hiển thị nội dung đang nghe hoặc đang phát.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.78\textwidth]{robotapp_chatbot_idle.jpg}
+    \caption{Màn hình chatbot của RobotApp ở trạng thái chờ đánh thức}
+    \label{fig:robotapp_chatbot}
+\end{figure}
+
 \subsubsection{Nhắc nhở theo lịch}
 
 \texttt{ReminderService} lắng nghe lịch tại \texttt{Schedules/\{uid\}} và hồ sơ tại \texttt{Users/\{uid\}}. Khi đến thời điểm nhắc, dịch vụ tạo bản ghi dưới \texttt{reminder\_logs/\{uid\}} và gửi sự kiện đến chatbot để phát lời nhắc. Người cao tuổi có thể xác nhận, từ chối hoặc không phản hồi. Bản ghi được cập nhật trạng thái, câu trả lời, số lần nhắc lại và thời điểm xác nhận. Việc lưu riêng từng lần thực hiện cho phép người chăm sóc xem lịch sử mà không thay đổi nội dung lịch gốc.
@@ -420,6 +492,27 @@ Các tác vụ liên quan đến an toàn không phụ thuộc hoàn toàn vào 
 \texttt{video\_call\_fragment} khởi tạo \texttt{PeerConnectionFactory}, nguồn âm thanh và hình ảnh, thành phần hiển thị video cùng tham chiếu đến nhánh \texttt{webrtc\_signal}. Khi chủ động gọi, RobotApp ghi bản đề nghị \texttt{offer} và các địa chỉ ứng viên ICE vào \texttt{robotCandidates}. Khi nhận cuộc gọi, ứng dụng đọc \texttt{offer}, tạo bản trả lời \texttt{answer} và theo dõi \texttt{caregiverCandidates}. Các bộ lắng nghe được đăng ký theo từng giai đoạn thiết lập phiên và hủy khi không còn sử dụng.
 
 WebRTC đảm nhiệm mã hóa và truyền âm thanh, hình ảnh; Firebase trao đổi SDP, ICE và trạng thái cuộc gọi \reportcite{ref:webrtc}. Trường \texttt{emergencyReason=fall} phân biệt cuộc gọi liên quan đến té ngã với cuộc gọi thông thường. Khi kết thúc, ứng dụng đặt trạng thái thành \texttt{ended}, giải phóng luồng dữ liệu, bộ thu hình, thành phần hiển thị và \texttt{PeerConnection}, sau đó trả quyền sử dụng camera cho chức năng theo dõi.
+
+Hình \ref{fig:robotapp_videocall} thể hiện hai trạng thái của fragment cuộc gọi trên RobotApp: màn hình khởi tạo cuộc gọi đến người chăm sóc và phiên gọi đang kết nối. Trong phiên gọi, khung hình lớn là luồng video nhận từ CaregiverApp, còn khung nhỏ là luồng hình ảnh cục bộ do camera robot cung cấp.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.78\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_call_idle.jpg}
+        \caption{Màn hình khởi tạo cuộc gọi đến người chăm sóc}
+        \label{fig:robotapp_call_idle}
+    \end{subfigure}
+    \\[6pt]
+    \begin{subfigure}[t]{0.78\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{robotapp_call_active.jpg}
+        \caption{Phiên gọi đang kết nối với luồng cục bộ và từ xa}
+        \label{fig:robotapp_call_active}
+    \end{subfigure}
+    \caption{Chức năng gọi video trên RobotApp}
+    \label{fig:robotapp_videocall}
+\end{figure}
 
 \subsubsection{RobotControlManager và BLE}
 
@@ -462,17 +555,108 @@ RobotApp định dạng hai giá trị này thành chuỗi \texttt{L-10.50R13.50
 
 CaregiverApp sử dụng \texttt{LoginActivity} và \texttt{SignUpActivity} cho quá trình xác thực, \texttt{MainActivity} làm màn hình khởi động chính, còn \texttt{ProfileFragment} phục vụ quản lý hồ sơ. Firebase Authentication cung cấp UID; hồ sơ được lưu tại \texttt{Users/\{uid\}} để RobotApp cùng truy cập. \texttt{MainActivity} đồng thời khởi động \texttt{IncomingCallService} nhằm tiếp nhận cuộc gọi khi ứng dụng chạy nền.
 
+Hình \ref{fig:caregiver_profile} thể hiện màn hình hồ sơ của CaregiverApp. Biểu mẫu được chia thành ba nhóm: nhóm giao tiếp cung cấp tên robot, cách tự xưng và cách gọi người cao tuổi; nhóm liên hệ khẩn cấp lưu tên, quan hệ và số điện thoại của người chăm sóc; nhóm y tế và thói quen lưu bệnh nền, lưu ý thị giác hoặc thính giác và sở thích. Các trường này được RobotApp đọc lại để bổ sung ngữ cảnh cho chatbot.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.38\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_profile_top.jpg}
+        \caption{Nhóm giao tiếp và liên hệ khẩn cấp}
+        \label{fig:caregiver_profile_top}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.38\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_profile_bottom.jpg}
+        \caption{Nhóm y tế, thói quen và thao tác tài khoản}
+        \label{fig:caregiver_profile_bottom}
+    \end{subfigure}
+    \caption{Màn hình quản lý hồ sơ trên CaregiverApp}
+    \label{fig:caregiver_profile}
+\end{figure}
+
 \subsubsection{Bật/tắt chức năng theo dõi}
 
 \path|tracking_fragment| cập nhật hai giá trị trạng thái \path|robot_follow_enabled| và \path|ai_fall_detection_enabled| để bật, tắt các chức năng tương ứng. Fragment theo dõi \texttt{.info/connected} để hiển thị tình trạng kết nối RTDB. Khi tắt bám theo tự động, CaregiverApp đồng thời gửi lệnh $x=0,y=0$; thời điểm của lệnh dừng được Firebase xác lập để không phụ thuộc vào đồng hồ cục bộ của điện thoại.
+
+Giao diện tương ứng được trình bày ở Hình \ref{fig:caregiver_tracking}. Mỗi chức năng có một công tắc riêng kèm dòng trạng thái mô tả tình trạng hiện tại; chỉ báo kết nối RTDB được hiển thị ngay dưới công tắc bám theo để người chăm sóc biết lệnh có được đồng bộ hay không.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.42\textwidth]{caregiver_tracking.jpg}
+    \caption{Màn hình bật, tắt bám theo tự động và phát hiện té ngã}
+    \label{fig:caregiver_tracking}
+\end{figure}
 
 \subsubsection{Lịch và nhật ký}
 
 Danh sách lịch tại \path|Schedules/uid| được đọc bởi \texttt{ScheduleFragment}. Người chăm sóc tạo hoặc cập nhật lịch qua \texttt{AddScheduleFragment}; \texttt{ScheduleAdapter} hiển thị danh sách bằng RecyclerView và liên kết công tắc bật, tắt với trường \texttt{active}. Nhật ký lời nhắc, cảnh báo té ngã và cuộc gọi có các fragment cùng bộ hiển thị danh sách riêng. Cảnh báo và cuộc gọi được truy vấn theo thời điểm trong bảy ngày gần nhất.
 
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_schedule_list.jpg}
+        \caption{Danh sách lịch nhắc đã tạo}
+        \label{fig:caregiver_schedule_list}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_schedule_date.jpg}
+        \caption{Chọn ngày nhắc}
+        \label{fig:caregiver_schedule_date}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_schedule_time.jpg}
+        \caption{Chọn giờ, chu kỳ lặp và nội dung nhắc}
+        \label{fig:caregiver_schedule_time}
+    \end{subfigure}
+    \caption{Quản lý lịch nhắc nhở trên CaregiverApp}
+    \label{fig:caregiver_schedule}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_log_calls.jpg}
+        \caption{Lịch sử cuộc gọi}
+        \label{fig:caregiver_log_calls}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_log_reminders.jpg}
+        \caption{Nhật ký lời nhắc}
+        \label{fig:caregiver_log_reminders}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.30\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_log_alerts.jpg}
+        \caption{Cảnh báo té ngã}
+        \label{fig:caregiver_log_alerts}
+    \end{subfigure}
+    \caption{Ba nhóm nhật ký hoạt động trên CaregiverApp}
+    \label{fig:caregiver_logs}
+\end{figure}
+
 \subsubsection{Tiếp nhận cuộc gọi khi ứng dụng chạy nền}
 
 \texttt{IncomingCallService} là dịch vụ chạy nền có thông báo thường trực (foreground service), lắng nghe nhánh \texttt{webrtc\_signal}. Khi nhận \texttt{status=calling} và \texttt{callerRole=robot}, dịch vụ tạo thông báo và có thể mở \texttt{IncomingCallActivity} toàn màn hình. Nếu có \texttt{emergencyReason=fall}, nội dung thông báo cho biết cuộc gọi được tạo sau tình huống chưa xác nhận an toàn. Tệp Manifest khai báo các quyền liên quan đến thông báo, dịch vụ nền và hiển thị toàn màn hình; khả năng hiển thị phụ thuộc vào quyền được cấp và chính sách của hệ điều hành.
+
+Hình \ref{fig:caregiver_incoming_call} là thông báo cuộc gọi đến được tạo khi CaregiverApp không ở tiền cảnh. Thông báo nêu rõ bên gọi là robot và cung cấp hai lựa chọn từ chối hoặc nhận cuộc gọi mà không cần mở ứng dụng trước.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.38\textwidth]{caregiver_incoming_call.jpg}
+    \caption{Thông báo cuộc gọi đến từ robot khi ứng dụng chạy nền}
+    \label{fig:caregiver_incoming_call}
+\end{figure}
 
 \subsubsection{Gọi video và điều khiển robot từ xa}
 
@@ -481,6 +665,34 @@ Danh sách lịch tại \path|Schedules/uid| được đọc bởi \texttt{Sched
 Khi người dùng bắt đầu điều khiển, ứng dụng tắt bám theo tự động để tránh hai nguồn lệnh cùng hoạt động. Các sự kiện \texttt{ACTION\_UP}, \texttt{ACTION\_CANCEL}, kết thúc cuộc gọi và rời màn hình đều gọi luồng gửi lệnh dừng với $x=0,y=0$ và một $ts$ mới. Nếu độ lệch thời gian chưa sẵn sàng, riêng lệnh dừng sử dụng \texttt{ServerValue.TIMESTAMP} để máy chủ xác lập thời điểm; phương án dự phòng này không được dùng cho lệnh gây chuyển động. Việc cập nhật lại $ts$ giúp RobotApp phân biệt lệnh dừng vừa tạo với dữ liệu cũ còn lưu trên RTDB.
 
 CaregiverApp gửi lệnh điều khiển chuẩn hóa qua Internet. RobotApp tiếp nhận, kiểm tra và chuyển lệnh thành vận tốc của hai động cơ theo quy ước lắp đặt, rồi truyền đến ESP32 qua BLE. Nhờ đó, người chăm sóc có thể điều khiển từ xa khi hai ứng dụng có kết nối Internet, còn việc giao tiếp với phần thân được thực hiện tại robot.
+
+Hình \ref{fig:caregiver_videocall} và Hình \ref{fig:caregiver_joystick} minh họa các bước của luồng này trên CaregiverApp. Thanh chức năng trong cuộc gọi gồm micro, camera, điều khiển, bám theo và kết thúc; khi chọn mục điều khiển, cần điều khiển ảo xuất hiện ở góc trái màn hình và các thao tác kéo được quy đổi thành cặp giá trị $x,y$ như mô tả ở trên.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.78\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_call_dialing.jpg}
+        \caption{Khởi tạo cuộc gọi đến robot}
+        \label{fig:caregiver_call_dialing}
+    \end{subfigure}
+    \\[6pt]
+    \begin{subfigure}[t]{0.78\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{caregiver_call_controls.jpg}
+        \caption{Thanh chức năng trong cuộc gọi}
+        \label{fig:caregiver_call_controls}
+    \end{subfigure}
+    \caption{Chức năng gọi video trên CaregiverApp}
+    \label{fig:caregiver_videocall}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.78\textwidth]{caregiver_call_joystick.jpg}
+    \caption{Cần điều khiển ảo dùng để điều khiển robot từ xa trong cuộc gọi}
+    \label{fig:caregiver_joystick}
+\end{figure}
 
 \subsection{Hiện thực dữ liệu dùng chung}
 
@@ -496,7 +708,9 @@ Mô hình phát hiện té ngã được chuẩn bị theo một quy trình liê
 
 Dữ liệu LE2I được cung cấp dưới dạng các video liên tục gồm hoạt động bình thường và tình huống té ngã. Quá trình tiền xử lý gồm:
 \begin{itemize}
-    \item \textbf{Trích xuất khung hình}: Video được phân tách thành các khung hình ở tốc độ 25 FPS để tương thích với tốc độ xử lý mục tiêu của camera robot.
+    \item \textbf{Trích xuất khung hình}: Toàn bộ khung hình của mỗi video được đọc tuần tự, không lấy mẫu lại. Video LE2I được ghi ở 25 FPS, nên nhịp khung hình của dữ liệu huấn luyện trùng với nhịp thu nhận mục tiêu của camera robot và một cửa sổ 15 khung hình biểu diễn cùng một khoảng thời gian ở cả hai giai đoạn.
+    \item \textbf{Gán nhãn theo trạng thái}: Mỗi khung hình từ thời điểm bắt đầu ngã đến hết video được gán nhãn dương, biểu diễn trạng thái người nằm trên sàn. Quy ước này thay cho cách chỉ đánh dấu khoảng thời gian rơi của chú thích gốc; lý do và ảnh hưởng được phân tích ở Mục \ref{subsec:eval_criteria}.
+    \item \textbf{Tạo keypoints bằng YOLO-Pose}: Các khung hình sau khi được trích xuất được đưa qua mô hình YOLO-Pose để phát hiện tư thế và tạo ra tọa độ các điểm đặc trưng (keypoints) của đối tượng. Tập dữ liệu keypoints này được lưu lại để phục vụ huấn luyện LSTM thay vì sử dụng ảnh thô. Ở phiên bản hiện tại, bước chuẩn bị dữ liệu sử dụng \texttt{yolov8n-pose.pt}, trong khi RobotApp suy luận bằng YOLO26n-Pose; chênh lệch này được thảo luận ở Chương 5.
     \item \textbf{Phân chia tập dữ liệu}: Tập huấn luyện, xác thực và kiểm tra được chia theo video và chủ thể, không chia ngẫu nhiên theo từng khung hình. Cách tổ chức này hạn chế rò rỉ dữ liệu khi những khung hình gần nhau của cùng một hành động xuất hiện đồng thời ở tập huấn luyện và tập kiểm tra.
     \item \textbf{Xử lý mất cân bằng lớp}: Số mẫu hoạt động bình thường thường lớn hơn số mẫu té ngã. Trọng số lớp và phương pháp lấy mẫu tăng cường được sử dụng để giảm xu hướng mô hình nghiêng về lớp NO FALL.
 \end{itemize}
@@ -552,19 +766,25 @@ Mô hình PyTorch \texttt{yolo26n-pose.pt} trước hết được xuất sang O
 \hline
 \textbf{Tệp mô hình} & \textbf{Định dạng} & \textbf{Dung lượng} & \textbf{Mục đích} \\
 \hline
-best\_model\_lstm.h5 & Keras H5 & 193,8 KB & Mô hình gốc để huấn luyện và đánh giá \\
+best\_model\_lstm\_v3\_ground.h5 & Keras H5 & 189,2 KB & Mô hình LSTM nguồn để huấn luyện và chuyển đổi \\
 \hline
-best\_model\_lstm\_v2.tflite & TFLite & 63,9 KB & Mô hình LSTM đã tối ưu cho Android \\
+fall\_detection\_lstm\_v3\_ground\_float.tflite & TFLite & 59,6 KB & Mô hình LSTM được đóng gói trong RobotApp, chỉ dùng toán tử dựng sẵn \\
 \hline
 yolo26n-pose.pt & PyTorch & 7,88 MB & Mô hình Pose gốc \\
 \hline
-yolo26n-pose\_320\_fp16.tflite & TFLite FP16 & 6,28 MB & Biến thể YOLO đã lượng tử hóa FP16, tối ưu kích thước và tốc độ \\
+yolo26n-pose\_no\_nms\_float16.tflite & TFLite FP16 & 6,01 MB & Biến thể YOLO FP16 ở giai đoạn chuyển đổi, đầu vào $480\times640$, dùng để đối chiếu kích thước và tốc độ \\
+\hline
+yolo26n-pose\_no\_nms\_float32.tflite & TFLite FP32 & 11,87 MB & Biến thể float32 tương ứng, dùng làm mốc so sánh cho FP16 \\
 \hline
 \end{tabularx}
 \end{table}
 
 \subsubsection{Quy trình kiểm tra tương đương sau chuyển đổi}
-Quy trình kiểm tra tương đương sử dụng cùng một tập dữ liệu đầu vào cho mô hình gốc và mô hình TFLite, sau đó đối chiếu bounding box, độ tin cậy, điểm khớp và vector xác suất của LSTM. Các phép so sánh nhằm phát hiện sai khác về toán tử, thứ tự đầu ra hoặc cách chuẩn hóa mà việc nạp mô hình thành công chưa phản ánh được. Đây là bước cần hoàn thiện cùng với lưu trữ dữ liệu đầu vào và kết quả so sánh để đánh giá đầy đủ ảnh hưởng của quá trình chuyển đổi.
+Quy trình kiểm tra tương đương sử dụng cùng một tập dữ liệu đầu vào cho mô hình gốc và mô hình TFLite, sau đó đối chiếu bounding box, độ tin cậy, điểm khớp và vector xác suất của LSTM. Các phép so sánh nhằm phát hiện sai khác về toán tử, thứ tự đầu ra hoặc cách chuẩn hóa mà việc nạp mô hình thành công chưa phản ánh được.
+
+Quy trình này đã được thực hiện đầy đủ cho mô hình LSTM được đóng gói. Toàn bộ 11.743 cửa sổ của tập kiểm thử được đưa qua interpreter TFLite và đối chiếu với đầu ra của mô hình Keras nguồn. Biến thể không lượng tử hóa có sai lệch xác suất tối đa $3{,}5\times10^{-6}$ và trùng 100\% quyết định sau khi áp ngưỡng; biến thể lượng tử hóa có sai lệch tối đa 0,596 và trùng 99,85\% quyết định. Kết quả cho thấy lượng tử hóa trọng số không làm thay đổi các chỉ số tổng hợp nhưng có thể làm lệch đáng kể xác suất của từng cửa sổ riêng lẻ.
+
+Quá trình chuyển đổi cũng cho thấy việc nạp được mô hình không bảo đảm mô hình chạy đúng. Khi kích thước lô đầu vào để ở dạng động, trình chuyển đổi không hạ được các toán tử danh sách tensor của LSTM về tập toán tử dựng sẵn và yêu cầu bổ sung Select TF Ops. Một phương án chuyển đổi khác tạo ra tệp hợp lệ nhưng phát sinh lỗi \texttt{READ\_VARIABLE} ngay khi suy luận vì biến trạng thái chưa được khởi tạo. Chỉ khi dựng lại mô hình với kích thước lô cố định bằng một rồi chuyển đổi trực tiếp từ mô hình Keras, tệp thu được mới vừa chỉ dùng toán tử dựng sẵn vừa chạy đúng. Nhờ đó, phiên bản đóng gói không còn phụ thuộc gói \path|tensorflow-lite-select-tf-ops|, là một trong các thành phần làm tăng dung lượng gói cài đặt đã nêu ở Chương 5.
 
 
 \subsection{Hiện thực firmware phần thân robot}

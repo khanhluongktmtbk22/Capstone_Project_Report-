@@ -12,4 +12,16 @@
 \contentsline {figure}{\numberline {3.7}{\ignorespaces Sơ đồ trạng thái của quá trình hậu kiểm và xác nhận té ngã}}{84}{figure.caption.48}%
 \contentsline {figure}{\numberline {4.1}{\ignorespaces Kiến trúc hiện thực của hệ thống}}{93}{figure.caption.50}%
 \contentsline {figure}{\numberline {4.2}{\ignorespaces Ánh xạ từ module thiết kế đến các thành phần hiện thực}}{94}{figure.caption.51}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}}{115}{figure.caption.62}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Giao diện khởi động và điều hướng của RobotApp}}{96}{figure.caption.53}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Lớp phủ theo dõi và duy trì mục tiêu ID0 trên RobotApp}}{109}{figure.caption.62}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Hiển thị kết quả suy luận LSTM trên lớp phủ theo dõi}}{111}{figure.caption.63}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Màn hình chatbot của RobotApp ở trạng thái chờ đánh thức}}{113}{figure.caption.64}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Chức năng gọi video trên RobotApp}}{115}{figure.caption.65}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Màn hình quản lý hồ sơ trên CaregiverApp}}{118}{figure.caption.67}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Màn hình bật, tắt bám theo tự động và phát hiện té ngã}}{119}{figure.caption.68}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Quản lý lịch nhắc nhở trên CaregiverApp}}{120}{figure.caption.69}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Ba nhóm nhật ký hoạt động trên CaregiverApp}}{121}{figure.caption.70}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Thông báo cuộc gọi đến từ robot khi ứng dụng chạy nền}}{122}{figure.caption.71}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Chức năng gọi video trên CaregiverApp}}{124}{figure.caption.72}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Cần điều khiển ảo dùng để điều khiển robot từ xa trong cuộc gọi}}{124}{figure.caption.73}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Ví dụ khung hình té ngã trong dữ liệu dùng để chuẩn bị mô hình}}{126}{figure.caption.74}%

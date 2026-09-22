@@ -127,91 +127,95 @@
 \contentsline {subsection}{\numberline {4.2}Môi trường phát triển và tổ chức các thành phần}{94}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Hiện thực RobotApp}{95}{subsection.4.3}%
 \contentsline {subsubsection}{\numberline {4.3.1}Khởi động, điều hướng và vòng đời dịch vụ}{95}{subsubsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.2}TrackingFragment và quản lý camera}{95}{subsubsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.3}Nạp và suy luận mô hình YOLO26n-Pose}{96}{subsubsection.4.3.3}%
-\contentsline {paragraph}{Mô hình triển khai và cơ chế khởi tạo bộ tăng tốc.}{96}{paragraph*.53}%
-\contentsline {paragraph}{Tiền xử lý khung hình.}{97}{paragraph*.55}%
-\contentsline {paragraph}{Nhận dạng và giải mã cấu trúc tensor.}{98}{paragraph*.56}%
-\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị kết quả.}{99}{paragraph*.57}%
-\contentsline {paragraph}{Chuyển kết quả đến các module tiếp theo.}{99}{paragraph*.59}%
-\contentsline {subsubsection}{\numberline {4.3.4}SORT, Kalman, Hungarian và Re-ID}{100}{subsubsection.4.3.4}%
-\contentsline {subsubsection}{\numberline {4.3.5}Duy trì mục tiêu ID0 và tạo lệnh bám theo}{104}{subsubsection.4.3.5}%
-\contentsline {paragraph}{Tạo vector điều khiển bám theo.}{105}{paragraph*.60}%
-\contentsline {subsubsection}{\numberline {4.3.6}LSTM phát hiện té ngã}{107}{subsubsection.4.3.6}%
-\contentsline {subsubsection}{\numberline {4.3.7}Hậu kiểm té ngã}{108}{subsubsection.4.3.7}%
-\contentsline {subsubsection}{\numberline {4.3.8}Luồng xác nhận và cảnh báo}{108}{subsubsection.4.3.8}%
-\contentsline {subsubsection}{\numberline {4.3.9}Chatbot giọng nói}{109}{subsubsection.4.3.9}%
-\contentsline {subsubsection}{\numberline {4.3.10}Nhắc nhở theo lịch}{109}{subsubsection.4.3.10}%
-\contentsline {subsubsection}{\numberline {4.3.11}WebRTC trong RobotApp}{109}{subsubsection.4.3.11}%
-\contentsline {subsubsection}{\numberline {4.3.12}RobotControlManager và BLE}{110}{subsubsection.4.3.12}%
-\contentsline {paragraph}{Ánh xạ vector điều khiển sang vận tốc hai bánh.}{110}{paragraph*.61}%
-\contentsline {subsection}{\numberline {4.4}Hiện thực CaregiverApp}{111}{subsection.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{112}{subsubsection.4.4.1}%
-\contentsline {subsubsection}{\numberline {4.4.2}Bật/tắt chức năng theo dõi}{112}{subsubsection.4.4.2}%
-\contentsline {subsubsection}{\numberline {4.4.3}Lịch và nhật ký}{112}{subsubsection.4.4.3}%
-\contentsline {subsubsection}{\numberline {4.4.4}Tiếp nhận cuộc gọi khi ứng dụng chạy nền}{112}{subsubsection.4.4.4}%
-\contentsline {subsubsection}{\numberline {4.4.5}Gọi video và điều khiển robot từ xa}{112}{subsubsection.4.4.5}%
-\contentsline {subsection}{\numberline {4.5}Hiện thực dữ liệu dùng chung}{113}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{114}{subsection.4.6}%
-\contentsline {subsubsection}{\numberline {4.6.1}Xử lý dữ liệu}{114}{subsubsection.4.6.1}%
-\contentsline {subsubsection}{\numberline {4.6.2}Trích xuất đặc trưng}{114}{subsubsection.4.6.2}%
-\contentsline {subsubsection}{\numberline {4.6.3}Huấn luyện mô hình}{115}{subsubsection.4.6.3}%
-\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{116}{subsubsection.4.6.4}%
-\contentsline {subsubsection}{\numberline {4.6.5}Quy trình kiểm tra tương đương sau chuyển đổi}{116}{subsubsection.4.6.5}%
-\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{117}{subsection.4.7}%
-\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{117}{subsubsection.4.7.1}%
-\contentsline {subsubsection}{\numberline {4.7.2}Tiếp nhận lệnh qua BLE GATT}{117}{subsubsection.4.7.2}%
-\contentsline {subsubsection}{\numberline {4.7.3}Xử lý vùng không đáp ứng và dừng khi mất lệnh}{117}{subsubsection.4.7.3}%
-\contentsline {subsection}{\numberline {4.8}Kết luận chương}{118}{subsection.4.8}%
-\contentsline {section}{\numberline {5}Kết quả và thảo luận}{119}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{119}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{119}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{120}{subsection.5.3}%
-\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{120}{subsubsection.5.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{121}{subsubsection.5.3.2}%
-\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{121}{subsubsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{122}{subsection.5.4}%
-\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ lệnh và chính sách bám người}{122}{subsubsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã và hình học tư thế}{123}{subsubsection.5.4.2}%
-\contentsline {subsubsection}{\numberline {5.4.3}Phân vùng đường dẫn Firebase}{124}{subsubsection.5.4.3}%
-\contentsline {subsection}{\numberline {5.5}Đánh giá tính nhất quán khi tích hợp bằng kiểm tra tĩnh}{124}{subsection.5.5}%
-\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{124}{subsubsection.5.5.1}%
-\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{124}{subsubsection.5.5.2}%
-\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{125}{subsubsection.5.5.3}%
-\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{125}{subsubsection.5.5.4}%
-\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{125}{subsection.5.6}%
-\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{127}{subsection.5.7}%
-\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{127}{subsubsection.5.7.1}%
-\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{127}{subsubsection.5.7.2}%
-\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{128}{subsubsection.5.7.3}%
-\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{128}{subsubsection.5.7.4}%
-\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{128}{subsection.5.8}%
-\contentsline {subsubsection}{\numberline {5.8.1}Benchmark Độ chính xác (Accuracy \& Metrics)}{128}{subsubsection.5.8.1}%
-\contentsline {subsubsection}{\numberline {5.8.2}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{129}{subsubsection.5.8.2}%
-\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{129}{subsection.5.9}%
-\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{129}{subsubsection.5.9.1}%
-\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{130}{subsubsection.5.9.2}%
-\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{130}{subsubsection.5.9.3}%
-\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{131}{subsection.5.10}%
-\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{131}{subsection.5.11}%
-\contentsline {subsection}{\numberline {5.12}Kết luận chương}{131}{subsection.5.12}%
-\contentsline {section}{\numberline {6}Kết luận}{133}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng kết}{133}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{133}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Hạn chế}{134}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{135}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{135}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{135}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{135}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{136}{subsubsection.6.4.4}%
-\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{136}{subsubsection.6.4.5}%
-\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{136}{subsection.6.5}%
-\contentsline {section}{Tài liệu tham khảo}{138}{section*.72}%
-\contentsline {section}{Phụ lục}{146}{section*.73}%
-\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{146}{section*.74}%
-\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{150}{table.6.10}%
-\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{151}{table.caption.75}%
-\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{153}{table.6.13}%
-\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{154}{lstnumber.7.21}%
-\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{155}{lstnumber.8.7}%
-\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{155}{table.caption.78}%
+\contentsline {subsubsection}{\numberline {4.3.2}TrackingFragment và quản lý camera}{97}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}Nạp và suy luận mô hình YOLO26n-Pose}{97}{subsubsection.4.3.3}%
+\contentsline {paragraph}{Mô hình triển khai và cơ chế khởi tạo bộ tăng tốc.}{97}{paragraph*.54}%
+\contentsline {paragraph}{Tiền xử lý khung hình.}{98}{paragraph*.56}%
+\contentsline {paragraph}{Nhận dạng và giải mã cấu trúc tensor.}{99}{paragraph*.57}%
+\contentsline {paragraph}{Chuyển đổi tọa độ và hiển thị kết quả.}{100}{paragraph*.58}%
+\contentsline {paragraph}{Chuyển kết quả đến các module tiếp theo.}{101}{paragraph*.60}%
+\contentsline {subsubsection}{\numberline {4.3.4}SORT, Kalman, Hungarian và Re-ID}{101}{subsubsection.4.3.4}%
+\contentsline {subsubsection}{\numberline {4.3.5}Duy trì mục tiêu ID0 và tạo lệnh bám theo}{105}{subsubsection.4.3.5}%
+\contentsline {paragraph}{Tạo vector điều khiển bám theo.}{106}{paragraph*.61}%
+\contentsline {subsubsection}{\numberline {4.3.6}LSTM phát hiện té ngã}{110}{subsubsection.4.3.6}%
+\contentsline {subsubsection}{\numberline {4.3.7}Hậu kiểm té ngã}{110}{subsubsection.4.3.7}%
+\contentsline {subsubsection}{\numberline {4.3.8}Luồng xác nhận và cảnh báo}{112}{subsubsection.4.3.8}%
+\contentsline {subsubsection}{\numberline {4.3.9}Chatbot giọng nói}{112}{subsubsection.4.3.9}%
+\contentsline {subsubsection}{\numberline {4.3.10}Nhắc nhở theo lịch}{113}{subsubsection.4.3.10}%
+\contentsline {subsubsection}{\numberline {4.3.11}WebRTC trong RobotApp}{114}{subsubsection.4.3.11}%
+\contentsline {subsubsection}{\numberline {4.3.12}RobotControlManager và BLE}{114}{subsubsection.4.3.12}%
+\contentsline {paragraph}{Ánh xạ vector điều khiển sang vận tốc hai bánh.}{116}{paragraph*.66}%
+\contentsline {subsection}{\numberline {4.4}Hiện thực CaregiverApp}{117}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}Khởi động, xác thực và hồ sơ}{117}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}Bật/tắt chức năng theo dõi}{117}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}Lịch và nhật ký}{119}{subsubsection.4.4.3}%
+\contentsline {subsubsection}{\numberline {4.4.4}Tiếp nhận cuộc gọi khi ứng dụng chạy nền}{122}{subsubsection.4.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.5}Gọi video và điều khiển robot từ xa}{123}{subsubsection.4.4.5}%
+\contentsline {subsection}{\numberline {4.5}Hiện thực dữ liệu dùng chung}{123}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Huấn luyện và chuyển đổi mô hình AI}{125}{subsection.4.6}%
+\contentsline {subsubsection}{\numberline {4.6.1}Xử lý dữ liệu}{125}{subsubsection.4.6.1}%
+\contentsline {subsubsection}{\numberline {4.6.2}Trích xuất đặc trưng}{126}{subsubsection.4.6.2}%
+\contentsline {subsubsection}{\numberline {4.6.3}Huấn luyện mô hình}{127}{subsubsection.4.6.3}%
+\contentsline {subsubsection}{\numberline {4.6.4}Chuyển đổi và tối ưu mô hình}{127}{subsubsection.4.6.4}%
+\contentsline {subsubsection}{\numberline {4.6.5}Quy trình kiểm tra tương đương sau chuyển đổi}{128}{subsubsection.4.6.5}%
+\contentsline {subsection}{\numberline {4.7}Hiện thực firmware phần thân robot}{129}{subsection.4.7}%
+\contentsline {subsubsection}{\numberline {4.7.1}Khởi tạo phần cứng}{129}{subsubsection.4.7.1}%
+\contentsline {subsubsection}{\numberline {4.7.2}Tiếp nhận lệnh qua BLE GATT}{129}{subsubsection.4.7.2}%
+\contentsline {subsubsection}{\numberline {4.7.3}Xử lý vùng không đáp ứng và dừng khi mất lệnh}{130}{subsubsection.4.7.3}%
+\contentsline {subsection}{\numberline {4.8}Kết luận chương}{130}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Kết quả và thảo luận}{131}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Mục tiêu đánh giá}{131}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Cấu hình và tiêu chí đánh giá}{131}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Kết quả hiện thực và artifact}{132}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Mức độ hoàn thành thành phần}{132}{subsubsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.2}Kết quả đóng gói Android}{133}{subsubsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.3}Kết quả artifact mô hình}{134}{subsubsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.4}Kiểm thử tự động ở mức logic}{134}{subsection.5.4}%
+\contentsline {subsubsection}{\numberline {5.4.1}Ánh xạ lệnh và chính sách bám người}{134}{subsubsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.2}Hậu kiểm té ngã và hình học tư thế}{135}{subsubsection.5.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.3}Phân vùng đường dẫn Firebase}{136}{subsubsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.5}Đánh giá tính nhất quán khi tích hợp bằng kiểm tra tĩnh}{136}{subsection.5.5}%
+\contentsline {subsubsection}{\numberline {5.5.1}Nhất quán Firebase}{136}{subsubsection.5.5.1}%
+\contentsline {subsubsection}{\numberline {5.5.2}Nhất quán BLE}{136}{subsubsection.5.5.2}%
+\contentsline {subsubsection}{\numberline {5.5.3}Chuỗi timeout}{137}{subsubsection.5.5.3}%
+\contentsline {subsubsection}{\numberline {5.5.4}Quyền sở hữu tài nguyên}{137}{subsubsection.5.5.4}%
+\contentsline {subsection}{\numberline {5.6}Kịch bản kiểm thử chức năng đầu cuối}{137}{subsection.5.6}%
+\contentsline {subsection}{\numberline {5.7}Thiết kế phép đo hiệu năng}{139}{subsection.5.7}%
+\contentsline {subsubsection}{\numberline {5.7.1}Độ trễ pipeline AI}{139}{subsubsection.5.7.1}%
+\contentsline {subsubsection}{\numberline {5.7.2}Độ trễ điều khiển}{139}{subsubsection.5.7.2}%
+\contentsline {subsubsection}{\numberline {5.7.3}WebRTC}{140}{subsubsection.5.7.3}%
+\contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{140}{subsubsection.5.7.4}%
+\contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{140}{subsection.5.8}%
+\contentsline {subsubsection}{\numberline {5.8.1}Dữ liệu, quy ước gán nhãn và giao thức đánh giá}{140}{subsubsection.5.8.1}%
+\contentsline {paragraph}{Quy ước gán nhãn.}{140}{paragraph*.81}%
+\contentsline {paragraph}{Giao thức đánh giá.}{141}{paragraph*.82}%
+\contentsline {subsubsection}{\numberline {5.8.2}Độ chính xác của mô hình}{141}{subsubsection.5.8.2}%
+\contentsline {subsubsection}{\numberline {5.8.3}Kết quả đóng gói mô hình}{142}{subsubsection.5.8.3}%
+\contentsline {subsubsection}{\numberline {5.8.4}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{143}{subsubsection.5.8.4}%
+\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{144}{subsection.5.9}%
+\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{144}{subsubsection.5.9.1}%
+\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{144}{subsubsection.5.9.2}%
+\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{145}{subsubsection.5.9.3}%
+\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{145}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{145}{subsection.5.11}%
+\contentsline {subsection}{\numberline {5.12}Kết luận chương}{146}{subsection.5.12}%
+\contentsline {section}{\numberline {6}Kết luận}{147}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng kết}{147}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{147}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Hạn chế}{148}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{149}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{149}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{149}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{149}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{150}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{150}{subsubsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{150}{subsection.6.5}%
+\contentsline {section}{Tài liệu tham khảo}{152}{section*.87}%
+\contentsline {section}{Phụ lục}{160}{section*.88}%
+\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{160}{section*.89}%
+\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{164}{table.6.10}%
+\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{165}{table.caption.90}%
+\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{167}{table.6.13}%
+\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{168}{lstnumber.7.21}%
+\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{169}{lstnumber.8.7}%
+\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{171}{table.caption.93}%
