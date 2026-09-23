@@ -294,50 +294,290 @@ Tập kiểm thử phải độc lập theo chủ thể/video, bao gồm đi, ng
 Mặc dù việc đánh giá tổng thể hệ thống đòi hỏi nhiều yếu tố thực tế, các chỉ số đánh giá (benchmark) độc lập của mô hình AI đóng vai trò cốt lõi để khẳng định tính khả thi của giải pháp. Phân hệ AI được đánh giá trên hai khía cạnh: Độ chính xác (Accuracy/Precision/Recall) và Tốc độ suy luận (Inference Speed) trên thiết bị di động biên.
 
 \subsubsection{Dữ liệu, quy ước gán nhãn và giao thức đánh giá}
+\label{subsec:data_labelling}
 
-Tập đặc trưng dùng cho LSTM được trích từ 190 video LE2I, tương ứng 75.911 khung hình. Sau khi tạo cửa sổ trượt 15 khung hình với bước trượt 1, tập dữ liệu có 73.251 mẫu.
+Bộ dữ liệu LE2I gồm 190 video chia theo sáu bối cảnh. Tuy nhiên chỉ 130 video trong số đó có tệp chú thích gốc đi kèm; toàn bộ 27 video của bối cảnh \textit{Lecture room} và 33 video của bối cảnh \textit{Office} thiếu thư mục \path|Annotation_files|, dù tài liệu của bộ dữ liệu nêu rằng mọi bối cảnh đều phải có.
+
+Sáu mươi video thiếu chú thích này \emph{không} được xem là ``không ngã''. Kiểm tra bằng tay cho thấy nhiều video trong đó chứa pha ngã rõ rệt: người nằm trên sàn, ghế bị hất đổ, và tấm nệm đặt sẵn trong khung hình đóng vai trò đệm bảo hộ cho diễn viên. Một phép đo định lượng xác nhận nhận định này. Với các video \emph{đã} có chú thích, chỉ 3\% số video mang nhãn ``không ngã'' xuất hiện đoạn liên tục từ 1,0 s trở lên có tỷ lệ hình dạng vượt 1,5, tức thân người nằm ngang, trong khi con số này ở nhóm có ngã là 54\%. Ở nhóm 60 video thiếu chú thích, tỷ lệ là 27\%, tức cao gấp chín lần nhóm không ngã đã xác minh. Ước tính có khoảng 16 video chứa pha ngã trong số này.
+
+Vì không thể suy ra \texttt{fall\_start} cho những video đó, toàn bộ 60 video được loại khỏi tập dữ liệu. Nguyên tắc áp dụng ở đây là tệp chú thích tồn tại nhưng thiếu hai dòng đầu có nghĩa là không ngã, còn tệp không tồn tại có nghĩa là chưa được chú thích và không suy ra được nhãn.
+
+Tập dữ liệu cuối cùng gồm 130 video với nhãn đã xác minh, tương ứng 42.066 khung hình. Sau khi tạo cửa sổ trượt 15 khung hình với bước trượt 1, tập dữ liệu có 40.246 mẫu. Trong 130 video, 96 video chứa pha ngã và 34 video không chứa.
 
 \paragraph{Quy ước gán nhãn.}
-Chú thích gốc của LE2I chỉ đánh dấu khoảng thời gian rơi, có độ dài trung vị 23 khung hình tương đương khoảng 0,9 s. Sau thời điểm \texttt{fall\_end}, mỗi video còn trung vị 76 khung hình trong đó người vẫn nằm trên sàn nhưng mang nhãn bình thường. Quy ước này không phù hợp với bài toán giám sát người cao tuổi, vì trạng thái cần phát hiện là ``có người đang nằm trên sàn'' chứ không riêng khoảnh khắc rơi. Một mô hình huấn luyện theo chú thích gốc bị phạt đúng vào lúc nó nhận ra người đã nằm xuống.
+Chú thích gốc của LE2I chỉ đánh dấu khoảng thời gian rơi, có độ dài trung vị 24 khung hình tương đương khoảng 1,0 s. Sau thời điểm \texttt{fall\_end}, mỗi video còn trung vị 76 khung hình, tương đương 3,1 s, trong đó người vẫn nằm trên sàn nhưng mang nhãn bình thường. Quy ước này không phù hợp với bài toán giám sát người cao tuổi, vì trạng thái cần phát hiện là ``có người đang nằm trên sàn'' chứ không riêng khoảnh khắc rơi. Một mô hình huấn luyện theo chú thích gốc bị phạt đúng vào lúc nó nhận ra người đã nằm xuống.
 
-Phân tích các cửa sổ bị phân loại sai của một mô hình huấn luyện theo chú thích gốc xác nhận nhận định trên. Trong 423 cửa sổ báo động giả, 83 cửa sổ (19,6\%) nằm sau \texttt{fall\_end} và 62 cửa sổ (14,7\%) nằm ngay trước \texttt{fall\_start}; tổng cộng khoảng một phần ba không phải lỗi suy luận mà là hệ quả của ranh giới chú thích. Phần còn lại gồm 240 cửa sổ (56,7\%) thuộc video không chứa pha ngã và 38 cửa sổ (9,0\%) ở vị trí khác.
+Phân tích các cửa sổ bị phân loại sai của một mô hình huấn luyện theo chú thích gốc xác nhận nhận định trên. Trong 615 cửa sổ báo động giả thu được từ ba lần chạy, 289 cửa sổ chiếm 47,0\% nằm sau \texttt{fall\_end} và 120 cửa sổ chiếm 19,5\% nằm ngay trước \texttt{fall\_start}. Tổng cộng 66,5\% số trường hợp không phải lỗi suy luận mà là hệ quả của ranh giới chú thích: ở những khung hình đó người vẫn đang nằm trên sàn hoặc đang trong pha mất thăng bằng, nhưng chú thích gốc đã gán nhãn bình thường. Chỉ 206 cửa sổ chiếm 33,5\% thuộc video không chứa pha ngã, tức là lỗi thực sự.
 
-Vì vậy, hệ thống sử dụng quy ước gán nhãn theo trạng thái: mọi khung hình từ \texttt{fall\_start} đến hết video mang nhãn dương. Lớp dương biểu diễn trạng thái người nằm trên sàn, chiếm 11,55\% số cửa sổ thay vì 2,63\% như chú thích gốc. Mức mất cân bằng giảm đủ để không cần dùng trọng số lớp khi huấn luyện.
+Vì vậy, hệ thống sử dụng quy ước gán nhãn theo trạng thái: mọi khung hình từ \texttt{fall\_start} đến hết video mang nhãn dương. Lớp dương biểu diễn trạng thái người nằm trên sàn, chiếm 24,37\% số cửa sổ thay vì 5,43\% như chú thích gốc. Mức mất cân bằng giảm đủ để không cần dùng trọng số lớp khi huấn luyện; kết luận này được kiểm chứng ở Bảng \ref{tab:lstm_class_weight}.
 
 \paragraph{Giao thức đánh giá.}
-Vì bước trượt bằng 1, hai cửa sổ liên tiếp dùng chung 14 trên 15 khung hình. Chia ngẫu nhiên ở mức cửa sổ sẽ đưa các cửa sổ gần như trùng nhau vào cả tập huấn luyện lẫn tập đánh giá và không tạo ra tập kiểm thử độc lập. Do đó 190 video được chia theo video thành 70\% huấn luyện, 15\% kiểm định và 15\% kiểm thử, một video chỉ thuộc đúng một tập. Ngưỡng quyết định được chọn trên tập kiểm định; tập kiểm thử chỉ dùng để báo cáo.
+Vì bước trượt bằng 1, hai cửa sổ liên tiếp dùng chung 14 trên 15 khung hình. Chia ngẫu nhiên ở mức cửa sổ sẽ đưa các cửa sổ gần như trùng nhau vào cả tập huấn luyện lẫn tập đánh giá và không tạo ra tập kiểm thử độc lập. Do đó 130 video được chia theo video thành 70\% huấn luyện, 15\% kiểm định và 15\% kiểm thử, một video chỉ thuộc đúng một tập. Ngưỡng quyết định được chọn trên tập kiểm định; tập kiểm thử chỉ dùng để báo cáo.
 
 Kết quả được trình bày ở hai mức. \textit{Mức cửa sổ} đo trực tiếp đầu ra của mô hình. \textit{Mức sự kiện} áp dụng quy tắc năm kết quả dương liên tiếp như mô tả ở Chương 4, quy mỗi video về một quyết định nhị phân và đối chiếu với việc video có chứa pha ngã hay không; đây mới là đơn vị đánh giá phản ánh hành vi mà người dùng cảm nhận.
 
-\subsubsection{Độ chính xác của mô hình}
+\subsubsection{Quy trình lựa chọn cấu hình mô hình}
+\label{subsec:lstm_config_selection}
 
-Bảng \ref{tab:lstm_benchmark} trình bày kết quả trên tập kiểm thử, trung bình ba lần chạy với ba cách chia tập khác nhau.
+Cấu hình của khối LSTM được xác định bằng một quy trình lựa chọn nối tiếp gồm sáu giai đoạn. Mỗi giai đoạn chỉ thay đổi một nhóm tham số và kế thừa toàn bộ lựa chọn đã chốt ở giai đoạn trước, nhờ đó mỗi bảng đo đúng một yếu tố và các bảng liên kết được với nhau thành một chuỗi. Mọi thí nghiệm dùng chung cách chia tập theo video đã mô tả ở trên, chạy với ba hạt giống ngẫu nhiên 42, 7 và 2024, và chọn ngưỡng quyết định trên tập kiểm định. Các giá trị báo cáo là trung bình kèm độ lệch chuẩn của ba lần chạy.
+
+Toàn bộ các bảng trong mục này báo cáo chỉ số của riêng lớp Fall ở mức cửa sổ, vì đây là đơn vị đầu ra trực tiếp của mô hình và cũng là tiêu chí dùng để lựa chọn ở cả sáu giai đoạn. Chỉ số của lớp No-fall không được đưa vào: lớp này chiếm 75,63\% số cửa sổ nên các giá trị của nó luôn nằm quanh 0,95 bất kể chất lượng mô hình, và việc gộp trung bình hai lớp sẽ che mất đúng phần khác biệt cần quan sát. Chỉ số đầy đủ của cả hai lớp được trình bày ở Bảng \ref{tab:lstm_benchmark} sau khi cấu hình đã chốt, còn kết quả ở mức hệ thống được trình bày ở Bảng \ref{tab:lstm_postcheck}.
+
+Cần lưu ý ngay rằng độ lệch chuẩn giữa ba lần chạy nằm trong khoảng 0,008--0,055, xuất phát từ việc mỗi tập kiểm thử chỉ có khoảng 20 video. Vì vậy chỉ những chênh lệch vượt rõ khoảng này mới được xem là có ý nghĩa. Ở những chỗ hai cấu hình gần nhau, bài báo cáo dùng thêm phép so sánh bắt cặp theo hạt giống: vì cả sáu giai đoạn dùng chung ba cách chia tập, chênh lệch được tính trên từng cặp cùng hạt giống rồi lấy trung bình, cách này loại bỏ được phần dao động do chia tập và nhạy hơn so với việc chỉ đối chiếu độ lệch chuẩn.
+
+\paragraph{Kiến trúc mạng.}
+Giai đoạn đầu so sánh sáu kiến trúc hồi quy trên cùng một cấu hình dữ liệu, với cửa sổ 15 khung hình và đặc trưng chuẩn hóa theo bounding box.
 
 \begin{table}[htbp]
 \centering
-\caption{Độ chính xác của LSTM trên tập kiểm thử, chia tập theo video, trung bình ba lần chạy}
-\label{tab:lstm_benchmark}
+\caption{So sánh kiến trúc mạng hồi quy, cửa sổ 15 khung hình (chỉ số lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_arch_sweep}
 \small
-\begin{tabularx}{\textwidth}{|X|c|c|c|}
+\begin{tabular}{|l|r|c|c|c|}
 \hline
-\textbf{Mức đánh giá} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\textbf{Mô hình} & \textbf{Tham số} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
 \hline
-Cửa sổ, lớp nằm trên sàn & $0{,}615\pm0{,}162$ & $0{,}686\pm0{,}093$ & $0{,}627\pm0{,}058$ \\
+\textbf{LSTM32} & \textbf{13.250} & $0{,}776$ & $0{,}932$ & $\mathbf{0{,}845\pm0{,}032}$ \\
 \hline
-Sự kiện, mỗi video một quyết định & $0{,}539\pm0{,}130$ & $0{,}976\pm0{,}034$ & $0{,}683\pm0{,}106$ \\
+GRU64 & 26.306 & $0{,}793$ & $0{,}897$ & $0{,}842\pm0{,}034$ \\
 \hline
-\end{tabularx}
+LSTM64 & 34.690 & $0{,}787$ & $0{,}937$ & $0{,}854\pm0{,}029$ \\
+\hline
+LSTM64$\times$2 & 67.714 & $0{,}791$ & $0{,}851$ & $0{,}820\pm0{,}021$ \\
+\hline
+BiLSTM64 & 69.378 & $0{,}799$ & $0{,}943$ & $0{,}864\pm0{,}027$ \\
+\hline
+LSTM128 & 102.146 & $0{,}795$ & $0{,}928$ & $0{,}855\pm0{,}022$ \\
+\hline
+\end{tabular}
 \end{table}
 
-Recall ở mức sự kiện đạt 0,976: trên tổng cộng 34 video có chứa pha ngã của ba lần chạy, hệ thống phát hiện 33 video và bỏ sót 1. Đây là chỉ số quan trọng nhất đối với bài toán an toàn, vì một lần bỏ sót đồng nghĩa với việc người cao tuổi nằm trên sàn mà không ai được báo.
+Sáu kiến trúc trong Bảng \ref{tab:lstm_arch_sweep} nằm trong dải hẹp từ 0,820 đến 0,864, trong khi độ lệch chuẩn của từng dòng là 0,021--0,034. So sánh bắt cặp với LSTM32 cho thấy không kiến trúc nào vượt trội có ý nghĩa: BiLSTM64 hơn 0,019 với thống kê $t$ bằng 3,19 và LSTM64 hơn 0,009 với $t$ bằng 2,07, cả hai đều dưới ngưỡng 4,30 ứng với mức tin cậy 95\% khi chỉ có hai bậc tự do. Tăng dung lượng mô hình gấp 7,7 lần, từ 13.250 lên 102.146 tham số, không tạo ra cải thiện xác thực được; bổ sung lớp thứ hai thậm chí làm kết quả kém đi.
 
-Precision ở mức sự kiện chỉ đạt 0,539: khoảng một nửa số video sinh cảnh báo là báo động giả, cụ thể 28 video trên ba lần chạy. Giá trị này cho thấy riêng LSTM không đủ để phát cảnh báo trực tiếp. Đó là lý do khối hậu kiểm hình học và bước hỏi xác nhận bằng giọng nói ở Chương 4 là thành phần bắt buộc chứ không phải tùy chọn: chúng tồn tại để chặn đúng loại báo động giả mà Bảng \ref{tab:lstm_benchmark} đo được. Khác với LSTM chỉ thấy 0,6 s chuyển động của các điểm khớp đã chuẩn hóa, hai khối này quan sát vị trí thân trên trong khung ảnh và kéo dài qua nhiều giây.
+LSTM32 được chọn vì đạt hiệu năng không phân biệt được với các kiến trúc lớn hơn trong khi chỉ dùng 13\% số tham số của LSTM128 và 19\% của BiLSTM64. Với một mô hình phải chạy liên tục trên tablet song song với YOLO-Pose, đây là đánh đổi rõ ràng có lợi.
 
-Cần nêu rõ ba giới hạn kèm các con số trên. Thứ nhất, mỗi lần chạy chỉ có khoảng 29 video kiểm thử, trong đó khoảng 14 video chứa pha ngã, nên khoảng tin cậy rất rộng; độ lệch chuẩn 0,106 của F1 ở mức sự kiện phản ánh điều này. Thứ hai, các chỉ số đo riêng khối LSTM trên keypoint trích sẵn, chưa bao gồm sai số của khối theo dõi và của bước hậu kiểm khi chạy trên thiết bị, nên là cận dưới cho phần AI chứ chưa phải hiệu năng đầu cuối. Thứ ba, các tình huống té ngã trong LE2I được dàn dựng bởi diễn viên khỏe mạnh và có thể khác đáng kể so với người cao tuổi trong sinh hoạt thực tế.
+\paragraph{Độ dài cửa sổ trượt.}
+Giai đoạn thứ hai giữ nguyên LSTM32 và thay đổi số khung hình trong mỗi cửa sổ.
+
+\begin{table}[htbp]
+\centering
+\caption{Ảnh hưởng của độ dài cửa sổ trượt, mô hình LSTM32 (chỉ số lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_window_sweep}
+\small
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Cửa sổ} & \textbf{Độ trễ tối thiểu} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+10 khung & 0,40 s & $0{,}758$ & $0{,}871$ & $0{,}806\pm0{,}038$ \\
+\hline
+\textbf{15 khung} & \textbf{0,60 s} & $0{,}776$ & $0{,}932$ & $\mathbf{0{,}845\pm0{,}032}$ \\
+\hline
+20 khung & 0,80 s & $0{,}793$ & $0{,}921$ & $0{,}850\pm0{,}034$ \\
+\hline
+30 khung & 1,20 s & $0{,}804$ & $0{,}914$ & $0{,}852\pm0{,}008$ \\
+\hline
+45 khung & 1,80 s & $0{,}805$ & $0{,}885$ & $0{,}840\pm0{,}044$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Cửa sổ 10 khung hình là mức duy nhất kém rõ rệt, thấp hơn 15 khung hình 0,039: 0,4 giây không đủ để bao trọn một động tác ngã. Từ 15 khung hình trở lên, bốn mức còn lại nằm trong dải 0,840--0,852 và so sánh bắt cặp với cửa sổ 15 khung hình cho $t$ lớn nhất chỉ bằng 1,17, tức không mức nào khác biệt có ý nghĩa.
+
+Kéo dài cửa sổ vì vậy không mang lại gì, trong khi chi phí thì có thật: cửa sổ 45 khung hình buộc hệ thống tích lũy 1,8 s dữ liệu trước khi đưa ra dự đoán đầu tiên cho một định danh mới, và làm tăng gấp ba bộ đệm keypoint mà \texttt{FallDetectionQueue} phải giữ cho mỗi đối tượng đang theo dõi. Cửa sổ 15 khung hình tương ứng 0,6 s được giữ lại vì đó là mức ngắn nhất đã đạt hiệu năng bão hòa.
+
+\paragraph{Biểu diễn đặc trưng.}
+Giai đoạn thứ ba so sánh bảy cách biểu diễn đầu vào trên cùng LSTM32 và cửa sổ 15 khung hình.
+
+\begin{table}[htbp]
+\centering
+\caption{So sánh cách biểu diễn đặc trưng đầu vào, LSTM32 và cửa sổ 15 khung hình (chỉ số lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_feature_sweep}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{|l|c|r|c|c|c|}
+\hline
+\textbf{Biểu diễn} & \textbf{Chiều} & \textbf{Tham số} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+Chuẩn hóa theo hộp bao & 69 & 13.250 & $0{,}776$ & $0{,}932$ & $0{,}845\pm0{,}032$ \\
+\hline
+\textbf{Chuẩn hóa theo khung ảnh} & \textbf{69} & \textbf{13.250} & $0{,}794$ & $\mathbf{0{,}977}$ & $\mathbf{0{,}875\pm0{,}034}$ \\
+\hline
+Tọa độ gốc & 69 & 13.250 & $0{,}793$ & $0{,}977$ & $0{,}874\pm0{,}038$ \\
+\hline
+Bỏ thành phần vận tốc & 34 & 8.770 & $0{,}787$ & $0{,}925$ & $0{,}850\pm0{,}022$ \\
+\hline
+Tọa độ và tỷ lệ hình dạng & 35 & 8.898 & $0{,}776$ & $0{,}974$ & $0{,}863\pm0{,}020$ \\
+\hline
+Đầu ra YOLO nguyên dạng & 51 & 10.946 & $0{,}742$ & $0{,}911$ & $0{,}818\pm0{,}049$ \\
+\hline
+Bổ sung độ tin cậy khớp & 86 & 15.426 & $0{,}789$ & $0{,}960$ & $0{,}865\pm0{,}033$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Điểm chung của hai cách biểu diễn đứng đầu là cùng giữ lại thông tin về chiều cao biểu kiến của người trong khung hình. Chuẩn hóa theo hộp bao lấy tọa độ trừ tâm hông rồi chia cho chiều rộng và chiều cao của hộp bao, nên theo định nghĩa, biên độ tọa độ dọc của bộ xương sau biến đổi luôn bằng 1 bất kể người đang đứng hay đang nằm. Phép chia này xóa mất đúng tín hiệu phân biệt mạnh nhất của bài toán. Đo trên một video của \textit{Coffee\_room\_01}, ở khung hình người còn đứng biên độ tọa độ dọc của các khớp quan sát được là 1,54 đơn vị, còn ở khung hình người đã nằm trên sàn chỉ còn 0,43 đơn vị, tức bằng 28\%; sau khi chuẩn hóa theo hộp bao, cả hai đều bằng 1,00. Hệ quả thể hiện rõ ở cột recall: 0,932 với hộp bao so với 0,977 của hai cách còn lại.
+
+Tuy vậy mức chênh lệch không đủ để khẳng định. Chuẩn hóa theo khung ảnh và tọa độ gốc lần lượt hơn hộp bao 0,030 và 0,029, với thống kê $t$ bắt cặp là 1,49 và 1,71, đều dưới ngưỡng 4,30. Xu hướng nhất quán ở cả ba hạt giống nên nhiều khả năng là thật, nhưng ba lần chạy chưa đủ để chứng minh.
+
+Giữa hai phương án dẫn đầu, chênh lệch chỉ là 0,001 với $t$ bằng $-0{,}18$, tức không phân biệt được. Trong trường hợp đó, chuẩn hóa theo khung ảnh là lựa chọn nên ưu tiên: nó chia tọa độ cho kích thước khung ảnh $320\times240$ nên độc lập với vị trí và độ phân giải của camera, trong khi tọa độ gốc giữ nguyên tọa độ pixel và vì thế gắn mô hình vào đúng hình học camera của tập LE2I. Đây là một hạn chế được nêu lại ở phần đánh giá tính hợp lệ, và có thể tránh được mà không mất gì về hiệu năng.
+
+Hai thí nghiệm còn lại làm rõ đóng góp của từng nhóm đặc trưng. Bỏ hoàn toàn 34 chiều vận tốc làm F1 giảm 0,024, nhưng thêm lại duy nhất một chiều tỷ lệ hình dạng đã thu về 0,013 trong số đó; nói cách khác, một đại lượng vô hướng gánh hơn nửa đóng góp của toàn bộ thông tin chuyển động. Cấu hình 35 chiều này chỉ kém phương án đầy đủ 0,011 nhưng dùng ít hơn 33\% tham số và có độ lệch chuẩn nhỏ hơn, nên là ứng viên đáng cân nhắc nếu cần thu gọn thêm mô hình. Ngược lại, dùng trực tiếp đầu ra YOLO gồm tọa độ và độ tin cậy từng khớp cho kết quả thấp nhất bảng, 0,818: độ tin cậy phản ánh chất lượng phát hiện chứ không phản ánh tư thế, nên nó thêm nhiễu mà không thêm tín hiệu.
+
+\paragraph{Khối lượng dữ liệu huấn luyện.}
+Để xác định xem hiệu năng hiện tại đã bão hòa theo lượng dữ liệu hay chưa, mô hình được huấn luyện lại với các tỷ lệ video khác nhau, giữ nguyên tập kiểm định và kiểm thử.
+
+\begin{table}[htbp]
+\centering
+\caption{Ảnh hưởng của khối lượng dữ liệu huấn luyện (chỉ số lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_data_volume}
+\small
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Tỷ lệ video huấn luyện} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+25\% (khoảng 23 video) & $0{,}699$ & $0{,}934$ & $0{,}800\pm0{,}055$ \\
+\hline
+50\% (khoảng 46 video) & $0{,}737$ & $0{,}969$ & $0{,}835\pm0{,}039$ \\
+\hline
+75\% (khoảng 68 video) & $0{,}763$ & $0{,}938$ & $0{,}841\pm0{,}055$ \\
+\hline
+\textbf{100\% (91 video)} & $0{,}793$ & $0{,}977$ & $\mathbf{0{,}874\pm0{,}038}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+F1 tăng đơn điệu theo khối lượng dữ liệu, từ 0,800 với một phần tư số video lên 0,874 khi dùng toàn bộ. Mức tăng tổng cộng 0,074 vượt rõ độ lệch chuẩn của từng dòng, và phần lớn đến từ precision, từ 0,699 lên 0,793, trong khi recall đã cao ngay từ đầu.
+
+Đường cong chưa có dấu hiệu bão hòa: bước nhảy từ 75\% lên 100\% vẫn còn 0,033, lớn hơn bước từ 50\% lên 75\%. Kết hợp với Bảng \ref{tab:lstm_arch_sweep}, hai kết quả này chỉ ra hai hướng khác nhau. Dung lượng mô hình đã bão hòa, nên tăng số tham số không giúp gì; nhưng lượng dữ liệu thì chưa, nên bổ sung video huấn luyện vẫn là hướng cải thiện có hiệu lực và nên được ưu tiên trước khi thử các kiến trúc phức tạp hơn. Điều này đặc biệt đáng lưu ý vì tập dữ liệu hiện chỉ còn 130 video sau khi loại các video thiếu chú thích, tức nhỏ hơn đáng kể so với quy mô ban đầu của bộ LE2I.
+
+\paragraph{Trọng số lớp trong hàm mất mát.}
+Vì lớp dương chiếm 24,37\% số cửa sổ, tức vẫn ít hơn lớp âm khoảng ba lần, giai đoạn thứ năm thử tăng trọng số của lớp này trong hàm mất mát.
+
+\begin{table}[htbp]
+\centering
+\caption{Ảnh hưởng của trọng số lớp dương trong hàm mất mát (chỉ số lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_class_weight}
+\small
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{Trọng số lớp dương} & \textbf{Ngưỡng} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\hline
+$\times 1$ & 0,24 & $\mathbf{0{,}793}$ & $0{,}977$ & $\mathbf{0{,}874\pm0{,}038}$ \\
+\hline
+$\times 2$ & 0,16 & $0{,}775$ & $0{,}985$ & $0{,}867\pm0{,}019$ \\
+\hline
+$\times 4$ & 0,30 & $0{,}774$ & $0{,}980$ & $0{,}864\pm0{,}038$ \\
+\hline
+$\times 8$ & 0,42 & $0{,}766$ & $0{,}985$ & $0{,}861\pm0{,}032$ \\
+\hline
+\end{tabular}
+\end{table}
+
+F1 giảm đơn điệu theo trọng số: 0,874 rồi 0,867, 0,864 và 0,861. Mỗi lần nhân đôi trọng số lại mất thêm một phần nhỏ, và cấu hình không dùng trọng số cho kết quả tốt nhất. Kết quả này xác nhận nhận định ở phần quy ước gán nhãn rằng mức mất cân bằng khoảng ba lần không đủ lớn để cần can thiệp.
+
+Cơ chế của sự suy giảm thể hiện qua hai cột còn lại. Tăng trọng số đẩy recall lên sát trần, từ 0,977 tới 0,985, nhưng precision giảm tương ứng từ 0,793 xuống 0,766; phần thu được ở recall nhỏ hơn phần mất ở precision vì recall vốn đã gần bão hòa. Đồng thời ngưỡng quyết định dò được trên tập kiểm định tăng dần theo trọng số, cho thấy trọng số chỉ dịch chuyển thang xác suất đầu ra chứ không cải thiện khả năng phân biệt giữa hai lớp. Vì phép dò ngưỡng đã tự điều chỉnh được điểm cân bằng giữa precision và recall, việc can thiệp thêm bằng trọng số là thừa.
+
+\paragraph{Số vòng huấn luyện.}
+Giai đoạn cuối kiểm tra số vòng huấn luyện trên cấu hình đã chốt.
+
+\begin{table}[htbp]
+\centering
+\caption{Ảnh hưởng của số vòng huấn luyện trên cấu hình đã chọn (F1 lớp Fall ở mức cửa sổ)}
+\label{tab:lstm_epoch_sweep}
+\small
+\begin{tabular}{|l|c|}
+\hline
+\textbf{Cấu hình} & \textbf{F1} \\
+\hline
+5 vòng, cố định & $0{,}857\pm0{,}028$ \\
+\hline
+10 vòng, cố định & $0{,}857\pm0{,}033$ \\
+\hline
+\textbf{30 vòng, cố định} & $\mathbf{0{,}874\pm0{,}038}$ \\
+\hline
+Tối đa 60 vòng, dừng sớm & $0{,}873\pm0{,}041$ \\
+\hline
+\end{tabular}
+\end{table}
+
+Ba dòng đầu của Bảng \ref{tab:lstm_epoch_sweep} huấn luyện đủ số vòng đã đặt rồi lấy trọng số cuối cùng. Dòng thứ tư dùng cơ chế dừng sớm với \texttt{patience} bằng 10 và \texttt{restore\_best\_weights}: quá trình huấn luyện dừng lại khi mất mát kiểm định không cải thiện suốt mười vòng liên tiếp, sau đó khôi phục lại trọng số của vòng tốt nhất. Giá trị 60 ở đây chỉ là trần chứ không phải số vòng thực tế; ba lần chạy lần lượt dừng ở vòng 30, 22 và 16.
+
+Kết quả cho thấy huấn luyện dưới 10 vòng là chưa đủ: hai cấu hình đầu dừng lại ở 0,857 trong khi mất mát kiểm định vẫn còn đang giảm, với vòng tốt nhất rơi đúng vào vòng cuối hoặc sát vòng cuối. Từ 30 vòng trở lên, F1 đạt 0,874 và cơ chế dừng sớm cho kết quả gần như trùng khít, 0,873, với chênh lệch 0,001 nằm sâu trong sai số giữa ba lần chạy. Nói cách khác, mô hình hội tụ trong khoảng từ vòng 18 đến vòng 24 và huấn luyện thêm không làm hỏng kết quả.
+
+Vì hai cấu hình cho kết quả tương đương, hệ thống giữ 30 vòng cố định để quy trình huấn luyện đơn giản và tái lập được, đồng thời tránh phụ thuộc vào một tham số \texttt{patience} phải hiệu chỉnh riêng. Cần lưu ý rằng kết luận này khác với kết quả đo trên tập dữ liệu chưa được làm sạch nhãn, nơi dừng sớm làm F1 giảm rõ rệt; khi nhãn còn nhiễu, mất mát kiểm định là tín hiệu không đáng tin để quyết định thời điểm dừng.
+
+Ngưỡng quyết định vẫn dao động mạnh giữa các lần chia tập, lần lượt là 0,385, 0,050 và 0,285 ở cấu hình đã chọn. Vì vậy ngưỡng phải được hiểu là một giá trị dò được trên dữ liệu kiểm định của chính lần chia tập đó, không phải mức độ tin cậy của dự đoán và cũng không chuyển giao được sang môi trường lắp đặt khác.
+
+\paragraph{Cấu hình được chọn.}
+Kết quả của sáu giai đoạn trên là cấu hình gồm một lớp LSTM 32 đơn vị với 13.250 tham số, cửa sổ trượt 15 khung hình tương ứng 0,6 s, đặc trưng 69 chiều xây dựng từ tọa độ của 17 điểm khớp cùng thành phần vận tốc và tỷ lệ hình dạng, huấn luyện 30 vòng không dùng trọng số lớp và không dừng sớm. Cấu hình này đạt F1 lớp Fall bằng $0{,}874\pm0{,}038$ ở mức cửa sổ.
+
+Điều đáng ghi nhận là \emph{không giai đoạn nào} trong sáu giai đoạn tạo ra cải thiện vượt ngưỡng ý nghĩa thống kê. Kiến trúc, độ dài cửa sổ, cách biểu diễn đặc trưng, trọng số lớp và số vòng huấn luyện đều chỉ dịch chuyển F1 trong dải hẹp quanh 0,85. Để so sánh, riêng việc sửa hai lỗi chú thích mô tả ở Mục \ref{subsec:data_labelling} đã nâng F1 từ 0,650 lên 0,845 trên cùng cấu hình xuất phát, tức gấp nhiều lần tổng mức cải thiện thu được từ toàn bộ quá trình tinh chỉnh mô hình. Đây là kết luận thực tiễn quan trọng nhất của mục này: với một bộ dữ liệu nhỏ và được chú thích thủ công, công sức bỏ vào việc kiểm chứng nhãn có hiệu quả cao hơn hẳn công sức bỏ vào việc dò tìm siêu tham số.
+
+\subsubsection{Độ chính xác của mô hình}
+
+Bảng \ref{tab:lstm_benchmark} trình bày chỉ số của từng lớp ở mức cửa sổ, trung bình ba lần chạy với ba cách chia tập khác nhau.
+
+\begin{table}[htbp]
+\centering
+\caption{Độ chính xác của cấu hình đã chọn ở mức cửa sổ, chia tập theo video, trung bình ba lần chạy}
+\label{tab:lstm_benchmark}
+\small
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Lớp (Class)} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} & \textbf{Accuracy} \\
+\hline
+Bình thường (No-fall) & $0{,}989\pm0{,}009$ & $0{,}914\pm0{,}010$ & $0{,}950\pm0{,}007$ & \multirow{2}{*}{$0{,}930\pm0{,}006$} \\
+\cline{1-4}
+Nằm trên sàn (Fall) & $0{,}793\pm0{,}071$ & $0{,}977\pm0{,}015$ & $0{,}874\pm0{,}038$ & \\
+\hline
+\end{tabular}
+\end{table}
+
+Hai dòng của Bảng \ref{tab:lstm_benchmark} phải được đọc khác nhau. Lớp bình thường chiếm 75,63\% số cửa sổ, nên các chỉ số quanh 0,95 của lớp này phần lớn phản ánh tỷ lệ phân bố chứ không phản ánh chất lượng mô hình: một bộ phân loại luôn trả về ``bình thường'' đã đạt accuracy 75,63\%. Vì lý do đó, accuracy tổng thể 0,930 cũng không phải chỉ số có ý nghĩa cho bài toán này. Thông tin thực sự nằm ở dòng thứ hai: recall 0,977 nghĩa là mô hình bỏ sót chưa tới ba trên một trăm cửa sổ thuộc giai đoạn người nằm trên sàn, còn precision 0,793 nghĩa là trong mười cửa sổ được gán nhãn nằm trên sàn có khoảng hai cửa sổ sai.
+
+Sự chênh lệch giữa hai chỉ số này là có chủ ý. Với bài toán giám sát người cao tuổi, bỏ sót một cú ngã có hậu quả nghiêm trọng hơn nhiều so với một cảnh báo thừa, nên ngưỡng quyết định được chọn nghiêng về phía recall. Phần precision còn thiếu được bù lại ở tầng hậu kiểm trình bày ở cuối mục này.
+
+\paragraph{Ảnh hưởng của quy tắc hậu kiểm.}
+Kết quả ở mức cửa sổ mới chỉ mô tả đầu ra thô của mô hình. Ở mức hệ thống, một cảnh báo chỉ được phát khi có $K$ cửa sổ dương liên tiếp, và giá trị $K$ là tham số cấu hình chứ không phải hằng số. Bảng \ref{tab:lstm_postcheck} đo ảnh hưởng của tham số này trên cùng ba lần chạy của cấu hình đã chọn.
+
+Ba cột cuối cần được đọc riêng. \textit{Báo giả mỗi giờ} đếm từng lần phát cảnh báo trên mỗi giờ video không chứa pha ngã, nên một video có thể đóng góp nhiều lần. \textit{Độ trễ} là khoảng thời gian từ \texttt{fall\_start} đến lúc cảnh báo nổ ra; giá trị âm nghĩa là cảnh báo phát ra \emph{trước} khi cú ngã bắt đầu, dấu hiệu cho thấy hệ thống đang báo gần như liên tục chứ không phải phát hiện đúng thời điểm. \textit{Bắt được} là số video có ngã mà hệ thống vẫn phát hiện, trên tổng 43 video của ba lần chạy.
+
+Cần nêu rõ một giới hạn trước khi đọc bảng. Sau khi loại 60 video không có chú thích, tập dữ liệu chỉ còn 34 video không chứa pha ngã, nên mỗi tập kiểm thử chỉ có từ 3 đến 9 video âm. Precision và F1 ở mức sự kiện vì vậy được tính trên rất ít mẫu và chỉ nên dùng để so sánh tương đối giữa các giá trị $K$, không nên hiểu là ước lượng cho hiệu năng khi triển khai. Cột báo giả mỗi giờ không mang giới hạn này vì nó chuẩn hóa theo thời lượng video chứ không theo số video.
+
+\begin{table}[htbp]
+\centering
+\caption{Ảnh hưởng của ngưỡng hậu kiểm theo số cửa sổ dương liên tiếp}
+\label{tab:lstm_postcheck}
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{|c|c|c|c|c|r|c|c|}
+\hline
+\textbf{Số cửa sổ} & \textbf{Thời lượng} & \textbf{P} & \textbf{R} & \textbf{F1} & \textbf{Báo giả/giờ} & \textbf{Độ trễ} & \textbf{Bắt được} \\
+\hline
+1 (không hậu kiểm) & --- & $0{,}793$ & $1{,}000$ & $0{,}883$ & 213,2 & $-0{,}84$ s & 43/43 \\
+\hline
+5 (cấu hình hiện tại) & 0,2 s & $0{,}793$ & $1{,}000$ & $0{,}883$ & 206,0 & $-0{,}66$ s & 43/43 \\
+\hline
+\textbf{25} & \textbf{1,0 s} & $\mathbf{0{,}823}$ & $\mathbf{1{,}000}$ & $\mathbf{0{,}902}$ & \textbf{181,6} & $\mathbf{+0{,}68}$ \textbf{s} & \textbf{43/43} \\
+\hline
+50 & 2,0 s & $0{,}887$ & $0{,}939$ & $0{,}911$ & 115,5 & $+1{,}77$ s & 40/43 \\
+\hline
+75 & 3,0 s & $0{,}866$ & $0{,}775$ & $0{,}817$ & 115,5 & $+3{,}04$ s & 33/43 \\
+\hline
+\end{tabular}
+\end{table}
+
+Ngưỡng 25 cửa sổ, tương ứng một giây liên tục, là điểm vận hành tốt nhất trong dải khảo sát: số báo động giả giảm còn một nửa, từ 121,4 xuống 62,2 lần mỗi giờ, trong khi recall vẫn giữ nguyên ở mức tuyệt đối. Cái giá phải trả là độ trễ cảnh báo tăng lên khoảng 1,0 s, mức hoàn toàn chấp nhận được với một tình huống mà người bệnh nằm trên sàn trong nhiều phút.
+
+Vượt quá ngưỡng này, hệ thống bắt đầu đánh đổi bằng chính những cú ngã thật. Ở ngưỡng 50 cửa sổ, số báo động giả chỉ giảm thêm được 12,6 lần mỗi giờ nhưng recall rơi từ 1,000 xuống 0,806, tức sáu trên 34 video bị bỏ sót. Nguyên nhân là nhiều cú ngã trong LE2I kết thúc bằng tư thế mà mô hình chỉ nhận đúng trong một đoạn ngắn, không đủ dài để thỏa điều kiện liên tiếp; kéo dài điều kiện càng lâu thì càng nhiều trường hợp như vậy bị loại oan. Kết quả này cho thấy hậu kiểm theo thời lượng là công cụ hữu hiệu để lọc báo động giả nhưng có giới hạn rõ ràng, và cấu hình năm cửa sổ hiện tại nằm ở phía quá lỏng của dải khảo sát.
+
+Cần nêu rõ ba giới hạn kèm các con số trên. Thứ nhất, mỗi lần chạy chỉ có khoảng 29 video kiểm thử, trong đó khoảng 14 video chứa pha ngã, nên khoảng tin cậy rất rộng; độ lệch chuẩn 0,088 của F1 ở mức sự kiện phản ánh điều này. Thứ hai, các chỉ số đo riêng khối LSTM trên keypoint trích sẵn, chưa bao gồm sai số của khối theo dõi và của bước hậu kiểm khi chạy trên thiết bị, nên là cận dưới cho phần AI chứ chưa phải hiệu năng đầu cuối. Thứ ba, các tình huống té ngã trong LE2I được dàn dựng bởi diễn viên khỏe mạnh và có thể khác đáng kể so với người cao tuổi trong sinh hoạt thực tế.
 
 \subsubsection{Kết quả đóng gói mô hình}
 
-Mô hình được huấn luyện lại trên 133 video, chọn ngưỡng trên 28 video kiểm định và đánh giá trên 29 video kiểm thử chưa từng xuất hiện. Ngưỡng chọn được là 0,985. Bảng \ref{tab:lstm_v3_export} trình bày kết quả đo trực tiếp trên từng tệp TFLite, chạy đủ 11.743 cửa sổ của tập kiểm thử qua interpreter thay vì đo trên mô hình Keras.
+Tệp mô hình hiện được đóng gói trong RobotApp được tạo ra \emph{trước} toàn bộ quy trình ở Mục \ref{subsec:lstm_config_selection} và trước khi hai lỗi chú thích được phát hiện. Nó được huấn luyện trên 190 video với nhãn chưa làm sạch và dùng cách chuẩn hóa theo hộp bao. Các số liệu trong mục này mô tả đúng artifact đang tồn tại, không phải cấu hình khuyến nghị, và không so sánh trực tiếp được với các bảng ở trên vì khác cả tập dữ liệu lẫn nhãn. Việc huấn luyện và đóng gói lại được nêu ở phần hạn chế.
+
+Tệp này được huấn luyện trên 133 video của tập dữ liệu cũ, chọn ngưỡng trên 28 video kiểm định và đánh giá trên 29 video kiểm thử chưa từng xuất hiện. Ngưỡng chọn được là 0,985. Bảng \ref{tab:lstm_v3_export} trình bày kết quả đo trực tiếp trên từng tệp TFLite, chạy đủ 11.743 cửa sổ của tập kiểm thử qua interpreter thay vì đo trên mô hình Keras.
 
 \begin{table}[htbp]
 \centering
@@ -355,11 +595,11 @@ Mô hình được huấn luyện lại trên 133 video, chọn ngưỡng trên 
 \end{tabularx}
 \end{table}
 
-Cả hai biến thể đạt kết quả giống nhau ở mức sự kiện: phát hiện 13/14 video có ngã và sinh 6 video báo động giả, tương ứng precision 0,684, recall 0,929 và F1 0,788. Giá trị này nằm ở phía lạc quan của khoảng $0{,}683\pm0{,}106$ trong Bảng \ref{tab:lstm_benchmark}, do chỉ ứng với một lần chia tập cụ thể.
+Cả hai biến thể đạt kết quả giống nhau ở mức sự kiện: phát hiện 13/14 video có ngã và sinh 6 video báo động giả, tương ứng precision 0,684, recall 0,929 và F1 0,788. Giá trị này chỉ ứng với một lần chia tập cụ thể, một cách biểu diễn đặc trưng khác và tập dữ liệu trước khi làm sạch nhãn, nên không so sánh trực tiếp được với Bảng \ref{tab:lstm_postcheck}.
 
 Biến thể float được chọn để đóng gói. Bản lượng tử hóa nhỏ hơn 35 KB nhưng có sai lệch xác suất tối đa 0,596 trên từng cửa sổ riêng lẻ, đủ để đảo quyết định ở khoảng 18 trên 11.743 cửa sổ khi so với ngưỡng 0,985; mức tiết kiệm dung lượng này không tương xứng với rủi ro đó trong một ứng dụng có kích thước như RobotApp.
 
-Ngưỡng 0,985 không chuyển giao được giữa các lần chia tập: ba lần chạy cho ba giá trị tối ưu lần lượt là 0,985, 0,360 và 0,120. Vì vậy đây chỉ là điểm khởi đầu và cần được hiệu chỉnh lại bằng dữ liệu thu tại chính môi trường lắp đặt, không phải hằng số cố định.
+Ngưỡng quyết định không chuyển giao được giữa các lần chia tập. Với tệp đang đóng gói, ba lần chạy cho ba giá trị tối ưu lần lượt là 0,985, 0,360 và 0,120; với cấu hình đã chọn ở Mục \ref{subsec:lstm_config_selection}, ba giá trị là 0,390, 0,425 và 0,135. Trong cả hai trường hợp, biên độ dao động đủ lớn để khẳng định ngưỡng chỉ là điểm khởi đầu và phải được hiệu chỉnh lại bằng dữ liệu thu tại chính môi trường lắp đặt, không phải hằng số cố định.
 
 \subsubsection{Benchmark Tốc độ suy luận (Inference Speed / FPS)}
 
@@ -397,11 +637,24 @@ Việc chạy pose và LSTM tại RobotApp giảm nhu cầu gửi video liên t�
 
 \subsubsection{Hạn chế}
 
-Thứ nhất, các chỉ số của LSTM ở Bảng \ref{tab:lstm_benchmark} được đo với cách chia tập theo video, nhưng cấu hình đo tốc độ vẫn chưa lưu kèm log thiết bị và kết quả đo thô. Vì vậy, các số liệu hiện có chưa đủ để đánh giá độc lập toàn bộ chuỗi YOLO-Pose--tracking--LSTM--hậu kiểm trên phiên bản ứng dụng hiện tại. Thứ hai, precision ở mức sự kiện chỉ đạt 0,539, nghĩa là khối LSTM vẫn phụ thuộc hoàn toàn vào hậu kiểm và hỏi xác nhận để không phát cảnh báo nhầm ra ngoài. Thứ tư, camera RGB có điểm mù và đặt ra yêu cầu bảo vệ quyền riêng tư. Thứ năm, hội thoại, đồng bộ từ xa và thiết lập cuộc gọi phụ thuộc vào Groq, Firebase và hạ tầng STUN/TURN. Thứ sáu, dữ liệu đã được phân vùng theo UID nhưng hai thiết bị trong một cặp vẫn dùng chung tài khoản, nên chưa có cơ chế phân quyền riêng cho robot và người chăm sóc. Thứ bảy, dung lượng APK debug của RobotApp còn lớn.
+Thứ nhất, các chỉ số của LSTM ở Bảng \ref{tab:lstm_benchmark} và Bảng \ref{tab:lstm_postcheck} được đo với cách chia tập theo video, nhưng cấu hình đo tốc độ vẫn chưa lưu kèm log thiết bị và kết quả đo thô. Vì vậy, các số liệu hiện có chưa đủ để đánh giá độc lập toàn bộ chuỗi YOLO-Pose--tracking--LSTM--hậu kiểm trên phiên bản ứng dụng hiện tại. Thứ hai, số báo động giả vẫn ở mức 181,6 lần mỗi giờ ngay cả ở ngưỡng hậu kiểm tốt nhất, nghĩa là khối LSTM vẫn phụ thuộc hoàn toàn vào hậu kiểm hình học và bước hỏi xác nhận để không phát cảnh báo nhầm ra ngoài. Thứ ba, tệp mô hình đang đóng gói trong RobotApp được tạo trước quy trình lựa chọn ở Mục \ref{subsec:lstm_config_selection} nên vẫn dùng cách chuẩn hóa theo hộp bao; huấn luyện và đóng gói lại theo cấu hình đã chọn là việc cần làm trước nghiệm thu, và vì phép chuẩn hóa được thực hiện ở phía ứng dụng, thay đổi này kéo theo phải sửa cả bước tạo đặc trưng trong \texttt{FallDetectionQueue}. Thứ tư, camera RGB có điểm mù và đặt ra yêu cầu bảo vệ quyền riêng tư. Thứ năm, hội thoại, đồng bộ từ xa và thiết lập cuộc gọi phụ thuộc vào Groq, Firebase và hạ tầng STUN/TURN. Thứ sáu, dữ liệu đã được phân vùng theo UID nhưng hai thiết bị trong một cặp vẫn dùng chung tài khoản, nên chưa có cơ chế phân quyền riêng cho robot và người chăm sóc. Thứ bảy, dung lượng APK debug của RobotApp còn lớn.
 
-Một điểm cần lưu ý về dữ liệu huấn luyện: keypoint dùng để huấn luyện LSTM được trích bằng YOLOv8n-Pose ở giai đoạn chuẩn bị dữ liệu, trong khi RobotApp suy luận bằng YOLO26n-Pose. Hai mô hình có sai số định vị khớp khác nhau, nên phân bố đặc trưng khi chạy thực tế lệch so với phân bố lúc huấn luyện; trích xuất lại keypoint bằng đúng mô hình triển khai là bước cải thiện có chi phí thấp và nên được thực hiện trước khi nghiệm thu.
+Một điểm cần lưu ý về dữ liệu huấn luyện: keypoint dùng để huấn luyện LSTM được trích bằng YOLOv8n-Pose ở giai đoạn chuẩn bị dữ liệu, trong khi RobotApp suy luận bằng YOLO26n-Pose. Hai mô hình có sai số định vị khớp khác nhau, nên phân bố đặc trưng khi chạy thực tế lệch so với phân bố lúc huấn luyện. Giả thuyết này đã được kiểm chứng bằng cách trích xuất lại toàn bộ 190 video bằng YOLO26n-Pose và huấn luyện lại trên cùng giao thức: F1 mức cửa sổ đạt $0{,}713$ so với $0{,}721$ của dữ liệu gốc, tức không cải thiện mà còn thấp hơn chút ít, và khác biệt vẫn nằm trong sai số giữa ba lần chạy. Như vậy sai lệch giữa hai bộ trích xuất keypoint không phải nguyên nhân chính của giới hạn hiện tại. Cần lưu ý rằng phép đo này được thực hiện trên tập dữ liệu trước khi làm sạch nhãn, nên nó chỉ cho biết việc đổi bộ trích xuất không mang lại cải thiện, chứ chưa loại trừ được khả năng có cải thiện trên dữ liệu sạch; việc đo lại là công việc còn tồn đọng.
+
+Cuối cùng, cả hai cách biểu diễn dẫn đầu ở Bảng \ref{tab:lstm_feature_sweep} đều phụ thuộc vào hình học camera, chỉ khác mức độ. Tọa độ gốc giữ nguyên giá trị pixel nên gắn chặt vào đúng cấu hình camera của LE2I, gồm độ phân giải $320\times240$, góc đặt và khoảng cách tới người; một camera đặt ở độ cao khác sẽ cho dải giá trị tọa độ dọc khác và làm mô hình hoạt động sai. Chuẩn hóa theo khung ảnh loại bỏ được sự phụ thuộc vào độ phân giải nhưng vẫn giữ phụ thuộc vào góc đặt và khoảng cách. Vì hai cách cho hiệu năng không phân biệt được, chuẩn hóa theo khung ảnh là lựa chọn an toàn hơn và nên được dùng khi đóng gói lại mô hình.
+
+Để triển khai trên nhiều phòng và nhiều góc camera, cả hai vẫn chưa đủ; cần một phép chuẩn hóa vừa giữ được tỷ lệ chiều cao vừa độc lập với camera, chẳng hạn chia theo chiều cao người khi đứng, đo một lần lúc hiệu chuẩn lắp đặt. Việc này nằm ngoài phạm vi đồ án và được nêu như hướng phát triển.
 
 Re-ID histogram nhẹ không đủ mạnh khi nhiều người mặc màu giống nhau. Logic người có bbox lớn nhất chỉ là heuristic ban đầu. LSTM 15 frame tạo trễ phụ thuộc FPS và có thể nhận cửa sổ không đều khi drop-frame. Bộ hậu kiểm dùng ngưỡng thủ công, cần calibration theo góc camera/nhà. Parser firmware chấp nhận \texttt{String.toFloat}, nên cần validate nghiêm hơn.
+
+\paragraph{Chất lượng chú thích của bộ dữ liệu.}
+Trong quá trình đánh giá, hai lỗi chú thích đã được phát hiện và cần được nêu lại vì chúng ảnh hưởng tới mọi số liệu trước đó.
+
+Lỗi thứ nhất nằm ở quy trình chuẩn bị dữ liệu. Bối cảnh \textit{Coffee room 02} đặt tên thư mục chú thích là \path|Annotations_files| trong khi năm bối cảnh còn lại dùng \path|Annotation_files|. Mã chuẩn bị dữ liệu chỉ khớp dạng thứ hai nên bỏ sót toàn bộ bối cảnh này, khiến 12 trên 22 video có pha ngã bị gán nhãn ``không ngã''. Hệ quả kép: mô hình được huấn luyện với 12 cú ngã bị dạy là bình thường, đồng thời bị tính là báo động giả khi nó phát hiện đúng những cú ngã đó lúc kiểm thử.
+
+Lỗi thứ hai nằm ở chính bộ dữ liệu: 60 video của hai bối cảnh \textit{Lecture room} và \textit{Office} không có tệp chú thích nào. Cách xử lý và bằng chứng đã trình bày ở Mục \ref{subsec:data_labelling}.
+
+Hai lỗi này chỉ lộ ra khi các video bị phân loại sai được xem lại trực tiếp bằng mắt, chứ không thể phát hiện qua bất kỳ chỉ số tổng hợp nào. Đây là lý do việc kiểm tra thủ công một mẫu các trường hợp sai là bước bắt buộc chứ không phải tùy chọn, và cũng là giới hạn của toàn bộ phần đánh giá: các chỉ số chỉ đáng tin bằng đúng độ tin cậy của nhãn mà chúng dựa vào.
 
 \subsubsection{Mối đe dọa tới tính hợp lệ}
 

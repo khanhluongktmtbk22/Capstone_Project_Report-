@@ -31,13 +31,20 @@
 \contentsline {table}{\numberline {5.5}{\ignorespaces Các trường hợp kiểm thử ánh xạ điều khiển}}{135}{table.caption.79}%
 \contentsline {table}{\numberline {5.6}{\ignorespaces Các trường hợp kiểm thử hậu kiểm té ngã}}{135}{table.caption.80}%
 \contentsline {table}{\numberline {5.7}{\ignorespaces Danh mục kiểm thử đầu cuối}}{137}{table.5.7}%
-\contentsline {table}{\numberline {5.8}{\ignorespaces Độ chính xác của LSTM trên tập kiểm thử, chia tập theo video, trung bình ba lần chạy}}{141}{table.caption.83}%
-\contentsline {table}{\numberline {5.9}{\ignorespaces Kết quả đo trên tệp TFLite được đóng gói}}{142}{table.caption.84}%
-\contentsline {table}{\numberline {5.10}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{143}{table.caption.85}%
-\contentsline {table}{\numberline {5.11}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{145}{table.caption.86}%
-\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{166}{table.caption.90}%
-\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{166}{table.6.12}%
-\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{167}{table.6.13}%
-\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{170}{table.caption.91}%
-\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{170}{table.caption.92}%
-\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{170}{table.caption.93}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces So sánh kiến trúc mạng hồi quy, cửa sổ 15 khung hình (chỉ số lớp Fall ở mức cửa sổ)}}{143}{table.caption.84}%
+\contentsline {table}{\numberline {5.9}{\ignorespaces Ảnh hưởng của độ dài cửa sổ trượt, mô hình LSTM32 (chỉ số lớp Fall ở mức cửa sổ)}}{143}{table.caption.86}%
+\contentsline {table}{\numberline {5.10}{\ignorespaces So sánh cách biểu diễn đặc trưng đầu vào, LSTM32 và cửa sổ 15 khung hình (chỉ số lớp Fall ở mức cửa sổ)}}{144}{table.caption.88}%
+\contentsline {table}{\numberline {5.11}{\ignorespaces Ảnh hưởng của khối lượng dữ liệu huấn luyện (chỉ số lớp Fall ở mức cửa sổ)}}{145}{table.caption.90}%
+\contentsline {table}{\numberline {5.12}{\ignorespaces Ảnh hưởng của trọng số lớp dương trong hàm mất mát (chỉ số lớp Fall ở mức cửa sổ)}}{146}{table.caption.92}%
+\contentsline {table}{\numberline {5.13}{\ignorespaces Ảnh hưởng của số vòng huấn luyện trên cấu hình đã chọn (F1 lớp Fall ở mức cửa sổ)}}{146}{table.caption.94}%
+\contentsline {table}{\numberline {5.14}{\ignorespaces Độ chính xác của cấu hình đã chọn ở mức cửa sổ, chia tập theo video, trung bình ba lần chạy}}{148}{table.caption.96}%
+\contentsline {table}{\numberline {5.15}{\ignorespaces Ảnh hưởng của ngưỡng hậu kiểm theo số cửa sổ dương liên tiếp}}{149}{table.caption.98}%
+\contentsline {table}{\numberline {5.16}{\ignorespaces Kết quả đo trên tệp TFLite được đóng gói}}{150}{table.caption.99}%
+\contentsline {table}{\numberline {5.17}{\ignorespaces Thời gian xử lý trung bình của cấu hình FP16 thử nghiệm trên Android}}{151}{table.caption.100}%
+\contentsline {table}{\numberline {5.18}{\ignorespaces Đối chiếu mục tiêu và kết quả}}{154}{table.caption.102}%
+\contentsline {table}{\numberline {6.11}{\ignorespaces Thông số BLE triển khai}}{175}{table.caption.106}%
+\contentsline {table}{\numberline {6.12}{\ignorespaces Module chính của RobotApp}}{175}{table.6.12}%
+\contentsline {table}{\numberline {6.13}{\ignorespaces Module chính của CaregiverApp}}{176}{table.6.13}%
+\contentsline {table}{\numberline {6.15}{\ignorespaces Mẫu tổng hợp benchmark AI}}{179}{table.caption.107}%
+\contentsline {table}{\numberline {6.16}{\ignorespaces Mẫu tổng hợp phát hiện té ngã theo sự cố}}{179}{table.caption.108}%
+\contentsline {table}{\numberline {6.17}{\ignorespaces Mẫu tổng hợp độ trễ và an toàn điều khiển}}{179}{table.caption.109}%

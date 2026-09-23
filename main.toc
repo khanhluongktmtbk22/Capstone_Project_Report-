@@ -187,35 +187,45 @@
 \contentsline {subsubsection}{\numberline {5.7.4}Độ chính xác té ngã}{140}{subsubsection.5.7.4}%
 \contentsline {subsection}{\numberline {5.8}Kết quả Benchmark Mô hình AI}{140}{subsection.5.8}%
 \contentsline {subsubsection}{\numberline {5.8.1}Dữ liệu, quy ước gán nhãn và giao thức đánh giá}{140}{subsubsection.5.8.1}%
-\contentsline {paragraph}{Quy ước gán nhãn.}{140}{paragraph*.81}%
+\contentsline {paragraph}{Quy ước gán nhãn.}{141}{paragraph*.81}%
 \contentsline {paragraph}{Giao thức đánh giá.}{141}{paragraph*.82}%
-\contentsline {subsubsection}{\numberline {5.8.2}Độ chính xác của mô hình}{141}{subsubsection.5.8.2}%
-\contentsline {subsubsection}{\numberline {5.8.3}Kết quả đóng gói mô hình}{142}{subsubsection.5.8.3}%
-\contentsline {subsubsection}{\numberline {5.8.4}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{143}{subsubsection.5.8.4}%
-\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{144}{subsection.5.9}%
-\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{144}{subsubsection.5.9.1}%
-\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{144}{subsubsection.5.9.2}%
-\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{145}{subsubsection.5.9.3}%
-\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{145}{subsection.5.10}%
-\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{145}{subsection.5.11}%
-\contentsline {subsection}{\numberline {5.12}Kết luận chương}{146}{subsection.5.12}%
-\contentsline {section}{\numberline {6}Kết luận}{147}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Tổng kết}{147}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{147}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Hạn chế}{148}{subsection.6.3}%
-\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{149}{subsection.6.4}%
-\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{149}{subsubsection.6.4.1}%
-\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{149}{subsubsection.6.4.2}%
-\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{149}{subsubsection.6.4.3}%
-\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{150}{subsubsection.6.4.4}%
-\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{150}{subsubsection.6.4.5}%
-\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{150}{subsection.6.5}%
-\contentsline {section}{Tài liệu tham khảo}{152}{section*.87}%
-\contentsline {section}{Phụ lục}{160}{section*.88}%
-\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{160}{section*.89}%
-\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{164}{table.6.10}%
-\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{165}{table.caption.90}%
-\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{167}{table.6.13}%
-\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{168}{lstnumber.7.21}%
-\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{169}{lstnumber.8.7}%
-\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{171}{table.caption.93}%
+\contentsline {subsubsection}{\numberline {5.8.2}Quy trình lựa chọn cấu hình mô hình}{142}{subsubsection.5.8.2}%
+\contentsline {paragraph}{Kiến trúc mạng.}{142}{paragraph*.83}%
+\contentsline {paragraph}{Độ dài cửa sổ trượt.}{143}{paragraph*.85}%
+\contentsline {paragraph}{Biểu diễn đặc trưng.}{144}{paragraph*.87}%
+\contentsline {paragraph}{Khối lượng dữ liệu huấn luyện.}{145}{paragraph*.89}%
+\contentsline {paragraph}{Trọng số lớp trong hàm mất mát.}{145}{paragraph*.91}%
+\contentsline {paragraph}{Số vòng huấn luyện.}{146}{paragraph*.93}%
+\contentsline {paragraph}{Cấu hình được chọn.}{147}{paragraph*.95}%
+\contentsline {subsubsection}{\numberline {5.8.3}Độ chính xác của mô hình}{147}{subsubsection.5.8.3}%
+\contentsline {paragraph}{Ảnh hưởng của quy tắc hậu kiểm.}{148}{paragraph*.97}%
+\contentsline {subsubsection}{\numberline {5.8.4}Kết quả đóng gói mô hình}{149}{subsubsection.5.8.4}%
+\contentsline {subsubsection}{\numberline {5.8.5}Benchmark Tốc độ suy luận (Inference Speed / FPS)}{150}{subsubsection.5.8.5}%
+\contentsline {subsection}{\numberline {5.9}Thảo luận kết quả}{151}{subsection.5.9}%
+\contentsline {subsubsection}{\numberline {5.9.1}Điểm mạnh}{151}{subsubsection.5.9.1}%
+\contentsline {subsubsection}{\numberline {5.9.2}Hạn chế}{151}{subsubsection.5.9.2}%
+\contentsline {paragraph}{Chất lượng chú thích của bộ dữ liệu.}{153}{paragraph*.101}%
+\contentsline {subsubsection}{\numberline {5.9.3}Mối đe dọa tới tính hợp lệ}{153}{subsubsection.5.9.3}%
+\contentsline {subsection}{\numberline {5.10}Mức đáp ứng mục tiêu}{153}{subsection.5.10}%
+\contentsline {subsection}{\numberline {5.11}Khuyến nghị trước nghiệm thu và trình diễn}{154}{subsection.5.11}%
+\contentsline {subsection}{\numberline {5.12}Kết luận chương}{154}{subsection.5.12}%
+\contentsline {section}{\numberline {6}Kết luận}{156}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Tổng kết}{156}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Kết quả đạt được}{156}{subsection.6.2}%
+\contentsline {subsection}{\numberline {6.3}Hạn chế}{157}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Hướng phát triển}{158}{subsection.6.4}%
+\contentsline {subsubsection}{\numberline {6.4.1}Hoàn thiện dữ liệu và phương pháp đánh giá}{158}{subsubsection.6.4.1}%
+\contentsline {subsubsection}{\numberline {6.4.2}Nâng cao độ ổn định của theo dõi và phát hiện té ngã}{158}{subsubsection.6.4.2}%
+\contentsline {subsubsection}{\numberline {6.4.3}Hoàn thiện khả năng di chuyển và an toàn vận hành}{158}{subsubsection.6.4.3}%
+\contentsline {subsubsection}{\numberline {6.4.4}Mở rộng quản lý người dùng và khả năng duy trì liên lạc}{159}{subsubsection.6.4.4}%
+\contentsline {subsubsection}{\numberline {6.4.5}Cải thiện trải nghiệm và tối ưu tài nguyên}{159}{subsubsection.6.4.5}%
+\contentsline {subsection}{\numberline {6.5}Kết luận cuối cùng}{159}{subsection.6.5}%
+\contentsline {section}{Tài liệu tham khảo}{161}{section*.103}%
+\contentsline {section}{Phụ lục}{169}{section*.104}%
+\contentsline {subsection}{Phụ lục A -- Đặc tả use case}{169}{section*.105}%
+\contentsline {subsection}{Phụ lục B -- Cấu trúc dữ liệu và giao thức truyền thông}{173}{table.6.10}%
+\contentsline {subsection}{Phụ lục C -- Danh mục module mã nguồn}{174}{table.caption.106}%
+\contentsline {subsection}{Phụ lục D -- Manifest artifact AI}{176}{table.6.13}%
+\contentsline {subsection}{Phụ lục E -- Quy trình build và triển khai}{177}{lstnumber.7.21}%
+\contentsline {subsection}{Phụ lục F -- Phiếu ghi kết quả kiểm thử}{178}{lstnumber.8.7}%
+\contentsline {subsection}{Phụ lục G -- Checklist an toàn trình diễn}{180}{table.caption.109}%

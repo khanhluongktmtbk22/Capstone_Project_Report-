@@ -1,10 +1,10 @@
 # Fdb version 4
-["xdvipdfmx"] 1790060257.4738 "main.xdv" "main.pdf" "main" 1790060259.50843 0
-  "main.xdv" 1790060257.2449 3778460 3178297de983cd29319ad9efffeb9acb "xelatex"
+["xdvipdfmx"] 1790145238.2661 "main.xdv" "main.pdf" "main" 1790145241.3769 0
+  "main.xdv" 1790145237.92348 4005156 bfe85299019e3c422404333522828e94 "xelatex"
   (generated)
   "main.pdf"
   (rewritten before read)
-["xelatex"] 1790060255.51022 "main.tex" "main.xdv" "main" 1790060259.5065 0
+["xelatex"] 1790145235.32211 "main.tex" "main.xdv" "main" 1790145241.3739 0
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -226,9 +226,9 @@
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
   "Contents/CoSoLyThuyet.tex" 1789891226.96734 134390 3eb352d4f8e6ebb5f4b6327623d2f730 ""
   "Contents/GioiThieu.tex" 1789711745.85175 94084 4bf49d69b977c8853d32eb93fad27bd7 ""
-  "Contents/HienThucHeThong.tex" 1790060229.76342 86509 b0ddc13c40e44bf0de004fbcef8f4ac5 ""
+  "Contents/HienThucHeThong.tex" 1790141595.40468 86510 cbb63451f7facc2d68698287bcc4d9a5 ""
   "Contents/KetLuan.tex" 1789711745.85271 12092 9e6104490313e9871eabbc74efb29d4f ""
-  "Contents/KetQuaVaThaoLuan.tex" 1790060255.43309 40031 85045ea0cd988278aea1110375358f8b ""
+  "Contents/KetQuaVaThaoLuan.tex" 1790145228.30995 70312 9b34ec80a1dc9b3f273745c43170baaf ""
   "Contents/OpenBotTomLuoc.tex" 1789711745.85345 10089 2de437b4fd66b28000c2c5fa6576ea36 ""
   "Contents/PhanTichThietKeHeThong.tex" 1789891226.96939 75232 f3b8b03713b83541b6da7495437b63b1 ""
   "Images/1.jpeg" 1788507283.58583 118719 189ead5670e11dffeac213aa6966c668 ""
@@ -275,12 +275,12 @@
   "Intro/TomTat.tex" 1789711745.87008 3244 f79b9b5642539c2ac806d0b12c33cf00 ""
   "Outro/PhuLuc.tex" 1789711745.87039 19804 13d87ecb76137fca784ec96dd284709f ""
   "Outro/TaiLieuThamKhao.tex" 1789711745.87087 19320 6cfa923c613b7d18682ab1dc32fa2932 ""
-  "main.aux" 1790060257.24063 68471 b11173c4a06696e21a7eb7f880178ede "xelatex"
-  "main.lof" 1790060257.24481 4061 c374d3b0447adea1623ad57d94d4cc63 "xelatex"
-  "main.lot" 1790060257.24485 5710 3cb539e33ce5eb1eea5e3116488d2795 "xelatex"
-  "main.out" 1790060257.24446 53371 88a5dc87386bb16d9bf25c7c1a2df72c "xelatex"
+  "main.aux" 1790145237.9168 72952 e3c15d2b65a8bbd757a4d384c7f04070 "xelatex"
+  "main.lof" 1790145237.92337 4061 c374d3b0447adea1623ad57d94d4cc63 "xelatex"
+  "main.lot" 1790145237.92341 7086 acce284bd4f8d0e72dd69fa30a3dcb5c "xelatex"
+  "main.out" 1790145237.92285 53701 497f2f05f36820580ce313b7727921f7 "xelatex"
   "main.tex" 1789891267.09098 10316 05f06d9be749ce32e343c81d82877f23 ""
-  "main.toc" 1790060257.24479 23900 a0cf3b644dfc6ea49a3ec7425982337c "xelatex"
+  "main.toc" 1790145237.92333 24782 7c0707c9f7d71b965902b7d473c807cf "xelatex"
   (generated)
   "main.aux"
   "main.lof"
