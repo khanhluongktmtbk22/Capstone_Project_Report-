@@ -429,11 +429,18 @@ Hình \ref{fig:robotapp_tracking_target} minh họa lớp phủ của \path|trac
 
 \subsubsection{LSTM phát hiện té ngã}
 
-\texttt{LstmFallDetector} nạp mô hình \path|fall_detection_lstm_v3_ground_float.tflite| có dung lượng khoảng 59,6 KB và sử dụng hai luồng CPU. Mô hình chỉ dùng toán tử TFLite dựng sẵn nên ứng dụng không cần liên kết gói \path|tensorflow-lite-select-tf-ops|. Dữ liệu của mỗi đối tượng được lưu trong \texttt{FallDetectionQueue}; khi tích lũy đủ 15 khung hình, hàng đợi tạo tensor đầu vào $1\times15\times69$ kiểu số thực. Thành phần dịch chuyển được tính từ chênh lệch tọa độ chuẩn hóa giữa hai khung hình liên tiếp; riêng khung hình đầu tiên của một định danh mới có $\Delta x_i=\Delta y_i=0$ vì chưa có quan sát trước đó. Với nhịp thu nhận mục tiêu 25 FPS, một cửa sổ đầu vào biểu diễn khoảng 0,6 s chuyển động. Tensor đầu ra $1\times2$ biểu diễn xác suất của hai lớp. Lớp dương được định nghĩa là trạng thái người đang nằm trên sàn, tính từ thời điểm bắt đầu ngã trở đi, chứ không riêng khoảnh khắc rơi; quy ước này và lý do lựa chọn được trình bày ở Mục \ref{subsec:data_labelling}. So với tệp Keras gốc khoảng 189,2 KB, tệp TFLite có dung lượng nhỏ hơn khi đóng gói vào ứng dụng.
+Hình \ref{fig:lstm_inference_pipeline} mô tả chuỗi suy luận của khối phát hiện té ngã, minh họa trên một pha ngã thật của bộ dữ liệu LE2I. Chuỗi này chỉ ghi nhận nhãn FALL cho từng cửa sổ; phải có năm nhãn FALL liên tiếp thì hệ thống mới coi là một chuỗi nghi té ngã và chuyển sang bước hậu kiểm trình bày ở mục sau.
 
-Kết quả được gán nhãn FALL khi xác suất của lớp dương vượt ngưỡng quyết định, mặc định 0,985, sau đó chuyển đến \texttt{FallVerificationEngine} để kiểm tra bổ sung. Ngưỡng được tách thành tham số cấu hình vì giá trị tối ưu phụ thuộc vào môi trường lắp đặt, như phân tích ở Chương 5. Chỉ khi có năm kết quả FALL liên tiếp, hệ thống mới ghi nhận một chuỗi nghi té ngã. Khi bộ theo dõi khôi phục thành công ID0, hàng đợi đặc trưng vẫn được gắn với người mục tiêu. Khả năng phân tích quan hệ thời gian của LSTM \reportcite{ref:lstm} được kết hợp với bước hậu kiểm trước khi tạo cảnh báo.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{lstm_inference_pipeline.jpg}
+    \caption{Chuỗi suy luận của khối LSTM phát hiện té ngã. Năm khung hình được trích từ cửa sổ 15 khung của video \textit{Coffee\_room\_01}, kèm khung xương 17 điểm và hộp bao do YOLO26n-Pose sinh ra.}
+    \label{fig:lstm_inference_pipeline}
+\end{figure}
 
-Kết quả của mô hình được hiển thị trực tiếp trên lớp phủ như Hình \ref{fig:robotapp_lstm_overlay}. Góc trái hiển thị nhãn dự đoán cùng xác suất lớp FALL, còn nhãn cạnh bounding box hiển thị trạng thái của riêng mục tiêu ID0. Trong hai tình huống đứng đối diện và quay lưng, mô hình đều cho nhãn NO FALL, cho thấy đặc trưng chuẩn hóa theo bounding box ít phụ thuộc vào hướng của người so với camera.
+Một vài tham số hiện thực không thể hiện được trên hình. \texttt{LstmFallDetector} nạp tệp \path|fall_detection_lstm_v3_ground_float.tflite| và chỉ dùng toán tử TFLite dựng sẵn, nhờ đó ứng dụng không cần liên kết gói \path|tensorflow-lite-select-tf-ops|; so với tệp Keras gốc khoảng 189,2 KB, tệp đóng gói nhỏ hơn ba lần. Ngưỡng quyết định mặc định là 0,985 nhưng được tách thành tham số cấu hình vì giá trị tối ưu phụ thuộc vào môi trường lắp đặt, như phân tích ở Chương 5. Lớp dương được định nghĩa là trạng thái người đang nằm trên sàn tính từ thời điểm bắt đầu ngã trở đi, chứ không riêng khoảnh khắc rơi; quy ước này và lý do lựa chọn được trình bày ở Mục \ref{subsec:data_labelling}. Khi bộ theo dõi khôi phục thành công ID0, hàng đợi đặc trưng vẫn được gắn với người mục tiêu nên chuỗi thời gian không bị đứt.
+
+Hình \ref{fig:robotapp_lstm_overlay} cho thấy kết quả suy luận hiển thị trực tiếp trên lớp phủ theo dõi. Góc trái hiển thị nhãn dự đoán cùng xác suất lớp FALL, còn nhãn cạnh bounding box hiển thị trạng thái của riêng mục tiêu ID0.
 
 \begin{figure}[htbp]
     \centering
@@ -456,9 +463,25 @@ Kết quả của mô hình được hiển thị trực tiếp trên lớp ph�
 
 \subsubsection{Hậu kiểm té ngã}
 
-\texttt{FallVerificationEngine} tiếp nhận \texttt{FrameEvidence}, gồm trạng thái quan sát mục tiêu, vị trí tương đối của thân trên, số điểm khớp, mức độ bounding box nằm trọn trong ảnh và tỷ lệ hình dạng. Sau khi chuỗi FALL kết thúc, bộ hậu kiểm xem xét vị trí mũi, vai ở các khung hình tiếp theo. Ba khung hình liên tiếp có các điểm thân trên trong vùng 70\% phía trên ảnh sẽ loại bỏ tình huống nghi té ngã; ba khung hình liên tiếp có các điểm này nằm dưới ngưỡng, hoặc 12 khung hình liên tiếp thiếu dữ liệu quan sát, sẽ dẫn đến bước hỏi xác nhận. Khi sự kiện đã được loại bỏ hoặc xác nhận, bộ hậu kiểm chờ 10 kết quả NO FALL liên tiếp trước khi trở lại trạng thái giám sát.
+\texttt{FallVerificationEngine} tiếp nhận \texttt{FrameEvidence} gồm trạng thái quan sát mục tiêu, vị trí tương đối của thân trên, số điểm khớp, mức độ bounding box nằm trọn trong ảnh và tỷ lệ hình dạng. Sau khi chuỗi FALL kết thúc, bộ hậu kiểm xét vị trí mũi và vai ở các khung hình tiếp theo theo quy tắc ở Giả mã sau.
 
-Bộ hậu kiểm trả về một trong ba kết quả: chưa đủ dữ liệu để kết luận, loại bỏ tình huống nghi té ngã qua \texttt{Rejected(reason)}, hoặc yêu cầu hỏi xác nhận qua \texttt{AskForConfirmation(reason, score, evidence)}. Việc tách phần xử lý khỏi giao diện cho phép kiểm thử riêng từng trường hợp bằng chuỗi dữ liệu đầu vào mà không cần camera. Trạng thái \texttt{isIncidentActive} cho biết sự kiện đang được xử lý, còn \texttt{canAcquireNewTarget} quy định khi nào được phép chọn mục tiêu mới. Các hàm \texttt{resolveAsSafe}, \texttt{resolveAsDanger} và \texttt{reset} cập nhật kết quả xác nhận hoặc đặt lại bộ xử lý.
+\begin{lstlisting}[caption={Giả mã bộ hậu kiểm té ngã}]
+khi chuoi FALL ket thuc:
+    upperOk = upperOk + 1 if thanTren nam trong 70% tren cua anh else 0
+    upperLow = upperLow + 1 if thanTren nam duoi nguong else 0
+    noData  = noData + 1 if khong quan sat duoc muc tieu else 0
+
+    if upperOk >= 3:                      # nguoi da dung day
+        return Rejected(reason)
+    if upperLow >= 3 or noData >= 12:     # van nam duoi san hoac mat dau
+        return AskForConfirmation(reason, score, evidence)
+    return ChuaDuDuLieu
+
+sau khi da loai bo hoac da xac nhan:
+    cho 10 ket qua NO FALL lien tiep roi tro ve trang thai giam sat
+\end{lstlisting}
+
+Ba kết quả trả về tương ứng ba nhánh xử lý phía trên: chưa đủ dữ liệu để kết luận, loại bỏ tình huống nghi té ngã, hoặc chuyển sang bước hỏi xác nhận bằng giọng nói. Việc tách phần xử lý khỏi giao diện cho phép kiểm thử riêng từng trường hợp bằng chuỗi dữ liệu đầu vào mà không cần camera. Ngoài ba nhánh trên, lớp này còn cung cấp \texttt{isIncidentActive} cho biết sự kiện đang được xử lý, \texttt{canAcquireNewTarget} quy định khi nào được phép chọn mục tiêu mới, và ba hàm \texttt{resolveAsSafe}, \texttt{resolveAsDanger}, \texttt{reset} để cập nhật kết quả xác nhận hoặc đặt lại bộ xử lý.
 
 \subsubsection{Luồng xác nhận và cảnh báo}
 

@@ -1023,51 +1023,6 @@ Dataset LE2I bao gồm khoảng 191 video với các đặc điểm:
     \item Số lượng chủ thể (diễn viên) còn hạn chế so với các dataset quy mô lớn gần đây.
 \end{itemize}
 
-\subsubsection{So sánh với các Dataset quy mô lớn (DiverseFALL10500)}
-
-Gần đây, một số nghiên cứu đề xuất các bộ dữ liệu khổng lồ như DiverseFALL10500 (10,500 ảnh) để khắc phục nhược điểm của các dataset cũ \reportcite{ref:falldetection}.
-
-\textbf{So sánh LE2I và DiverseFALL10500:}
-\begin{center}
-\begin{tabular}{|l|c|c|}
-\hline
-\textbf{Tiêu chí} & \textbf{LE2I Dataset} & \textbf{DiverseFALL10500} \\
-\hline
-Số lượng video/ảnh & 191 videos & 10,500 images \\
-Môi trường & 4 môi trường trong nhà & Indoor + Outdoor \\
-Độ phân giải & 320x240 & Đa dạng (HD) \\
-Yếu tố che khuất & Tích hợp sẵn (bàn, ghế) & Đa dạng \\
-\hline
-\end{tabular}
-\end{center}
-
-Đồ án này lựa chọn sử dụng (hoặc kết hợp) LE2I do đặc thù bộ dữ liệu này phản ánh rất sát các kịch bản trong môi trường nhà ở và có chứa chuỗi chuyển động thời gian (video), vô cùng phù hợp để trích xuất Tracklet cho mô hình LSTM.
-
-%=========================================
-\subsection{Suy luận AI trên thiết bị và TensorFlow Lite}
-
-\subsubsection{Suy luận AI trên thiết bị}
-
-Suy luận AI trên thiết bị, còn gọi là \textit{on-device AI} hoặc \textit{Edge AI}, là quá trình thực thi mô hình ngay tại nơi dữ liệu được thu nhận thay vì chuyển toàn bộ dữ liệu đến máy chủ đám mây. Cách tiếp cận này giúp rút ngắn đường truyền dữ liệu, giảm độ trễ phản hồi và cho phép một số chức năng tiếp tục hoạt động khi kết nối mạng không ổn định. Dữ liệu đầu vào được xử lý cục bộ cũng làm giảm phạm vi truyền tải thông tin nhạy cảm ra ngoài thiết bị.
-
-Đổi lại, thiết bị biên bị giới hạn về năng lực tính toán, bộ nhớ, dung lượng pin và khả năng tản nhiệt. Mô hình triển khai vì vậy phải đạt sự cân bằng giữa độ chính xác, kích thước, thời gian suy luận và mức tiêu thụ tài nguyên. Hiệu năng không chỉ phụ thuộc số lượng tham số hoặc phép toán mà còn chịu ảnh hưởng bởi kích thước tensor trung gian, khả năng tối ưu toán tử và đặc điểm phần cứng của thiết bị.
-
-\subsubsection{Kiến trúc và quy trình suy luận TensorFlow Lite}
-
-TensorFlow Lite, hiện được Google tiếp tục phát triển trong hệ sinh thái LiteRT, là nền tảng dành cho việc triển khai mô hình học máy trên thiết bị di động và thiết bị biên. Mô hình được lưu dưới định dạng \texttt{.tflite} dựa trên FlatBuffers, giúp biểu diễn cấu trúc mạng, trọng số và metadata trong một tệp có thể nạp trực tiếp bởi runtime \reportcite{ref:tflite}.
-
-Một quy trình triển khai thông thường bắt đầu từ mô hình đã huấn luyện, sau đó sử dụng công cụ chuyển đổi để ánh xạ các toán tử và tham số sang định dạng TensorFlow Lite. Ở phía suy luận, \textit{interpreter} nạp mô hình, cấp phát bộ nhớ cho tensor, nhận dữ liệu đầu vào, thực thi các toán tử theo đồ thị và trả về tensor đầu ra. Dữ liệu trước khi đưa vào mô hình phải được biến đổi đúng kích thước, thứ tự chiều, kiểu số và miền giá trị mà mô hình yêu cầu. Tương tự, tensor đầu ra cần được diễn giải dựa trên cấu trúc đầu ra và metadata của mô hình.
-
-TensorFlow Lite thực thi mô hình trên CPU thông qua các kernel được tối ưu hoặc chuyển một phần đồ thị sang bộ tăng tốc bằng \textit{delegate}. Delegate đóng vai trò ánh xạ những toán tử được hỗ trợ sang GPU, NPU hoặc bộ xử lý chuyên dụng; các toán tử còn lại có thể tiếp tục chạy trên CPU. Do phạm vi hỗ trợ khác nhau giữa các delegate, một mô hình hợp lệ về mặt định dạng chưa chắc đạt cùng hiệu năng trên mọi thiết bị.
-
-\subsubsection{Tối ưu hóa và đánh giá mô hình sau chuyển đổi}
-
-Tối ưu hóa sau huấn luyện được sử dụng để giảm kích thước mô hình và chi phí tính toán. Lượng tử hóa FP16 chuyển trọng số từ số thực 32 bit sang 16 bit, qua đó giảm dung lượng và băng thông bộ nhớ. Lượng tử hóa dải động lưu trọng số ở dạng số nguyên nhưng lượng tử hóa activation trong khi suy luận. Lượng tử hóa số nguyên toàn phần chuyển cả trọng số và activation sang INT8; phương pháp này thường cần một tập dữ liệu đại diện để hiệu chuẩn miền giá trị của các tensor.
-
-Lượng tử hóa có thể cải thiện tốc độ và mức sử dụng bộ nhớ nhưng cũng tạo sai số số học. Mức ảnh hưởng phụ thuộc kiến trúc mạng, phân bố dữ liệu và độ nhạy của từng đầu ra. Vì vậy, mô hình sau chuyển đổi cần được đánh giá lại bằng cùng tập kiểm thử và chỉ số của mô hình ban đầu, thay vì chỉ kiểm tra khả năng nạp và thực thi.
-
-Ba yếu tố cần được kiểm chứng trong quá trình chuyển đổi là tính tương thích của toán tử, tính nhất quán của tensor đầu vào--đầu ra và sai lệch kết quả suy luận. Bên cạnh độ chính xác, việc đánh giá trên thiết bị đích cần xem xét thời gian khởi động, độ trễ trung bình, độ biến thiên độ trễ, bộ nhớ sử dụng và ảnh hưởng của cơ chế tăng tốc. Những chỉ số này phản ánh đầy đủ hơn khả năng triển khai của mô hình trong điều kiện tài nguyên giới hạn.
-
 \subsection{Firebase Authentication và Realtime Database}
 
 \subsubsection{Firebase Authentication}

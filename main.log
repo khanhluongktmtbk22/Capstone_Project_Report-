@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.9.4)  23 SEP 2026 13:33
+This is XeTeX, Version 3.141592653-2.6-0.999998 (TeX Live 2026) (preloaded format=xelatex 2026.9.4)  23 SEP 2026 14:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1514,11 +1514,11 @@ File: Images/hcmut.png Graphic file (type bmp)
 
 ] (./main.toc [4
 
-] [5] [6] [7] [8] [9])
+] [5] [6] [7] [8])
 \tf@toc=\write5
 \openout5 = `main.toc'.
 
- [10] (./main.lof)
+ [9] [10] (./main.lof)
 \tf@lof=\write6
 \openout6 = `main.lof'.
 
@@ -2468,19 +2468,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [43]
-Underfull \hbox (badness 5064) in paragraph at lines 1028--1029
-[]\TU/TimesNewRoman(0)/m/n/13 Gần đây, một số nghiên cứu đề xuất các bộ dữ liệu
- khổng lồ như
- []
-
-
-Underfull \hbox (badness 1859) in paragraph at lines 1028--1029
-\TU/TimesNewRoman(0)/m/n/13 DiverseFALL10500 (10,500 ảnh) để khắc phục nhược đi
-ểm của các dataset cũ
- []
-
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -2500,9 +2490,22 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [45]
+Underfull \hbox (badness 10000) in paragraph at lines 1091--1091
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Giao diện mạng
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1091--1091
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Thu được thông
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1091--1091
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Được cấp bởi
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -2522,18 +2525,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [47]
-Underfull \hbox (badness 10000) in paragraph at lines 1136--1136
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Giao diện mạng
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1136--1136
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Thu được thông
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1136--1136
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Được cấp bởi
+Underfull \hbox (badness 1377) in paragraph at lines 1108--1109
+\TU/TimesNewRoman(0)/m/n/13 hai trạng thái kết nối và ngắt kết nối. \TU/Courier
+New(0)/m/n/13 signalingState \TU/TimesNewRoman(0)/m/n/13 phản ánh tiến trình
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -2557,9 +2551,44 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [49]
-Underfull \hbox (badness 1377) in paragraph at lines 1153--1154
-\TU/TimesNewRoman(0)/m/n/13 hai trạng thái kết nối và ngắt kết nối. \TU/Courier
-New(0)/m/n/13 signalingState \TU/TimesNewRoman(0)/m/n/13 phản ánh tiến trình
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/b/n/11.8625 Hướng
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+ []
+
+
+Underfull \hbox (badness 4765) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Còn được gọi là \TU/TimesNewRoman(0)/m/it/1
+1.8625 write without
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server đến
+ []
+
+
+Underfull \hbox (badness 1442) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server chủ động gửi giá trị cho
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1163--1163
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server đến
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -2583,44 +2612,33 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [51]
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/b/n/11.8625 Hướng
+Underfull \hbox (badness 10000) in paragraph at lines 1199--1199
+[]|\TU/TimesNewRoman(0)/b/n/11.8625 Cấu hình trong
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+Underfull \hbox (badness 1701) in paragraph at lines 1199--1199
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai bus I$[]$C, BLE và
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+Underfull \hbox (badness 10000) in paragraph at lines 1199--1199
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai động cơ
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Client đến
+Underfull \hbox (badness 10000) in paragraph at lines 1199--1199
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai driver 3-
  []
 
 
-Underfull \hbox (badness 4765) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Còn được gọi là \TU/TimesNewRoman(0)/m/it/1
-1.8625 write without
+Underfull \hbox (badness 1308) in paragraph at lines 1199--1199
+\TU/TimesNewRoman(0)/m/n/11.8625 giới hạn điện áp điều
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server đến
- []
-
-
-Underfull \hbox (badness 1442) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server chủ động gửi giá trị cho
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1208--1208
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Server đến
+Underfull \hbox (badness 10000) in paragraph at lines 1199--1199
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai cảm biến
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -2644,63 +2662,13 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [53]
-Underfull \hbox (badness 10000) in paragraph at lines 1244--1244
-[]|\TU/TimesNewRoman(0)/b/n/11.8625 Cấu hình trong
- []
-
-
-Underfull \hbox (badness 1701) in paragraph at lines 1244--1244
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai bus I$[]$C, BLE và
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1244--1244
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai động cơ
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1244--1244
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai driver 3-
- []
-
-
-Underfull \hbox (badness 1308) in paragraph at lines 1244--1244
-\TU/TimesNewRoman(0)/m/n/11.8625 giới hạn điện áp điều
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1244--1244
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Hai cảm biến
- []
-
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[54]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[55]
-Underfull \hbox (badness 1810) in paragraph at lines 1260--1261
+Underfull \hbox (badness 1810) in paragraph at lines 1215--1216
 \TU/TimesNewRoman(0)/m/n/13 động cần điều khiển, chẳng hạn mô-men, vận tốc hoặc
  vị trí. Thuộc tính
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1262--1263
+Underfull \hbox (badness 10000) in paragraph at lines 1217--1218
 \TU/TimesNewRoman(0)/m/n/13 và \TU/CourierNew(0)/m/n/13 PID_velocity.D \TU/Time
 sNewRoman(0)/m/n/13 dùng để hiệu chỉnh vòng điều khiển vận tốc.
  []
@@ -2714,7 +2682,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[56])
+[54])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -2725,7 +2693,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[57] (./Contents/PhanTichThietKeHeThong.tex
+[55] (./Contents/PhanTichThietKeHeThong.tex
 Underfull \hbox (badness 10000) in paragraph at lines 23--23
 []|\TU/TimesNewRoman(0)/m/n/13 Tìm hiểu Intel
  []
@@ -2771,7 +2739,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[58
+[56
 
 
 ]
@@ -2793,7 +2761,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[59]
+[57]
 Underfull \hbox (badness 4391) in paragraph at lines 91--91
 []|\TU/TimesNewRoman(0)/m/n/13 Duy trì người mục
  []
@@ -2834,31 +2802,31 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
+[58]
+ignored: Infinite glue shrinkage found in box being split
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[59]
+ignored: Infinite glue shrinkage found in box being split
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
 [60]
-ignored: Infinite glue shrinkage found in box being split
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[61]
-ignored: Infinite glue shrinkage found in box being split
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[62]
 Underfull \hbox (badness 10000) in paragraph at lines 139--139
 []|\TU/TimesNewRoman(0)/m/n/13 Khả năng sử
  []
@@ -2894,7 +2862,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[63]
+[61]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -2905,7 +2873,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[64]
+[62]
 Underfull \hbox (badness 10000) in paragraph at lines 183--183
 []|\TU/TimesNewRoman(0)/b/n/11.8625 Yêu cầu liên
  []
@@ -2951,7 +2919,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[65]
+[63]
 Underfull \hbox (badness 6380) in paragraph at lines 204--205
 []|\TU/TimesNewRoman(0)/b/n/13 Thông tin trao
  []
@@ -3175,11 +3143,36 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[66]
+[64]
 ignored: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[65]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[66]
+Underfull \hbox (badness 5161) in paragraph at lines 275--275
+[]|\TU/TimesNewRoman(0)/m/n/11.8625 Người cao tuổi,
+ []
+
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -3199,31 +3192,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [68]
-Underfull \hbox (badness 5161) in paragraph at lines 275--275
-[]|\TU/TimesNewRoman(0)/m/n/11.8625 Người cao tuổi,
- []
-
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[69]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[70]
 File: Images/Activity_Fall_Detection_Design.png Graphic file (type bmp)
 <Images/Activity_Fall_Detection_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -3236,7 +3204,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[71
+[69
 
 ]
 File: Images/Sequence_Emergency_Response_Design.png Graphic file (type bmp)
@@ -3251,7 +3219,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[72
+[70
 
 ]
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -3264,7 +3232,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[73]
+[71]
 File: Images/Activity_Dialogue_Reminder_Design.png Graphic file (type bmp)
 <Images/Activity_Dialogue_Reminder_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -3277,7 +3245,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[74
+[72
 
 ]
 Underfull \hbox (badness 2503) in paragraph at lines 329--329
@@ -3620,8 +3588,30 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[75]
+[73]
 ignored: Infinite glue shrinkage found in box being split
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[74]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[75]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3644,6 +3634,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [77]
+File: Images/Tracking_Association_Target_Score_Design.png Graphic file (type bm
+p)
+<Images/Tracking_Association_Target_Score_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3666,9 +3659,8 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [79]
-File: Images/Tracking_Association_Target_Score_Design.png Graphic file (type bm
-p)
-<Images/Tracking_Association_Target_Score_Design.png>
+File: Images/Control_Command_Routing_Design.png Graphic file (type bmp)
+<Images/Control_Command_Routing_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3691,8 +3683,8 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [81]
-File: Images/Control_Command_Routing_Design.png Graphic file (type bmp)
-<Images/Control_Command_Routing_Design.png>
+File: Images/Fall_Verification_State_Design.png Graphic file (type bmp)
+<Images/Fall_Verification_State_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3715,8 +3707,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [83]
-File: Images/Fall_Verification_State_Design.png Graphic file (type bmp)
-<Images/Fall_Verification_State_Design.png>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3728,28 +3718,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [84]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[85]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[86]
 Underfull \hbox (badness 10000) in paragraph at lines 495--495
 \TU/TimesNewRoman(0)/m/n/13 pronoun, caregiver,
  []
@@ -3940,7 +3908,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[87]
+[85]
 Package hyperref Info: bookmark level for unknown lstlisting defaults to 0 on i
 nput line 519.
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -3953,7 +3921,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[88]
+[86]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3964,7 +3932,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[89]
+[87]
 Underfull \hbox (badness 1845) in paragraph at lines 577--578
 \TU/TimesNewRoman(0)/m/n/13 tên \TU/CourierNew(0)/m/n/13 OhmniRobot\TU/TimesNew
 Roman(0)/m/n/13 . Mã định danh dịch vụ là \TU/CourierNew(0)/m/n/13 4FAFC201-1FB
@@ -3987,7 +3955,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[90])
+[88])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -3998,7 +3966,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[91] (./Contents/HienThucHeThong.tex
+[89] (./Contents/HienThucHeThong.tex
 Underfull \hbox (badness 1033) in paragraph at lines 7--8
 []\TU/TimesNewRoman(0)/m/n/13 Hình [][]4.1[][] thể hiện các thành phần và công 
 nghệ được sử dụng theo thiết
@@ -4016,7 +3984,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[92
+[90
 
 
 ]
@@ -4032,7 +4000,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[93]
+[91]
 Underfull \hbox (badness 2035) in paragraph at lines 29--30
 []\TU/TimesNewRoman(0)/m/n/13 Hệ thống gồm bốn thành phần được phát triển độc l
 ập nhưng sử dụng
@@ -4101,7 +4069,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[94]
+[92]
 File: Images/robotapp_home.jpg Graphic file (type bmp)
 <Images/robotapp_home.jpg>
 File: Images/robotapp_profile.jpg Graphic file (type bmp)
@@ -4116,7 +4084,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[95]
+[93]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4127,7 +4095,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[96]
+[94]
 Underfull \hbox (badness 10000) in paragraph at lines 111--111
 []|\TU/TimesNewRoman(0)/b/n/10.83342 Kích
  []
@@ -4151,29 +4119,29 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
+[95]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[96]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
 [97]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[98]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[99]
 Underfull \hbox (badness 10000) in paragraph at lines 173--173
 []|$\OT1/cmr/m/n/12 [0\OML/cmm/m/it/12 ; W[]\OT1/cmr/m/n/12 ] \OMS/cmsy/m/n/12 
 ^^B
@@ -4210,6 +4178,28 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
+[98]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[99]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
 [100]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
@@ -4233,9 +4223,13 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [102]
+Underfull \hbox (badness 1540) in paragraph at lines 334--335
+[]\TU/TimesNewRoman(0)/m/n/13 Người mục tiêu được gán định danh \TU/CourierNew(
+0)/m/n/13 PRIMARY_TRACK_ID=0\TU/TimesNewRoman(0)/m/n/13 . Hàm lựa
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4255,13 +4249,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [104]
-Underfull \hbox (badness 1540) in paragraph at lines 334--335
-[]\TU/TimesNewRoman(0)/m/n/13 Người mục tiêu được gán định danh \TU/CourierNew(
-0)/m/n/13 PRIMARY_TRACK_ID=0\TU/TimesNewRoman(0)/m/n/13 . Hàm lựa
- []
-
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4270,9 +4260,23 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [105]
+Underfull \hbox (badness 10000) in paragraph at lines 407--408
+[]\TU/TimesNewRoman(0)/m/n/13 Sau khi làm mượt vector bám theo, \TU/CourierNew(
+0)/m/n/13 sendTrackingVector() \TU/TimesNewRoman(0)/m/n/13 gọi
+ []
+
+
+Overfull \hbox (10.98705pt too wide) in paragraph at lines 407--408
+\TU/CourierNew(0)/m/n/13 sendFollowCommand(x,y) \TU/TimesNewRoman(0)/m/n/13 và 
+chuyển lệnh trực tiếp đến \TU/CourierNew(0)/m/n/13 RobotControlManager
+ []
+
+File: Images/robotapp_tracking_front.jpg Graphic file (type bmp)
+<Images/robotapp_tracking_front.jpg>
+File: Images/robotapp_tracking_walk.jpg Graphic file (type bmp)
+<Images/robotapp_tracking_walk.jpg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4292,25 +4296,24 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [107]
-Underfull \hbox (badness 10000) in paragraph at lines 407--408
-[]\TU/TimesNewRoman(0)/m/n/13 Sau khi làm mượt vector bám theo, \TU/CourierNew(
-0)/m/n/13 sendTrackingVector() \TU/TimesNewRoman(0)/m/n/13 gọi
+File: Images/lstm_inference_pipeline.jpg Graphic file (type bmp)
+<Images/lstm_inference_pipeline.jpg>
+
+Underfull \hbox (badness 10000) in paragraph at lines 441--442
+\TU/TimesNewRoman(0)/m/n/13 nạp tệp $[][][][] [] [][][][][][][][][] [] [][][][]
+ [] [][] [] [][][][][][] [] [][][][][] [] [][][][][][]$ và chỉ
  []
 
 
-Overfull \hbox (10.98705pt too wide) in paragraph at lines 407--408
-\TU/CourierNew(0)/m/n/13 sendFollowCommand(x,y) \TU/TimesNewRoman(0)/m/n/13 và 
-chuyển lệnh trực tiếp đến \TU/CourierNew(0)/m/n/13 RobotControlManager
+Underfull \hbox (badness 5388) in paragraph at lines 441--442
+\TU/TimesNewRoman(0)/m/n/13 dùng toán tử TFLite dựng sẵn, nhờ đó ứng dụng không
+ cần liên kết gói
  []
 
-File: Images/robotapp_tracking_front.jpg Graphic file (type bmp)
-<Images/robotapp_tracking_front.jpg>
-File: Images/robotapp_tracking_walk.jpg Graphic file (type bmp)
-<Images/robotapp_tracking_walk.jpg>
 
-Underfull \hbox (badness 10000) in paragraph at lines 432--433
-[]\TU/CourierNew(0)/m/n/13 LstmFallDetector \TU/TimesNewRoman(0)/m/n/13 nạp mô 
-hình $[][][][] [] [][][][][][][][][] [] [][][][] [] [][] []
+Underfull \hbox (badness 4205) in paragraph at lines 441--442
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][]$\TU/TimesNew
+Roman(0)/m/n/13 ; so với tệp Keras gốc khoảng 189,2
  []
 
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -4323,17 +4326,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [108]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[109]
 File: Images/robotapp_tracking_front2.jpg Graphic file (type bmp)
 <Images/robotapp_tracking_front2.jpg>
 File: Images/robotapp_tracking_back.jpg Graphic file (type bmp)
@@ -4348,7 +4340,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[110]
+[109]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4359,51 +4351,41 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[111]
-Overfull \hbox (10.59464pt too wide) in paragraph at lines 471--472
+[110]
+Overfull \hbox (10.59464pt too wide) in paragraph at lines 494--495
 []$[][][][][][][] [] [][][][][][][][]$ \TU/TimesNewRoman(0)/m/n/13 phối hợp ba 
 thành phần: $[][][][][][][][][][][][][][][][][][][][][][][]$
  []
 
 
-Underfull \hbox (badness 1005) in paragraph at lines 473--474
+Underfull \hbox (badness 1005) in paragraph at lines 496--497
 []\TU/CourierNew(0)/m/n/13 GroqChatService \TU/TimesNewRoman(0)/m/n/13 gọi điểm
  cuối \TU/CourierNew(0)/m/n/13 /openai/v1/chat/completions
  []
 
 
-Underfull \hbox (badness 1622) in paragraph at lines 473--474
+Underfull \hbox (badness 1622) in paragraph at lines 496--497
 \TU/TimesNewRoman(0)/m/n/13 cơ chế Server-Sent Events (SSE) có tiền tố \TU/Cour
 ierNew(0)/m/n/13 data:\TU/TimesNewRoman(0)/m/n/13 , dịch vụ đọc nội dung tại
  []
 
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[112]
 File: Images/robotapp_chatbot_idle.jpg Graphic file (type bmp)
 <Images/robotapp_chatbot_idle.jpg>
 
-Underfull \hbox (badness 10000) in paragraph at lines 488--489
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
 []\TU/CourierNew(0)/m/n/13 ReminderService \TU/TimesNewRoman(0)/m/n/13 lắng ngh
 e lịch tại \TU/CourierNew(0)/m/n/13 Schedules/{uid} \TU/TimesNewRoman(0)/m/n/13
  và hồ
  []
 
 
-Underfull \hbox (badness 4582) in paragraph at lines 488--489
+Underfull \hbox (badness 4582) in paragraph at lines 511--512
 \TU/TimesNewRoman(0)/m/n/13 sơ tại \TU/CourierNew(0)/m/n/13 Users/{uid}\TU/Time
 sNewRoman(0)/m/n/13 . Khi đến thời điểm nhắc, dịch vụ tạo bản ghi dưới
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 488--489
+Underfull \hbox (badness 1147) in paragraph at lines 511--512
 \TU/CourierNew(0)/m/n/13 reminder_logs/{uid} \TU/TimesNewRoman(0)/m/n/13 và gửi
  sự kiện đến chatbot để phát lời nhắc. Người
  []
@@ -4417,25 +4399,47 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[113]
-Underfull \hbox (badness 2698) in paragraph at lines 492--493
+[111]
+Underfull \hbox (badness 2698) in paragraph at lines 515--516
 []\TU/CourierNew(0)/m/n/13 video_call_fragment \TU/TimesNewRoman(0)/m/n/13 khởi
  tạo \TU/CourierNew(0)/m/n/13 PeerConnectionFactory\TU/TimesNewRoman(0)/m/n/13 
 , nguồn
  []
 
 
-Underfull \hbox (badness 1694) in paragraph at lines 492--493
+Underfull \hbox (badness 1694) in paragraph at lines 515--516
 \TU/TimesNewRoman(0)/m/n/13 âm thanh và hình ảnh, thành phần hiển thị video cùn
 g tham chiếu đến nhánh
  []
 
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[112]
 File: Images/robotapp_call_idle.jpg Graphic file (type bmp)
 <Images/robotapp_call_idle.jpg>
 File: Images/robotapp_call_active.jpg Graphic file (type bmp)
 <Images/robotapp_call_active.jpg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[113]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4455,9 +4459,18 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [115]
+File: Images/caregiver_profile_top.jpg Graphic file (type bmp)
+<Images/caregiver_profile_top.jpg>
+File: Images/caregiver_profile_bottom.jpg Graphic file (type bmp)
+<Images/caregiver_profile_bottom.jpg>
+
+Underfull \hbox (badness 1189) in paragraph at lines 604--605
+[]$[][][][][][][][] [] [][][][][][][][]$ \TU/TimesNewRoman(0)/m/n/13 cập nhật h
+ai giá trị trạng thái $[][][][][] [] [][][][][][] []
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4466,46 +4479,16 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [116]
-File: Images/caregiver_profile_top.jpg Graphic file (type bmp)
-<Images/caregiver_profile_top.jpg>
-File: Images/caregiver_profile_bottom.jpg Graphic file (type bmp)
-<Images/caregiver_profile_bottom.jpg>
-
-Underfull \hbox (badness 1189) in paragraph at lines 581--582
-[]$[][][][][][][][] [] [][][][][][][][]$ \TU/TimesNewRoman(0)/m/n/13 cập nhật h
-ai giá trị trạng thái $[][][][][] [] [][][][][][] []
- []
-
 File: Images/caregiver_tracking.jpg Graphic file (type bmp)
 <Images/caregiver_tracking.jpg>
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
 
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[117]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[118]
-Underfull \hbox (badness 10000) in paragraph at lines 594--595
+Underfull \hbox (badness 10000) in paragraph at lines 617--618
 \TU/TimesNewRoman(0)/m/n/13 Người chăm sóc tạo hoặc cập nhật lịch qua \TU/Couri
 erNew(0)/m/n/13 AddScheduleFragment\TU/TimesNewRoman(0)/m/n/13 ;
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 594--595
+Underfull \hbox (badness 2818) in paragraph at lines 617--618
 \TU/CourierNew(0)/m/n/13 ScheduleAdapter \TU/TimesNewRoman(0)/m/n/13 hiển thị d
 anh sách bằng RecyclerView và liên kết công
  []
@@ -4516,6 +4499,16 @@ File: Images/caregiver_schedule_date.jpg Graphic file (type bmp)
 <Images/caregiver_schedule_date.jpg>
 File: Images/caregiver_schedule_time.jpg Graphic file (type bmp)
 <Images/caregiver_schedule_time.jpg>
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[117]
 File: Images/caregiver_log_calls.jpg Graphic file (type bmp)
 <Images/caregiver_log_calls.jpg>
 File: Images/caregiver_log_reminders.jpg Graphic file (type bmp)
@@ -4523,19 +4516,50 @@ File: Images/caregiver_log_reminders.jpg Graphic file (type bmp)
 File: Images/caregiver_log_alerts.jpg Graphic file (type bmp)
 <Images/caregiver_log_alerts.jpg>
 
-Underfull \hbox (badness 5741) in paragraph at lines 650--651
+Underfull \hbox (badness 5741) in paragraph at lines 673--674
 []\TU/CourierNew(0)/m/n/13 IncomingCallService \TU/TimesNewRoman(0)/m/n/13 là d
 ịch vụ chạy nền có thông báo thường
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 650--651
+Underfull \hbox (badness 10000) in paragraph at lines 673--674
 \TU/TimesNewRoman(0)/m/n/13 trực (foreground service), lắng nghe nhánh \TU/Cour
 ierNew(0)/m/n/13 webrtc_signal\TU/TimesNewRoman(0)/m/n/13 . Khi nhận
  []
 
+File: Images/caregiver_incoming_call.jpg Graphic file (type bmp)
+<Images/caregiver_incoming_call.jpg>
+
+Underfull \hbox (badness 4072) in paragraph at lines 686--687
+[]\TU/CourierNew(0)/m/n/13 video_call_fragment \TU/TimesNewRoman(0)/m/n/13 xử l
+ý cả vai trò gọi đi và nhận cuộc gọi,
+ []
+
+
+Underfull \hbox (badness 2818) in paragraph at lines 686--687
+\TU/TimesNewRoman(0)/m/n/13 hiển thị hình ảnh cục bộ, từ xa và trao đổi thông t
+in thiết lập phiên. Hàm
+ []
+
+
+Underfull \hbox (badness 3386) in paragraph at lines 686--687
+\TU/CourierNew(0)/m/n/13 setupVirtualJoystick() \TU/TimesNewRoman(0)/m/n/13 xác
+ định tâm và bán kính di chuyển của cần
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[118]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4555,6 +4579,12 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [120]
+File: Images/caregiver_call_dialing.jpg Graphic file (type bmp)
+<Images/caregiver_call_dialing.jpg>
+File: Images/caregiver_call_controls.jpg Graphic file (type bmp)
+<Images/caregiver_call_controls.jpg>
+File: Images/caregiver_call_joystick.jpg Graphic file (type bmp)
+<Images/caregiver_call_joystick.jpg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4566,8 +4596,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [121]
-File: Images/caregiver_incoming_call.jpg Graphic file (type bmp)
-<Images/caregiver_incoming_call.jpg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4579,31 +4607,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [122]
-Underfull \hbox (badness 4072) in paragraph at lines 663--664
-[]\TU/CourierNew(0)/m/n/13 video_call_fragment \TU/TimesNewRoman(0)/m/n/13 xử l
-ý cả vai trò gọi đi và nhận cuộc gọi,
- []
-
-
-Underfull \hbox (badness 2818) in paragraph at lines 663--664
-\TU/TimesNewRoman(0)/m/n/13 hiển thị hình ảnh cục bộ, từ xa và trao đổi thông t
-in thiết lập phiên. Hàm
- []
-
-
-Underfull \hbox (badness 3386) in paragraph at lines 663--664
-\TU/CourierNew(0)/m/n/13 setupVirtualJoystick() \TU/TimesNewRoman(0)/m/n/13 xác
- định tâm và bán kính di chuyển của cần
- []
-
-File: Images/caregiver_call_dialing.jpg Graphic file (type bmp)
-<Images/caregiver_call_dialing.jpg>
-File: Images/caregiver_call_controls.jpg Graphic file (type bmp)
-<Images/caregiver_call_controls.jpg>
-File: Images/caregiver_call_joystick.jpg Graphic file (type bmp)
-<Images/caregiver_call_joystick.jpg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -4612,28 +4618,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [123]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[124]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[125]
 File: Images/1.jpeg Graphic file (type bmp)
 <Images/1.jpeg>
 File: Images/bk_name_vi.png Graphic file (type bmp)
@@ -4646,51 +4630,51 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[126]
-Underfull \hbox (badness 6380) in paragraph at lines 754--756
+[124]
+Underfull \hbox (badness 6380) in paragraph at lines 777--779
 \TU/TimesNewRoman(0)/m/n/13 tra \TU/CourierNew(0)/m/n/13 input_shape \TU/TimesN
 ewRoman(0)/m/n/13 trước khi chuyển đổi bằng $[][][][][][][][][][][][][][][] [] 
 [][][][] []
  []
 
 
-Overfull \hbox (30.86935pt too wide) in paragraph at lines 779--779
+Overfull \hbox (30.86935pt too wide) in paragraph at lines 802--802
 []|\TU/TimesNewRoman(0)/m/n/11.8625 best_model_lstm_v3_ground.h5| 
  []
 
 
-Overfull \hbox (79.59944pt too wide) in paragraph at lines 779--779
+Overfull \hbox (79.59944pt too wide) in paragraph at lines 802--802
 []|\TU/TimesNewRoman(0)/m/n/11.8625 fall_detection_lstm_v3_ground_float.tflite|
  
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 779--779
+Underfull \hbox (badness 10000) in paragraph at lines 802--802
 []|\TU/TimesNewRoman(0)/m/n/11.8625 yolo26n-
  []
 
 
-Overfull \hbox (7.79308pt too wide) in paragraph at lines 779--779
+Overfull \hbox (7.79308pt too wide) in paragraph at lines 802--802
 \TU/TimesNewRoman(0)/m/n/11.8625 pose_no_nms_float16.tflite| 
  []
 
 
-Underfull \hbox (badness 1325) in paragraph at lines 779--779
+Underfull \hbox (badness 1325) in paragraph at lines 802--802
 \OT1/cmr/m/n/12 640$\TU/TimesNewRoman(0)/m/n/11.8625 , dùng để đối chiếu kích
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 779--779
+Underfull \hbox (badness 10000) in paragraph at lines 802--802
 []|\TU/TimesNewRoman(0)/m/n/11.8625 yolo26n-
  []
 
 
-Overfull \hbox (7.79308pt too wide) in paragraph at lines 779--779
+Overfull \hbox (7.79308pt too wide) in paragraph at lines 802--802
 \TU/TimesNewRoman(0)/m/n/11.8625 pose_no_nms_float32.tflite| 
  []
 
 
-Underfull \hbox (badness 2644) in paragraph at lines 779--779
+Underfull \hbox (badness 2644) in paragraph at lines 802--802
 []|\TU/TimesNewRoman(0)/m/n/11.8625 Biến thể float32 tương ứng,
  []
 
@@ -4703,7 +4687,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[127]
+[125]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4714,7 +4698,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[128]
+[126]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4725,7 +4709,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[129])
+[127])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4736,7 +4720,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[130] (./Contents/KetQuaVaThaoLuan.tex
+[128] (./Contents/KetQuaVaThaoLuan.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4747,7 +4731,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[131
+[129
 
 
 ]
@@ -4831,7 +4815,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[132]
+[130]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -4842,7 +4826,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[133]
+[131]
 Underfull \hbox (badness 1762) in paragraph at lines 127--127
 []|\TU/TimesNewRoman(0)/m/n/11.8625 Tương thích rộng,
  []
@@ -4876,7 +4860,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[134]
+[132]
 Underfull \hbox (badness 10000) in paragraph at lines 185--185
 []|\TU/TimesNewRoman(0)/m/n/11.8625 Hình thành ứng
  []
@@ -4905,7 +4889,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[135]
+[133]
 Underfull \hbox (badness 1292) in paragraph at lines 192--193
 []\TU/TimesNewRoman(0)/m/n/13 Hai ứng dụng đều có \TU/CourierNew(0)/m/n/13 Fire
 basePairPathsTest \TU/TimesNewRoman(0)/m/n/13 với cùng hai nguyên
@@ -4946,7 +4930,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[136]
+[134]
 Underfull \hbox (badness 10000) in paragraph at lines 226--226
 []|\TU/TimesNewRoman(0)/m/n/13 Đăng nhập dùng
  []
@@ -5082,11 +5066,37 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[137]
+[135]
 ignored: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[136]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[137]
+Overfull \hbox (9.9006pt too wide) in paragraph at lines 286--287
+\TU/TimesNewRoman(0)/m/n/13 packetsLost, jitter, framesEncoded/Decoded, framesD
+ropped và availableOutgoingBitrate.
+ []
+
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -5106,13 +5116,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [139]
-Overfull \hbox (9.9006pt too wide) in paragraph at lines 286--287
-\TU/TimesNewRoman(0)/m/n/13 packetsLost, jitter, framesEncoded/Decoded, framesD
-ropped và availableOutgoingBitrate.
- []
-
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -5154,9 +5160,13 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [143]
+Underfull \hbox (badness 1019) in paragraph at lines 503--504
+[]\TU/TimesNewRoman(0)/m/n/13 Ba dòng đầu của Bảng [][]5.13[][] huấn luyện đủ s
+ố vòng đã đặt rồi lấy trọng
+ []
+
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
-
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -5176,13 +5186,9 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [145]
-Underfull \hbox (badness 1019) in paragraph at lines 503--504
-[]\TU/TimesNewRoman(0)/m/n/13 Ba dòng đầu của Bảng [][]5.13[][] huấn luyện đủ s
-ố vòng đã đặt rồi lấy trọng
- []
-
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
+
 
 Package fancyhdr Warning: \headheight is too small (33.0pt): 
 (fancyhdr)                Make it at least 33.13278pt, for example:
@@ -5191,28 +5197,6 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
 [146]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[147]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[148]
 Underfull \hbox (badness 10000) in paragraph at lines 595--595
 []|$[] [] [] [] [][] [] [][][][][][] []
  []
@@ -5241,7 +5225,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[149]
+[147]
 Underfull \hbox (badness 2469) in paragraph at lines 625--625
 []|\TU/TimesNewRoman(0)/b/n/11.8625 Thời gian xử lý mỗi
  []
@@ -5270,29 +5254,29 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
+[148]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[149]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
 [150]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[151]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[152]
 Underfull \hbox (badness 10000) in paragraph at lines 690--690
 []|\TU/TimesNewRoman(0)/m/n/11.8625 Đạt nguyên
  []
@@ -5336,7 +5320,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[153])
+[151])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -5347,7 +5331,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[154]
+[152]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -5358,7 +5342,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[155] (./Contents/KetLuan.tex
+[153] (./Contents/KetLuan.tex
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -5369,10 +5353,32 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[156
+[154
 
 
 ]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[155]
+File: Images/bk_name_vi.png Graphic file (type bmp)
+<Images/bk_name_vi.png>
+
+
+Package fancyhdr Warning: \headheight is too small (33.0pt): 
+(fancyhdr)                Make it at least 33.13278pt, for example:
+(fancyhdr)                \setlength{\headheight}{33.13278pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
+
+[156])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -5394,29 +5400,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[158])
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[159]
-File: Images/bk_name_vi.png Graphic file (type bmp)
-<Images/bk_name_vi.png>
-
-
-Package fancyhdr Warning: \headheight is too small (33.0pt): 
-(fancyhdr)                Make it at least 33.13278pt, for example:
-(fancyhdr)                \setlength{\headheight}{33.13278pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
-
-[160] (./Outro/TaiLieuThamKhao.tex
+[158] (./Outro/TaiLieuThamKhao.tex
 Underfull \hbox (badness 2351) in paragraph at lines 5--6
 []\TU/TimesNewRoman(0)/m/n/13 General Statistics Office of Viet Nam and UNFPA V
 iet Nam, “Population
@@ -5473,7 +5457,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[161
+[159
 
 
 
@@ -5498,7 +5482,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[162]
+[160]
 Underfull \hbox (badness 4595) in paragraph at lines 24--25
 \TU/TimesNewRoman(0)/m/n/13 radar and a hybrid variational RNN autoencoder,” \T
 U/TimesNewRoman(0)/m/it/13 IEEE Transactions on
@@ -5556,7 +5540,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[163]
+[161]
 Underfull \hbox (badness 1281) in paragraph at lines 34--35
 []\TU/TimesNewRoman(0)/m/n/13 N. Wojke, A. Bewley, and D. Paulus, “Simple onlin
 e and realtime tracking
@@ -5649,7 +5633,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[164]
+[162]
 Underfull \hbox (badness 1546) in paragraph at lines 44--45
 []\TU/TimesNewRoman(0)/m/n/13 Groq, “Rate limits,” [Online]. Available: [][]$[]
 [][][][] [] [] [] [][][][][][][] [] [][][][] [] [][][] []
@@ -5676,7 +5660,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[165]
+[163]
 Overfull \hbox (19.5383pt too wide) in paragraph at lines 63--64
 \TU/TimesNewRoman(0)/m/n/13 mobile vision applications,” \TU/TimesNewRoman(0)/m
 /it/13 arXiv:1704.04861\TU/TimesNewRoman(0)/m/n/13 , 2017, doi: 10.48550/arXiv.
@@ -5728,7 +5712,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[166]
+[164]
 Underfull \hbox (badness 10000) in paragraph at lines 68--69
 \TU/TimesNewRoman(0)/m/n/13 Real-time end-to-end object detection,” \TU/TimesNe
 wRoman(0)/m/it/13 arXiv:2405.14458\TU/TimesNewRoman(0)/m/n/13 , 2024, doi:
@@ -5773,7 +5757,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[167]
+[165]
 Underfull \hbox (badness 10000) in paragraph at lines 78--79
 []\TU/TimesNewRoman(0)/m/n/13 A. Keränen, C. Holmberg, and J. Rosenberg, “Inter
 active Connectivity
@@ -5844,7 +5828,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[168] (./Outro/PhuLuc.tex
+[166] (./Outro/PhuLuc.tex
 
 Package hyperref Warning: The anchor of a bookmark and its parent's must not
 (hyperref)                be the same. Added a new anchor on input line 4.
@@ -5858,7 +5842,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[169
+[167
 
 
 
@@ -5884,7 +5868,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[170]
+[168]
 ignored: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
@@ -5896,7 +5880,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[171]
+[169]
 Underfull \hbox (badness 10000) in paragraph at lines 150--151
 []|\TU/TimesNewRoman(0)/m/n/13 Người cao tuổi/RobotApp; người chăm
  []
@@ -5910,7 +5894,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[172]
+[170]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -5921,7 +5905,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[173]
+[171]
 Underfull \hbox (badness 3792) in paragraph at lines 281--281
 []|\TU/CourierNew(0)/m/n/13 L<left>R<right>\n\TU/TimesNewRoman(0)/m/n/13 , ASCI
 I/UTF-8, dấu chấm thập
@@ -5956,7 +5940,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[174]
+[172]
 ignored: Infinite glue shrinkage found in box being split
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
@@ -5968,7 +5952,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[175]
+[173]
 Underfull \hbox (badness 10000) in paragraph at lines 353--353
 []|\TU/TimesNewRoman(0)/m/n/13 Schedule/
  []
@@ -5992,7 +5976,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[176]
+[174]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -6003,7 +5987,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[177]
+[175]
 Underfull \hbox (badness 1112) in paragraph at lines 421--422
 []\TU/TimesNewRoman(0)/m/n/13 Trong Arduino IDE, chọn ESP32 Dev Module; cài Sim
 pleFOC phiên bản
@@ -6068,7 +6052,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[178]
+[176]
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -6079,7 +6063,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[179])
+[177])
 File: Images/bk_name_vi.png Graphic file (type bmp)
 <Images/bk_name_vi.png>
 
@@ -6090,7 +6074,7 @@ Package fancyhdr Warning: \headheight is too small (33.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.13278pt}.
 
-[180] 
+[178] 
 enddocument/afterlastpage (AED): lastpage setting LastPage.
 (./main.aux)
  ***********
@@ -6103,15 +6087,15 @@ LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 497F2F05F36820580CE313B7727921F7;53701.
+(rerunfilecheck)             Checksum: FC0FDDF8FC9087BA2040D007286AFC93;51924.
  ) 
 Here is how much of TeX's memory you used:
- 33627 strings out of 468168
- 687512 string characters out of 5432816
- 1301323 words of memory out of 5000000
- 61605 multiletter control sequences out of 15000+600000
+ 33639 strings out of 468168
+ 687949 string characters out of 5432816
+ 1313727 words of memory out of 5000000
+ 61616 multiletter control sequences out of 15000+600000
  639033 words of font info for 152 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  109i,16n,132p,1423b,1904s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on main.xdv (202 pages, 4005156 bytes).
+Output written on main.xdv (200 pages, 3964828 bytes).

@@ -1,10 +1,10 @@
 # Fdb version 4
-["xdvipdfmx"] 1790145238.2661 "main.xdv" "main.pdf" "main" 1790145241.3769 0
-  "main.xdv" 1790145237.92348 4005156 bfe85299019e3c422404333522828e94 "xelatex"
+["xdvipdfmx"] 1790148156.5247 "main.xdv" "main.pdf" "main" 1790148159.67036 0
+  "main.xdv" 1790148156.18474 3964828 3bdf23af9fdbb64330203c8fa14fda24 "xelatex"
   (generated)
   "main.pdf"
   (rewritten before read)
-["xelatex"] 1790145235.32211 "main.tex" "main.xdv" "main" 1790145241.3739 0
+["xelatex"] 1790148153.48563 "main.tex" "main.xdv" "main" 1790148159.66736 0
   "/usr/local/texlive/2026/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/adobe/zapfding/pzdr.tfm" 1136768653 1528 f853c4d1b4e0550255e02831fdc8496f ""
   "/usr/local/texlive/2026/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1246382020 1004 54797486969f23fa377b128694d548df ""
@@ -224,9 +224,9 @@
   "/usr/local/texlive/2026/texmf-dist/web2c/texmf.cnf" 1770478701 43630 e9fa012910491fe5ae08a72c3c2997a7 ""
   "/usr/local/texlive/2026/texmf-var/web2c/xetex/xelatex.fmt" 1788531240 5948573 2df9d318cc0a88c274effc45ac57b64b ""
   "/usr/local/texlive/2026/texmf.cnf" 1774209515 577 648cd9f92f9c0eac486f4c71c85cfbbe ""
-  "Contents/CoSoLyThuyet.tex" 1789891226.96734 134390 3eb352d4f8e6ebb5f4b6327623d2f730 ""
+  "Contents/CoSoLyThuyet.tex" 1790147705.6208 128427 c5a9442aa688fa39e1e141073d5f19c0 ""
   "Contents/GioiThieu.tex" 1789711745.85175 94084 4bf49d69b977c8853d32eb93fad27bd7 ""
-  "Contents/HienThucHeThong.tex" 1790141595.40468 86510 cbb63451f7facc2d68698287bcc4d9a5 ""
+  "Contents/HienThucHeThong.tex" 1790148153.3638 86214 d2ce1e09eff5ba46c113046a3ec7f2c5 ""
   "Contents/KetLuan.tex" 1789711745.85271 12092 9e6104490313e9871eabbc74efb29d4f ""
   "Contents/KetQuaVaThaoLuan.tex" 1790145228.30995 70312 9b34ec80a1dc9b3f273745c43170baaf ""
   "Contents/OpenBotTomLuoc.tex" 1789711745.85345 10089 2de437b4fd66b28000c2c5fa6576ea36 ""
@@ -258,6 +258,7 @@
   "Images/caregiver_tracking.jpg" 1789917600.89115 77551 dd59bb9004ec0dd6bafa627f7aa92f89 ""
   "Images/hcmut.png" 1788507283.5979 111831 243d0fbdc8e50c8e2734c22d4851fc1e ""
   "Images/lstm_arch.jpg" 1788536397.25464 416433 80ecffbec72efa65a258522d6097e92e ""
+  "Images/lstm_inference_pipeline.jpg" 1790148142.4832 456783 bf30a491c256ac0dba8f96c7aa387b92 ""
   "Images/robotapp_call_active.jpg" 1789917600.68742 131619 101503559f2a470b2f2f41bc362d1d8c ""
   "Images/robotapp_call_idle.jpg" 1789917600.61938 46677 e407f91e1eeddf00bea0f439b993520c ""
   "Images/robotapp_chatbot_idle.jpg" 1789917600.25716 71617 24b25b964a79ece0fead02f1fd16dd15 ""
@@ -275,12 +276,12 @@
   "Intro/TomTat.tex" 1789711745.87008 3244 f79b9b5642539c2ac806d0b12c33cf00 ""
   "Outro/PhuLuc.tex" 1789711745.87039 19804 13d87ecb76137fca784ec96dd284709f ""
   "Outro/TaiLieuThamKhao.tex" 1789711745.87087 19320 6cfa923c613b7d18682ab1dc32fa2932 ""
-  "main.aux" 1790145237.9168 72952 e3c15d2b65a8bbd757a4d384c7f04070 "xelatex"
-  "main.lof" 1790145237.92337 4061 c374d3b0447adea1623ad57d94d4cc63 "xelatex"
-  "main.lot" 1790145237.92341 7086 acce284bd4f8d0e72dd69fa30a3dcb5c "xelatex"
-  "main.out" 1790145237.92285 53701 497f2f05f36820580ce313b7727921f7 "xelatex"
+  "main.aux" 1790148156.17815 72917 47ac81bdc868f18ad2484a6de3acd048 "xelatex"
+  "main.lof" 1790148156.18461 4371 65358bc34a1a8246e1ecf049babe859f "xelatex"
+  "main.lot" 1790148156.18466 7086 98fc703078464909fb7d310327c3d92d "xelatex"
+  "main.out" 1790148156.18406 51924 fc0fddf8fc9087ba2040d007286afc93 "xelatex"
   "main.tex" 1789891267.09098 10316 05f06d9be749ce32e343c81d82877f23 ""
-  "main.toc" 1790145237.92333 24782 7c0707c9f7d71b965902b7d473c807cf "xelatex"
+  "main.toc" 1790148156.18456 24144 ec0a644117b6ecaceb8ffb96b1677d40 "xelatex"
   (generated)
   "main.aux"
   "main.lof"
